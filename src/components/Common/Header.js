@@ -30,6 +30,7 @@ const SearchBtn = styled.button`
   border: 1px solid #654222;
   border-left: none;
   border-radius: 0 50px 50px 0;
+  cursor: pointer;
 `;
 const SearchBtnImg = styled.img`
   width: 20px;
@@ -42,7 +43,9 @@ const HeaderCategory = styled.div`
   justify-content: space-between;
 `;
 
-const HeaderCategoryItem = styled.span``;
+const HeaderCategoryItem = styled.span`
+  cursor: pointer;
+`;
 
 const Header = () => {
   const categoryItems = ["이벤트", "로그인"];
@@ -63,7 +66,6 @@ const Header = () => {
 
   const logoBtnClick = () => {
     navigate("/");
-    alert("호텔검색버튼클릭!");
   };
 
   const searchBtnClick = () => {
@@ -105,9 +107,12 @@ const Header = () => {
           </SearchBtn>
         </InputDiv>
         <HeaderCategory>
-          {categoryItems.map((item) => {
+          {categoryItems.map((item, idx) => {
             return (
-              <HeaderCategoryItem onClick={categoryBtnClick(item)}>
+              <HeaderCategoryItem
+                key={idx}
+                onClick={() => categoryBtnClick(item)}
+              >
                 {item}
               </HeaderCategoryItem>
             );

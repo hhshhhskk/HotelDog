@@ -43,4 +43,5 @@ export const HeaderContent = styled.div`
 export const LogoImg = styled.img`
   width: 180px;
   height: 40px;
+  cursor: pointer;
 `;
