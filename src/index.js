@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 import "normalize.css";
 import "../src/styles/Common/index.css";
 
-import { RouterInfo } from "./util/router";
+import { RouterInfo } from "./routes/router";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Loading from "./components/Loading/Loading";
