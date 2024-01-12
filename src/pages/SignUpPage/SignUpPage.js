@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useFormAction } from "react-router-dom";
 
 const SignUpWrap = styled.div`
   width: 100%;
@@ -57,7 +57,7 @@ const SignUpPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useFormAction();
   return (
     <SignUpWrap>
       <SignUpContent>
