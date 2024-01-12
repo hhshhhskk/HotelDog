@@ -63,16 +63,8 @@ const LoginCommon = styled.div`
   border-top-left-radius: 10px;
 `;
 
-const LoginBusiness = styled.div`
-  width: 50%;
-  height: 100%;
-  color: #fff;
+const LoginBusiness = styled(LoginCommon)`
   background-color: ${props => (props.userType === 1 ? "#d9d9d9" : "#654222")};
-
-  cursor: pointer;
-  border-top: 1px solid #d9d9d9;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
 `;
 
 const LoginForm = styled.form`
@@ -136,8 +128,8 @@ const IdSave = styled.div`
 `;
 
 const IdSaveImgBtn = styled.img`
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   margin-right: 5px;
 
   cursor: pointer;
