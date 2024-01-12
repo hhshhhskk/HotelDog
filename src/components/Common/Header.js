@@ -1,51 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
+  HeaderCategory,
+  HeaderCategoryItem,
   HeaderContent,
   HeaderDiv,
   HeaderTop,
+  InputDiv,
   LogoImg,
+  SearchBox,
+  SearchBtn,
+  SearchBtnImg,
 } from "../../styles/Common/headerStyle";
-import styled from "@emotion/styled";
-import { useNavigate } from "react-router-dom";
-
-const InputDiv = styled.div`
-  width: 700px;
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-const SearchBox = styled.input`
-  width: 600px;
-  height: 50px;
-  padding-left: 30px;
-  border: 1px solid #654222;
-  border-right: none;
-  border-radius: 50px 0 0 50px;
-`;
-const SearchBtn = styled.button`
-  width: 50px;
-  height: 50px;
-  background-color: #fff;
-  border: 1px solid #654222;
-  border-left: none;
-  border-radius: 0 50px 50px 0;
-  cursor: pointer;
-`;
-const SearchBtnImg = styled.img`
-  width: 20px;
-  height: 20px;
-`;
-
-const HeaderCategory = styled.div`
-  width: 150px;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const HeaderCategoryItem = styled.span`
-  cursor: pointer;
-`;
 
 const Header = () => {
   const categoryItems = ["이벤트", "로그인"];
@@ -72,7 +38,7 @@ const Header = () => {
     alert("호텔검색버튼클릭!");
   };
 
-  const categoryBtnClick = (item) => {
+  const categoryBtnClick = item => {
     if (item === "이벤트") {
       navigate("/event");
     } else if (item === "로그인") {
