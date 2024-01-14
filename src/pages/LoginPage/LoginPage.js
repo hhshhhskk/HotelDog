@@ -19,11 +19,14 @@ const LoginContent = styled.div`
 `;
 
 const LoginBox = styled.div`
-  width: 750px;
-  height: 400px;
-
+  width: 1000px;
+  height: 500px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  gap: 90px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
 `;
 
 const LoginLogo = styled.img`
@@ -35,7 +38,7 @@ const LoginLogo = styled.img`
 
 const LoginArea = styled.div`
   width: 475px;
-  height: 400px;
+  height: 250px;
   display: flex;
   flex-direction: column;
 `;
