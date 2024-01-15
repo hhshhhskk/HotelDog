@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
 import React from "react";
+import TopButton from "../../components/Common/TopButton";
 
 const MainPageDiv = styled.div`
+  position: relative;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -45,6 +47,7 @@ const MainPage = () => {
         src={`${process.env.PUBLIC_URL}/images/mainList.png`}
         alt="이미지가없어요"
       />
+      <TopButton />
     </MainPageDiv>
   );
 };
