@@ -2,23 +2,27 @@ import styled from "@emotion/styled";
 import React from "react";
 
 const Wrapper = styled.div`
-  position: absolute;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  z-index: 1000;
+`;
+
+const Overlay = styled.div`
   width: 100%;
   height: 100vh;
   background-color: rgb(0, 0, 0, 0.5);
-  z-index: 1000;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Modal = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 680px;
   height: 920px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   background-color: #fff;
   border-radius: 15px;
@@ -30,6 +34,15 @@ const ModalInner = styled.div`
   height: 743px;
   border-radius: 10px;
   background-color: #f9f9f9;
+`;
+
+const ModalTop = styled.div`
+  width: 600px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #654222;
+  margin-top: 33px;
+  margin-bottom: 23px;
 `;
 
 const TextBox = styled.div`
@@ -48,15 +61,34 @@ const TextContent = styled.div`
   color: #9d9d9d;
 `;
 
+const AgreeBtn = styled.div`
+  width: 120px;
+  height: 50px;
+
+  margin-top: 23px;
+
+  color: #fff;
+  text-align: center;
+  font-family: Noto Sans;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 50px;
+
+  border-radius: 10px;
+  border: 1px solid #654222;
+  background: #654222;
+`;
+
 const AgreeModal = ({ closeModal }) => {
   return (
-    <Wrapper
-      onClick={() => {
-        closeModal();
-      }}
-    >
+    <Wrapper>
+      <Overlay
+        onClick={() => {
+          closeModal("no");
+        }}
+      ></Overlay>
       <Modal>
-        <div>이용약관</div>
+        <ModalTop>이용약관</ModalTop>
         <ModalInner>
           <TextBox>
             <TextTitle>1. 회원 가입 및 계정</TextTitle>
@@ -125,6 +157,13 @@ const AgreeModal = ({ closeModal }) => {
             </TextContent>
           </TextBox>
         </ModalInner>
+        <AgreeBtn
+          onClick={() => {
+            closeModal("yes");
+          }}
+        >
+          동 의
+        </AgreeBtn>
       </Modal>
     </Wrapper>
   );
