@@ -1,11 +1,12 @@
 import Layout from "../components/Layout/Layout";
 import MainPage from "../pages/MainPage/MainPage";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
-import LoginPage from "../pages/LoginPage/LoginPage";
+import LoginPage from "../pages/LoginPage";
 import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import MyPage from "../pages/MyPage/MyPage";
 import EventPage from "../pages/EventPage/EventPage";
 import HotelDeatilPage from "../pages/HotelDetailPage/HotelDetailPage";
+import BoardPage from "../pages/BoardPage/BoardPage";
 
 export const RouterInfo = [
   {
@@ -24,7 +25,7 @@ export const RouterInfo = [
         label: "login",
       },
       {
-        path: "/signup",
+        path: "/signup/:userType",
         element: <SignUpPage />,
         label: "signup",
       },
@@ -37,6 +38,11 @@ export const RouterInfo = [
         path: "/event",
         element: <EventPage />,
         label: "event",
+      },
+      {
+        path: "/board",
+        element: <BoardPage />,
+        label: "board",
       },
       {
         path: "/hoteldetail/:detailId",

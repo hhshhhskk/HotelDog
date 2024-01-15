@@ -1,10 +1,11 @@
 import styled from "@emotion/styled";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import DaumPostcode from "react-daum-postcode";
 import AgreeModal from "../../components/SignUp/AgreeModal";
 import { Global } from "@emotion/react";
 import { css } from "@emotion/react";
+import AddressPopup from "../../components/SignUp/AddressPopup";
+import MailModal from "../../components/SignUp/MailModal";
 
 const globalStyles = css`
   body.modal-open {
@@ -29,11 +30,20 @@ const SignUpContent = styled.div`
 
 const SignUpForm = styled.form`
   width: 100%;
-  height: 700px;
+  height: 800px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+`;
+
+const SignUpTitle = styled.div`
+  color: #654222;
+  font-family: Noto Sans;
+  font-size: 24px;
+  font-weight: 700;
+
+  margin-bottom: 60px;
 `;
 
 const InputName = styled.div`
@@ -59,7 +69,7 @@ const AddressBox = styled.div`
   height: 40px;
   margin-bottom: 30px;
   font-size: 1.4rem;
-  line-height: 40px;
+  line-height: 38px;
   padding-left: 10px;
   border: 1px solid #654222;
   border-radius: 10px;
@@ -106,7 +116,7 @@ const SignUpBtn = styled.button`
   font-size: 1.3rem;
   font-weight: 700;
   border: none;
-  border-radius: 15px;
+  border-radius: 7px;
 `;
 
 const styleBtn = {
@@ -125,64 +135,108 @@ const SignUpPage = () => {
   const [address, setAddress] = useState("");
 
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isMailModalOpen, setMailModalOpen] = useState(false);
 
   const openModal = () => {
     setModalOpen(true);
     document.body.classList.add("modal-open");
   };
 
-  const closeModal = () => {
+  const closeModal = agree => {
+    if (agree === "no") {
+      setAgree(false);
+    }
+
     setModalOpen(false);
-    setAgree(false);
     document.body.classList.remove("modal-open");
   };
 
-  const handleComplete = data => {
+  const onValid = data => {
     console.log(data);
-    setAddress(data.address);
   };
-  console.log(agree);
+
+  const onInValid = data => {
+    let id = "";
+    let password = "";
+    let passwordcheck = "";
+    if (data?.id?.message !== undefined) {
+      id = data?.title?.message;
+    }
+    if (data?.password?.message !== undefined) {
+      password = data?.content?.message;
+    }
+    if (data?.passwordcheck?.message !== undefined) {
+      passwordcheck = data?.hashtag?.message;
+    }
+    alert(`${id}\n${password}\n${passwordcheck}`);
+  };
+
   return (
     <>
       <Global styles={globalStyles} />
+      {isMailModalOpen && <MailModal setMailModalOpen={setMailModalOpen} />}
       {isModalOpen && <AgreeModal closeModal={closeModal} />}
       <SignUpWrap>
         <SignUpContent>
           {popUp && (
-            <div>
-              <DaumPostcode onComplete={handleComplete} />
-            </div>
+            <AddressPopup setPopUp={setPopUp} setAddress={setAddress} />
           )}
-          <SignUpForm>
+          <SignUpForm onSubmit={handleSubmit(onValid, onInValid)}>
+            <SignUpTitle>회원가입</SignUpTitle>
             <InnerDiv>
               <InputName>아이디</InputName>
               <InputBox
-                type="text"
-                placeholder="이메일 ex) example@gmail.com"
+                {...register("id", {
+                  required: "Id는 필수사항입니다.",
+                })}
+                placeholder="Id를 입력해주세요."
                 style={styleBtn}
               />
-              <InnerBtn>메일인증</InnerBtn>
+              <InnerBtn
+                onClick={() => {
+                  setMailModalOpen(true);
+                }}
+              >
+                메일인증
+              </InnerBtn>
             </InnerDiv>
             <InputName>비밀번호</InputName>
-            <InputBox type="password" placeholder="4자리 이상 특수문자 조합" />
+            <InputBox
+              {...register("password", {
+                required: "비밀번호는 필수사항입니다.",
+              })}
+              placeholder="4자리 이상 특수문자 조합"
+            />
             <InputName>비밀번호 확인</InputName>
             <InputBox
-              type="password"
+              {...register("passwordcheck", {
+                required: "비밀번호 확인은 필수사항입니다.",
+              })}
               placeholder="비밀번호를 한번 더 입력해주세요"
             />
             <InnerDiv>
               <InputName>닉네임</InputName>
-              <InputBox type="text" placeholder="" />
+              <InputBox
+                {...register("nickname", {
+                  required: "닉네임은 필수사항입니다.",
+                })}
+                placeholder="닉네임을 입력해주세요."
+              />
               <InnerBtn>중복체크</InnerBtn>
             </InnerDiv>
             <InputName>전화번호(+82)</InputName>
-            <InputBox type="text" placeholder="" />
+            <InputBox
+              {...register("telnum", {
+                required: "전화번호는 필수사항입니다.",
+              })}
+              placeholder="전화번호를 입력해주세요(-제외)"
+            />
             <InnerDiv>
               <InputName style={styleBtn}>주소</InputName>
               <AddressBox>{address}</AddressBox>
               <InnerBtn
                 onClick={() => {
-                  setPopUp(!popUp);
+                  setPopUp(true);
                 }}
               >
                 주소찾기
