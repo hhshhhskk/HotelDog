@@ -1,17 +1,18 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const TopBt = styled.button`
   position: fixed;
-  top: 90%;
-  left: 83%;
+  bottom: 350px;
+  right: 50px;
   background-color: #654222;
   border: none;
   border-radius: 30px;
-  padding: 12px 20px;
+  padding: 10px 17px;
   color: #fff;
   font-weight: 700;
   font-size: 15px;
+  cursor: pointer;
 `;
 
 const TopBtImg = styled.img`
@@ -21,23 +22,46 @@ const TopBtImg = styled.img`
 `;
 
 const TopButton = () => {
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollPosition(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // TOP 버튼 클릭 시 실행되는 이벤트
   const handleClick = e => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    // if(scrollPosition > 100){
+
+    // }else(scrollPosition<500){
+
+    // }
   };
 
   return (
     <div>
-      <TopBt
-        onClick={e => {
-          handleClick(e);
-        }}
-      >
-        <TopBtImg
-          src={`${process.env.PUBLIC_URL}/images/bt_arrow.svg`}
-          alt=""
-        />
-        TOP
-      </TopBt>
+      {scrollPosition > 90 ? (
+        <TopBt
+          id="scrollButton"
+          onClick={e => {
+            handleClick(e);
+          }}
+        >
+          <TopBtImg
+            src={`${process.env.PUBLIC_URL}/images/bt_arrow.svg`}
+            alt=""
+          />
+          TOP
+        </TopBt>
+      ) : null}
     </div>
   );
 };

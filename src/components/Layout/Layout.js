@@ -4,8 +4,6 @@ import Header from "../Common/Header";
 import Footer from "../Common/Footer";
 
 import { MainContent, Wrapper } from "../../styles/Common/layoutStyle";
-import TopButton from "../Common/TopButton";
-import DefaultButton from "../Common/DefaultButton";
 
 // 기본 Wrapper
 const Layout = () => {
@@ -15,8 +13,6 @@ const Layout = () => {
       <MainContent>
         <Outlet />
       </MainContent>
-      <TopButton />
-      <DefaultButton />
       <Footer />
     </Wrapper>
   );
