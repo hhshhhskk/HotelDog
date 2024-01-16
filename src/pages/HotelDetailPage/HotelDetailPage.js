@@ -13,3 +13,4 @@ const HotelDetailPage = () => {
 };
 
 export default HotelDetailPage;
+ 
