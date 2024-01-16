@@ -14,8 +14,6 @@ import {
 } from "../../styles/Common/headerStyle";
 
 const Header = () => {
-  const categoryItems = ["이벤트", "로그인"];
-
   const navigate = useNavigate();
   const [scrollPosition, setScrollPosition] = useState(0);
 
@@ -39,17 +37,21 @@ const Header = () => {
     alert("호텔검색버튼클릭!");
   };
 
-  const categoryBtnClick = item => {
-    if (item === "이벤트") {
+  // Header 카테고리 선택 시 페이지 전환 이벤트
+  const handleClickCate = e => {
+    const spanText = e.target.innerText;
+    if (spanText === "게시판") {
       navigate("/event");
-    } else if (item === "로그인") {
+    } else if (spanText === "마이페이지") {
+      navigate("/mypage");
+    } else if (spanText === "로그인") {
       navigate("/login");
     }
   };
 
   return (
     <HeaderDiv scrollPosition={scrollPosition}>
-      <HeaderTop scrollPosition={scrollPosition}></HeaderTop>
+      <HeaderTop scrollPosition={scrollPosition} />
       <HeaderContent>
         {scrollPosition > 50 ? (
           <LogoImg
@@ -74,16 +76,18 @@ const Header = () => {
           </SearchBtn>
         </InputDiv>
         <HeaderCategory>
-          {categoryItems.map((item, idx) => {
-            return (
-              <HeaderCategoryItem
-                key={idx}
-                onClick={() => categoryBtnClick(item)}
-              >
-                {item}
-              </HeaderCategoryItem>
-            );
-          })}
+          <ul>
+            <li>
+              <span onClick={e => handleClickCate(e)}>게시판</span>
+            </li>
+            <li>
+              <span onClick={e => handleClickCate(e)}>마이페이지</span>
+            </li>
+            {/* 로그인 정보로 삼항 연산자 작성 예정 */}
+            <li>
+              <span onClick={e => handleClickCate(e)}>로그인</span>
+            </li>
+          </ul>
         </HeaderCategory>
       </HeaderContent>
     </HeaderDiv>
