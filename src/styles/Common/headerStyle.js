@@ -76,9 +76,15 @@ export const SearchBtnImg = styled.img`
 `;
 
 export const HeaderCategory = styled.div`
-  width: 150px;
-  display: flex;
-  justify-content: space-between;
+  width: 183px;
+  ul {
+    display: flex;
+    justify-content: space-between;
+    li span {
+      border-radius: none;
+      cursor: pointer;
+    }
+  }
 `;
 
 export const HeaderCategoryItem = styled.span`
