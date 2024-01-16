@@ -2,9 +2,11 @@ import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 
 const TopBt = styled.button`
+  // visibility: ${props => (props.scrollPosition > 900 ? "none" : "hidden")};
+  display: none;
   position: fixed;
   bottom: 350px;
-  right: 50px;
+  right: 450px;
   background-color: #654222;
   border: none;
   border-radius: 30px;
@@ -48,20 +50,20 @@ const TopButton = () => {
 
   return (
     <div>
-      {scrollPosition > 90 ? (
-        <TopBt
-          id="scrollButton"
-          onClick={e => {
-            handleClick(e);
-          }}
-        >
-          <TopBtImg
-            src={`${process.env.PUBLIC_URL}/images/bt_arrow.svg`}
-            alt=""
-          />
-          TOP
-        </TopBt>
-      ) : null}
+      {/* {scrollPosition > 1 ? ( */}
+      <TopBt
+        id="scrollButton"
+        onClick={e => {
+          handleClick(e);
+        }}
+      >
+        <TopBtImg
+          src={`${process.env.PUBLIC_URL}/images/bt_arrow.svg`}
+          alt=""
+        />
+        TOP
+      </TopBt>
+      {/* ) : null} */}
     </div>
   );
 };

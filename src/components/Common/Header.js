@@ -15,6 +15,7 @@ import {
 
 const Header = () => {
   const categoryItems = ["이벤트", "로그인"];
+
   const navigate = useNavigate();
   const [scrollPosition, setScrollPosition] = useState(0);
 
