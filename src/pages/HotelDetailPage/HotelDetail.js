@@ -1,8 +1,11 @@
 import React from 'react'
+import RoomType from '../../components/Detail/RoomType'
 
 const HotelDetail = () => {
   return (
-    <div></div>
+    <div>
+      <RoomType />
+    </div>
   )
 }
 
