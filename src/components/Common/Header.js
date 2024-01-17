@@ -59,13 +59,11 @@ const Header = () => {
   const handleClickCate = e => {
     const spanText = e.target.innerText;
     if (spanText === "게시판") {
-      navigate("/event");
+      navigate("/board");
     } else if (spanText === "마이페이지") {
       navigate("/mypage");
     } else if (spanText === "로그인") {
       navigate("/login");
-    } else if (item === "게시판") {
-      navigate("/board");
     }
   };
 
