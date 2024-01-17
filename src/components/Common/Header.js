@@ -14,7 +14,7 @@ import {
 } from "../../styles/Common/headerStyle";
 
 const Header = () => {
-  const categoryItems = ["이벤트", "로그인"];
+  const categoryItems = ["게시판", "이벤트", "로그인"];
 
   const navigate = useNavigate();
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -44,6 +44,8 @@ const Header = () => {
       navigate("/event");
     } else if (item === "로그인") {
       navigate("/login");
+    } else if (item === "게시판") {
+      navigate("/board");
     }
   };
 
