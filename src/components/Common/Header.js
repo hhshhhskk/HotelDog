@@ -10,22 +10,21 @@ import {
   InputDiv,
   HeaderLogo,
   SearchBox,
-  SearchBtn,
   SearchBtnImg,
   SearchBt,
 } from "../../styles/Common/headerStyle";
 
 const Header = () => {
   const navigate = useNavigate();
+
+  // 스크롤 위치 업데이트
   const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrollPosition(window.scrollY);
     };
-
     window.addEventListener("scroll", handleScroll);
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -68,7 +67,7 @@ const Header = () => {
 
   return (
     <HeaderDiv scrollPosition={scrollPosition}>
-      {/* SNS 카테고리 바 */}
+      {/* Header 상단 : SNS 카테고리 */}
       <HeaderTop scrollPosition={scrollPosition}>
         <HeaderTopContent>
           <HeaderTopItem>
@@ -100,6 +99,7 @@ const Header = () => {
         </HeaderTopContent>
       </HeaderTop>
 
+      {/* Header 하단 : 로고, 검색, 카테고리*/}
       <HeaderContent>
         {scrollPosition > 40 ? (
           <HeaderLogo
@@ -115,8 +115,8 @@ const Header = () => {
           />
         )}
         <InputDiv>
-          <SearchBox />
-          <SearchBt onClick={searchBtnClick}>
+          <SearchBox scrollPosition={scrollPosition} />
+          <SearchBt scrollPosition={scrollPosition} onClick={searchBtnClick}>
             {scrollPosition > 40 ? (
               <SearchBtnImg
                 src={`${process.env.PUBLIC_URL}/images/searchBtAfter.svg`}
