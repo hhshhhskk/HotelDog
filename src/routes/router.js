@@ -1,12 +1,12 @@
 import Layout from "../components/Layout/Layout";
-import MainPage from "../pages/MainPage/MainPage";
-import ErrorPage from "../pages/ErrorPage/ErrorPage";
-import LoginPage from "../pages/LoginPage";
-import SignUpPage from "../pages/SignUpPage/SignUpPage";
-import MyPage from "../pages/MyPage/MyPage";
-import EventPage from "../pages/EventPage/EventPage";
-import HotelDeatilPage from "../pages/HotelDetailPage/HotelDetailPage";
 import BoardPage from "../pages/BoardPage/BoardPage";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import EventPage from "../pages/EventPage/EventPage";
+import HotelDetailPage from "../pages/HotelDetailPage/HotelDetailPage";
+import LoginPage from "../pages/LoginPage";
+import MainPage from "../pages/MainPage/MainPage";
+import MyPage from "../pages/MyPage/MyPage";
+import SignUpPage from "../pages/SignUpPage/SignUpPage";
 
 export const RouterInfo = [
   {
@@ -46,7 +46,7 @@ export const RouterInfo = [
       },
       {
         path: "/hoteldetail/:detailId",
-        element: <HotelDeatilPage />,
+        element: <HotelDetailPage />,
         label: "hoteldetail",
       },
     ],
