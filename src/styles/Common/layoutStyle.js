@@ -11,5 +11,5 @@ export const Wrapper = styled.div`
 export const MainContent = styled.div`
   width: 100%;
   // 헤더가 fixed라서 헤더탑 높이만큼 밀기
-  margin-top: 50px;
+  margin-top: 40px;
 `;
