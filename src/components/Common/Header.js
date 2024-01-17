@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   HeaderCategory,
-  HeaderCategoryItem,
   HeaderContent,
   HeaderDiv,
   HeaderTop,
+  HeaderTopContent,
+  HeaderTopItem,
   InputDiv,
-  LogoImg,
+  HeaderLogo,
   SearchBox,
   SearchBtn,
   SearchBtnImg,
+  SearchBt,
 } from "../../styles/Common/headerStyle";
 
 const Header = () => {
@@ -29,7 +31,8 @@ const Header = () => {
     };
   }, []);
 
-  const logoBtnClick = () => {
+  // 로고 클릭 시 메인홈으로 전환
+  const handleClickLogo = () => {
     navigate("/");
   };
 
@@ -37,7 +40,21 @@ const Header = () => {
     alert("호텔검색버튼클릭!");
   };
 
-  // Header 카테고리 선택 시 페이지 전환 이벤트
+  // SNS 선택 시 페이지 전환
+  const handleClickSns = e => {
+    const snsImg = e.target.id;
+    if (snsImg === "facebook") {
+      navigate("/");
+    } else if (snsImg === "instagram") {
+      navigate("/");
+    } else if (snsImg === "twitter") {
+      navigate("/");
+    } else if (snsImg === "youtube") {
+      navigate("/");
+    }
+  };
+
+  // 카테고리 선택 시 페이지 전환
   const handleClickCate = e => {
     const spanText = e.target.innerText;
     if (spanText === "게시판") {
@@ -51,41 +68,80 @@ const Header = () => {
 
   return (
     <HeaderDiv scrollPosition={scrollPosition}>
-      <HeaderTop scrollPosition={scrollPosition} />
+      {/* SNS 카테고리 바 */}
+      <HeaderTop scrollPosition={scrollPosition}>
+        <HeaderTopContent>
+          <HeaderTopItem>
+            <img
+              id="facebook"
+              src={`${process.env.PUBLIC_URL}/images/facebook.svg`}
+              alt=""
+              onClick={handleClickSns}
+            />
+            <img
+              id="instagram"
+              src={`${process.env.PUBLIC_URL}/images/instagram.svg`}
+              alt=""
+              onClick={handleClickSns}
+            />
+            <img
+              id="twitter"
+              src={`${process.env.PUBLIC_URL}/images/twitter.svg`}
+              alt=""
+              onClick={handleClickSns}
+            />
+            <img
+              id="youtube"
+              src={`${process.env.PUBLIC_URL}/images/youtube.svg`}
+              alt=""
+              onClick={handleClickSns}
+            />
+          </HeaderTopItem>
+        </HeaderTopContent>
+      </HeaderTop>
+
       <HeaderContent>
-        {scrollPosition > 50 ? (
-          <LogoImg
-            onClick={logoBtnClick}
+        {scrollPosition > 40 ? (
+          <HeaderLogo
+            onClick={handleClickLogo}
             src={`${process.env.PUBLIC_URL}/images/logoAfter.svg`}
             alt=""
           />
         ) : (
-          <LogoImg
-            onClick={logoBtnClick}
+          <HeaderLogo
+            onClick={handleClickLogo}
             src={`${process.env.PUBLIC_URL}/images/logoBefore.svg`}
             alt=""
           />
         )}
         <InputDiv>
           <SearchBox />
-          <SearchBtn onClick={searchBtnClick}>
-            <SearchBtnImg
-              src={`${process.env.PUBLIC_URL}/images/searchBtn.svg`}
-              alt=""
-            />
-          </SearchBtn>
+          <SearchBt onClick={searchBtnClick}>
+            {scrollPosition > 40 ? (
+              <SearchBtnImg
+                src={`${process.env.PUBLIC_URL}/images/searchBtAfter.svg`}
+                alt=""
+              />
+            ) : (
+              <SearchBtnImg
+                src={`${process.env.PUBLIC_URL}/images/searchBtBefore.svg`}
+                alt=""
+              />
+            )}
+          </SearchBt>
         </InputDiv>
+
         <HeaderCategory>
           <ul>
             <li>
-              <span onClick={e => handleClickCate(e)}>게시판</span>
+              <span onClick={handleClickCate}>게시판</span>
             </li>
             <li>
-              <span onClick={e => handleClickCate(e)}>마이페이지</span>
+              <span onClick={handleClickCate}>마이페이지</span>
             </li>
-            {/* 로그인 정보로 삼항 연산자 작성 예정 */}
+            {/* 로그인 유무로 삼항 연산자 작성 예정 */}
             <li>
-              <span onClick={e => handleClickCate(e)}>로그인</span>
+              <span onClick={handleClickCate}>로그인</span>
             </li>
           </ul>
         </HeaderCategory>
