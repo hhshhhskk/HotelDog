@@ -42,7 +42,7 @@ const TopButton = () => {
 
   return (
     <div>
-      {scrollPosition > 400 ? (
+      {scrollPosition > 150 ? (
         <TopBt
           scrollPosition={scrollPosition}
           id="scrollButton"
