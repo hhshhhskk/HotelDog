@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import Dog from "../../components/Common/Dog";
+import BoardTable from "../../components/Board/BoardTable";
 
 const BoardWrap = styled.div`
   width: 100%;
@@ -101,34 +102,12 @@ const BoardFilter = styled.div`
   width: 50%;
 `;
 
-const BoardBox = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: yellowgreen;
-`;
-
-const BoardBoxTitle = styled.div`
-  background-color: red;
-  width: 100%;
-  height: 35px;
-
-  border-top: 0.5px solid #654222;
-  border-bottom: 0.5px solid #654222;
-`;
-
-const BoardBoxItem = styled.div`
-  background-color: beige;
-  width: 100%;
-  height: 50px;
-  border-bottom: 0.5px solid #654222;
-`;
-
 const BoardPage = () => {
   const data = [0, 1, 2, 3, 4, 5, 6, 7];
   const category = ["전체글", "공지", "정보", "자유게시판"];
   const [cateNum, setCateNum] = useState(0);
   const categoryLength = category.length;
+
   return (
     <BoardWrap>
       <BoardContent>
@@ -167,12 +146,7 @@ const BoardPage = () => {
           </BoardCategory>
           <BoardFilter></BoardFilter>
         </BoardTop>
-        <BoardBox>
-          <BoardBoxTitle></BoardBoxTitle>
-          {data.map((data, idx) => {
-            return <BoardBoxItem key={idx}></BoardBoxItem>;
-          })}
-        </BoardBox>
+        <BoardTable />
       </BoardContent>
     </BoardWrap>
   );
