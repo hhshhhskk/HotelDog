@@ -76,67 +76,6 @@ export const VisualForm = styled.div`
   /* background-color: aqua; */
 `;
 
-export const SearchForm = styled.form`
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  /* 왜 안먹지 */
-  align-items: center;
-  /* background-color: aquamarine; */
-  padding: 20px 43px;
-  font-size: 1.4rem;
-`;
-
-export const LocationSelect = styled.select`
-  width: 420px;
-  height: 42px;
-  padding: 10px 25px;
-  border-radius: 9px;
-  border: none;
-  color: #9c9c9c;
-`;
-
-export const DateSelect = styled.input`
-  width: 250px;
-  height: 42px;
-  padding: 10px 25px;
-  border-radius: 9px;
-  border: none;
-`;
-
-export const NumberSelect = styled.select`
-  width: 140px;
-  height: 42px;
-  padding: 10px 25px;
-  border-radius: 9px;
-  border: none;
-`;
-
-export const OptionSelect = styled.button`
-  width: 140px;
-  height: 42px;
-  padding: 10px 25px;
-  border-radius: 9px;
-  border: none;
-  color: #9c9c9c;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-export const SubmitButton = styled.button`
-  width: 120px;
-  height: 42px;
-  /* padding: 10px 25px; */
-  border-radius: 9px;
-  border: none;
-  background-color: #ccb197;
-  color: #654222;
-  font-weight: 700;
-  cursor: pointer;
-`;
-
 export const ListDiv = styled.div`
   /* background-color: aquamarine; */
   margin-top: 40px;
@@ -145,13 +84,13 @@ export const ListDiv = styled.div`
 `;
 
 export const EventListDiv = styled.div`
-  background-color: hotpink;
+  /* background-color: hotpink; */
   height: 460px;
   width: 100%;
 `;
 
 export const HotelListDiv = styled.div`
-  background-color: hotpink;
+  /* background-color: hotpink; */
   height: 460px;
   width: 100%;
 `;
@@ -160,6 +99,9 @@ export const EventText = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* padding-top: 35px;
+  padding-bottom: 20px; */
+  padding: 35px 0px;
   /* background-color: plum; */
   /* height: 460px; */
   width: 100%;

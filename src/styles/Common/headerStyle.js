@@ -8,7 +8,7 @@ export const HeaderDiv = styled.div`
   height: ${props => (props.scrollPosition > 40 ? "100px" : "140px")};
 
   position: fixed;
-  /* top: 0; */
+  top: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
