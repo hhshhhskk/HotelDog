@@ -6,25 +6,25 @@ const MyPageWrap = styled.div`
   margin: 0 auto;
   width: 1200px;
   height: auto;
-  background-color: lavender;
+  /* background-color: lavender; */
 `;
 const MyPageContents = styled.div`
   position: relative;
+  display: flex;
   width: 100%;
-  height: auto;
+  height: 980px;
   margin-top: 199px;
 `;
 const MyPageSide = styled.div`
   position: relative;
   padding: 35px;
   width: 250px;
-  height: auto;
+  height: 330px;
   background-color: #fffaf0;
   border-radius: 10px;
 `;
 const SideTop = styled.div`
   position: relative;
-  display: flex;
 `;
 const SideTopTitle = styled.div`
   position: relative;
@@ -72,8 +72,48 @@ const SideBut = styled.div`
     }
   }
 `;
+
 const MyPageRright = styled.div`
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 260px;
+  width: 300px;
+  height: 168px;
+  background-color: #ffffff;
+`;
+
+const MyPageRrightContent = styled.div`
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+  p {
+    position: relative;
+    font-size: 16px;
+    font-weight: 600;
+    color: #654222;
+  }
+
+  img {
+    position: relative;
+    width: 60px;
+    height: 62px;
+  }
+  input {
+    position: relative;
+    color: #654222;
+    width: 250px;
+    height: 30px;
+    overflow: hidden;
+    font-size: 4rem;
+    border: 1px solid #654222;
+    border-radius: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+
+    overflow: hidden;
+  }
 `;
 
 // 마이페이지
@@ -121,7 +161,13 @@ const MyPage = () => {
               </ul>
             </SideBut>
           </MyPageSide>
-          <MyPageRright></MyPageRright>
+          <MyPageRright>
+            <MyPageRrightContent>
+              <img src={`${process.env.PUBLIC_URL}/images/MyPage/unlock.svg`} />
+              <p>비밀번호를 다시 한 번 입력해주세요.</p>
+              <input type="password" />
+            </MyPageRrightContent>
+          </MyPageRright>
         </MyPageContents>
       </MyPageWrap>
     </div>
