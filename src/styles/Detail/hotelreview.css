@@ -1,0 +1,13 @@
+.hotelreview_wrap {
+  position: relative;
+  width: 650px;
+  height: 640px;
+  background-color: yellowgreen;
+  border-radius: 15px;
+}
+.roomreview {
+  position: relative;
+  font-size: 20px;
+  color: #654222;
+  font-weight: 600;
+}
