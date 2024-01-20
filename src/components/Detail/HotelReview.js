@@ -5,25 +5,37 @@ const HotelReview = () => {
   return (
     <div className="hotelreview_wrap">
       {/* 후기 - 헤더 영역 */}
-      <div className="roomreview">숙소 후기</div>
-      <div>
-        <img
-          src={`${process.env.PUBLIC_URL}/images/hotelDetail/hotelReviewClose.svg`}
-          alt=""
-        />
-      </div>
-      {/* 후기 - 메인 영역 */}
-      <div>
-        {/* 메인's 헤더(숙소 이름) 영역 */}
-        <div>
+      <div className="hotelreview-header-wrap">
+        <div className="roomreview">숙소 후기</div>
+        <div className="roomreview-close">
           <img
-            src={`${process.env.PUBLIC_URL}/images/board/boardImg.svg`}
+            src={`${process.env.PUBLIC_URL}/images/hotelDetail/hotelReviewClose.svg`}
             alt=""
           />
-          <span>5. 0</span>
-          <span>교동 쉽독호텔 & 리조트</span>
-          <span>대구광역시 중구</span>
         </div>
+      </div>
+      {/* 후기 - 메인 영역 */}
+      <div className="review-main">
+        {/* 메인's 헤더(숙소 이름) 영역 */}
+        <div className="review-header">
+          {/* <div className="review-star"> */}
+          {/* </div> */}
+          <img
+            className="review-star"
+            src={`${process.env.PUBLIC_URL}/images/hotelDetail/filledStar.svg`}
+            alt=""
+          />
+          <div>
+            <span className="review-number">5. 0</span>
+            <span className="review-hotel">교동 쉽독호텔 & 리조트</span>
+            <span className="review-spot">대구광역시 중구</span>
+          </div>
+        </div>
+        <img
+          className="review-main-line"
+          src={`${process.env.PUBLIC_URL}/images/hotelDetail/hotelMainLine.svg`}
+          alt=""
+        />
         {/* 메인's 헤더(별점 및 한줄평) 영역 */}
       </div>
 
