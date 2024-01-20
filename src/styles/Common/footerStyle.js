@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 export const FooterDiv = styled.div`
-  /* position: relative; */
+  position: relative;
   background-color: #654222;
   width: 100%;
   min-width: 1250px;
@@ -12,7 +12,6 @@ export const FooterDiv = styled.div`
 
   font-size: 15px;
   color: #fff;
-  bottom: 0;
 `;
 
 export const FooterContent = styled.div`

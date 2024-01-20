@@ -1,27 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
+import HotelCardForm from "../../components/Main/HotelCardForm";
+import MainSearchFrom from "../../components/Main/MainSearchFrom";
 import TopButton from "../../components/Main/TopButton";
 import {
-  DateSelect,
-  EventListDiv,
-  EventText,
+  AdListDiv,
+  AdText,
+  AdTitle,
+  FilterListDiv,
+  FilterText,
+  FilterTitle,
+  HotelCardDiv,
   HotelListDiv,
-  ListDiv,
-  LocationSelect,
   MainPageDiv,
-  NumberSelect,
-  OptionSelect,
-  SearchForm,
-  SubmitButton,
   VisualDiv,
   VisualForm,
   VisualImg,
   VisualInner,
   VisualText,
 } from "./mainPageStyle";
-import HotelCardForm from "../../components/Main/HotelCardForm";
-import MainSearchFrom from "../../components/Main/MainSearchFrom";
 
 const MainPage = () => {
+  const [selectOption, setSelectOption] = useState();
+
+  //  호텔리스트 정렬방식(별점순, 리뷰순) 선택
+  const handleChangeOption = e => {
+    const selectedValue = e.target.value;
+    setSelectOption(selectedValue);
+    filterData(selectedValue);
+  };
+
+  // 호텔리스트 정렬방식(별점순, 리뷰순) 필터
+  const filterData = selectedValue => {
+    // 선택된 값을 이용해서 데이터 필터링
+    console.log("선택된 값 :", selectedValue);
+  };
+
   return (
     <MainPageDiv>
       <VisualDiv>
@@ -35,6 +48,7 @@ const MainPage = () => {
               나의 반려견에게 <br /> 최고의 하루를 선물하세요
             </span>
           </VisualText>
+
           <VisualForm>
             {/* 메인 검색창 */}
             <MainSearchFrom />
@@ -42,25 +56,42 @@ const MainPage = () => {
         </VisualInner>
       </VisualDiv>
 
-      {/* 호텔 리스트 영역 */}
-      <ListDiv>
+      {/* 호텔 리스트 */}
+      <HotelListDiv>
         {/* 광고 호텔 */}
-        <EventListDiv>
-          <EventText>
-            <h1>지금, 🔥 HOTDOG</h1>
-          </EventText>
-          <HotelListDiv>
+        <AdListDiv>
+          <AdText>
+            <AdTitle>지금, 🔥 HOTDOG</AdTitle>
+            <span>핫한 광고 상품을 추천드립니다!</span>
+          </AdText>
+          <HotelCardDiv>
             {/* 맵을 돌리자^^ */}
             <HotelCardForm />
-          </HotelListDiv>
+          </HotelCardDiv>
+        </AdListDiv>
 
-          {/* 호텔 */}
-          <HotelListDiv>
-            <h1>호텔리스트</h1>
-            <span>정렬방식</span>
-          </HotelListDiv>
-        </EventListDiv>
-      </ListDiv>
+        {/* 필터 호텔 */}
+        <FilterListDiv>
+          <FilterText>
+            <FilterTitle>호텔 리스트 </FilterTitle>
+            <span>등록된 주소 기준으로 보여드립니다</span>
+            <form>
+              <select onChange={handleChangeOption}>
+                <option disabled selected hidden>
+                  정렬방식
+                </option>
+                <option value="별점순">별점순</option>
+                <option value="리뷰순">리뷰순</option>
+              </select>
+            </form>
+          </FilterText>
+
+          <HotelCardDiv>
+            {/* 맵을 돌리자^^ */}
+            <HotelCardForm />
+          </HotelCardDiv>
+        </FilterListDiv>
+      </HotelListDiv>
       <TopButton />
     </MainPageDiv>
   );
