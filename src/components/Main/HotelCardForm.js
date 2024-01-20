@@ -2,9 +2,9 @@ import styled from "@emotion/styled";
 import React from "react";
 
 export const HotelDiv = styled.div`
+  position: relative;
   width: 360px;
-  height: 410px;
-  /* background-color: plum; */
+  padding-bottom: 50px;
 `;
 export const HotelImgDiv = styled.div`
   position: relative;
@@ -12,9 +12,10 @@ export const HotelImgDiv = styled.div`
   height: 290px;
   overflow: hidden;
   border-radius: 10px;
-  /* background-color: aqua; */
+  /* z-index: 1; */
 
   img {
+    position: relative;
     object-fit: cover;
     width: 100%;
     height: 100%;
@@ -22,14 +23,24 @@ export const HotelImgDiv = styled.div`
   }
 `;
 
-// 좋아요한 호텔
-export const LikeImgDiv = styled.div``;
+// 좋아요한 호텔 (안 되는 이유?)
+export const LikeImgDiv = styled.div`
+  position: absolute;
+  z-index: 999;
+
+  img {
+    position: relative;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+`;
 
 export const HotelText = styled.div`
   position: relative;
   display: block;
   padding: 20px 0px;
-  /* background-color: aqua; */
 `;
 
 export const TitleDiv = styled.div`
@@ -57,74 +68,110 @@ export const HotelLocation = styled.span`
   display: block;
   color: #9d9d9d;
   font-size: 14px;
-  padding-top: 6px;
+  padding: 6px 0px;
 `;
 
 export const PriceDiv = styled.div`
   position: relative;
   display: flex;
-  padding-top: 6px;
-  bottom: 0;
   align-items: flex-end;
+  font-weight: 700;
 `;
 
 export const Sale = styled.span`
   position: relative;
   color: #e05353;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 1.8rem;
 `;
 export const NetPrice = styled.span`
   position: relative;
   color: #9d9d9d;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 1.4rem;
   padding: 0px 6px;
+  text-decoration: line-through;
 `;
 export const SalePriceDiv = styled.div`
   position: relative;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 1.8rem;
 `;
 
 const HotelCardForm = () => {
-  return (
-    <div>
-      <HotelDiv>
-        {/* 호텔 이미지 */}
-        <HotelImgDiv>
-          <img src={`${process.env.PUBLIC_URL}/images/hotel1.jpg`} />
-          {/* 찜하기 이미지 */}
-          <LikeImgDiv>
-            <img />
-          </LikeImgDiv>
-        </HotelImgDiv>
+  const hotels = [
+    {
+      pic: "",
+      name: "호텔 1",
+      star: "9.5",
+      add: "대구 중구",
+      sale: "",
+      netprice: "50000",
+      saleprice: "",
+    },
+    {
+      pic: "",
+      name: "호텔 2",
+      star: "8.0",
+      add: "대구 수성구",
+      sale: "10",
+      netprice: "50000",
+      saleprice: "45000",
+    },
+    {
+      pic: "",
+      name: "호텔 3",
+      star: "9.8",
+      add: "대구 북구",
+      sale: "10",
+      netprice: "80000",
+      saleprice: "72000",
+    },
+    {
+      pic: "",
+      name: "호텔 4",
+      star: "5.0",
+      add: "대구 중구",
+      sale: "",
+      netprice: "30000",
+      saleprice: "",
+    },
+  ];
 
-        {/* 텍스트 영역 */}
-        <HotelText>
-          {/* 호텔 이름 및 별점 */}
-          <TitleDiv>
-            {/* 호텔 이름 */}
-            <HotelName>강아지 호텔</HotelName>
-            {/* 호텔 별점 */}
-            <StarDiv>
-              {/* 별점의 별을 이미지로 할지? */}
-              <img />
-              <span>★ 9.5</span>
-            </StarDiv>
-          </TitleDiv>
-          <HotelLocation>강아지 호텔 설명입니다.</HotelLocation>
-          <PriceDiv>
-            <Sale>10%</Sale>
-            <NetPrice>110,000</NetPrice>
-            <SalePriceDiv>
-              <span>99,000</span>
-              <span>원</span>
-            </SalePriceDiv>
-          </PriceDiv>
-        </HotelText>
-      </HotelDiv>
-    </div>
+  return (
+    <>
+      {hotels.map(hotels => (
+        <>
+          <HotelDiv key={hotels.name} style={{ flex: "0 0 33%" }}>
+            {/* 호텔 이미지 */}
+            <HotelImgDiv>
+              <img src={`${process.env.PUBLIC_URL}/images/hotel1.jpg`} />
+              {/* <LikeImgDiv>
+                <img src={`${process.env.PUBLIC_URL}/images/like_before.svg`} />
+              </LikeImgDiv> */}
+            </HotelImgDiv>
+
+            {/* 텍스트 영역 */}
+            <HotelText>
+              <TitleDiv>
+                <HotelName>{hotels.name}</HotelName>
+                <StarDiv>
+                  {/* 별점의 별을 이미지로 할지? */}
+                  <img />
+                  <span>★ {hotels.star}</span>
+                </StarDiv>
+              </TitleDiv>
+              <HotelLocation>{hotels.add}</HotelLocation>
+              <PriceDiv>
+                <Sale>{hotels.sale}%</Sale>
+                <NetPrice>{hotels.netprice}</NetPrice>
+                <SalePriceDiv>
+                  <span>{hotels.saleprice}</span>
+                  <span>원</span>
+                </SalePriceDiv>
+              </PriceDiv>
+            </HotelText>
+          </HotelDiv>
+        </>
+      ))}
+    </>
   );
 };
 

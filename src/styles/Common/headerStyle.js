@@ -2,25 +2,31 @@ import styled from "@emotion/styled";
 
 export const HeaderDiv = styled.div`
   background-color: ${props =>
-    props.scrollPosition > 40 ? "#fff" : "rgba(0, 0, 0, 0.6)"};
+    props.scrollPosition < 40 && props.mainPage
+      ? "rgba(0, 0, 0, 0.6)"
+      : "#fff"};
   width: 100%;
   min-width: 1250px;
-  height: ${props => (props.scrollPosition > 40 ? "100px" : "140px")};
+  height: ${props =>
+    props.scrollPosition < 40 && props.mainPage ? "140px" : "100px"};
 
   position: fixed;
   top: 0;
+
   display: flex;
   flex-direction: column;
   align-items: center;
 
   border-bottom: ${props =>
-    props.scrollPosition > 40 ? "1px solid rgba(0, 0, 0, 0.1)" : "none"};
+    props.scrollPosition < 40 && props.mainPage
+      ? "none"
+      : "1px solid rgba(0, 0, 0, 0.1)"};
 
   z-index: 1000;
   font-size: 1.5rem;
-  color: ${props => (props.scrollPosition > 40 ? "#654222" : "#fff")};
+  color: ${props =>
+    props.scrollPosition < 40 && props.mainPage ? "#fff" : "#654222"};
 
-  /* 애니메이션 효과 */
   transition: background-color 0.5s ease, height 0.5s ease, color 0.5s ease;
 `;
 
@@ -77,14 +83,15 @@ export const SearchBox = styled.input`
   width: 600px;
   height: 50px;
   padding-left: 30px;
-  /* 왜 안 먹지??? */
   border: ${props =>
-    props.scrollPosition > 40 ? "1px solid #654222" : "none"};
+    props.scrollPosition < 40 && props.mainPage ? "none" : "1px solid #654222"};
   /* border: 1px solid #654222; */
   border-right: none;
   border-radius: 50px 0 0 50px;
   background-color: ${props =>
-    props.scrollPosition > 40 ? "#fff" : "rgba(255, 255, 255, 0.3)"};
+    props.scrollPosition < 40 && props.mainPage
+      ? "rgba(255, 255, 255, 0.3)"
+      : "#fff"};
   transition: border 0.5s ease;
 `;
 
@@ -94,9 +101,11 @@ export const SearchBt = styled.button`
   border-radius: 0 50px 50px 0;
   cursor: pointer;
   background-color: ${props =>
-    props.scrollPosition > 40 ? "#fff" : "rgba(255, 255, 255, 0.3)"};
+    props.scrollPosition < 40 && props.mainPage
+      ? "rgba(255, 255, 255, 0.3)"
+      : "#fff"};
   border: ${props =>
-    props.scrollPosition > 40 ? "1px solid #654222" : "none"};
+    props.scrollPosition < 40 && props.mainPage ? "none" : "1px solid #654222"};
   /* border: 1px solid #654222; */
   border-left: none;
 `;

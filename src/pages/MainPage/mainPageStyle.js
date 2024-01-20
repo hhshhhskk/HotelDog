@@ -12,17 +12,19 @@ export const MainPageDiv = styled.div`
 `;
 
 export const VisualDiv = styled.div`
+  position: relative;
   width: 100%;
   height: 860px;
-  background-color: yellowgreen;
   /* overflow: hidden; */
 `;
 
 export const VisualImg = styled.div`
+  position: relative;
   width: 100%;
   height: 860px;
   /* overflow: hidden; */
   img {
+    position: relative;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -30,6 +32,7 @@ export const VisualImg = styled.div`
   }
   /* 이미지 앞에 검은색 투명도 주기 */
   &::before {
+    position: relative;
     content: "";
     position: absolute;
     top: 0;
@@ -60,6 +63,7 @@ export const VisualText = styled.div`
   bottom: 130px;
   /* margin-top: -130px; */
   span {
+    position: relative;
     font-size: 4rem;
     font-weight: 600;
     color: #fff;
@@ -76,46 +80,73 @@ export const VisualForm = styled.div`
   /* background-color: aqua; */
 `;
 
-export const ListDiv = styled.div`
+export const HotelListDiv = styled.div`
+  position: relative;
   /* background-color: aquamarine; */
-  margin-top: 40px;
-  height: 500px;
+  margin: 100px 0px;
   width: 1200px;
 `;
 
-export const EventListDiv = styled.div`
-  /* background-color: hotpink; */
-  height: 460px;
+export const AdListDiv = styled.div`
+  position: relative;
+  /* padding-top: 50px; */
   width: 100%;
 `;
 
-export const HotelListDiv = styled.div`
-  /* background-color: hotpink; */
-  height: 460px;
+export const AdText = styled.div`
+  position: relative;
+  display: block;
+  padding-bottom: 13px;
   width: 100%;
+  span {
+    color: #9c9c9c;
+    font-size: 1.4rem;
+  }
 `;
 
-export const EventText = styled.div`
+export const AdTitle = styled.h1`
+  position: relative;
+  color: #654222;
+`;
+
+export const HotelCardDiv = styled.div`
+  position: relative;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
-  /* padding-top: 35px;
-  padding-bottom: 20px; */
-  padding: 35px 0px;
-  /* background-color: plum; */
-  /* height: 460px; */
   width: 100%;
-  height: 27px;
-  h1 {
-    /* font-size: 2rem; */
-    color: #654222;
+  /* background-color: yellowgreen; */
+`;
+export const FilterListDiv = styled.div`
+  position: relative;
+  width: 100%;
+  /* background-color: red; */
+`;
+
+export const FilterText = styled.div`
+  position: relative;
+  display: block;
+  padding-bottom: 13px;
+  width: 100%;
+  span {
+    color: #9c9c9c;
+    font-size: 1.4rem;
   }
-  button {
-    border: none;
-    background-color: #fff;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    color: #654222;
+  form {
+    position: absolute;
+    right: 0;
+    bottom: 15px;
+    select {
+      padding: 3px 17px;
+      border-radius: 5px;
+      border: 1px solid #969696;
+      color: #969696;
+    }
   }
+`;
+
+// 화면에 마진이 왜 들어가 있지?
+export const FilterTitle = styled.h1`
+  position: relative;
+  color: #654222;
 `;

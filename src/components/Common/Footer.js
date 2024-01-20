@@ -33,7 +33,7 @@ const Footer = () => {
             <FooterBottomItem>
               <ul>
                 <li>상호명 : 호텔독</li>
-                <li>대표 : 황예지</li>
+                <li>대표 : 홍길동</li>
                 <li>TEL : 053-572-1005</li>
                 <li>EMAIL : master@hoteldog.com</li>
                 <li>주소 : 대구광역시 중구 중앙대로 394</li>

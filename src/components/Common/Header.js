@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   HeaderCategory,
   HeaderContent,
@@ -15,13 +15,17 @@ import {
 } from "../../styles/Common/headerStyle";
 
 const Header = () => {
-  const categoryItems = ["게시판", "이벤트", "로그인"];
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // 스크롤 위치 업데이트
+  // 메인페이지 주소
+  const mainPage = location.pathname === "/";
+
+  // 스크롤 위치에 대한 useState
   const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
+    // 스크롤 위치 업데이트
     const handleScroll = () => {
       setScrollPosition(window.scrollY);
     };
@@ -31,16 +35,7 @@ const Header = () => {
     };
   }, []);
 
-  // 로고 클릭 시 메인홈으로 전환
-  const handleClickLogo = () => {
-    navigate("/");
-  };
-
-  const searchBtnClick = () => {
-    alert("호텔검색버튼클릭!");
-  };
-
-  // SNS 선택 시 페이지 전환
+  // SNS 클릭 시 페이지 전환
   const handleClickSns = e => {
     const snsImg = e.target.id;
     if (snsImg === "facebook") {
@@ -52,6 +47,17 @@ const Header = () => {
     } else if (snsImg === "youtube") {
       navigate("/");
     }
+  };
+
+  // 로고 클릭 시 메인홈으로 전환
+  const handleClickLogo = () => {
+    navigate("/");
+  };
+
+  // 검색할 시 검색에 대한 필터 작동
+  const handleClickSearch = () => {
+    // !!! 검색 기능 넣어주기
+    alert("호텔 검색");
   };
 
   // 카테고리 선택 시 페이지 전환
@@ -67,65 +73,71 @@ const Header = () => {
   };
 
   return (
-    <HeaderDiv scrollPosition={scrollPosition}>
-      {/* Header 상단 : SNS 카테고리 */}
-      <HeaderTop scrollPosition={scrollPosition}>
-        <HeaderTopContent>
-          <HeaderTopItem>
-            <img
-              id="facebook"
-              src={`${process.env.PUBLIC_URL}/images/facebook.svg`}
-              alt=""
-              onClick={handleClickSns}
-            />
-            <img
-              id="instagram"
-              src={`${process.env.PUBLIC_URL}/images/instagram.svg`}
-              alt=""
-              onClick={handleClickSns}
-            />
-            <img
-              id="twitter"
-              src={`${process.env.PUBLIC_URL}/images/twitter.svg`}
-              alt=""
-              onClick={handleClickSns}
-            />
-            <img
-              id="youtube"
-              src={`${process.env.PUBLIC_URL}/images/youtube.svg`}
-              alt=""
-              onClick={handleClickSns}
-            />
-          </HeaderTopItem>
-        </HeaderTopContent>
-      </HeaderTop>
+    <HeaderDiv scrollPosition={scrollPosition} mainPage={mainPage}>
+      {/* Header 상단 : SNS */}
+      {mainPage && (
+        <HeaderTop scrollPosition={scrollPosition}>
+          <HeaderTopContent>
+            <HeaderTopItem>
+              <img
+                id="facebook"
+                src={`${process.env.PUBLIC_URL}/images/facebook.svg`}
+                alt=""
+                onClick={handleClickSns}
+              />
+              <img
+                id="instagram"
+                src={`${process.env.PUBLIC_URL}/images/instagram.svg`}
+                alt=""
+                onClick={handleClickSns}
+              />
+              <img
+                id="twitter"
+                src={`${process.env.PUBLIC_URL}/images/twitter.svg`}
+                alt=""
+                onClick={handleClickSns}
+              />
+              <img
+                id="youtube"
+                src={`${process.env.PUBLIC_URL}/images/youtube.svg`}
+                alt=""
+                onClick={handleClickSns}
+              />
+            </HeaderTopItem>
+          </HeaderTopContent>
+        </HeaderTop>
+      )}
 
       {/* Header 하단 : 로고, 검색, 카테고리*/}
       <HeaderContent>
-        {scrollPosition > 40 ? (
-          <HeaderLogo
-            onClick={handleClickLogo}
-            src={`${process.env.PUBLIC_URL}/images/logoAfter.svg`}
-            alt=""
-          />
-        ) : (
+        {scrollPosition < 40 && mainPage ? (
           <HeaderLogo
             onClick={handleClickLogo}
             src={`${process.env.PUBLIC_URL}/images/logoBefore.svg`}
             alt=""
           />
+        ) : (
+          <HeaderLogo
+            onClick={handleClickLogo}
+            src={`${process.env.PUBLIC_URL}/images/logoAfter.svg`}
+            alt=""
+          />
         )}
         <InputDiv>
-          <SearchBox scrollPosition={scrollPosition} />
-          <SearchBt scrollPosition={scrollPosition} onClick={searchBtnClick}>
-            {scrollPosition > 40 ? (
+          <SearchBox scrollPosition={scrollPosition} mainPage={mainPage} />
+          <SearchBt
+            scrollPosition={scrollPosition}
+            mainPage={mainPage}
+            onClick={handleClickSearch}
+          >
+            {scrollPosition < 40 && mainPage ? (
               <SearchBtnImg
-                src={`${process.env.PUBLIC_URL}/images/searchBtAfter.svg`}
+                src={`${process.env.PUBLIC_URL}/images/searchBtBefore.svg`}
                 alt=""
               />
             ) : (
               <SearchBtnImg
-                src={`${process.env.PUBLIC_URL}/images/searchBtBefore.svg`}
+                src={`${process.env.PUBLIC_URL}/images/searchBtAfter.svg`}
                 alt=""
               />
             )}
@@ -140,7 +152,7 @@ const Header = () => {
             <li>
               <span onClick={handleClickCate}>마이페이지</span>
             </li>
-            {/* 로그인 유무로 삼항 연산자 작성 예정 */}
+            {/* !!! 로그인 유무로 삼항 연산자 작성 예정 */}
             <li>
               <span onClick={handleClickCate}>로그인</span>
             </li>
