@@ -15,8 +15,8 @@ const BoardContent = styled.div`
   width: 1200px;
   height: 100%;
   display: flex;
+  margin-top: 150px;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 `;
 
@@ -103,7 +103,6 @@ const BoardFilter = styled.div`
 `;
 
 const BoardPage = () => {
-  const data = [0, 1, 2, 3, 4, 5, 6, 7];
   const category = ["전체글", "공지", "정보", "자유게시판"];
   const [cateNum, setCateNum] = useState(0);
   const categoryLength = category.length;
@@ -146,7 +145,7 @@ const BoardPage = () => {
           </BoardCategory>
           <BoardFilter></BoardFilter>
         </BoardTop>
-        <BoardTable />
+        <BoardTable cateNum={cateNum} />
       </BoardContent>
     </BoardWrap>
   );

@@ -218,6 +218,7 @@ const LoginPage = () => {
                     {...register("password", {
                       required: "비밀번호는 필수사항입니다.",
                     })}
+                    type="password"
                     placeholder="비밀번호"
                   />
                 </InputDiv>

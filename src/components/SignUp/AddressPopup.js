@@ -4,8 +4,8 @@ import DaumPostcode from "react-daum-postcode";
 
 const PopupWrapper = styled.div`
   position: absolute;
-  top: 25%;
-  left: 15%;
+  top: 20%;
+  left: 8%;
 
   width: 500px;
   height: 500px;

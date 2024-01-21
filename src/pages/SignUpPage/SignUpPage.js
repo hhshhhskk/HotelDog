@@ -43,7 +43,7 @@ const SignUpTitle = styled.div`
   font-size: 24px;
   font-weight: 700;
 
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 `;
 
 const InputName = styled.div`
@@ -99,7 +99,7 @@ const AgreeDiv = styled.div`
   width: 550px;
   font-size: 1.5rem;
   color: #654222;
-  margin-bottom: 64px;
+  margin-bottom: 30px;
 `;
 
 const AgreeImg = styled.img`
