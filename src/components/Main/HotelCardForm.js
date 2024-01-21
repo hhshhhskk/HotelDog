@@ -130,7 +130,7 @@ const HotelCardForm = () => {
     },
   ];
 
-  // 호텔 할인가 계산식
+  // 호텔 할인가 계산
   const salePrice = (originalPrice, sale) => {
     if (originalPrice && sale) {
       const discount = (parseFloat(sale) / 100) * parseFloat(originalPrice);
