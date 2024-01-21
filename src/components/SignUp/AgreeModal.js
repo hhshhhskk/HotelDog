@@ -20,7 +20,7 @@ const Modal = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 680px;
-  height: 920px;
+  height: 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -31,9 +31,11 @@ const Modal = styled.div`
 const ModalInner = styled.div`
   padding: 33px 50px 33px 50px;
   width: 600px;
-  height: 743px;
+  height: 600px;
   border-radius: 10px;
   background-color: #f9f9f9;
+
+  overflow: auto;
 `;
 
 const ModalTop = styled.div`
