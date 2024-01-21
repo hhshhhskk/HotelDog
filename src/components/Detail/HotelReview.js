@@ -26,7 +26,7 @@ const HotelReview = () => {
             alt=""
           />
           <div>
-            <span className="review-number">5. 0</span>
+            <span className="review-number">5.0</span>
             <span className="review-hotel">교동 쉽독호텔 & 리조트</span>
             <span className="review-spot">대구광역시 중구</span>
           </div>
