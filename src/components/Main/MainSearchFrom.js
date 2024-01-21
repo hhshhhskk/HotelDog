@@ -71,6 +71,7 @@ const MainSearchFrom = () => {
           <option disabled selected hidden>
             지역을 선택해주세요
           </option>
+          {/* !!!데이터오면 map으로 변경 */}
           <option>서울특별시</option>
           <option>대구광역시</option>
         </LocationSelect>
@@ -80,6 +81,13 @@ const MainSearchFrom = () => {
 
         {/* 마리 선택 */}
         <NumberSelect>
+          {/* <li>
+            <label>
+              <input type="checkbox" name="소형견" />
+              소형견
+            </label>
+            <input type="number">마리</input>
+          </li> */}
           <option selected>
             <img src={`${process.env.PUBLIC_URL}/images/footicon.svg`} alt="" />
             1 마리
