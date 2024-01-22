@@ -69,16 +69,16 @@ const SideBut = styled.div`
 
 const MyPageRright = styled.div`
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 260px;
-  width: 300px;
-  height: 168px;
-  background-color: #ffffff;
 `;
 
-const MyPageRrightContent = styled.div``;
+const MyPageRrightContent = styled.div`
+  position: relative;
+  width: 950px;
+  height: 980px;
+  justify-content: center;
+  align-items: center;
+  /* background-color: lavender; */
+`;
 
 const SideTopCateItem = styled.div`
   position: relative;
@@ -112,10 +112,10 @@ const MyPage = () => {
     setSelectedCategory(index);
   };
 
-  const renderComponentByCategory = () => {
+  const myPageCate = () => {
     switch (selectedCategory) {
       case 0:
-        return <Member />;
+        return <Password />;
       case 1:
         return <Booking />;
       case 2:
@@ -165,7 +165,7 @@ const MyPage = () => {
           </MyPageSide>
           <MyPageRright>
             <MyPageRrightContent>
-              {selectedCategory !== null && renderComponentByCategory()}
+              {selectedCategory !== null && myPageCate()}
             </MyPageRrightContent>
           </MyPageRright>
         </MyPageContents>
