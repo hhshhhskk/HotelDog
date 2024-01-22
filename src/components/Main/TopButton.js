@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 const TopBt = styled.button`
   position: fixed;
   bottom: 350px;
-  right: 450px;
+  right: 250px;
   background-color: #654222;
   border: none;
   border-radius: 30px;
@@ -22,14 +22,19 @@ const TopBtImg = styled.img`
 `;
 
 const TopButton = () => {
-  // 스크롤 위치 업데이트
+  // 스크롤 위치 저장 및 업데이트, 초기값은 0
   const [scrollPosition, setScrollPosition] = useState(0);
 
+  // 컴포넌트가 마운트될 때 한 번만 실행되는 이벤트 리스너를 설정
   useEffect(() => {
     const handleScroll = () => {
+      // 스크롤 이벤트가 발생할 때 호출. window.scrollY로 현재 스크롤 위치를 가져와서 scrollPosition을 업데이트
       setScrollPosition(window.scrollY);
     };
+    // 스크롤 이벤트가 발생할 때 handScroll 함수 호출하는 이벤트 리스너
     window.addEventListener("scroll", handleScroll);
+
+    // 컴포넌트가 언마운트될 때 등록한 이벤트 리스너 제거. 메모리 누수 방지용
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };

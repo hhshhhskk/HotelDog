@@ -72,11 +72,12 @@ export const HeaderLogo = styled.img`
 `;
 
 export const InputDiv = styled.div`
-  width: 700px;
+  width: 650px;
   /* height: 100px; */
   display: flex;
   justify-content: center;
   /* align-items: center; */
+  /* background-color: rebeccapurple; */
 `;
 
 export const SearchBox = styled.input`
@@ -116,12 +117,13 @@ export const SearchBtnImg = styled.img`
 `;
 
 export const HeaderCategory = styled.div`
-  width: 183px;
+  /* width: 183px; */
   ul {
     display: flex;
     justify-content: space-between;
     li span {
       cursor: pointer;
+      padding: 0px 5px;
     }
   }
 `;
