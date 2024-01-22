@@ -1,5 +1,6 @@
 import Layout from "../components/Layout/Layout";
-import BoardPage from "../pages/BoardPage/BoardPage";
+import BoardCreatePage from "../pages/Board/BoardCreatePage/BoardCreatePage";
+import BoardPage from "../pages/Board/BoardPage/BoardPage";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import EventPage from "../pages/EventPage/EventPage";
 import HotelDetailPage from "../pages/HotelDetailPage/HotelDetailPage";
@@ -43,6 +44,11 @@ export const RouterInfo = [
         path: "/board",
         element: <BoardPage />,
         label: "board",
+      },
+      {
+        path: "/boardcreate",
+        element: <BoardCreatePage />,
+        label: "boardcreate",
       },
       {
         path: "/hoteldetail/:detailId",
