@@ -6,11 +6,10 @@ const MainSearchFrom = () => {
     position: relative;
     display: flex;
     justify-content: space-between;
-    /* 왜 안먹지 */
-    align-items: center;
-    /* background-color: aquamarine; */
     padding: 20px 43px;
     font-size: 1.4rem;
+    width: 1200px;
+    height: 85px;
   `;
 
   const LocationSelect = styled.select`
