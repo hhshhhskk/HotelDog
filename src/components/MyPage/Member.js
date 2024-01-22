@@ -1,10 +1,16 @@
 import styled from "@emotion/styled";
 import React from "react";
 
-const MemberPage = styled.div``;
+const MemberPage = styled.div`
+  position: relative;
+`;
 
 const Member = () => {
-  return <MemberPage>Member</MemberPage>;
+  return (
+    <MemberPage>
+      <p>회원정보</p>
+    </MemberPage>
+  );
 };
 
 export default Member;
