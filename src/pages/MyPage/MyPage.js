@@ -1,5 +1,12 @@
+import { ClassNames } from "@emotion/react";
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useState } from "react";
+import Booking from "../../components/MyPage/Booking";
+import Member from "../../components/MyPage/Member";
+import Password from "../../components/MyPage/Password";
+import Mydog from "../../components/MyPage/Mydog";
+import LikeList from "../../components/MyPage/LikeList";
+import Review from "../../components/MyPage/Review";
 
 const MyPageWrap = styled.div`
   position: relative;
@@ -19,7 +26,7 @@ const MyPageSide = styled.div`
   position: relative;
   padding: 35px;
   width: 250px;
-  height: 330px;
+  height: 320px;
   background-color: #fffaf0;
   border-radius: 10px;
 `;
@@ -29,7 +36,7 @@ const SideTop = styled.div`
 const SideTopTitle = styled.div`
   position: relative;
   p {
-    width: 82px;
+    width: 90px;
     height: 25px;
     font-size: 18px;
     color: #654222;
@@ -40,19 +47,6 @@ const SideTopTitle = styled.div`
 
 const SideTopCate = styled.div`
   position: relative;
-  ul {
-    position: relative;
-    margin-top: 10px;
-    li {
-      position: relative;
-      margin-bottom: 6px;
-      cursor: pointer;
-      p {
-        font-size: 14px;
-        color: #969696;
-      }
-    }
-  }
 `;
 
 const SideBut = styled.div`
@@ -84,40 +78,58 @@ const MyPageRright = styled.div`
   background-color: #ffffff;
 `;
 
-const MyPageRrightContent = styled.div`
+const MyPageRrightContent = styled.div``;
+
+const SideTopCateItem = styled.div`
   position: relative;
-  text-align: center;
-  overflow: hidden;
-  p {
+  margin-top: 10px;
+  li {
     position: relative;
-    font-size: 16px;
-    font-weight: 600;
-    color: #654222;
-  }
+    margin-bottom: 6px;
 
-  img {
-    position: relative;
-    width: 60px;
-    height: 62px;
-  }
-  input {
-    position: relative;
-    color: #654222;
-    width: 250px;
-    height: 30px;
-    overflow: hidden;
-    font-size: 4rem;
-    border: 1px solid #654222;
-    border-radius: 10px;
-    padding-bottom: 10px;
-    padding-left: 10px;
-
-    overflow: hidden;
+    span {
+      font-size: 14px;
+      color: #969696;
+      cursor: pointer;
+    }
   }
 `;
+const Content = styled.div``;
 
 // 마이페이지
 const MyPage = () => {
+  const categoryTop = [
+    "회원 정보",
+    "예약 내역",
+    "반려견 정보",
+    "찜한 호텔",
+    "이용 후기",
+  ];
+
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  const clickMenu = index => {
+    setSelectedCategory(index);
+  };
+
+  const renderComponentByCategory = () => {
+    switch (selectedCategory) {
+      case 0:
+        return <Member />;
+      case 1:
+        return <Booking />;
+      case 2:
+        return <Mydog />;
+      case 3:
+        return <LikeList />;
+      case 4:
+        return <Review />;
+      // 추가적으로 다른 카테고리에 대한 컴포넌트를 추가
+      default:
+        return null;
+    }
+  };
+
   return (
     <div>
       <MyPageWrap>
@@ -128,23 +140,13 @@ const MyPage = () => {
                 <p>마이페이지</p>
               </SideTopTitle>
               <SideTopCate>
-                <ul>
-                  <li>
-                    <p>회원 정보</p>
-                  </li>
-                  <li>
-                    <p>예약내역</p>
-                  </li>
-                  <li>
-                    <p>반려견 정보</p>
-                  </li>
-                  <li>
-                    <p>찜한 호텔</p>
-                  </li>
-                  <li>
-                    <p>이용 후기</p>
-                  </li>
-                </ul>
+                <SideTopCateItem>
+                  {categoryTop.map((category, index) => (
+                    <li key={index} onClick={() => clickMenu(index)}>
+                      <span>{category}</span>
+                    </li>
+                  ))}
+                </SideTopCateItem>
               </SideTopCate>
             </SideTop>
             <SideBut>
@@ -163,9 +165,7 @@ const MyPage = () => {
           </MyPageSide>
           <MyPageRright>
             <MyPageRrightContent>
-              <img src={`${process.env.PUBLIC_URL}/images/MyPage/unlock.svg`} />
-              <p>비밀번호를 다시 한 번 입력해주세요.</p>
-              <input type="password" />
+              {selectedCategory !== null && renderComponentByCategory()}
             </MyPageRrightContent>
           </MyPageRright>
         </MyPageContents>
