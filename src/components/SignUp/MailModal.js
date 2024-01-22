@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 
 const Wrapper = styled.div`
-  position: relative;
+  position: absolute;
   width: 100%;
   height: 100vh;
   z-index: 1000;
@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 
 const Overlay = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-color: rgb(0, 0, 0, 0.5);
 `;
 
@@ -40,7 +40,7 @@ const CloseImg = styled.img`
 `;
 
 const MailImg = styled.img`
-  margin-top: 84px;
+  margin-top: 67px;
   margin-bottom: 18px;
 `;
 
@@ -64,6 +64,51 @@ const SmallText = styled.div`
   letter-spacing: -0.32px;
 `;
 
+const CodeBox = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 18px;
+`;
+
+const CodeInput = styled.input`
+  width: 250px;
+  height: 40px;
+
+  border: 1px solid #654222;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  padding-left: 10px;
+  padding-right: 80px;
+`;
+
+const CodeBtn = styled.input`
+  position: absolute;
+  right: 5px;
+  width: 70px;
+  height: 32px;
+  background-color: #654222;
+  color: #fff;
+
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.6rem;
+  border: none;
+  border-radius: 7px;
+`;
+
+const CodeTime = styled.div`
+  width: 100px;
+  height: 30px;
+  margin-top: 7px;
+
+  color: #654222;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+`;
+
 const ReSendBtn = styled.div`
   width: 160px;
   height: 40px;
@@ -79,8 +124,8 @@ const ReSendBtn = styled.div`
 
   background: #fff;
 
-  margin-top: 31px;
-  margin-bottom: 77px;
+  margin-top: 10px;
+  margin-bottom: 52px;
 `;
 
 const ModalInnerBox = styled.div`
@@ -154,19 +199,21 @@ const MailModal = ({ setMailModalOpen }) => {
         <SmallText>
           메일함에서(example@gmail.com) 인증 메일을 확인 바랍니다.
         </SmallText>
-        <SmallText>
-          이메일의 인증 버튼을 선택하면 회원가입이 완료됩니다.
-        </SmallText>
-        <ReSendBtn>인증 메일 재발송</ReSendBtn>
+        <SmallText>이메일의 인증 코드를 확인 후 입력해 주세요.</SmallText>
+        <CodeBox>
+          <CodeInput type="text" placeholder="인증코드를 입력해주세요." />
+          <CodeBtn type="button" value="확 인" />
+        </CodeBox>
+        <CodeTime>5:00</CodeTime>
+        <ReSendBtn>인증 코드 재발송</ReSendBtn>
         <ModalInnerBox>
           <ModalInnerBigText>유의사항</ModalInnerBigText>
           <TextBox>
             <TextFlexBox>
               <TextNum>1.</TextNum>
               <ModalInnerSmallText>
-                인증 메일은 발송 시점으로부터 24시간 동안만 유효하며, 재발송 시
-                기존 인증은 만료됩니다. 반드시 마지막에 수신된 메일을 확인
-                바랍니다.
+                인증 메일은 발송 시점으로부터 5분간 유효하며, 재발송 시 기존
+                인증은 만료됩니다. 반드시 마지막에 수신된 메일을 확인 바랍니다.
               </ModalInnerSmallText>
             </TextFlexBox>
             <TextFlexBox>

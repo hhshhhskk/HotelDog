@@ -80,7 +80,7 @@ function BoardTable({ cateNum }) {
       title: "룽지쵝오",
       writer: "유밍구",
       date: "2024.1.15",
-      views: 300,
+      views: 1997,
     },
     {
       category: "자유게시판",
@@ -118,7 +118,7 @@ function BoardTable({ cateNum }) {
       title: "성공한 인생",
       writer: "준수르",
       date: "2024.1.14",
-      views: 2024,
+      views: 5234,
     },
 
     {

@@ -19,6 +19,8 @@ const SignUpWrap = styled.div`
 
   display: flex;
   justify-content: center;
+
+  margin-top: 40px;
 `;
 
 const SignUpContent = styled.div`
@@ -184,12 +186,12 @@ const SignUpPage = () => {
           <SignUpForm onSubmit={handleSubmit(onValid, onInValid)}>
             <SignUpTitle>회원가입</SignUpTitle>
             <InnerDiv>
-              <InputName>아이디</InputName>
+              <InputName>이메일 아이디</InputName>
               <InputBox
-                {...register("id", {
-                  required: "Id는 필수사항입니다.",
+                {...register("email", {
+                  required: "Email은 필수사항입니다.",
                 })}
-                placeholder="Id를 입력해주세요."
+                placeholder="Email을 입력해주세요."
                 style={styleBtn}
               />
               <InnerBtn
