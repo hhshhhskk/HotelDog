@@ -10,7 +10,7 @@ const HotelDetail = () => {
       <RoomType />
       <ReserveCompletePage />
       <HotelReview />
-      {/* <Calendar /> */}
+      <Calendar />
     </div>
   );
 };

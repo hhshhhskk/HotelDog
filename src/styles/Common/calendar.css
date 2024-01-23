@@ -1,0 +1,63 @@
+.calendar_modal_wrap {
+  position: relative;
+  /* background-color: yellowgreen; */
+  border-radius: 10px;
+  border: 1px solid #c1bfbf;
+  width: 750px;
+  height: 500px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.calendar_header {
+  position: relative;
+  width: 620px;
+  height: 29px;
+
+  display: flex;
+}
+
+.calendar_header-img {
+  position: relative;
+  width: 20px;
+  height: 23px;
+  margin-right: 10px;
+}
+.calendar_header-text {
+  position: relative;
+  font-size: 16px;
+  font-weight: 600;
+  color: #654222;
+}
+/* 달력만 감싸기 */
+.calendar_wrap {
+  position: relative;
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+}
+.calendar_modal_css {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calendar_button {
+  position: relative;
+  background-color: #654222;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+
+  border-radius: 5px;
+  width: 100px;
+  height: 40px;
+  border: 0;
+
+  margin-top: 5px;
+}
+
