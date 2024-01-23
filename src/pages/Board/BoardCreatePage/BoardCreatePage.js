@@ -11,6 +11,8 @@ import {
   BoardTitleRight,
   BoardWrap,
 } from "../../../styles/BoardPageStyle/boardStyle";
+import { useNavigate } from "react-router-dom";
+import QuillEditor from "../../../components/Board/QuillEditor";
 
 const BoardCreateBox = styled.div`
   width: 100%;
@@ -58,32 +60,80 @@ const BoardCreateForm = styled.form`
 `;
 
 const FormNickName = styled.div`
-  background-color: red;
   width: 860px;
   height: 30px;
 `;
 
-const FormTitle = styled.div`
-  background-color: orange;
+const FormLabel = styled.label`
+  display: inline-block;
+  width: 70px;
+  color: #000;
+  font-size: 1.4rem;
+  font-weight: 400;
 
+  &#content {
+    height: 350px;
+    line-height: 350px;
+  }
+`;
+
+const FormInput = styled.input`
+  height: 24px;
+  background-color: #eeeeee;
+  border: none;
+
+  &#nickname {
+    width: 150px;
+  }
+
+  &#title {
+    width: 500px;
+  }
+
+  &#content {
+    width: 800px;
+    height: 350px;
+  }
+`;
+
+const FormTitle = styled.div`
   width: 860px;
   height: 30px;
 `;
 
 const FormCategory = styled.div`
-  background-color: yellow;
   width: 860px;
   height: 30px;
 `;
 
+const CategorySelect = styled.select`
+  width: 80px;
+  height: 24px;
+  border-radius: 5px;
+  border: 1px solid #969696;
+  background-color: #fff;
+
+  option {
+    color: #969696;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+`;
+
+const Editor = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const FormContent = styled.div`
-  background-color: green;
   width: 860px;
   height: 350px;
+  display: flex;
 `;
 
 const FormFile = styled.div`
-  background-color: blue;
+  position: relative;
   width: 860px;
   height: 30px;
   display: flex;
@@ -97,6 +147,13 @@ const File = styled.div`
 
   border: 1px solid #eee;
   background-color: #fafafa;
+`;
+
+const FileInput = styled.input`
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  width: 790px;
 `;
 
 const FormBtnDiv = styled.div`
@@ -126,6 +183,19 @@ const FormBtn = styled.button`
 `;
 
 const BoardCreatePage = () => {
+  const navigate = useNavigate();
+
+  const cancleClick = e => {
+    e.preventDefault();
+    const answer = confirm(
+      "취소를 하시면 작성한 내용을 모두 잃게 됩니다. 정말 취소 하시겠습니까?",
+    );
+
+    if (answer) {
+      navigate(-1);
+    }
+  };
+
   return (
     <BoardWrap>
       <BoardContent>
@@ -154,33 +224,38 @@ const BoardCreatePage = () => {
           </BoardCreateTitleBox>
           <BoardCreateForm>
             <FormNickName>
-              <label htmlFor="nickname">닉네임:</label>
-              <input type="text" id="nickname" name="nickname" />
+              <FormLabel htmlFor="nickname">닉네임</FormLabel>
+              <FormInput type="text" id="nickname" name="nickname" />
             </FormNickName>
             <FormTitle>
-              <label htmlFor="title">제목:</label>
-              <input type="text" id="title" name="title" />
+              <FormLabel htmlFor="title">제목</FormLabel>
+              <FormInput type="text" id="title" name="title" />
             </FormTitle>
             <FormCategory>
-              <label htmlFor="category">카테고리:</label>
-              <input type="text" id="category" name="category" />
+              <FormLabel htmlFor="category">카테고리</FormLabel>
+              <CategorySelect>
+                <option value="정보">정보</option>
+                <option value="자유게시판">자유게시판</option>
+              </CategorySelect>
             </FormCategory>
             <FormContent>
-              <label htmlFor="content">내용:</label>
-              <input type="text" id="content" name="content" />
+              <FormLabel htmlFor="content" id="content">
+                내용
+              </FormLabel>
+              {/* <FormInput type="text" id="content" name="content" /> */}
+              <Editor>
+                <QuillEditor />
+              </Editor>
             </FormContent>
             <FormFile>
-              <label htmlFor="file">첨부파일:</label>
-              <input
-                style={{ opacity: "0", position: "absolute", width: "800px" }}
-                type="file"
-                id="file"
-                name="file"
-              />
+              <FormLabel htmlFor="file">첨부파일</FormLabel>
+              <FileInput type="file" id="file" name="file" />
               <File></File>
             </FormFile>
             <FormBtnDiv>
-              <FormBtn bg="cancle">취소</FormBtn>
+              <FormBtn bg="cancle" onClick={cancleClick}>
+                취소
+              </FormBtn>
               <FormBtn>확인</FormBtn>
             </FormBtnDiv>
           </BoardCreateForm>
