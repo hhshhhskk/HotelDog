@@ -37,15 +37,54 @@ const HotelReview = () => {
           alt=""
         />
         {/* 메인's 헤더(별점 및 한줄평) 영역 */}
+        <div className="review_wrap">
+          <div className="review_small_stars">
+            <img
+              className="review_SmFilledStar"
+              src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewFilledStar.svg`}
+              alt=""
+            />
+            <img
+              className="review_SmFilledStar"
+              src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewFilledStar.svg`}
+              alt=""
+            />
+            <img
+              className="review_SmFilledStar"
+              src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewFilledStar.svg`}
+              alt=""
+            />
+            <img
+              className="review_SmFilledStar"
+              src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewFilledStar.svg`}
+              alt=""
+            />
+            <img
+              className="review_SmFilledStar"
+              src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewFilledStar.svg`}
+              alt=""
+            />
+          </div>
+          <div className="review_nickname">닉네임</div>
+          <div className="review_desc">
+            저희 집 주인님 팔자는 항상 부럽지만 이렇게 부러운 적은 또 없습니다.
+            사람도 받아주시나요?
+          </div>
+        </div>
+        <img
+          className="review-part-line"
+          src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewWrapLine.svg`}
+          alt=""
+        />
       </div>
 
       {/* 더보기(후기 - 푸터) 영역 */}
-      <div>
+      <div className="review_more">
         <img
-          src={`${process.env.PUBLIC_URL}/images/board/boardImg.svg`}
+          src={`${process.env.PUBLIC_URL}/images/hotelDetail/bt_moreReview.svg`}
           alt=""
         />
-        <button>더 보기</button>
+        <button className="review_more_bt">더 보기</button>
       </div>
     </div>
   );
