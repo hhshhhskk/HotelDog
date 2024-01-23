@@ -15,7 +15,7 @@ const DefaultButton = props => {
   return (
     <div>
       {/* props로 버튼 안에 있는 글씨 바꿔서 쓰기 */}
-      <DefaultBt>{props.children}동 의</DefaultBt>
+      <DefaultBt>{props.children}</DefaultBt>
     </div>
   );
 };

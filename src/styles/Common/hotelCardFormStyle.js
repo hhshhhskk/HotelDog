@@ -32,42 +32,62 @@ export const TitleDiv = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 360px;
+  /* background-color: aqua; */
 `;
 
 export const HotelName = styled.span`
   position: relative;
-  font-size: 18px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* background-color: beige; */
+  width: 280px;
 `;
 
-export const HotelStarDiv = styled.div`
+export const HotelEvaluationDiv = styled.div`
   position: relative;
   background-color: #d9d9d9;
-  font-size: 12px;
+  font-size: 1.2rem;
   padding: 2px 4px;
-  margin-left: 15px;
+  margin-left: 10px;
   border-radius: 5px;
+`;
+
+export const Star = styled.span`
+  position: relative;
+  font-weight: 600;
+`;
+
+export const Review = styled.span`
+  position: relative;
+  padding-left: 3px;
 `;
 
 export const HotelAddress = styled.span`
   position: relative;
   display: block;
   color: #9d9d9d;
-  font-size: 14px;
-  padding: 6px 0px;
+  font-size: 1.4rem;
+  padding: 5px 0px;
 `;
 
 export const HotelPriceDiv = styled.div`
   position: relative;
   display: flex;
   align-items: flex-end;
-  font-weight: 700;
 `;
 
 export const Discount = styled.span`
   position: relative;
   color: #e05353;
   font-size: 1.8rem;
+  font-weight: 600;
 `;
+
 export const OriginalPrice = styled.span`
   position: relative;
   color: #9d9d9d;
@@ -75,7 +95,23 @@ export const OriginalPrice = styled.span`
   padding: 0px 6px;
   text-decoration: line-through;
 `;
+
 export const FinalPriceDiv = styled.div`
   position: relative;
+`;
+
+export const FinalPrice = styled.span`
+  position: relative;
   font-size: 1.8rem;
+  font-weight: 600;
+`;
+
+export const Unit = styled.span`
+  position: relative;
+  font-size: 1.4rem;
+`;
+
+export const OneNight = styled.span`
+  position: relative;
+  font-size: 1.4rem;
 `;

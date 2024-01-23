@@ -1,16 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import {
   Discount,
+  FinalPrice,
   FinalPriceDiv,
   HotelAddress,
   HotelCardDiv,
   HotelContentsDiv,
+  HotelEvaluationDiv,
   HotelImgDiv,
   HotelName,
   HotelPriceDiv,
   HotelStarDiv,
+  OneNight,
   OriginalPrice,
+  Review,
+  Star,
   TitleDiv,
+  Unit,
 } from "../../styles/Common/hotelCardFormStyle";
 import HotelLike from "../Common/HotelLike";
 
@@ -21,35 +27,39 @@ const HotelCardForm = () => {
   const hotels = [
     {
       pic: "",
-      name: "호텔 1",
-      star: "9.5",
+      name: "호텔 이름이 길면 긴대로 잘라야하는데 어떻게 하지",
+      star: 9.5,
       add: "대구 중구",
       sale: "",
-      originalPrice: "50000",
+      review: 999,
+      originalPrice: 50000,
     },
     {
       pic: "",
       name: "호텔 2",
-      star: "8.0",
+      star: 8.0,
       add: "대구 수성구",
-      sale: "10",
-      originalPrice: "50000",
+      sale: 10,
+      review: 24,
+      originalPrice: 50000,
     },
     {
       pic: "",
       name: "호텔 3",
-      star: "9.8",
+      star: 9.8,
       add: "대구 북구",
-      sale: "5",
-      originalPrice: "80000",
+      sale: 5,
+      review: 9,
+      originalPrice: 80000,
     },
     {
       pic: "",
       name: "호텔 4",
-      star: "5.0",
+      star: 5.0,
       add: "대구 중구",
-      sale: "3",
-      originalPrice: "30000",
+      sale: 3,
+      review: 2542,
+      originalPrice: 30000,
     },
   ];
 
@@ -58,11 +68,16 @@ const HotelCardForm = () => {
     navigate("/hoteldetail/:detailId");
   };
 
-  // 호텔 할인가 계산식
+  // 숫자 천단위 쉼표 표시
+  const formatNumber = number => {
+    return number.toLocaleString();
+  };
+
+  // 호텔 할인가 계산
   const salePrice = (originalPrice, sale) => {
     if (originalPrice && sale) {
       const discount = (parseFloat(sale) / 100) * parseFloat(originalPrice);
-      return parseFloat(originalPrice) - discount;
+      return (parseFloat(originalPrice) - discount).toLocaleString();
     }
     return null;
   };
@@ -81,27 +96,34 @@ const HotelCardForm = () => {
             <HotelContentsDiv onClick={handleClickHotel}>
               <TitleDiv>
                 <HotelName>{hotels.name}</HotelName>
-                <HotelStarDiv>
-                  <span>★ {hotels.star} </span>
-                </HotelStarDiv>
+                <HotelEvaluationDiv>
+                  <Star>★ {hotels.star}</Star>
+                  <Review>({formatNumber(hotels.review)})</Review>
+                </HotelEvaluationDiv>
               </TitleDiv>
               <HotelAddress>{hotels.add}</HotelAddress>
               <HotelPriceDiv>
                 {hotels.sale ? (
                   <>
                     <Discount>{hotels.sale}%</Discount>
-                    <OriginalPrice>{hotels.originalPrice}</OriginalPrice>
+                    <OriginalPrice>
+                      {formatNumber(hotels.originalPrice)}
+                    </OriginalPrice>
                     <FinalPriceDiv>
-                      <span>
+                      <FinalPrice>
                         {salePrice(hotels.originalPrice, hotels.sale)}
-                      </span>
-                      <span>원</span>
+                      </FinalPrice>
+                      <Unit>원~</Unit>
+                      <OneNight>/1박</OneNight>
                     </FinalPriceDiv>
                   </>
                 ) : (
                   <FinalPriceDiv>
-                    <span>{hotels.originalPrice}</span>
-                    <span>원</span>
+                    <FinalPrice>
+                      {formatNumber(hotels.originalPrice)}
+                    </FinalPrice>
+                    <Unit>원~</Unit>
+                    <OneNight>/1박</OneNight>
                   </FinalPriceDiv>
                 )}
               </HotelPriceDiv>
