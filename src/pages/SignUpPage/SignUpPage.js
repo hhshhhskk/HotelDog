@@ -153,6 +153,16 @@ const SignUpPage = () => {
     document.body.classList.remove("modal-open");
   };
 
+  const openMailModal = () => {
+    setMailModalOpen(true);
+    document.body.classList.add("modal-open");
+  };
+
+  const closeMailModal = () => {
+    setMailModalOpen(false);
+    document.body.classList.remove("modal-open");
+  };
+
   const onValid = data => {
     console.log(data);
   };
@@ -176,7 +186,7 @@ const SignUpPage = () => {
   return (
     <>
       <Global styles={globalStyles} />
-      {isMailModalOpen && <MailModal setMailModalOpen={setMailModalOpen} />}
+      {isMailModalOpen && <MailModal closeMailModal={closeMailModal} />}
       {isModalOpen && <AgreeModal closeModal={closeModal} />}
       <SignUpWrap>
         <SignUpContent>
@@ -194,13 +204,7 @@ const SignUpPage = () => {
                 placeholder="Email을 입력해주세요."
                 style={styleBtn}
               />
-              <InnerBtn
-                onClick={() => {
-                  setMailModalOpen(true);
-                }}
-              >
-                메일인증
-              </InnerBtn>
+              <InnerBtn onClick={openMailModal}>메일인증</InnerBtn>
             </InnerDiv>
             <InputName>비밀번호</InputName>
             <InputBox

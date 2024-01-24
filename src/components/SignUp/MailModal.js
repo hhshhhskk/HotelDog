@@ -177,16 +177,14 @@ const ModalInnerSmallText = styled.div`
   letter-spacing: -0.28px;
 `;
 
-const MailModal = ({ setMailModalOpen }) => {
+const MailModal = ({ closeMailModal }) => {
   return (
     <Wrapper>
       <Overlay></Overlay>
       <Modal>
         <CloseDiv>
           <CloseImg
-            onClick={() => {
-              setMailModalOpen(false);
-            }}
+            onClick={closeMailModal}
             src={`${process.env.PUBLIC_URL}/images/closeBtn.svg`}
             alt=""
           />

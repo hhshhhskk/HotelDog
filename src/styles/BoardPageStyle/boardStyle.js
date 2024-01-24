@@ -2,10 +2,12 @@ import styled from "@emotion/styled";
 
 export const BoardWrap = styled.div`
   width: 100%;
-  height: 120vh;
+  height: 100vh;
 
   display: flex;
   justify-content: center;
+
+  margin-top: 120px;
 `;
 
 export const BoardContent = styled.div`
@@ -13,7 +15,6 @@ export const BoardContent = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 `;
 
