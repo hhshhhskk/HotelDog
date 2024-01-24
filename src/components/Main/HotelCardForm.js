@@ -30,7 +30,7 @@ const HotelCardForm = () => {
       name: "호텔 이름이 길면 긴대로 잘라야하는데 어떻게 하지",
       star: 9.5,
       add: "대구 중구",
-      sale: "",
+      sale: 5,
       review: 999,
       originalPrice: 50000,
     },
