@@ -1,0 +1,25 @@
+.reserveform {
+  position: relative;
+  width: 420px;
+  min-height: 680px;
+  background-color: yellowgreen;
+
+  border: 1px solid #9c9c9c;
+  border-radius: 10px;
+}
+.calendar-img {
+  position: relative;
+  width: 20px;
+  height: 23px;
+}
+.calendar-date-title {
+  position: relative;
+  font-size: 16px;
+  color: #654222;
+  font-weight: 600;
+}
+
+/* 선택된 예약 목록 나타내는 영역 */
+.reseved-wrap {
+  position: relative;
+}
