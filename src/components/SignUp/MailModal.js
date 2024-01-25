@@ -194,9 +194,7 @@ const MailModal = ({ closeMailModal }) => {
           alt=""
         />
         <BigText>인증메일이 발송되었습니다.</BigText>
-        <SmallText>
-          메일함에서(example@gmail.com) 인증 메일을 확인 바랍니다.
-        </SmallText>
+        <SmallText>메일함에서 인증 코드 확인 바랍니다.</SmallText>
         <SmallText>이메일의 인증 코드를 확인 후 입력해 주세요.</SmallText>
         <CodeBox>
           <CodeInput type="text" placeholder="인증코드를 입력해주세요." />

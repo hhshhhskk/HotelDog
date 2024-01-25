@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import AgreeModal from "../../components/SignUp/AgreeModal";
@@ -6,119 +5,26 @@ import { Global } from "@emotion/react";
 import { css } from "@emotion/react";
 import AddressPopup from "../../components/SignUp/AddressPopup";
 import MailModal from "../../components/SignUp/MailModal";
+import {
+  AddressBox,
+  AgreeDiv,
+  AgreeImg,
+  InnerBtn,
+  InnerDiv,
+  InputBox,
+  InputName,
+  SignUpBtn,
+  SignUpContent,
+  SignUpForm,
+  SignUpTitle,
+  SignUpWrap,
+} from "../../styles/SignUpPageStyle/signUpPageStyle";
+import { MailAuthAPI, signUpAPi } from "../../api/SignUp/addressApi";
 
 const globalStyles = css`
   body.modal-open {
     overflow: hidden;
   }
-`;
-
-const SignUpWrap = styled.div`
-  width: 100%;
-  height: 100vh;
-
-  display: flex;
-  justify-content: center;
-
-  margin-top: 40px;
-`;
-
-const SignUpContent = styled.div`
-  width: 1200px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-`;
-
-const SignUpForm = styled.form`
-  width: 100%;
-  height: 800px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const SignUpTitle = styled.div`
-  color: #654222;
-  font-family: Noto Sans;
-  font-size: 24px;
-  font-weight: 700;
-
-  margin-bottom: 40px;
-`;
-
-const InputName = styled.div`
-  width: 550px;
-  height: 20px;
-  font-size: 1.4rem;
-  color: #654222;
-  margin-bottom: 11px;
-`;
-
-const InputBox = styled.input`
-  width: 550px;
-  height: 40px;
-  margin-bottom: 23px;
-  font-size: 1.4rem;
-  padding-left: 10px;
-  border: 1px solid #654222;
-  border-radius: 10px;
-`;
-
-const AddressBox = styled.div`
-  width: 550px;
-  height: 40px;
-  margin-bottom: 30px;
-  font-size: 1.4rem;
-  line-height: 38px;
-  padding-left: 10px;
-  border: 1px solid #654222;
-  border-radius: 10px;
-`;
-
-const InnerDiv = styled.div`
-  position: relative;
-`;
-
-const InnerBtn = styled.div`
-  position: absolute;
-  top: 36px;
-  right: 10px;
-  width: 80px;
-  height: 30px;
-  background-color: #654222;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 600;
-  text-align: center;
-  line-height: 3rem;
-
-  border-radius: 6px;
-`;
-
-const AgreeDiv = styled.div`
-  width: 550px;
-  font-size: 1.5rem;
-  color: #654222;
-  margin-bottom: 30px;
-`;
-
-const AgreeImg = styled.img`
-  width: 20px;
-  height: 20px;
-  margin-left: 5px;
-`;
-
-const SignUpBtn = styled.button`
-  width: 150px;
-  height: 40px;
-  background-color: #654222;
-  color: #fff;
-  font-size: 1.3rem;
-  font-weight: 700;
-  border: none;
-  border-radius: 7px;
 `;
 
 const styleBtn = {
@@ -134,7 +40,8 @@ const SignUpPage = () => {
   } = useForm();
   const [popUp, setPopUp] = useState(false);
   const [agree, setAgree] = useState(false);
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState();
+  const [mail, setMail] = useState("");
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [isMailModalOpen, setMailModalOpen] = useState(false);
@@ -154,8 +61,11 @@ const SignUpPage = () => {
   };
 
   const openMailModal = () => {
-    setMailModalOpen(true);
-    document.body.classList.add("modal-open");
+    if (mail) {
+      setMailModalOpen(true);
+      document.body.classList.add("modal-open");
+    }
+    // MailAuthAPI();
   };
 
   const closeMailModal = () => {
@@ -165,6 +75,29 @@ const SignUpPage = () => {
 
   const onValid = data => {
     console.log(data);
+
+    const postData = {
+      emailResponseVo: {
+        email: "string",
+        result: 0,
+      },
+      upw: "password",
+      nickname: "string",
+      phoneNum: "01702462778",
+      userAddress: "string",
+      addressEntity: {
+        addressName: "string",
+        region1depthName: "string",
+        region2depthName: "string",
+        region3depthName: "string",
+        zoneNo: "string",
+        x: "string",
+        y: "string",
+        detail: "string",
+      },
+    };
+
+    signUpAPi(postData);
   };
 
   const onInValid = data => {
@@ -182,7 +115,6 @@ const SignUpPage = () => {
     }
     alert(`${id}\n${password}\n${passwordcheck}`);
   };
-
   return (
     <>
       <Global styles={globalStyles} />
@@ -203,6 +135,9 @@ const SignUpPage = () => {
                 })}
                 placeholder="Email을 입력해주세요."
                 style={styleBtn}
+                onChange={e => {
+                  setMail(e.currentTarget.value);
+                }}
               />
               <InnerBtn onClick={openMailModal}>메일인증</InnerBtn>
             </InnerDiv>
@@ -239,7 +174,7 @@ const SignUpPage = () => {
             />
             <InnerDiv>
               <InputName style={styleBtn}>주소</InputName>
-              <AddressBox>{address}</AddressBox>
+              <AddressBox>{address?.address_name}</AddressBox>
               <InnerBtn
                 onClick={() => {
                   setPopUp(true);

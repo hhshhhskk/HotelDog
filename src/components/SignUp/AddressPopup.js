@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useState } from "react";
 import DaumPostcode from "react-daum-postcode";
+
+import { addressApi } from "../../api/SignUp/addressApi";
 
 const PopupWrapper = styled.div`
   position: absolute;
@@ -26,8 +28,8 @@ const CloseImg = styled.img``;
 
 const AddressPopup = ({ setPopUp, setAddress }) => {
   const handleComplete = data => {
-    console.log(data);
-    setAddress(data.address);
+    addressApi(data.address, setAddress);
+    // console.log(data);
     setPopUp(false);
   };
 
