@@ -1,14 +1,13 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useState } from "react";
 
-const BookingPage = styled.div`
+const MydogPage = styled.div`
   margin-left: 85px;
   position: relative;
-  /* display: flex; */
   width: 865px;
-  /* height: 980px; */
-  /* background-color: lightblue; */
 `;
+// PageTitle 공통 스타일로 빼도됨
+
 const PageTitle = styled.div`
   position: relative;
   height: auto;
@@ -18,7 +17,8 @@ const PageTitle = styled.div`
     color: #654222;
   }
 `;
-const BookingList = styled.div`
+// ListNone 공통 스타일로 빼도됨
+const ListNone = styled.div`
   position: relative;
   display: flex;
   width: 950px;
@@ -62,20 +62,72 @@ const BookingList = styled.div`
     align-items: center;
   }
 `;
+const DogList = styled.div`
+  position: relative;
+`;
+const DogListLeft = styled.div`
+  position: relative;
+`;
+const DogListRight = styled.div`
+  position: relative;
+`;
+const Line = styled.div`
+  position: relative;
+  display: flex;
+  height: 20px;
+  border-left: 3px solid #654222;
+`;
+const DogInfo = styled.div`
+  position: relative;
+`;
+const DogDetail = styled.div`
+  position: relative;
+`;
+const DogBt = styled.div`
+  position: relative;
+`;
+const DogDelete = styled.div`
+  position: relative;
+`;
+const DogUp = styled.div`
+  position: relative;
+`;
 
-const Booking = () => {
+const Mydog = () => {
+  const [image, setImage] = useState();
   return (
-    <BookingPage>
+    <MydogPage>
       <PageTitle>
         <p>반려견 정보</p>
       </PageTitle>
-      <BookingList>
+      <DogList>
+        <DogListLeft>
+          <input type="file" />
+        </DogListLeft>
+        <DogListRight>
+          <DogInfo>
+            {/* <Line />
+            <input type="text">이름</input>
+            <Line />
+            <input type="text">나이</input>
+            <Line />
+            <option value="소형견">이름</option>
+            <option value="중형견">이름</option> */}
+          </DogInfo>
+          <DogDetail></DogDetail>
+          <DogBt>
+            <DogDelete></DogDelete>
+            <DogUp></DogUp>
+          </DogBt>
+        </DogListRight>
+      </DogList>
+      {/* <ListNone>
         <img src={`${process.env.PUBLIC_URL}/images/MyPage/dog.svg`} />
         <p>반려견 정보가 없습니다.</p>
         <span>대표 반려견을 등록해주세요</span>
-      </BookingList>
-    </BookingPage>
+      </ListNone> */}
+    </MydogPage>
   );
 };
 
-export default Booking;
+export default Mydog;
