@@ -45,7 +45,8 @@ const MainPage = () => {
         <VisualInner>
           <VisualText>
             <span>
-              나의 반려견에게 <br /> 최고의 하루를 선물하세요
+              나의 반려견에게 <br />
+              최고의 하루를 선물하세요
             </span>
           </VisualText>
 
@@ -65,7 +66,6 @@ const MainPage = () => {
             <span>핫한 광고 상품을 추천드립니다!</span>
           </AdText>
           <HotelCardDiv>
-            {/* 맵을 돌리자^^ */}
             <HotelCardForm />
           </HotelCardDiv>
         </AdListDiv>
@@ -87,7 +87,6 @@ const MainPage = () => {
           </FilterText>
 
           <HotelCardDiv>
-            {/* 맵을 돌리자^^ */}
             <HotelCardForm />
           </HotelCardDiv>
         </FilterListDiv>

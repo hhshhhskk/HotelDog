@@ -80,7 +80,6 @@ export const VisualForm = styled.div`
   bottom: -40px;
   border-radius: 15px;
   background-color: #654222;
-  /* background-color: aqua; */
 `;
 
 export const HotelListDiv = styled.div`
