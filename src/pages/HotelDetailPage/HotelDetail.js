@@ -13,6 +13,7 @@ const HotelDetail = () => {
       <HotelReview />
       <Calendar />
       <ReserveForm />
+      
     </div>
   );
 };
