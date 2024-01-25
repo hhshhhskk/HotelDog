@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const BoardBox = styled.table`
   width: 100%;
@@ -62,11 +63,13 @@ const BoardTd = styled.td`
       ? "left"
       : "center"};
   border-bottom: 0.5px solid #654222;
+
+  cursor: ${props => (props.propKey === "title" ? "pointer" : "default")};
 `;
 
 function BoardTable({ cateNum }) {
   const rows = ["번호", "카테고리", "제목", "작성자", "날짜", "조회수"];
-
+  const navigate = useNavigate();
   let data = [
     {
       category: "공지",
@@ -153,6 +156,12 @@ function BoardTable({ cateNum }) {
     return dateB - dateA;
   });
 
+  const itmeClick = (key, idx) => {
+    if (key === "title") {
+      navigate(`/boardDetail/${idx}`);
+    }
+  };
+
   return (
     <BoardBox>
       <BoardThead>
@@ -169,7 +178,13 @@ function BoardTable({ cateNum }) {
           <BoardTr key={idx} writer={item.writer}>
             <BoardTd propKey="number">{idx + 1}</BoardTd>
             {["category", "title", "writer", "date", "views"].map(key => (
-              <BoardTd key={key} propKey={key}>
+              <BoardTd
+                key={key}
+                propKey={key}
+                onClick={() => {
+                  return itmeClick(key, idx + 1);
+                }}
+              >
                 {item[key]}
               </BoardTd>
             ))}
