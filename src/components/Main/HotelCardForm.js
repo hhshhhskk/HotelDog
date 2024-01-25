@@ -89,7 +89,10 @@ const HotelCardForm = () => {
         <>
           <HotelCardDiv key={hotels.name} style={{ flex: "0 0 360px" }}>
             <HotelImgDiv>
-              <img src={`${process.env.PUBLIC_URL}/images/hotel1.jpg`} />
+              <img
+                src={`${process.env.PUBLIC_URL}/images/hotel1.jpg`}
+                onClick={handleClickHotel}
+              />
               <HotelLike />
             </HotelImgDiv>
 

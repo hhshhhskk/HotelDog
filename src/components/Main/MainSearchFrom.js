@@ -1,118 +1,30 @@
-import styled from "@emotion/styled";
 import React, { useState } from "react";
+import {
+  DateSelect,
+  DogNumber,
+  DogNumberDiv,
+  DogSelect,
+  DogSelectDiv,
+  DogTitle,
+  ExtraDogNumber,
+  ExtraLabel,
+  LocationOption,
+  LocationSelect,
+  LocationSelectDiv,
+  MinusBt,
+  OptionSelect,
+  PlusBt,
+  SearchForm,
+  SubmitButton,
+} from "../../styles/MainPageStyle/MainSearchFromStyle";
 
 const MainSearchFrom = () => {
-  const SearchForm = styled.form`
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 43px;
-    font-size: 1.4rem;
-    width: 1200px;
-    height: 85px;
-  `;
+  // 드롭다운 useState
+  const [locationDropdown, setLocationDropdown] = useState(false);
+  const [dogDropdown, setDogDropdown] = useState(false);
+  const [filterDropdown, setFilterDropdown] = useState(false);
 
-  const LocationSelect = styled.select`
-    width: 420px;
-    height: 42px;
-    padding: 10px 25px;
-    border-radius: 9px;
-    border: none;
-    color: #9c9c9c;
-  `;
-
-  const DateSelect = styled.input`
-    width: 250px;
-    height: 42px;
-    padding: 10px 25px;
-    border-radius: 9px;
-    border: none;
-  `;
-
-  const DogSelectDiv = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 140px;
-    height: 42px;
-    padding: 10px 15px;
-    border-radius: 9px;
-    border: none;
-    background-color: #fff;
-  `;
-
-  const DogSelect = styled.div`
-    position: absolute;
-    /* display: flex;
-    justify-content: center; */
-    top: 65px;
-    left: 735px;
-    width: 140px;
-    background-color: #fff;
-    padding: 10px;
-    z-index: 1;
-    border-radius: 9px;
-    border: 1px solid #654222;
-    ul {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      /* align-items: center; */
-      li {
-        display: flex;
-        align-items: center;
-        padding: 10px 0px;
-        /* height: 40px; */
-        label {
-          padding-right: 15px;
-        }
-        button {
-          border: none;
-          background-color: #fff;
-          font-size: 2rem;
-          font-weight: 600;
-        }
-      }
-    }
-  `;
-
-  const DogNumber = styled.input`
-    width: 30px;
-    border: none;
-    /* text-align: center; */
-    /* display: flex; */
-    /* align-items: center; */
-    /* justify-content: center; */
-    background-color: hotpink;
-    padding-left: 10px;
-  `;
-
-  const OptionSelect = styled.button`
-    width: 140px;
-    height: 42px;
-    padding: 10px 25px;
-    border-radius: 9px;
-    border: none;
-    color: #9c9c9c;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  `;
-
-  const SubmitButton = styled.button`
-    width: 120px;
-    height: 42px;
-    /* padding: 10px 25px; */
-    border-radius: 9px;
-    border: none;
-    background-color: #ccb197;
-    color: #654222;
-    font-weight: 700;
-    cursor: pointer;
-  `;
-
+  // 강아지(사이즈/마리) useState 및 초기 데이터
   const [dogInfo, setDogInfo] = useState([
     { size: "소형견", count: 0 },
     { size: "중형견", count: 0 },
@@ -120,7 +32,23 @@ const MainSearchFrom = () => {
     { size: "초대형견", count: 0 },
   ]);
 
-  const [dropdownVisible, setDropdownVisible] = useState(false);
+  // !!! 데이터 연동 시 변경 예정
+  const locationInfo = ["서울특별시", "대구광역시"];
+
+  const [locationValue, setLocationValue] = useState("지역을 선택해주세요");
+  const [dogValue, setDogValue] = useState("사이즈 / 마리");
+
+  const handleChangeLocation = e => {
+    const location = e.target.innerText;
+    setLocationValue(location);
+    // 드롭다운 닫기
+    setLocationDropdown(false);
+  };
+
+  const handleChangeDog = e => {
+    const Dog = e.target.innerText;
+    setDogValue(Dog);
+  };
 
   const handleIncrement = index => {
     setDogInfo(prevDogInfo => {
@@ -141,37 +69,74 @@ const MainSearchFrom = () => {
   };
 
   return (
-    <div>
-      {/* !!!form 전송을 위한 작업 예정*/}
+    <>
+      {/* !!!form 전송을 위한 작업 예정 */}
       <SearchForm method="post" action="">
         {/* 지역 선택 */}
-        <LocationSelect>
-          <option disabled selected hidden>
-            지역을 선택해주세요
-          </option>
-          {/* !!!데이터오면 map으로 변경 */}
-          <option>서울특별시</option>
-          <option>대구광역시</option>
-        </LocationSelect>
+        <LocationSelectDiv
+          onClick={() => setLocationDropdown(!locationDropdown)}
+        >
+          <div>
+            <label>{locationValue}</label>
+            <img src={`${process.env.PUBLIC_URL}/images/toggleArrow.svg`} />
+          </div>
+          {locationDropdown && (
+            <LocationSelect>
+              <ul>
+                {locationInfo.map((location, index) => (
+                  <LocationOption key={index} onClick={handleChangeLocation}>
+                    {location}
+                  </LocationOption>
+                ))}
+              </ul>
+            </LocationSelect>
+          )}
+        </LocationSelectDiv>
 
         {/* !!!날짜 선택 : 달력 삽입하기*/}
         <DateSelect type="date" />
 
-        {/* 마리 선택 */}
-        <DogSelectDiv>
-          <div onClick={() => setDropdownVisible(!dropdownVisible)}>
+        {/* 사이즈/마리 선택*/}
+        <DogSelectDiv onClick={() => setDogDropdown(!dogDropdown)}>
+          <div>
             <img src={`${process.env.PUBLIC_URL}/images/footicon.svg`} alt="" />
-            <span>사이즈 / 마리</span>
+            <span>{dogValue}</span>
           </div>
-          {dropdownVisible && (
+          {dogDropdown && (
             <DogSelect>
               <ul>
                 {dogInfo.map((dog, index) => (
                   <li key={index}>
-                    <label>{dog.size}</label>
-                    <button onClick={() => handleDecrement(index)}>-</button>
-                    <DogNumber type="number" value={dog.count} readOnly />
-                    <button onClick={() => handleIncrement(index)}>+</button>
+                    <DogTitle>{dog.size}</DogTitle>
+                    <DogNumberDiv>
+                      <div>
+                        <MinusBt
+                          src={`${process.env.PUBLIC_URL}/images/minusBt.svg`}
+                          onClick={() => handleDecrement(index)}
+                        />
+                      </div>
+                      {dog.size === "초대형견" ? (
+                        <ExtraDogNumber
+                          type="number"
+                          value={dog.count}
+                          readOnly
+                          onClick={handleChangeDog}
+                        />
+                      ) : (
+                        <DogNumber
+                          type="number"
+                          value={dog.count}
+                          readOnly
+                          onClick={handleChangeDog}
+                        />
+                      )}
+                      <div>
+                        <PlusBt
+                          src={`${process.env.PUBLIC_URL}/images/plusBt.svg`}
+                          onClick={() => handleIncrement(index)}
+                        />
+                      </div>
+                    </DogNumberDiv>
                   </li>
                 ))}
               </ul>
@@ -179,14 +144,20 @@ const MainSearchFrom = () => {
           )}
         </DogSelectDiv>
 
-        {/* 추가 필터 선택 */}
-        <OptionSelect type="button">
-          <img src={`${process.env.PUBLIC_URL}/images/filtericon.svg`} alt="" />
-          필터
+        {/* 필터 선택*/}
+        <OptionSelect>
+          <div>
+            <img
+              src={`${process.env.PUBLIC_URL}/images/filtericon.svg`}
+              alt=""
+            />
+            <span>필터</span>
+          </div>
+          {filterDropdown && <div></div>}
         </OptionSelect>
         <SubmitButton type="submit">적용</SubmitButton>
       </SearchForm>
-    </div>
+    </>
   );
 };
 
