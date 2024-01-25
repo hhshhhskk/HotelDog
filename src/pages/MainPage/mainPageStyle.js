@@ -76,7 +76,7 @@ export const VisualForm = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 1200px;
-  height: 85px;
+  /* height: 85px; */
   bottom: -40px;
   border-radius: 15px;
   background-color: #654222;
