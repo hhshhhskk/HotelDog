@@ -1,5 +1,6 @@
 import Layout from "../components/Layout/Layout";
 import BoardCreatePage from "../pages/Board/BoardCreatePage/BoardCreatePage";
+import BoardDetailPage from "../pages/Board/BoardDetail/BoardDetailPage";
 import BoardPage from "../pages/Board/BoardPage/BoardPage";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import EventPage from "../pages/EventPage/EventPage";
@@ -46,14 +47,19 @@ export const RouterInfo = [
         label: "board",
       },
       {
-        path: "/boardcreate",
-        element: <BoardCreatePage />,
-        label: "boardcreate",
+        path: "/boardDetail/:detailId",
+        element: <BoardDetailPage />,
+        label: "boardDetail",
       },
       {
-        path: "/hoteldetail/:detailId",
+        path: "/boardCreate",
+        element: <BoardCreatePage />,
+        label: "boardCreate",
+      },
+      {
+        path: "/hotelDetail/:detailId",
         element: <HotelDetailPage />,
-        label: "hoteldetail",
+        label: "hotelDetail",
       },
     ],
   },

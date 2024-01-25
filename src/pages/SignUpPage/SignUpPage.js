@@ -211,7 +211,7 @@ const SignUpPage = () => {
               {...register("password", {
                 required: "비밀번호는 필수사항입니다.",
               })}
-              placeholder="4자리 이상 특수문자 조합"
+              placeholder="영문 숫자 8자리 이상"
             />
             <InputName>비밀번호 확인</InputName>
             <InputBox
