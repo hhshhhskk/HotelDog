@@ -1,0 +1,13 @@
+.reserveform-fixed {
+  position: fixed;
+  background-color: yellow;
+  width: 420px;
+  min-height: 921px;
+}
+.hotelrepresentive-bigimg {
+  position: relative;
+  width: 590px;
+  height: 480px;
+
+  margin-top: 79px;
+}

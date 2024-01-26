@@ -2,11 +2,21 @@ import React from "react";
 // import { Wrapper } from "../../../styles/Common/layoutStyle";
 import "../../../styles/Detail/reserveformstyle.css";
 import ReserveDate from "../../Common/ReserveDate";
+import styled from "@emotion/styled";
 
 const ReserveForm = () => {
+  const ReserveFormFixed = styled.div`
+    position: fixed;
+    width: 420px;
+    min-height: 921px;
+
+    top: 122px;
+    right: 360px;
+    bottom: 122px;
+  `;
   const handleDogSize = () => {};
   return (
-    <>
+    <ReserveFormFixed>
       <div className="reserveform">
         <div className="reserveform-margin">
           <div className="reserve-selectdate-wrap">
@@ -158,7 +168,7 @@ const ReserveForm = () => {
           <button className="reserve-button">예약하기</button>
         </div>
       </div>
-    </>
+    </ReserveFormFixed>
   );
 };
 
