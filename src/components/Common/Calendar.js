@@ -15,40 +15,40 @@ const Calendar = () => {
     },
   ]);
 
-    return (
-      <div className="calendar_modal_wrap">
-        <div className="calendar_modal_css">
-          <div className="calendar_header">
-            <div className="calendar_header-img">
-              <img
-                className="calendar_header-img"
-                src={`${process.env.PUBLIC_URL}/images/calenderImage.svg`}
-                alt=""
-              />
-            </div>
-
-            <div className="calendar_header-text">체크 인/아웃 날짜 선택</div>
-          </div>
-
-          {/* 달력만 감싸기 */}
-          <div className="calendar_wrap">
-            <DateRange
-              editableDateInputs={true}
-              onChange={item => setState([item.selection])}
-              moveRangeOnFirstSelection={false}
-              ranges={state}
-              months={2}
-              direction="horizontal"
-              locale={ko}
-              // ranges prop을 통해 startDate와 endDate의 스타일 지정
-              rangeColors={["#000"]} // 원하는 색상으로 변경
+  return (
+    <div className="calendar_modal_wrap">
+      <div className="calendar_modal_css">
+        <div className="calendar_header">
+          <div className="calendar_header-img">
+            <img
+              className="calendar_header-img"
+              src={`${process.env.PUBLIC_URL}/images/calendarImage.svg`}
+              alt=""
             />
           </div>
 
-          <button className="calendar_button">선택</button>
+          <div className="calendar_header-text">체크 인/아웃 날짜 선택</div>
         </div>
+
+        {/* 달력만 감싸기 */}
+        <div className="calendar_wrap">
+          <DateRange
+            editableDateInputs={true}
+            onChange={item => setState([item.selection])}
+            moveRangeOnFirstSelection={false}
+            ranges={state}
+            months={2}
+            direction="horizontal"
+            locale={ko}
+            // ranges prop을 통해 startDate와 endDate의 스타일 지정
+            rangeColors={["#654222"]} // 원하는 색상으로 변경
+          />
+        </div>
+
+        <button className="calendar_button">선택</button>
       </div>
-    );
-  };
-  
+    </div>
+  );
+};
+
 export default Calendar;

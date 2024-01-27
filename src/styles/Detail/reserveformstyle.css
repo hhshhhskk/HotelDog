@@ -43,6 +43,8 @@
   font-weight: 600;
   color: #fff;
   border-radius: 5px;
+
+  cursor: pointer;
 }
 /* reserveLine 영역 */
 .reserveLine {
@@ -79,6 +81,8 @@
   margin-top: 27px;
   border: 1px solid #9c9c9c;
   border-radius: 10px;
+
+  /* margin-bottom: 1000px; */
 }
 .reserved-margin {
   position: relative;

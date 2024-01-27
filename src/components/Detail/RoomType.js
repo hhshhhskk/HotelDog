@@ -40,9 +40,15 @@ const RoomType = () => {
       size: 3, // 방에 수용가능한 사이즈(클수록 큰 강아지 수용가능)
     },
   ];
+
   return (
     <div className="roomtype-flex">
-      객실 둘러보기
+      <p className="roomtype-text-flex">
+        객실 둘러보기
+        <span className="roomtype-info">
+          * 객실 먼저 선택 후, 반려견 정보를 입력해 주세요.
+        </span>
+      </p>
       {hotel_room_info.map(function (item, index) {
         return (
           <div className="roomtype-wrap" key={index}>

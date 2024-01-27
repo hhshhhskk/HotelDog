@@ -1,8 +1,9 @@
 import React from "react";
 // import { Wrapper } from "../../../styles/Common/layoutStyle";
+import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 import "../../../styles/Detail/reserveformstyle.css";
 import ReserveDate from "../../Common/ReserveDate";
-import styled from "@emotion/styled";
 
 const ReserveForm = () => {
   const ReserveFormFixed = styled.div`
@@ -12,9 +13,14 @@ const ReserveForm = () => {
 
     top: 122px;
     right: 360px;
-    bottom: 122px;
+    padding-bottom: 122px;
   `;
   const handleDogSize = () => {};
+
+  const navigate = useNavigate();
+  const handleMoveCompletedPage = e => {
+    navigate("/reservecomplete");
+  };
   return (
     <ReserveFormFixed>
       <div className="reserveform">
@@ -165,7 +171,14 @@ const ReserveForm = () => {
             </span>
           </div>
 
-          <button className="reserve-button">예약하기</button>
+          <button
+            className="reserve-button"
+            onClick={() => {
+              handleMoveCompletedPage();
+            }}
+          >
+            예약하기
+          </button>
         </div>
       </div>
     </ReserveFormFixed>
