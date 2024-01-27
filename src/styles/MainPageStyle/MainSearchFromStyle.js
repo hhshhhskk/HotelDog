@@ -141,7 +141,7 @@ export const PlusBt = styled.img`
 `;
 
 // 필터 선택
-export const OptionSelect = styled.div`
+export const FilterSelectDiv = styled.div`
   width: 140px;
   height: 42px;
   padding: 10px 25px;
@@ -153,6 +153,75 @@ export const OptionSelect = styled.div`
   justify-content: space-between;
   align-items: center;
   background-color: #fff;
+`;
+
+export const FilterSelect = styled.div`
+  position: absolute;
+  top: 62px;
+  left: 885px;
+  width: 380px;
+  background-color: #fff;
+  padding: 20px 25px;
+  z-index: 1;
+  border-radius: 9px;
+  border: 1px solid #654222;
+`;
+
+export const FilterOptionDiv = styled.div`
+  /* background-color: red; */
+  padding-top: 20px;
+`;
+
+export const FilterTitle = styled.span`
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #654222;
+  /* padding: 10px 0; */
+`;
+
+export const FilterOption = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  button {
+    padding: 8px 20px;
+    background-color: #fffaf0;
+    color: #654222;
+    border-radius: 20px;
+    border: 1px solid #654222;
+    font-size: 1.2rem;
+    font-weight: 400;
+    cursor: pointer;
+    :hover {
+      background-color: #654222;
+      color: #fff;
+    }
+  }
+`;
+
+export const FilterRadio = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  width: 130px;
+  label {
+    input {
+      appearance: none;
+      border: 1px solid #654222;
+      border-radius: 50%;
+      width: 1.25em;
+      height: 1.25em;
+      :checked {
+        border: 0.4em solid #654222;
+      }
+    }
+    span {
+      color: black;
+      padding-left: 5px;
+      font-size: 1.4rem;
+    }
+  }
 `;
 
 // 서버 전송 버튼
