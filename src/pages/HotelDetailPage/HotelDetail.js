@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "../../components/Common/Calendar";
 import HotelReview from "../../components/Detail/HotelReview";
 import ReserveForm from "../../components/Detail/Reservation/ReserveForm";
@@ -82,8 +82,7 @@ const HotelDetail = () => {
     white-space: nowrap;
   `;
 
-  const handleMoveReviewModal = () => {};
-
+  // 더미 데이터
   const hotel_option = [
     {
       주차장: true,
@@ -112,6 +111,18 @@ const HotelDetail = () => {
       // }
     },
   ];
+
+  // 후기 모달 관련
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleMoveReviewModal = () => {
+    setIsOpen(!isOpen);
+    return <HotelReview />;
+  };
+
+  // useEffect(() => {
+  //   return <HotelReview />;
+  // }, []);
 
   return (
     <div>
@@ -201,17 +212,15 @@ const HotelDetail = () => {
                 부럽지만 이렇게 부러운 적은 또 없습니다. 사람도 받아주시나요?
               </ReviewTextDesc>
             </div>
-            <ReviewTextMoreBt
-              onClick={() => {
-                handleMoveReviewModal();
-              }}
-            >
-              더 보기
-            </ReviewTextMoreBt>
+
+            {isOpen && (
+              <ReviewTextMoreBt onClick={handleMoveReviewModal()}>
+                더 보기
+              </ReviewTextMoreBt>
+            )}
           </ReviewText>
         </ReviewWrap>
 
-        <HotelReview />
         <Calendar />
       </ReserveFormScroll>
 
