@@ -1,12 +1,12 @@
 import { ClassNames } from "@emotion/react";
 import styled from "@emotion/styled";
 import React, { useState } from "react";
-import Booking from "../../components/MyPage/Booking";
 import Member from "../../components/MyPage/Member";
 import Password from "../../components/MyPage/Password";
 import Mydog from "../../components/MyPage/Mydog";
 import LikeList from "../../components/MyPage/LikeList";
 import Review from "../../components/MyPage/Review";
+import Booking from "./Booking";
 
 const MyPageWrap = styled.div`
   position: relative;
@@ -19,7 +19,7 @@ const MyPageContents = styled.div`
   position: relative;
   display: flex;
   width: 100%;
-  height: 980px;
+  /* height: 980px; */
   margin-top: 199px;
 `;
 const MyPageSide = styled.div`
@@ -74,7 +74,7 @@ const MyPageRright = styled.div`
 const MyPageRrightContent = styled.div`
   position: relative;
   width: 950px;
-  height: 980px;
+  /* height: 980px; */
   justify-content: center;
   align-items: center;
   /* background-color: lavender; */
@@ -124,7 +124,6 @@ const MyPage = () => {
         return <LikeList />;
       case 4:
         return <Review />;
-      // 추가적으로 다른 카테고리에 대한 컴포넌트를 추가
       default:
         return null;
     }
