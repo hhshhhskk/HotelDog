@@ -85,7 +85,7 @@ const HotelDetail = () => {
   // 더미 데이터
   const hotel_option = [
     {
-      주차장: true,
+      주차장: false,
       미용전문: true,
       미용자격증: true,
       드라이기: false,
@@ -94,7 +94,7 @@ const HotelDetail = () => {
       놀이: true,
       훈련자격증: true,
       조식: true,
-      수제간식: false,
+      수제간식: true,
     },
   ];
   const hotelInfoVo = [
@@ -116,13 +116,9 @@ const HotelDetail = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleMoveReviewModal = () => {
-    setIsOpen(!isOpen);
-    return <HotelReview />;
+    setIsOpen(true);
+    document.body.style.overflow = "hidden";
   };
-
-  // useEffect(() => {
-  //   return <HotelReview />;
-  // }, []);
 
   return (
     <div>
@@ -213,21 +209,20 @@ const HotelDetail = () => {
               </ReviewTextDesc>
             </div>
 
-            {isOpen && (
-              <ReviewTextMoreBt onClick={handleMoveReviewModal()}>
-                더 보기
-              </ReviewTextMoreBt>
-            )}
+            {isOpen && <HotelReview />}
+            <ReviewTextMoreBt onClick={() => handleMoveReviewModal()}>
+              더 보기
+            </ReviewTextMoreBt>
           </ReviewText>
         </ReviewWrap>
 
-        <Calendar />
+        {/* <Calendar /> */}
       </ReserveFormScroll>
 
-      {/* 우측 픽스 영역 */}
+      {/* 우측 픽스 영역
       <div className="reserveform-fixed">
         <ReserveForm />
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -3,6 +3,8 @@
   background-color: yellow;
   width: 420px;
   min-height: 921px;
+
+  z-index: 1;
 }
 .hotelrepresentive-bigimg {
   position: relative;
