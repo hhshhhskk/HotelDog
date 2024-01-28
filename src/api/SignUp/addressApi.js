@@ -1,13 +1,16 @@
 import axios from "axios";
 
 const REST_API_KEY = process.env.REACT_APP_KAKAO_API_KEY;
+
 // 메일인증 API
-export const MailAuthAPI = async mail => {
+export const mailAuthAPI = async mail => {
   try {
     await axios({
       method: "post",
-      url: "/api/mailsend",
-      data: mail,
+      url: "/api/email/mailSend",
+      data: {
+        email: mail,
+      },
       headers: {
         "Content-Type": "application/json",
       },
@@ -20,6 +23,46 @@ export const MailAuthAPI = async mail => {
         // 오류가 발생했을 때의 처리
         console.error("Error:", error.response.data);
       });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+// 메일코드 체크 API
+export const mailAuthCodeAPI = async (mail, mailCode) => {
+  try {
+    const response = await axios({
+      method: "post",
+      url: "/api/email/mailAuthCheck",
+      data: {
+        email: mail,
+        authNum: mailCode,
+      },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    // 성공한 경우 응답 데이터를 반환
+    // console.log(response.data.result);
+    return response.data.result;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+// 닉네임 체크
+export const nickNameCheckAPI = async nickname => {
+  try {
+    const response = await axios({
+      method: "get",
+      url: `/api/user/nickname-check?nickname=${nickname}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    // 성공한 경우 응답 데이터를 반환
+    // console.log(response.data.result);
+    return response.data.result;
   } catch (error) {
     console.log(error.message);
   }
@@ -41,8 +84,8 @@ export const addressApi = async (dataAddress, setAddress) => {
     })
       .then(response => {
         // 성공적으로 응답을 받았을 때의 처리
-        // console.log("Response:", response.data.documents);
-        setAddress(response.data.documents[0]);
+        console.log("Response:", response.data.documents[0].road_address);
+        setAddress(response.data.documents[0].road_address);
       })
       .catch(error => {
         // 오류가 발생했을 때의 처리

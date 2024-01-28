@@ -46,17 +46,21 @@ export const InputName = styled.div`
 export const InputBox = styled.input`
   width: 550px;
   height: 40px;
-  margin-bottom: 23px;
+  margin-bottom: 18px;
   font-size: 1.4rem;
   padding-left: 10px;
   border: 1px solid #654222;
   border-radius: 10px;
+
+  background-color: ${props =>
+    props.check === "checked" ? "#c9c9c9" : "#fff"};
+  color: ${props => (props.check === "checked" ? "#9D9D9D" : "#000")};
 `;
 
 export const AddressBox = styled.div`
   width: 550px;
   height: 40px;
-  margin-bottom: 30px;
+  margin-bottom: 5px;
   font-size: 1.4rem;
   line-height: 38px;
   padding-left: 10px;
