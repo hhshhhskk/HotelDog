@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
+import { mailAuthCodeAPI } from "../../api/SignUp/addressApi";
 
 const Wrapper = styled.div`
   position: absolute;
@@ -177,7 +178,47 @@ const ModalInnerSmallText = styled.div`
   letter-spacing: -0.28px;
 `;
 
-const MailModal = ({ closeMailModal }) => {
+const MailModal = ({ mail, closeMailModal, setMailChecked }) => {
+  const [count, setCount] = useState(60 * 5 - 1); // 5분을 초로 계산
+  const [mailCode, setMailCode] = useState("");
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      // 매 초마다 count를 1씩 감소
+      setCount(prevCount => (prevCount > 0 ? prevCount - 1 : 0));
+    }, 1000);
+
+    if (count === 0) {
+      closeMailModal();
+      setCount(60 * 5);
+    }
+    // 컴포넌트가 언마운트되면 타이머를 정리
+    return () => clearInterval(intervalId);
+  }, [count]);
+
+  // 분과 초를 계산
+  const minutes = Math.floor(count / 60);
+  const seconds = count % 60;
+
+  const mailCodeChanged = e => {
+    // console.log(e.target.value);
+    setMailCode(e.target.value);
+  };
+  const mailCodeClick = async e => {
+    e.preventDefault();
+
+    if (mailCode === "") {
+      alert("인증코드를 입력해주세요");
+    } else {
+      const result = await mailAuthCodeAPI(mail, mailCode);
+      if (result === 1) {
+        alert("인증되었습니다.");
+        setMailChecked(true);
+        closeMailModal();
+      } else {
+        alert("인증코드가 틀렸습니다.");
+      }
+    }
+  };
   return (
     <Wrapper>
       <Overlay></Overlay>
@@ -197,10 +238,16 @@ const MailModal = ({ closeMailModal }) => {
         <SmallText>메일함에서 인증 코드 확인 바랍니다.</SmallText>
         <SmallText>이메일의 인증 코드를 확인 후 입력해 주세요.</SmallText>
         <CodeBox>
-          <CodeInput type="text" placeholder="인증코드를 입력해주세요." />
-          <CodeBtn type="button" value="확 인" />
+          <CodeInput
+            type="text"
+            onChange={mailCodeChanged}
+            placeholder="인증코드를 입력해주세요."
+          />
+          <CodeBtn onClick={mailCodeClick} type="button" value="확 인" />
         </CodeBox>
-        <CodeTime>5:00</CodeTime>
+        <CodeTime>
+          {minutes}:{seconds}
+        </CodeTime>
         <ReSendBtn>인증 코드 재발송</ReSendBtn>
         <ModalInnerBox>
           <ModalInnerBigText>유의사항</ModalInnerBigText>
