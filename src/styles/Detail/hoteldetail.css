@@ -1,0 +1,117 @@
+.reserveform-fixed {
+  position: fixed;
+  background-color: yellow;
+  width: 420px;
+  min-height: 921px;
+
+  z-index: 1;
+}
+.hotelrepresentive-bigimg {
+  position: relative;
+  width: 590px;
+  height: 480px;
+
+  margin-top: 79px;
+}
+.hotelrepresentive-smallimg-wrap {
+  position: relative;
+  width: 590px;
+  height: 80px;
+
+  display: flex;
+  flex-direction: row;
+
+  justify-content: space-between;
+
+  margin-bottom: 40px;
+}
+.hotelrepresentive-smallimg {
+  position: relative;
+  width: 80px;
+  height: 80px;
+
+  margin-top: 21px;
+}
+/* 시설 영역 css */
+.facility-title {
+  position: relative;
+  color: #654222;
+  font-size: 16px;
+  font-weight: 600;
+
+  display: inline-block;
+  margin: 50px 0px 25px;
+}
+.facility-flex {
+  position: relative;
+
+  width: 590px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  margin: 0px 0px 24px 0;
+}
+.facility-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 80px;
+  height: 30px;
+  position: relative;
+  color: #654222;
+  font-size: 12px;
+  font-weight: 400;
+  border-radius: 19.482px;
+  border: 0.779px solid rgba(101, 66, 34, 0.5);
+  background: #fffaf0;
+
+  margin-bottom: 15px;
+  margin-right: 10px;
+}
+
+/* 호텔 이미지 및 설명 영역 */
+.hotel-text-wrap {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 33px;
+}
+
+.hotel-desc {
+  position: relative;
+  font-size: 15px;
+  color: #000;
+  font-weight: 400;
+}
+
+.hotel-spot {
+  position: relative;
+  font-size: 16px;
+  color: #969696;
+  font-weight: 400;
+}
+.hotel-title {
+  position: relative;
+  font-size: 24px;
+  color: #000;
+  font-weight: 600;
+
+  margin-bottom: 2px;
+}
+.hotel-won {
+  position: relative;
+  font-size: 24px;
+  color: #000;
+  font-weight: 400;
+}
+.hotel-price {
+  position: relative;
+  font-size: 28px;
+  color: #000;
+  font-weight: 600;
+}

@@ -7,7 +7,7 @@ const ReserveDate = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 16px;
+    margin-top: 10px;
   `;
   const CalendarSelectLeft = styled.div`
     position: relative;

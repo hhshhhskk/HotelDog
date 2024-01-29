@@ -1,3 +1,30 @@
+.roomtype-flex {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  min-height: 650px;
+
+  color: #000;
+  font-size: 16px;
+  font-weight: 600;
+}
+.roomtype-text-flex {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-weight: 600;
+  font-size: 16px;
+}
+.roomtype-info {
+  position: relative;
+  font-size: 12px;
+  font-weight: 500;
+  color: #9c9c9c;
+}
 .roomtype-wrap {
   position: relative;
   width: 590px;
@@ -81,6 +108,8 @@
   color: #fff;
   border-radius: 0.625rem;
   /* margin-left: 10px; */
+
+  cursor: pointer;
 }
 
 /* transition: property timing-function duration delay | initial | inherit */

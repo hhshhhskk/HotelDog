@@ -1,9 +1,31 @@
-.hotelreview_wrap {
+.review-modal-background {
   position: relative;
+  position: fixed;
+
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  background: rgba(0, 0, 0, 0.6);
+}
+.close {
+  display: none;
+}
+
+.hotelreview_wrap {
+  position: absolute;
   width: 650px;
   height: 640px;
   border: 1px solid #d9d9d9;
   border-radius: 15px;
+
+  /* 모달 위치 지정 */
+  margin: 0 auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
 }
 /* 후기 - 헤더 영역 */
 .hotelreview-header-wrap {
@@ -21,11 +43,21 @@
   color: #654222;
   font-weight: 600;
 }
-.roomreview-close {
+.roomreviewClose {
   position: relative;
+  cursor: pointer;
+}
+.roomreviewClose .hidden {
+  display: none;
+  position: relative;
+  color: #fefefe;
 }
 
 /* 메인 헤더(숙소명-별점) 영역 */
+.review-main {
+  position: relative;
+  /* max-height: calc(100vh - 272px); */
+}
 .review-header {
   position: relative;
   margin: 0 50px;
@@ -40,16 +72,6 @@
   margin-right: 9px;
   display: flex;
 }
-/*
-.review-star img {
-  position: relative;
-  width: 21px;
-  height: 19px;
-
-  img 라 block 넣어주기?! 
-  display: block;
-}
-*/
 
 .review-number {
   color: #654222;
@@ -72,13 +94,22 @@
   font-weight: 500;
 }
 .review-main-line {
-  margin: 15px 50px 41px;
+  margin: 15px 50px 11px;
 }
 
 /* 별점 및 한줄평 영역 */
+.review-wrap-scroll {
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: (650px - 272px);
+}
 .review_wrap {
   position: relative;
   left: 51px;
+  margin-top: 30px;
+  max-height: (650px - 272px);
+  overflow-y: auto;
 }
 .review_small_stars {
   position: relative;
@@ -108,9 +139,13 @@
   font-weight: 400;
   color: #000;
   line-height: normal;
+
+  /* text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap; */
 }
 .review-part-line {
-  margin: 17px 50px 0px;
+  margin: 17px 0px 0px 0px;
 }
 
 .review_more {
