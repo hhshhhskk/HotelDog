@@ -125,7 +125,7 @@ const SignUpPage = () => {
               },
             };
             console.log(postData);
-            // signUpAPi(postData);
+            signUpAPi(postData);
           } else {
             alert("이용약관동의를 해주세요.");
           }
