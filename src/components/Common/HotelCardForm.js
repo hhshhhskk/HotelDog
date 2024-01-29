@@ -10,7 +10,6 @@ import {
   HotelImgDiv,
   HotelName,
   HotelPriceDiv,
-  HotelStarDiv,
   OneNight,
   OriginalPrice,
   Review,
@@ -18,7 +17,7 @@ import {
   TitleDiv,
   Unit,
 } from "../../styles/Common/hotelCardFormStyle";
-import HotelLike from "../Common/HotelLike";
+import HotelLike from "./HotelLike";
 
 const HotelCardForm = () => {
   const navigate = useNavigate();
@@ -87,7 +86,7 @@ const HotelCardForm = () => {
       {/* [수정 예정] 컴포넌트를 쓰는 페이지에서 데이터를 받아 올 수 있게 변경*/}
       {hotels.map(hotels => (
         <>
-          <HotelCardDiv key={hotels.name} style={{ flex: "0 0 360px" }}>
+          <HotelCardDiv key={hotels.name}>
             <HotelImgDiv>
               <img
                 src={`${process.env.PUBLIC_URL}/images/hotel1.jpg`}

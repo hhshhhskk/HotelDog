@@ -24,9 +24,8 @@ export const LocationSelectDiv = styled.div`
 
 export const LocationSelectTitle = styled.div`
   display: flex;
-  img {
-    padding-left: 238px;
-  }
+  justify-content: space-between;
+  width: 420px;
 `;
 
 export const LocationSelect = styled.div`
@@ -74,6 +73,7 @@ export const DogSelectDiv = styled.div`
 export const DogSelectTitle = styled.div`
   display: flex;
   align-items: center;
+  color: #9c9c9c;
   span {
     padding-left: 10px;
   }
@@ -176,19 +176,17 @@ export const FilterSelect = styled.div`
   border: 1px solid #654222;
 `;
 
-export const FilterOptionDiv = styled.div`
-  /* background-color: red; */
-  padding-top: 20px;
+export const OtherDiv = styled.div`
+  position: relative;
 `;
 
 export const FilterTitle = styled.span`
   font-size: 1.4rem;
   font-weight: 600;
   color: #654222;
-  /* padding: 10px 0; */
 `;
 
-export const FilterOption = styled.div`
+export const OtherOptionBt = styled.div`
   display: flex;
   justify-content: space-between;
   padding-top: 10px;
@@ -205,14 +203,27 @@ export const FilterOption = styled.div`
       background-color: #654222;
       color: #fff;
     }
-    button.active {
+    &.active {
       background-color: #654222;
       color: #fff;
     }
   }
 `;
 
-export const FilterRadio = styled.div`
+export const ChoiceDiv = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 330px;
+  /* background-color: azure; */
+`;
+
+export const ChoiceOptionDiv = styled.div`
+  padding-top: 20px;
+  padding-right: 35px;
+  /* background-color: azure; */
+`;
+
+export const ChoiceOptionRadio = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
