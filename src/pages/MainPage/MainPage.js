@@ -19,7 +19,18 @@ import {
 } from "../../styles/MainPageStyle/mainPageStyle";
 import HotelCardForm from "../../components/Common/HotelCardForm";
 
+const initData = {
+  // 메인페이지 정보 데이터 형식
+};
+
 const MainPage = () => {
+  // 페인페이지 useState
+  const [mainData, setMainData] = useState(initData);
+  // 처음 메인페이지 데이터 가져오기
+  const getMainInfo = () => {
+    // getAPI 정보에 setMainData 담아주기
+  };
+
   const [selectOption, setSelectOption] = useState();
 
   //  호텔리스트 정렬방식(별점순, 리뷰순) 선택

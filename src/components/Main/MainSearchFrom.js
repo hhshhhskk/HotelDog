@@ -4,6 +4,8 @@ import {
   ChoiceOptionDiv,
   ChoiceOptionRadio,
   DateSelect,
+  DateSelectDiv,
+  DateSelectTitle,
   DogNumber,
   DogNumberDiv,
   DogSelect,
@@ -26,6 +28,7 @@ import {
   SearchForm,
   SubmitButton,
 } from "../../styles/MainPageStyle/MainSearchFromStyle";
+import Calendar from "../Common/Calendar";
 
 const MainSearchFrom = () => {
   // 미리보기 useState
@@ -34,6 +37,7 @@ const MainSearchFrom = () => {
 
   // 드롭다운 useState
   const [locationDropdown, setLocationDropdown] = useState(false);
+  const [calendarDropdown, setCalendarDropdown] = useState(false);
   const [dogDropdown, setDogDropdown] = useState(false);
   const [filterDropdown, setFilterDropdown] = useState(false);
 
@@ -141,7 +145,20 @@ const MainSearchFrom = () => {
         </LocationSelectDiv>
 
         {/* !!!날짜 선택 : 달력 삽입하기*/}
-        <DateSelect type="date" />
+        {/* <DateSelect type="date" /> */}
+        <DateSelectDiv>
+          <DateSelectTitle
+            onClick={() => setCalendarDropdown(!calendarDropdown)}
+          >
+            <span>날짜 출력</span>
+            <img src={`${process.env.PUBLIC_URL}/images/toggleArrow.svg`} />
+          </DateSelectTitle>
+          {calendarDropdown && (
+            <DateSelect>
+              <Calendar />
+            </DateSelect>
+          )}
+        </DateSelectDiv>
 
         {/* 사이즈/마리 선택*/}
         <DogSelectDiv>
