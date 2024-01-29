@@ -1,14 +1,27 @@
+.calendar_modal_background {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  background: rgba(0, 0, 0, 0.6);
+
+  z-index: 3;
+}
+
 .calendar_modal_wrap {
   position: relative;
-  /* background-color: yellowgreen; */
   border-radius: 10px;
   border: 1px solid #c1bfbf;
   width: 750px;
   height: 500px;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  top: 55%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
 }
 .calendar_header {
   position: relative;
@@ -21,6 +34,7 @@
 .calendar_header-img {
   position: relative;
   width: 20px;
+  
   height: 23px;
   margin-right: 10px;
 }
@@ -59,5 +73,6 @@
   border: 0;
 
   margin-top: 5px;
-}
 
+  cursor: pointer;
+}

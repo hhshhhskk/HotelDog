@@ -113,12 +113,14 @@ const HotelDetail = () => {
   ];
 
   // 후기 모달 관련
-  const [isOpen, setIsOpen] = useState(false);
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
 
   const handleMoveReviewModal = () => {
-    setIsOpen(true);
+    setReviewModalOpen(true);
     document.body.style.overflow = "hidden";
   };
+
+  const [reserveForm, setReserveForm] = useState(true);
 
   return (
     <div>
@@ -209,7 +211,14 @@ const HotelDetail = () => {
               </ReviewTextDesc>
             </div>
 
-            {isOpen && <HotelReview />}
+            {reviewModalOpen && (
+              <HotelReview
+                // props로 상태 전달
+                // setReviewModalOpen 함수. reviewModalOpen은 변수
+                setReviewModalOpen={setReviewModalOpen}
+                reviewModalOpen={reviewModalOpen}
+              />
+            )}
             <ReviewTextMoreBt onClick={() => handleMoveReviewModal()}>
               더 보기
             </ReviewTextMoreBt>
@@ -218,11 +227,8 @@ const HotelDetail = () => {
 
         {/* <Calendar /> */}
       </ReserveFormScroll>
-
       {/* 우측 픽스 영역
-      <div className="reserveform-fixed">
-        <ReserveForm />
-      </div> */}
+      <div className="reserveform-fixed"><ReserveForm /></div> */}
     </div>
   );
 };
