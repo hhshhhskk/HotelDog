@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import React, { useRef, useState } from "react";
+import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
 
 const MydogPage = styled.div`
   margin-left: 85px;
@@ -36,16 +37,22 @@ const DogRight = styled.div`
 
 const DogLeft = styled.div`
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 정렬 추가 */
   width: 360px;
   height: 290px;
   background-color: #eee;
-  P {
+  border-radius: 10px;
+  p {
+    display: ${props =>
+      props.hasImage ? "none" : "flex"}; /* 이미지가 있으면 숨김 */
     color: #9c9c9c;
-
     font-size: 18px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    align-items: center;
   }
   img {
     width: 360px;
@@ -54,6 +61,8 @@ const DogLeft = styled.div`
     object-fit: cover;
     border-radius: 10px;
     cursor: pointer;
+    display: ${props =>
+      props.hasImage ? "block" : "none"}; /* 이미지가 있으면 표시 */
   }
 `;
 
@@ -69,7 +78,7 @@ const DogName = styled.div`
   }
 `;
 
-const DogNameArea = styled.div`
+const DogNameArea = styled.input`
   position: relative;
   width: 260px;
   height: 25px;
@@ -77,6 +86,13 @@ const DogNameArea = styled.div`
   border-radius: 5px;
   background: #eee;
   margin-left: 10px;
+  line-height: normal;
+  border: none;
+  padding-left: 10px;
+  color: #9c9c9c;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
   line-height: normal;
 `;
 
@@ -90,18 +106,32 @@ const DogAge = styled.div`
     font-weight: 600;
     color: #654222;
   }
+  p {
+    margin-left: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #654222;
+    margin-right: 28px;
+  }
 `;
 
-const DogAgeArea = styled.div`
+const DogAgeArea = styled.input`
   position: relative;
-  width: 90px;
+  width: 60px;
   height: 25px;
   align-items: center;
   border-radius: 5px;
   background: #eee;
   margin-left: 10px;
   line-height: normal;
-  margin-right: 20px;
+
+  border: none;
+  padding-left: 10px;
+  color: #9c9c9c;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 `;
 
 const DogSizeSelect = styled.select`
@@ -116,6 +146,8 @@ const DogSizeSelect = styled.select`
   cursor: pointer;
   font-size: 14px;
   color: #654222;
+  padding-left: 10px;
+  padding-right: 10px;
 `;
 
 const DogInfo = styled.textarea`
@@ -140,7 +172,7 @@ const DogBt = styled.div`
   justify-content: flex-end;
 `;
 
-const DogDel = styled.button`
+const DogCancel = styled.button`
   position: relative;
   cursor: pointer;
   width: 90px;
@@ -195,20 +227,19 @@ const ListNone = styled.div`
     color: #969696;
     margin-bottom: 14px;
   }
-
-  a {
-    display: flex;
-    justify-content: center;
-    color: #e5b300;
-    width: 150px;
-    height: 40px;
-    font-size: 14px;
-    border-radius: 10px;
-    border: 1px solid #e5b300;
-    background: #fff;
-    cursor: pointer;
-    align-items: center;
-  }
+`;
+const DogFormBt = styled.button`
+  display: flex;
+  justify-content: center;
+  color: #e5b300;
+  width: 150px;
+  height: 40px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 1px solid #e5b300;
+  background: #fff;
+  cursor: pointer;
+  align-items: center;
 `;
 const Line = styled.div`
   position: relative;
@@ -218,25 +249,63 @@ const Line = styled.div`
 `;
 
 const Mydog = () => {
+  // 이미지 업로드 부분
   const [imageURL, setImageURL] = useState(null);
   const inputRef = useRef(null);
 
   const handleImageChange = event => {
     const file = event.target.files[0];
     const reader = new FileReader();
-
     reader.onloadend = () => {
       setImageURL(reader.result);
     };
-
     if (file) {
       reader.readAsDataURL(file);
     }
   };
 
+  // 반려견 정보 상태
+  const [dogInfo, setDogInfo] = useState({
+    pic: "",
+    dto: {
+      sizePk: 0,
+      dogNm: "",
+      dogAge: 0,
+      dogPic: "",
+      dogEtc: "",
+    },
+  });
+
+  // 반려견 정보 입력 핸들러
+  const handleInputChange = e => {
+    const { name, value } = e.target;
+    setDogInfo(prevState => ({
+      ...prevState,
+      dto: {
+        ...prevState.dto,
+        [name]: value,
+      },
+    }));
+  };
+
+  // 반려견 정보 저장하기
+  const handleDogSubmit = async () => {
+    try {
+      // 서버에 데이터 전송
+      const response = await axios.post("http://112.222.157.156:5222/api/dog", {
+        pic: imageURL, // 이미지 URL은 이미지 업로드 후에 설정
+        dto: dogInfo.dto,
+      });
+      // 응답 처리
+      console.log("서버 응답 데이터:", response.data);
+      // 필요한 작업 수행
+    } catch (error) {
+      console.error("오류 발생:", error);
+    }
+  };
+
   const handleDogLeftClick = () => {
-    // DogLeft 영역을 클릭하면 input 요소를 클릭하여 이미지 선택 창을 나타냄
-    inputRef.current.click();
+    inputRef.current.click(); // input 요소를 클릭합니다.
   };
 
   return (
@@ -245,7 +314,8 @@ const Mydog = () => {
         <p>반려견 정보</p>
       </PageTitle>
       <DogContents>
-        <DogLeft onClick={handleDogLeftClick}>
+        <DogLeft onClick={handleDogLeftClick} hasImage={!!imageURL}>
+          {/* hasImage prop 전달 */}
           <input
             type="file"
             onChange={handleImageChange}
@@ -253,40 +323,54 @@ const Mydog = () => {
             style={{ display: "none" }}
             ref={inputRef}
           />
-          {imageURL && <img src={imageURL} alt="Selected" />}
           <p>사진을 선택하세요</p>
+          {imageURL && <img src={imageURL} alt="Selected" />}
         </DogLeft>
         <DogRight>
           <DogName>
             <Line />
             <span>이름</span>
-            <DogNameArea />
+            <DogNameArea
+              type="text"
+              name="dogNm"
+              value={dogInfo.dto.dogNm}
+              onChange={handleInputChange}
+            />
           </DogName>
           <DogAge>
             <Line />
             <span>나이</span>
-            <DogAgeArea />
+            <DogAgeArea
+              type="text"
+              name="dogAge"
+              value={dogInfo.dto.dogAge}
+              onChange={handleInputChange}
+            />
+            <p>살</p>
             <Line />
             <span>사이즈</span>
-            <DogSizeSelect>
-              <option value="small">소형</option>
-              <option value="medium">중형</option>
-              <option value="large">대형</option>
+            <DogSizeSelect
+              value={dogInfo.dto.sizePk}
+              onChange={handleInputChange}
+              name="sizePk"
+            >
+              <option value={0}>소형</option>
+              <option value={1}>중형</option>
+              <option value={2}>대형</option>
             </DogSizeSelect>
           </DogAge>
-          <DogInfo placeholder="특이 사항 및 요청 사항을 입력해 주세요."></DogInfo>
+          <DogInfo
+            placeholder="특이 사항 및 요청 사항을 입력해 주세요."
+            name="dogEtc"
+            value={dogInfo.dto.dogEtc}
+            onChange={handleInputChange}
+          />
           <DogBt>
-            <DogDel>삭제하기</DogDel>
-            <DogUp>등록 하기</DogUp>
+            <DogCancel>취소 하기</DogCancel>
+            <DogUp onClick={handleDogSubmit}>등록 하기</DogUp>
           </DogBt>
         </DogRight>
       </DogContents>
-
-      {/* <ListNone>
-        <img src={`${process.env.PUBLIC_URL}/images/MyPage/dog.svg`} />
-        <p>반려견 정보가 없습니다.</p>
-        <span>대표 반려견을 등록해주세요</span>
-      </ListNone> */}
     </MydogPage>
   );
 };
