@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import {
+  ChoiceDiv,
+  ChoiceOptionDiv,
+  ChoiceOptionRadio,
   DateSelect,
   DogNumber,
   DogNumberDiv,
@@ -8,9 +11,6 @@ import {
   DogSelectTitle,
   DogTitle,
   ExtraDogNumber,
-  FilterOption,
-  FilterOptionDiv,
-  FilterRadio,
   FilterSelect,
   FilterSelectDiv,
   FilterSelectTitle,
@@ -20,6 +20,8 @@ import {
   LocationSelectDiv,
   LocationSelectTitle,
   MinusBt,
+  OtherDiv,
+  OtherOptionBt,
   PlusBt,
   SearchForm,
   SubmitButton,
@@ -36,8 +38,12 @@ const MainSearchFrom = () => {
   const [filterDropdown, setFilterDropdown] = useState(false);
 
   // 필터에 대한 useState
-  const [selectFilter, setSelectFilter] = useState(null);
-  const [selectRadio, setSelectRadio] = useState("no");
+  const [selectFilter, setSelectFilter] = useState([]);
+  const [selectRadio, setSelectRadio] = useState({
+    프로그램: "no",
+    산책: "no",
+    미용: "no",
+  });
 
   // !!! 데이터 연동 시 변경 예정
   const locationOption = ["서울특별시", "대구광역시"];
@@ -50,11 +56,11 @@ const MainSearchFrom = () => {
     { size: "초대형견", count: 0 },
   ]);
 
-  const filterOption = [
-    { option: "프로그램" },
-    { option: "산책" },
-    { option: "미용" },
-  ];
+  // const filterOption = [
+  //   { option: "프로그램" },
+  //   { option: "산책" },
+  //   { option: "미용" },
+  // ];
 
   // 지역 선택 시 미리보기 내용 변경
   const handleChangeLocation = e => {
@@ -89,18 +95,24 @@ const MainSearchFrom = () => {
 
   // 필터 선택에 따른 이벤트
   const handleClickFilter = theme => {
-    // 선택된 테마인지 확인
-    if (selectFilter === theme) {
+    const Selected = selectFilter.includes(theme);
+    if (Selected) {
       // 이미 선택된 경우 선택 해제
-      setSelectFilter(null);
+      setSelectFilter(prevFilters =>
+        prevFilters.filter(filter => filter !== theme),
+      );
     } else {
       // 선택되지 않은 경우 선택
-      setSelectFilter(theme);
+      setSelectFilter(prevFilters => [...prevFilters, theme]);
     }
   };
 
-  const handleChangeFilter = e => {
-    setSelectRadio(e.target.value);
+  // 필터 라디오 버튼 선택에 따른 이벤트
+  const handleClickRadio = theme => {
+    setSelectRadio(prevState => ({
+      ...prevState,
+      [theme]: prevState[theme] === "yes" ? "no" : "yes",
+    }));
   };
 
   return (
@@ -188,54 +200,56 @@ const MainSearchFrom = () => {
             />
             <span>필터</span>
           </FilterSelectTitle>
+
           {filterDropdown && (
             <FilterSelect>
-              <div>
+              {/* 필터-기타 영역 */}
+              <OtherDiv>
                 <FilterTitle>기타</FilterTitle>
-                <FilterOption>
+                <OtherOptionBt>
                   {["수영장", "운동장", "수제식", "셔틀운행"].map(
                     (theme, index) => (
                       <button
                         key={index}
                         type="button"
                         onClick={() => handleClickFilter(theme)}
-                        className={selectFilter === theme ? "active" : ""}
+                        className={selectFilter.includes(theme) ? "active" : ""}
                       >
                         {theme}
                       </button>
                     ),
                   )}
-                </FilterOption>
-              </div>
-              <div>
-                {filterOption.map((option, index) => (
-                  <FilterOptionDiv key={index}>
-                    <FilterTitle>{option.option}</FilterTitle>
-                    <FilterRadio>
+                </OtherOptionBt>
+              </OtherDiv>
+
+              {/* 필터-프로그램,산책,미용 영역 */}
+              <ChoiceDiv>
+                {["프로그램", "산책", "미용"].map((option, index) => (
+                  <ChoiceOptionDiv key={index}>
+                    <FilterTitle>{option}</FilterTitle>
+                    <ChoiceOptionRadio>
                       <label>
                         <input
                           type="radio"
-                          name={option.option}
                           value="yes"
-                          checked={selectRadio === "yes"}
-                          onChange={handleChangeFilter}
+                          checked={selectRadio[option] === "yes"}
+                          onClick={() => handleClickRadio(option)}
                         />
                         <span>선택</span>
                       </label>
                       <label>
                         <input
                           type="radio"
-                          name={option.option}
                           value="no"
-                          checked={selectRadio === "no"}
-                          onChange={handleChangeFilter}
+                          checked={selectRadio[option] === "no"}
+                          onClick={() => handleClickRadio(option)}
                         />
                         <span>미선택</span>
                       </label>
-                    </FilterRadio>
-                  </FilterOptionDiv>
+                    </ChoiceOptionRadio>
+                  </ChoiceOptionDiv>
                 ))}
-              </div>
+              </ChoiceDiv>
             </FilterSelect>
           )}
         </FilterSelectDiv>

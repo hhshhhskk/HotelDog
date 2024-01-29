@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import HotelCardForm from "../../components/Main/HotelCardForm";
 import MainSearchFrom from "../../components/Main/MainSearchFrom";
 import TopButton from "../../components/Main/TopButton";
 import {
@@ -17,7 +16,8 @@ import {
   VisualImg,
   VisualInner,
   VisualText,
-} from "./mainPageStyle";
+} from "../../styles/MainPageStyle/mainPageStyle";
+import HotelCardForm from "../../components/Common/HotelCardForm";
 
 const MainPage = () => {
   const [selectOption, setSelectOption] = useState();
@@ -35,6 +35,10 @@ const MainPage = () => {
     console.log("선택된 값 :", selectedValue);
   };
 
+  const handleClickForm = () => {
+    window.scrollTo({ top: 300, behavior: "smooth" });
+  };
+
   return (
     <MainPageDiv>
       <VisualDiv>
@@ -50,7 +54,7 @@ const MainPage = () => {
             </span>
           </VisualText>
 
-          <VisualForm>
+          <VisualForm onClick={handleClickForm}>
             {/* 메인 검색창 */}
             <MainSearchFrom />
           </VisualForm>

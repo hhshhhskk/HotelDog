@@ -4,6 +4,11 @@ export const HotelCardDiv = styled.div`
   position: relative;
   width: 360px;
   padding-bottom: 50px;
+  /* .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  } */
 `;
 export const HotelImgDiv = styled.div`
   position: relative;

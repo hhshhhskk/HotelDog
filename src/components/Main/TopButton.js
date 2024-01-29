@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 
 const TopBt = styled.button`
   position: fixed;
-  bottom: 350px;
-  right: 250px;
-  background-color: #654222;
+  bottom: 50px;
+  right: 100px;
+  background-color: black;
   border: none;
   border-radius: 30px;
   padding: 10px 17px;
@@ -13,6 +13,8 @@ const TopBt = styled.button`
   font-weight: 7rem;
   font-size: 15px;
   cursor: pointer;
+  z-index: 2;
+  /* box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5); */
 `;
 
 const TopBtImg = styled.img`
@@ -47,7 +49,7 @@ const TopButton = () => {
 
   return (
     <div>
-      {scrollPosition > 150 ? (
+      {scrollPosition > 80 ? (
         <TopBt
           scrollPosition={scrollPosition}
           id="scrollButton"
