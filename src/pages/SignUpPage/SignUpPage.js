@@ -24,6 +24,7 @@ import {
   nickNameCheckAPI,
   signUpAPi,
 } from "../../api/SignUp/addressApi";
+import { useNavigate } from "react-router-dom";
 
 const globalStyles = css`
   body.modal-open {
@@ -43,6 +44,7 @@ const SignUpPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const navigate = useNavigate();
   const [popUp, setPopUp] = useState(false);
   const [agree, setAgree] = useState(false);
   const [address, setAddress] = useState();
@@ -96,7 +98,7 @@ const SignUpPage = () => {
     }
   };
 
-  const onValid = data => {
+  const onValid = async data => {
     // console.log(data);
     let result = 0;
     if (mailChecked) {
@@ -112,20 +114,19 @@ const SignUpPage = () => {
               upw: data.password,
               nickname: data.nickname,
               phoneNum: data.telnum,
-              userAddress: "string",
               addressEntity: {
                 addressName: address.address_name,
-                region1depthName: address.region_1depth_name,
-                region2depthName: address.region_2depth_name,
-                region3depthName: address.region_3depth_name,
-                zoneNo: address.zone_no,
+                region1DepthName: address.region_1depth_name,
+                region2DepthName: address.region_2depth_name,
+                region3DepthName: address.region_3depth_name,
+                zoneNum: address.zone_no,
                 x: address.x,
                 y: address.y,
-                detail: data.detail,
+                detailAddress: data.detail,
               },
             };
             console.log(postData);
-            signUpAPi(postData);
+            signUpAPi(postData, navigate);
           } else {
             alert("이용약관동의를 해주세요.");
           }

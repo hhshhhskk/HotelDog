@@ -97,9 +97,9 @@ export const addressApi = async (dataAddress, setAddress) => {
 };
 
 // 회원가입 POST 요청
-export const signUpAPi = async postData => {
+export const signUpAPi = async (postData, navigate) => {
   try {
-    await axios({
+    const response = await axios({
       method: "post",
       url: "/api/user/signup",
       data: postData,
@@ -110,6 +110,7 @@ export const signUpAPi = async postData => {
       .then(response => {
         // 성공적으로 응답을 받았을 때의 처리
         console.log("Response:", response.data);
+        navigate(`/login`);
       })
       .catch(error => {
         // 오류가 발생했을 때의 처리
