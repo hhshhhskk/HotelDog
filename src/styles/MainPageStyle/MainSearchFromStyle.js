@@ -20,10 +20,12 @@ export const LocationSelectDiv = styled.div`
   display: flex;
   align-items: center;
   color: #9c9c9c;
+`;
+
+export const LocationSelectTitle = styled.div`
+  display: flex;
   img {
-    position: absolute;
-    top: 38px;
-    left: 430px;
+    padding-left: 238px;
   }
 `;
 
@@ -67,15 +69,13 @@ export const DogSelectDiv = styled.div`
   border-radius: 9px;
   border: none;
   background-color: #fff;
-  div {
-    /* width: 140px; */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* background-color: aqua; */
-    span {
-      padding-left: 10px;
-    }
+`;
+
+export const DogSelectTitle = styled.div`
+  display: flex;
+  align-items: center;
+  span {
+    padding-left: 10px;
   }
 `;
 
@@ -149,10 +149,19 @@ export const FilterSelectDiv = styled.div`
   border: none;
   color: #9c9c9c;
   cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   background-color: #fff;
+  display: flex;
+  /* align-items: center; */
+`;
+
+export const FilterSelectTitle = styled.div`
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+
+  span {
+    padding-left: 20px;
+  }
 `;
 
 export const FilterSelect = styled.div`
@@ -193,6 +202,10 @@ export const FilterOption = styled.div`
     font-weight: 400;
     cursor: pointer;
     :hover {
+      background-color: #654222;
+      color: #fff;
+    }
+    button.active {
       background-color: #654222;
       color: #fff;
     }

@@ -5,63 +5,69 @@ import {
   DogNumberDiv,
   DogSelect,
   DogSelectDiv,
+  DogSelectTitle,
   DogTitle,
   ExtraDogNumber,
-  ExtraLabel,
   FilterOption,
   FilterOptionDiv,
   FilterRadio,
   FilterSelect,
   FilterSelectDiv,
+  FilterSelectTitle,
   FilterTitle,
   LocationOption,
   LocationSelect,
   LocationSelectDiv,
+  LocationSelectTitle,
   MinusBt,
-  OptionSelect,
-  OptionSelectDiv,
   PlusBt,
   SearchForm,
   SubmitButton,
 } from "../../styles/MainPageStyle/MainSearchFromStyle";
 
 const MainSearchFrom = () => {
+  // 미리보기 useState
   const [locationValue, setLocationValue] = useState("지역을 선택해주세요");
-  const [dogValue, setDogValue] = useState("사이즈 / 마리");
+  // const [dogValue, setDogValue] = useState("사이즈 / 마리");
 
   // 드롭다운 useState
   const [locationDropdown, setLocationDropdown] = useState(false);
   const [dogDropdown, setDogDropdown] = useState(false);
   const [filterDropdown, setFilterDropdown] = useState(false);
 
+  // 필터에 대한 useState
+  const [selectFilter, setSelectFilter] = useState(null);
   const [selectRadio, setSelectRadio] = useState("no");
 
   // !!! 데이터 연동 시 변경 예정
   const locationOption = ["서울특별시", "대구광역시"];
-  // 강아지(사이즈/마리) useState 및 초기 데이터
+
+  // 사이즈/마리에 대한 useState
   const [dogOption, setDogOption] = useState([
     { size: "소형견", count: 0 },
     { size: "중형견", count: 0 },
     { size: "대형견", count: 0 },
     { size: "초대형견", count: 0 },
   ]);
+
   const filterOption = [
     { option: "프로그램" },
     { option: "산책" },
     { option: "미용" },
   ];
 
+  // 지역 선택 시 미리보기 내용 변경
   const handleChangeLocation = e => {
     const location = e.target.innerText;
     setLocationValue(location);
     // 드롭다운 닫기
     setLocationDropdown(false);
   };
-  const handleChangeDog = e => {
-    // !!! 뭘 선택해야 내용이 바뀔지
-    const dogPick = e.target.value;
-    setDogValue(dogPick);
-  };
+  // const handleChangeDog = e => {
+  //   // !!! 뭘 선택해야 내용이 바뀔지
+  //   const dogPick = e.target.value;
+  //   setDogValue(dogPick);
+  // };
 
   // 반려견 마리수 -,+ 에 따른 연산
   const handleIncrement = index => {
@@ -81,6 +87,18 @@ const MainSearchFrom = () => {
     });
   };
 
+  // 필터 선택에 따른 이벤트
+  const handleClickFilter = theme => {
+    // 선택된 테마인지 확인
+    if (selectFilter === theme) {
+      // 이미 선택된 경우 선택 해제
+      setSelectFilter(null);
+    } else {
+      // 선택되지 않은 경우 선택
+      setSelectFilter(theme);
+    }
+  };
+
   const handleChangeFilter = e => {
     setSelectRadio(e.target.value);
   };
@@ -93,10 +111,10 @@ const MainSearchFrom = () => {
         <LocationSelectDiv
           onClick={() => setLocationDropdown(!locationDropdown)}
         >
-          <div>
+          <LocationSelectTitle>
             <label>{locationValue}</label>
             <img src={`${process.env.PUBLIC_URL}/images/toggleArrow.svg`} />
-          </div>
+          </LocationSelectTitle>
           {locationDropdown && (
             <LocationSelect>
               <ul>
@@ -115,10 +133,10 @@ const MainSearchFrom = () => {
 
         {/* 사이즈/마리 선택*/}
         <DogSelectDiv>
-          <div onClick={() => setDogDropdown(!dogDropdown)}>
+          <DogSelectTitle onClick={() => setDogDropdown(!dogDropdown)}>
             <img src={`${process.env.PUBLIC_URL}/images/footicon.svg`} alt="" />
-            <span>{dogValue}</span>
-          </div>
+            <span>사이즈 / 마리</span>
+          </DogSelectTitle>
           {dogDropdown && (
             <DogSelect>
               <ul>
@@ -137,14 +155,14 @@ const MainSearchFrom = () => {
                           type="number"
                           value={dog.count}
                           readOnly
-                          onChange={handleChangeDog}
+                          // onChange={handleChangeDog}
                         />
                       ) : (
                         <DogNumber
                           type="number"
                           value={dog.count}
                           readOnly
-                          onChange={handleChangeDog}
+                          // onChange={handleChangeDog}
                         />
                       )}
                       <div>
@@ -163,22 +181,30 @@ const MainSearchFrom = () => {
 
         {/* 필터 선택*/}
         <FilterSelectDiv>
-          <div onClick={() => setFilterDropdown(!filterDropdown)}>
+          <FilterSelectTitle onClick={() => setFilterDropdown(!filterDropdown)}>
             <img
               src={`${process.env.PUBLIC_URL}/images/filtericon.svg`}
               alt=""
             />
             <span>필터</span>
-          </div>
+          </FilterSelectTitle>
           {filterDropdown && (
             <FilterSelect>
               <div>
                 <FilterTitle>기타</FilterTitle>
                 <FilterOption>
-                  <button type="button">수영장</button>
-                  <button type="button">운동장</button>
-                  <button type="button">운동장</button>
-                  <button type="button">운동장</button>
+                  {["수영장", "운동장", "수제식", "셔틀운행"].map(
+                    (theme, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() => handleClickFilter(theme)}
+                        className={selectFilter === theme ? "active" : ""}
+                      >
+                        {theme}
+                      </button>
+                    ),
+                  )}
                 </FilterOption>
               </div>
               <div>
