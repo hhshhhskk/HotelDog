@@ -1,22 +1,170 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 const MydogPage = styled.div`
   margin-left: 85px;
   position: relative;
   width: 865px;
 `;
-// PageTitle 공통 스타일로 빼도됨
 
 const PageTitle = styled.div`
   position: relative;
   height: auto;
+  margin-bottom: 35px;
   p {
     font-weight: 700;
     font-size: 24px;
     color: #654222;
   }
 `;
+
+const DogContents = styled.div`
+  position: relative;
+  display: flex;
+`;
+const ImageContainer = styled.div`
+  position: relative;
+`;
+
+const DogRight = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 30px;
+`;
+
+const DogLeft = styled.div`
+  position: relative;
+  width: 360px;
+  height: 290px;
+  background-color: #eee;
+  P {
+    color: #9c9c9c;
+
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  img {
+    width: 360px;
+    height: 290px;
+    overflow: hidden;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+`;
+
+const DogName = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  span {
+    margin-left: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #654222;
+  }
+`;
+
+const DogNameArea = styled.div`
+  position: relative;
+  width: 260px;
+  height: 25px;
+  align-items: center;
+  border-radius: 5px;
+  background: #eee;
+  margin-left: 10px;
+  line-height: normal;
+`;
+
+const DogAge = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  span {
+    margin-left: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #654222;
+  }
+`;
+
+const DogAgeArea = styled.div`
+  position: relative;
+  width: 90px;
+  height: 25px;
+  align-items: center;
+  border-radius: 5px;
+  background: #eee;
+  margin-left: 10px;
+  line-height: normal;
+  margin-right: 20px;
+`;
+
+const DogSizeSelect = styled.select`
+  position: relative;
+  width: 90px;
+  height: 25px;
+  border-radius: 5px;
+  background: #eee;
+  margin-left: 10px;
+  line-height: normal;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #654222;
+`;
+
+const DogInfo = styled.textarea`
+  position: relative;
+  width: 305px;
+  height: 150px;
+  border-radius: 5px;
+  background: #fffaf0;
+  border: 1px solid transparent;
+  resize: none;
+  padding: 15px;
+  color: #9c9c9c;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+`;
+
+const DogBt = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const DogDel = styled.button`
+  position: relative;
+  cursor: pointer;
+  width: 90px;
+  height: 45px;
+  border-radius: 10px;
+  border: 1px solid #654222;
+  background: #fff;
+  color: #654222;
+  font-size: 14px;
+  margin-right: 10px;
+`;
+
+const DogUp = styled.button`
+  position: relative;
+  cursor: pointer;
+  width: 90px;
+  height: 45px;
+  border-radius: 10px;
+  border: 1px solid #654222;
+  background: #654222;
+  color: #fff;
+  font-size: 14px;
+`;
+
 // ListNone 공통 스타일로 빼도됨
 const ListNone = styled.div`
   position: relative;
@@ -62,65 +210,78 @@ const ListNone = styled.div`
     align-items: center;
   }
 `;
-const DogList = styled.div`
-  position: relative;
-`;
-const DogListLeft = styled.div`
-  position: relative;
-`;
-const DogListRight = styled.div`
-  position: relative;
-`;
 const Line = styled.div`
   position: relative;
   display: flex;
-  height: 20px;
+  height: 16px;
   border-left: 3px solid #654222;
-`;
-const DogInfo = styled.div`
-  position: relative;
-`;
-const DogDetail = styled.div`
-  position: relative;
-`;
-const DogBt = styled.div`
-  position: relative;
-`;
-const DogDelete = styled.div`
-  position: relative;
-`;
-const DogUp = styled.div`
-  position: relative;
 `;
 
 const Mydog = () => {
-  const [image, setImage] = useState();
+  const [imageURL, setImageURL] = useState(null);
+  const inputRef = useRef(null);
+
+  const handleImageChange = event => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setImageURL(reader.result);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDogLeftClick = () => {
+    // DogLeft 영역을 클릭하면 input 요소를 클릭하여 이미지 선택 창을 나타냄
+    inputRef.current.click();
+  };
+
   return (
     <MydogPage>
       <PageTitle>
         <p>반려견 정보</p>
       </PageTitle>
-      <DogList>
-        <DogListLeft>
-          <input type="file" />
-        </DogListLeft>
-        <DogListRight>
-          <DogInfo>
-            {/* <Line />
-            <input type="text">이름</input>
+      <DogContents>
+        <DogLeft onClick={handleDogLeftClick}>
+          <input
+            type="file"
+            onChange={handleImageChange}
+            accept="image/*"
+            style={{ display: "none" }}
+            ref={inputRef}
+          />
+          {imageURL && <img src={imageURL} alt="Selected" />}
+          <p>사진을 선택하세요</p>
+        </DogLeft>
+        <DogRight>
+          <DogName>
             <Line />
-            <input type="text">나이</input>
+            <span>이름</span>
+            <DogNameArea />
+          </DogName>
+          <DogAge>
             <Line />
-            <option value="소형견">이름</option>
-            <option value="중형견">이름</option> */}
-          </DogInfo>
-          <DogDetail></DogDetail>
+            <span>나이</span>
+            <DogAgeArea />
+            <Line />
+            <span>사이즈</span>
+            <DogSizeSelect>
+              <option value="small">소형</option>
+              <option value="medium">중형</option>
+              <option value="large">대형</option>
+            </DogSizeSelect>
+          </DogAge>
+          <DogInfo placeholder="특이 사항 및 요청 사항을 입력해 주세요."></DogInfo>
           <DogBt>
-            <DogDelete></DogDelete>
-            <DogUp></DogUp>
+            <DogDel>삭제하기</DogDel>
+            <DogUp>등록 하기</DogUp>
           </DogBt>
-        </DogListRight>
-      </DogList>
+        </DogRight>
+      </DogContents>
+
       {/* <ListNone>
         <img src={`${process.env.PUBLIC_URL}/images/MyPage/dog.svg`} />
         <p>반려견 정보가 없습니다.</p>
