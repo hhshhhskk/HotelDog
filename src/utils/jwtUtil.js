@@ -12,7 +12,7 @@ const beforeReq = config => {
   console.log("2. 쿠키로 토큰가져오기");
   const tokenCookie = getCookie("accessToken");
 
-  if (!accessToken) {
+  if (!tokenCookie) {
     console.log("쿠키 정보 없네요.");
     // axios 요청을 중단합니다.
     return Promise.reject({ response: { data: { error: "Login 하세요." } } });
