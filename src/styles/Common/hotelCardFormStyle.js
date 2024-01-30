@@ -4,11 +4,6 @@ export const HotelCardDiv = styled.div`
   position: relative;
   width: 360px;
   padding-bottom: 50px;
-  /* .grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-  } */
 `;
 export const HotelImgDiv = styled.div`
   position: relative;
@@ -22,7 +17,6 @@ export const HotelImgDiv = styled.div`
     object-fit: cover;
     width: 100%;
     height: 100%;
-    /* display: block; */
   }
 `;
 
@@ -39,7 +33,6 @@ export const TitleDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 360px;
-  /* background-color: aqua; */
 `;
 
 export const HotelName = styled.span`
@@ -49,7 +42,6 @@ export const HotelName = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  /* background-color: beige; */
   width: 280px;
 `;
 

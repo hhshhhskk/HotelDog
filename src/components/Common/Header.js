@@ -82,6 +82,7 @@ const Header = () => {
     removeCookie("user", "/");
     // 서버에서 구워주는 쿠키
     // removeCookie("rt", "/");
+    alert("로그아웃이 완료되었습니다.");
     navigate("/");
   };
 

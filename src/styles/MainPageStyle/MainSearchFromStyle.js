@@ -38,13 +38,21 @@ export const LocationSelect = styled.div`
   z-index: 1;
   border-radius: 9px;
   border: 1px solid #654222;
-`;
 
-export const LocationOption = styled.li`
-  padding: 10px 25px;
-  &:hover {
-    background-color: #fffaf0;
-    color: #654222;
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 10px 25px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #fffaf0;
+        color: #654222;
+      }
+    }
   }
 `;
 
@@ -96,7 +104,6 @@ export const DogSelectTitle = styled.div`
     padding-left: 10px;
   }
 `;
-
 export const DogSelect = styled.div`
   position: absolute;
   top: 62px;
@@ -107,15 +114,21 @@ export const DogSelect = styled.div`
   z-index: 1;
   border-radius: 9px;
   border: 1px solid #654222;
+
   ul {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
     li {
       width: 100%;
       display: flex;
       align-items: center;
       padding: 10px 0px;
+      cursor: pointer;
+
       &:hover {
         background-color: #fffaf0;
         color: #654222;

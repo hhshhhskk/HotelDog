@@ -84,54 +84,50 @@ const HotelCardForm = () => {
   return (
     <>
       {/* [수정 예정] 컴포넌트를 쓰는 페이지에서 데이터를 받아 올 수 있게 변경*/}
-      {hotels.map(hotels => (
-        <>
-          <HotelCardDiv key={hotels.name}>
-            <HotelImgDiv>
-              <img
-                src={`${process.env.PUBLIC_URL}/images/hotel1.jpg`}
-                onClick={handleClickHotel}
-              />
-              <HotelLike />
-            </HotelImgDiv>
+      {hotels.map((hotel, index) => (
+        <HotelCardDiv key={index}>
+          <HotelImgDiv>
+            <img
+              src={`${process.env.PUBLIC_URL}/images/hotel1.jpg`}
+              onClick={handleClickHotel}
+            />
+            <HotelLike />
+          </HotelImgDiv>
 
-            <HotelContentsDiv onClick={handleClickHotel}>
-              <TitleDiv>
-                <HotelName>{hotels.name}</HotelName>
-                <HotelEvaluationDiv>
-                  <Star>★ {hotels.star}</Star>
-                  <Review>({formatNumber(hotels.review)})</Review>
-                </HotelEvaluationDiv>
-              </TitleDiv>
-              <HotelAddress>{hotels.add}</HotelAddress>
-              <HotelPriceDiv>
-                {hotels.sale ? (
-                  <>
-                    <Discount>{hotels.sale}%</Discount>
-                    <OriginalPrice>
-                      {formatNumber(hotels.originalPrice)}
-                    </OriginalPrice>
-                    <FinalPriceDiv>
-                      <FinalPrice>
-                        {salePrice(hotels.originalPrice, hotels.sale)}
-                      </FinalPrice>
-                      <Unit>원~</Unit>
-                      <OneNight>/1박</OneNight>
-                    </FinalPriceDiv>
-                  </>
-                ) : (
+          <HotelContentsDiv onClick={handleClickHotel}>
+            <TitleDiv>
+              <HotelName>{hotel.name}</HotelName>
+              <HotelEvaluationDiv>
+                <Star>★ {hotel.star}</Star>
+                <Review>({formatNumber(hotel.review)})</Review>
+              </HotelEvaluationDiv>
+            </TitleDiv>
+            <HotelAddress>{hotel.add}</HotelAddress>
+            <HotelPriceDiv>
+              {hotel.sale ? (
+                <>
+                  <Discount>{hotel.sale}%</Discount>
+                  <OriginalPrice>
+                    {formatNumber(hotel.originalPrice)}
+                  </OriginalPrice>
                   <FinalPriceDiv>
                     <FinalPrice>
-                      {formatNumber(hotels.originalPrice)}
+                      {salePrice(hotel.originalPrice, hotel.sale)}
                     </FinalPrice>
                     <Unit>원~</Unit>
                     <OneNight>/1박</OneNight>
                   </FinalPriceDiv>
-                )}
-              </HotelPriceDiv>
-            </HotelContentsDiv>
-          </HotelCardDiv>
-        </>
+                </>
+              ) : (
+                <FinalPriceDiv>
+                  <FinalPrice>{formatNumber(hotel.originalPrice)}</FinalPrice>
+                  <Unit>원~</Unit>
+                  <OneNight>/1박</OneNight>
+                </FinalPriceDiv>
+              )}
+            </HotelPriceDiv>
+          </HotelContentsDiv>
+        </HotelCardDiv>
       ))}
     </>
   );

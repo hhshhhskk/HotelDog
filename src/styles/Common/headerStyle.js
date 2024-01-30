@@ -69,15 +69,15 @@ export const HeaderLogo = styled.img`
   width: 180px;
   height: 40px;
   cursor: pointer;
+  /* margin-right: 100px; */
 `;
 
 export const InputDiv = styled.div`
+  /* position: absolute;
+  left: 370px; */
   width: 650px;
-  /* height: 100px; */
   display: flex;
   justify-content: center;
-  /* align-items: center; */
-  /* background-color: rebeccapurple; */
 `;
 
 export const SearchBox = styled.input`
@@ -94,6 +94,8 @@ export const SearchBox = styled.input`
       ? "rgba(255, 255, 255, 0.3)"
       : "#fff"};
   transition: border 0.5s ease;
+  color: ${props =>
+    props.scrollPosition < 40 && props.mainPage ? "#fff" : "#654222"};
 `;
 
 export const SearchBt = styled.button`
@@ -117,10 +119,10 @@ export const SearchBtnImg = styled.img`
 `;
 
 export const HeaderCategory = styled.div`
-  /* width: 183px; */
+  width: 195px;
   ul {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     li span {
       cursor: pointer;
       padding: 0px 5px;
