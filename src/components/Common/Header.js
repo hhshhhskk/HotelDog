@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { getCookie, removeCookie } from "../../api/cookieUtil";
 import {
   HeaderCategory,
   HeaderContent,
   HeaderDiv,
+  HeaderLogo,
   HeaderTop,
   HeaderTopContent,
   HeaderTopItem,
   InputDiv,
-  HeaderLogo,
   SearchBox,
-  SearchBtnImg,
   SearchBt,
+  SearchBtnImg,
 } from "../../styles/Common/headerStyle";
 
 const Header = () => {
+  // 쿠키 정보 읽기
+  const loginInState = getCookie("user");
+  console.log("loginInState", loginInState);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -60,7 +65,7 @@ const Header = () => {
     alert("호텔 검색");
   };
 
-  // 카테고리 선택 시 페이지 전환
+  // 카테고리 클릭 시 페이지 이동
   const handleClickCate = e => {
     const spanText = e.target.innerText;
     if (spanText === "게시판") {
@@ -70,6 +75,14 @@ const Header = () => {
     } else if (spanText === "로그인") {
       navigate("/login");
     }
+  };
+
+  // 로그아웃 클릭 시 쿠키 삭제 및 페이지 이동
+  const handleClickLogOut = e => {
+    removeCookie("user", "/");
+    // 서버에서 구워주는 쿠키
+    // removeCookie("rt", "/");
+    navigate("/");
   };
 
   return (
@@ -145,18 +158,28 @@ const Header = () => {
         </InputDiv>
 
         <HeaderCategory>
-          <ul>
-            <li>
-              <span onClick={handleClickCate}>게시판</span>
-            </li>
-            <li>
-              <span onClick={handleClickCate}>마이페이지</span>
-            </li>
-            {/* !!! 로그인 유무로 삼항 연산자 작성 예정 */}
-            <li>
-              <span onClick={handleClickCate}>로그인</span>
-            </li>
-          </ul>
+          {loginInState ? (
+            <ul>
+              <li>
+                <span onClick={handleClickCate}>게시판</span>
+              </li>
+              <li>
+                <span onClick={handleClickCate}>마이페이지</span>
+              </li>
+              <li>
+                <span onClick={handleClickLogOut}>로그아웃</span>
+              </li>
+            </ul>
+          ) : (
+            <ul>
+              <li>
+                <span onClick={handleClickCate}>게시판</span>
+              </li>
+              <li>
+                <span onClick={handleClickCate}>로그인</span>
+              </li>
+            </ul>
+          )}
         </HeaderCategory>
       </HeaderContent>
     </HeaderDiv>

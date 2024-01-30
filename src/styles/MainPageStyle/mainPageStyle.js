@@ -14,14 +14,14 @@ export const MainPageDiv = styled.div`
 export const VisualDiv = styled.div`
   position: relative;
   width: 100%;
-  height: 650px;
+  height: 630px;
   /* overflow: hidden; */
 `;
 
 export const VisualImg = styled.div`
   position: relative;
   width: 100%;
-  height: 650px;
+  height: 630px;
   /* overflow: hidden; */
   img {
     position: relative;
@@ -38,7 +38,7 @@ export const VisualImg = styled.div`
     top: 0;
     left: 0;
     width: 100%;
-    height: 650px;
+    height: 630px;
     background-color: rgba(0, 0, 0, 0.3);
   }
 `;
@@ -46,7 +46,7 @@ export const VisualImg = styled.div`
 export const VisualInner = styled.div`
   position: absolute;
   width: 1200px;
-  height: 650px;
+  height: 630px;
   top: 0;
   left: 0;
   right: 0;
@@ -67,6 +67,7 @@ export const VisualText = styled.div`
     font-size: 4rem;
     font-weight: 600;
     color: #fff;
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   }
 `;
 
@@ -84,8 +85,10 @@ export const VisualForm = styled.div`
 
 export const HotelListDiv = styled.div`
   position: relative;
-  /* background-color: aquamarine; */
-  margin: 100px 0px;
+  /* display: flex;
+  flex-wrap: wrap;
+  background-color: aquamarine; */
+  margin: 70px 0px;
   width: 1200px;
 `;
 
@@ -116,7 +119,8 @@ export const HotelCardDiv = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  width: 100%;
+  /* width: 1200px; */
+  /* background-color: red; */
 `;
 
 export const FilterListDiv = styled.div`

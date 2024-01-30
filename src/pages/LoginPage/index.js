@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { loginAPI } from "../../api/Login/loginApi";
 
 const LoginWrap = styled.div`
   width: 100%;
@@ -163,20 +164,20 @@ const LoginPage = () => {
   };
   const onValid = data => {
     console.log(data);
+    loginAPI(data.id, data.password, navigate);
   };
 
   const onInValid = data => {
-    console.log(data);
+    // console.log(data);
     let id = data.id?.message;
     let password = data.password?.message;
-    if (data.id?.message === undefined) {
-      id = "";
-    }
-    if (data.password?.message === undefined) {
-      password = "";
-    }
 
-    alert(`${id}\n${password}`);
+    const req = [id, password];
+
+    const reqFil = req.filter(item => item !== undefined);
+    const message = reqFil.join("\n");
+
+    alert(`${message}`);
   };
   return (
     <LoginWrap>
