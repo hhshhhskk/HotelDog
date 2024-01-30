@@ -292,7 +292,7 @@ const Mydog = () => {
   const handleDogSubmit = async () => {
     try {
       // 서버에 데이터 전송
-      const response = await axios.post("http://112.222.157.156:5222/api/dog", {
+      const response = await axios.post("/api/dog", {
         pic: imageURL, // 이미지 URL은 이미지 업로드 후에 설정
         dto: dogInfo.dto,
       });
