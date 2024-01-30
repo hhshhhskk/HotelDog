@@ -9,6 +9,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  background-color: #fff;
 }
 .calendar_header {
   position: relative;
@@ -60,4 +62,3 @@
 
   margin-top: 5px;
 }
-

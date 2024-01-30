@@ -49,12 +49,30 @@ export const LocationOption = styled.li`
 `;
 
 // 날짜 선택
-export const DateSelect = styled.input`
+export const DateSelectDiv = styled.div`
+  background-color: #fff;
   width: 250px;
   height: 42px;
   padding: 10px 25px;
   border-radius: 9px;
-  border: none;
+  display: flex;
+  align-items: center;
+  color: #9c9c9c;
+`;
+
+export const DateSelectTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center; */
+  width: 200px;
+  /* background-color: aqua; */
+`;
+
+export const DateSelect = styled.div`
+  position: absolute;
+  z-index: 2;
+  top: 62px;
+  left: 475px;
 `;
 
 // 사이즈/마리 선택

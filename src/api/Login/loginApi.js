@@ -1,4 +1,5 @@
 import axios from "axios";
+import { setCookie } from "../cookieUtil";
 
 // 로그인 API
 export const loginAPI = async (id, password, navigate) => {
@@ -18,6 +19,8 @@ export const loginAPI = async (id, password, navigate) => {
     // 성공적으로 응답을 받았을 때의 처리
     console.log("Response:", response);
     sessionStorage.setItem("accessToken", response.data.accessToken);
+    setCookie("user", JSON.stringify(response.data), 1);
+
     navigate(`/`);
     // 로그인 성공 시 서버에서 받아온 데이터 반환
     return response.data;
