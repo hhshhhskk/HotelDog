@@ -99,7 +99,7 @@ export const addressApi = async (dataAddress, setAddress) => {
 // 회원가입 POST 요청
 export const signUpAPi = async (postData, navigate) => {
   try {
-    const response = await axios({
+    await axios({
       method: "post",
       url: "/api/user/signup",
       data: postData,
