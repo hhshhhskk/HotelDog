@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 // import { Wrapper } from "../../../styles/Common/layoutStyle";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/Detail/reserveformstyle.css";
 import ReserveDate from "../../Common/ReserveDate";
 
-const ReserveForm = () => {
+const ReserveForm = ({ selectedRoom, setSelectedRoom }) => {
+  const navigate = useNavigate();
+  const handleMoveCompletedPage = e => {
+    navigate("/reservecomplete");
+  };
   const ReserveFormFixed = styled.div`
     position: fixed;
     width: 420px;
@@ -15,12 +19,13 @@ const ReserveForm = () => {
     right: 360px;
     padding-bottom: 122px;
   `;
-  const handleDogSize = () => {};
 
-  const navigate = useNavigate();
-  const handleMoveCompletedPage = e => {
-    navigate("/reservecomplete");
+  const [showDogSizeOptions, setShowDogSizeOptions] = useState(false); // 강아지 크기 옵션 표시 여부를 관리하는 상태
+
+  const toggleDogSizeOptions = () => {
+    setShowDogSizeOptions(!showDogSizeOptions); // 상태를 반전시켜 강아지 크기 옵션의 표시 여부를 변경
   };
+
   return (
     <ReserveFormFixed>
       <div className="reserveform">
@@ -60,7 +65,11 @@ const ReserveForm = () => {
               alt=""
             />
 
-            <div>객실 예약 클릭 시, 해당 호실이 입력되는 곳.</div>
+            {/* 선택된 방 이름 출력 */}
+            {selectedRoom && (
+              <p className="selected-room">선택된 객실: {selectedRoom}</p>
+            )}
+            {/* <p className="selected-room">선택된 객실 : {selectedRoom}</p> */}
           </div>
 
           {/* 반려견 정보 */}
@@ -113,24 +122,38 @@ const ReserveForm = () => {
                   <button
                     type="button"
                     className="dog-input-style"
-                    onClick={() => handleDogSize()}
+                    onClick={toggleDogSizeOptions}
                   >
                     크기를 선택해 주세요.
                   </button>
-                  <ul>
-                    <li>
-                      <button type="button">소형견</button>
-                    </li>
-                    <li>
-                      <button type="button">중형견</button>
-                    </li>
-                    <li>
-                      <button type="button">대형견</button>
-                    </li>
-                    <li>
-                      <button type="button">초대형견</button>
-                    </li>
-                  </ul>
+                  {showDogSizeOptions && ( // showDogSizeOptions 값이 true일 때만 ul 요소를 렌더링
+                    <ul
+                      className={`dog-size-ul ${
+                        showDogSizeOptions ? "visible" : ""
+                      }`}
+                    >
+                      <li>
+                        <button type="button" className="dog-size-li">
+                          소형견
+                        </button>
+                      </li>
+                      <li>
+                        <button type="button" className="dog-size-li">
+                          중형견
+                        </button>
+                      </li>
+                      <li>
+                        <button type="button" className="dog-size-li">
+                          대형견
+                        </button>
+                      </li>
+                      <li>
+                        <button type="button" className="dog-size-li">
+                          초대형견
+                        </button>
+                      </li>
+                    </ul>
+                  )}
                 </div>
 
                 <textarea

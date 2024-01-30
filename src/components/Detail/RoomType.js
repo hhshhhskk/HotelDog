@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../styles/Detail/roomtype.css";
+import ReserveForm from "./Reservation/ReserveForm";
 
 const RoomType = () => {
   const hotel_room_info = [
@@ -41,6 +42,18 @@ const RoomType = () => {
     },
   ];
 
+  const [selectedRoom, setSelectedRoom] = useState(null);
+
+  const handleReserve = roomName => {
+    console.log("예약하기 버튼이 클릭되었습니다.");
+    console.log("선택된 객실 이름:", roomName);
+    // 여기에 선택된 객실에 대한 처리 로직을 추가할 수 있습니다.
+    // ReserveForm(roomName);
+    setSelectedRoom(roomName); // 선택된 객실 정보를 부모 컴포넌트로 전달
+  };
+
+  const [reserveForm, setReserveForm] = useState(true);
+
   return (
     <div className="roomtype-flex">
       <p className="roomtype-text-flex">
@@ -73,7 +86,19 @@ const RoomType = () => {
                     <h3>{item.hotel_room_cost}</h3>원
                   </span>
                 </div>
-                <button className="button-wrap">예약하기</button>
+                {selectedRoom ? (
+                  <ReserveForm selectedRoom={selectedRoom} />
+                ) : (
+                  <ReserveForm />
+                )}
+                <button
+                  className="button-wrap"
+                  onClick={() => handleReserve(item.hotel_room_nm)}
+                  // selectedRoom = {selectedRoom}
+                  // setSelectedRoom={setSelectedRoom}
+                >
+                  예약하기
+                </button>
               </div>
             </div>
           </div>

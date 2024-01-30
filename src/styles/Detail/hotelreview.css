@@ -1,5 +1,4 @@
 .review-modal-background {
-  position: relative;
   position: fixed;
 
   top: 0;
@@ -8,11 +7,10 @@
   right: 0;
 
   background: rgba(0, 0, 0, 0.6);
-}
-.close {
-  display: none;
-}
 
+  z-index: 3;
+  /* display: none; */
+}
 .hotelreview_wrap {
   position: absolute;
   width: 650px;
@@ -46,6 +44,9 @@
 .roomreviewClose {
   position: relative;
   cursor: pointer;
+
+  border: none;
+  background-color: #fff;
 }
 .roomreviewClose .hidden {
   display: none;

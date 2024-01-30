@@ -142,6 +142,7 @@ const ReviewModal = ({
     alert("후기가 작성되었습니다.");
     // 모달 닫기
     onClose();
+    
   };
 
   return (
