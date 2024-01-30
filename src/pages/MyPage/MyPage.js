@@ -115,7 +115,7 @@ const MyPage = () => {
   const myPageCate = () => {
     switch (selectedCategory) {
       case 0:
-        return <Password />;
+        return <Member />;
       case 1:
         return <Booking />;
       case 2:

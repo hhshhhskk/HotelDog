@@ -288,14 +288,27 @@ const Mydog = () => {
     }));
   };
 
+  //나중에 지워야됨
+  const jwtToken =
+    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoie1widXNlclBrXCI6ODN9IiwiaWF0IjoxNzA2NTc2NTk2LCJleHAiOjE3MDY1ODM3OTZ9.BvNuQmewHh6jo_K-FOPq7gLrKn927TyIinMsLPeEiYo";
+
   // 반려견 정보 저장하기
   const handleDogSubmit = async () => {
     try {
       // 서버에 데이터 전송
-      const response = await axios.post("/api/dog", {
-        pic: imageURL, // 이미지 URL은 이미지 업로드 후에 설정
-        dto: dogInfo.dto,
-      });
+      const response = await axios.post(
+        "/api/dog",
+
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`, // 헤더에 JWT 토큰 추가
+          },
+        },
+        {
+          pic: imageURL, // 이미지 URL은 이미지 업로드 후에 설정
+          dto: dogInfo.dto,
+        },
+      );
       // 응답 처리
       console.log("서버 응답 데이터:", response.data);
       // 필요한 작업 수행
