@@ -19,12 +19,11 @@ import {
 } from "../../styles/Common/hotelCardFormStyle";
 import HotelLike from "./HotelLike";
 
-const HotelCardForm = () => {
-  const navigate = useNavigate();
-
+const HotelCardForm = ({ handleSelectGo }) => {
   // [삭제예정] 더미 데이터
   const hotels = [
     {
+      hotel_pk: 1,
       pic: "",
       name: "호텔 이름이 길면 긴대로 잘라야하는데 어떻게 하지",
       star: 9.5,
@@ -34,6 +33,7 @@ const HotelCardForm = () => {
       originalPrice: 50000,
     },
     {
+      hotel_pk: 2,
       pic: "",
       name: "호텔 2",
       star: 8.0,
@@ -43,6 +43,7 @@ const HotelCardForm = () => {
       originalPrice: 50000,
     },
     {
+      hotel_pk: 3,
       pic: "",
       name: "호텔 3",
       star: 9.8,
@@ -52,6 +53,7 @@ const HotelCardForm = () => {
       originalPrice: 80000,
     },
     {
+      hotel_pk: 4,
       pic: "",
       name: "호텔 4",
       star: 5.0,
@@ -61,11 +63,6 @@ const HotelCardForm = () => {
       originalPrice: 30000,
     },
   ];
-
-  const handleClickHotel = () => {
-    // [수정 예정] 데이터 오면 주소 변경
-    navigate("/hoteldetail/:detailId");
-  };
 
   // 숫자 천단위 쉼표 표시
   const formatNumber = number => {
@@ -89,12 +86,12 @@ const HotelCardForm = () => {
           <HotelImgDiv>
             <img
               src={`${process.env.PUBLIC_URL}/images/hotel1.jpg`}
-              onClick={handleClickHotel}
+              onClick={() => handleSelectGo(hotel.hotel_pk)}
             />
             <HotelLike />
           </HotelImgDiv>
 
-          <HotelContentsDiv onClick={handleClickHotel}>
+          <HotelContentsDiv onClick={() => handleSelectGo(hotel.hotel_pk)}>
             <TitleDiv>
               <HotelName>{hotel.name}</HotelName>
               <HotelEvaluationDiv>

@@ -20,6 +20,8 @@ import {
   VisualText,
 } from "../../styles/MainPageStyle/mainPageStyle";
 import HotelCardForm from "../../components/Common/HotelCardForm";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MainPage = () => {
   // 검색 폼 클릭 시 스크롤 이동
@@ -43,6 +45,31 @@ const MainPage = () => {
     console.log("선택된 값 :", selectedValue);
   };
 
+  // 자식 컴포넍트 즉, calendar 에서 알려줘야 다른 컴포넌트에 전달할 수 있다.
+
+  const [reserveDay, setReserveDay] = useState({ startDay: "", endDay: "" });
+  const changeSelectDay = (_st, _ed) => {
+    console.log("시작", _st);
+    console.log("완료", _ed);
+
+    setReserveDay(prev => {
+      // 중요: 값을 업데이트할 때 `this.state` 대신 `state` 값을 읽어옵니다.
+      return { startDay: _st, endDay: _ed };
+    });
+  };
+
+  useEffect(() => {
+    console.log(reserveDay);
+  }, [reserveDay]);
+
+  const navigate = useNavigate();
+  const handleSelectGo = _hotel_pk => {
+    console.log("상세 페이지 보기?? ", _hotel_pk);
+    console.log(reserveDay);
+    // useNavigate 를 이용한 이동과 정보를 함께 보내기(state)
+    navigate(`/hoteldetail/${_hotel_pk}`, { state: { day: reserveDay } });
+  };
+
   return (
     <MainPageDiv>
       <VisualDiv>
@@ -60,7 +87,7 @@ const MainPage = () => {
 
           {/* 검색 */}
           <VisualForm onClick={handleClickForm}>
-            <MainSearchFrom />
+            <MainSearchFrom changeSelectDay={changeSelectDay} />
           </VisualForm>
         </VisualInner>
       </VisualDiv>
@@ -74,7 +101,7 @@ const MainPage = () => {
             <span>핫한 광고 상품을 추천드립니다!</span>
           </AdText>
           <HotelCardDiv>
-            <HotelCardForm />
+            <HotelCardForm handleSelectGo={handleSelectGo} />
           </HotelCardDiv>
         </AdListDiv>
 
@@ -96,7 +123,7 @@ const MainPage = () => {
             </form>
           </FilterText>
           <HotelCardDiv>
-            <HotelCardForm />
+            <HotelCardForm handleSelectGo={handleSelectGo} />
           </HotelCardDiv>
           {/* 호텔 더 불러오기 버튼 */}
           <HotelPlusBtDiv>

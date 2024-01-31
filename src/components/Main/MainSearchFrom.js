@@ -30,7 +30,7 @@ import {
 } from "../../styles/MainPageStyle/MainSearchFromStyle";
 import Calendar from "../Common/Calendar";
 
-const MainSearchFrom = () => {
+const MainSearchFrom = ({ changeSelectDay }) => {
   // 미리보기 useState
   const [locationValue, setLocationValue] = useState("지역을 선택해주세요");
   const [calendarValue, setCalendarValue] = useState("오늘날짜");
@@ -133,6 +133,10 @@ const MainSearchFrom = () => {
     };
   };
 
+  const calendarClose = (_st, _ed) => {
+    changeSelectDay(_st, _ed);
+    setCalendarDropdown(false);
+  };
   return (
     <>
       {/* !!!form 전송을 위한 작업 예정 */}
@@ -168,7 +172,7 @@ const MainSearchFrom = () => {
           </DateSelectTitle>
           {calendarDropdown && (
             <DateSelect>
-              <Calendar />
+              <Calendar calendarClose={calendarClose} />
             </DateSelect>
           )}
         </DateSelectDiv>

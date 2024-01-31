@@ -8,7 +8,7 @@ import HotelDetailPage from "../pages/HotelDetailPage/HotelDetailPage";
 import LoginPage from "../pages/LoginPage";
 import MainPage from "../pages/MainPage/MainPage";
 import MyPage from "../pages/MyPage/MyPage";
-import ReserveCompletePage from '../pages/ReserveCompletePage/ReserveCompletePage';
+import ReserveCompletePage from "../pages/ReserveCompletePage/ReserveCompletePage";
 import SignUpPage from "../pages/SignUpPage/SignUpPage";
 
 export const RouterInfo = [

@@ -5,15 +5,35 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import "../../styles/Common/calendar.css";
 
 import { useState } from "react";
-import { isWeekend } from "date-fns";
-const Calendar = () => {
-  const [state, setState] = useState([
+// import { isWeekend } from "date-fns";
+import { addDays } from "date-fns";
+import { useEffect } from "react";
+import moment from "moment/moment";
+const Calendar = ({ calendarClose }) => {
+  const [selectDay, setSelectDay] = useState([
     {
       startDate: new Date(),
-      endDate: null,
+      endDate: addDays(new Date(), 1),
       key: "selection",
     },
   ]);
+  useEffect(() => {
+    console.log(selectDay);
+    // console.log(state[0].startDate);
+    // console.log(state[0].endDate);
+    // const startDay = moment(selectDay[0].startDate).format("YYYY-MM-DD");
+    // const endDay = moment(selectDay[0].endDate).format("YYYY-MM-DD");
+    // console.log(startDay, endDay);
+  }, [selectDay]);
+
+  const handleSelectDay = () => {
+    // 0131
+    const startDay =
+      moment(selectDay[0].startDate).format("YYYY-MM-DD") + "(수)";
+    const endDay = moment(selectDay[0].endDate).format("YYYY-MM-DD") + "(금)";
+    console.log(startDay, endDay);
+    calendarClose(startDay, endDay);
+  };
 
   return (
     <div className="calendar_modal_background">
@@ -35,9 +55,9 @@ const Calendar = () => {
           <div className="calendar_wrap">
             <DateRange
               editableDateInputs={true}
-              onChange={item => setState([item.selection])}
+              onChange={item => setSelectDay([item.selection])}
               moveRangeOnFirstSelection={false}
-              ranges={state}
+              ranges={selectDay}
               months={2}
               direction="horizontal"
               locale={ko}
@@ -46,7 +66,9 @@ const Calendar = () => {
             />
           </div>
 
-          <button className="calendar_button">선택</button>
+          <button className="calendar_button" onClick={handleSelectDay}>
+            선택
+          </button>
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@ const initState = {
   dogname: "",
   dogage: "",
   dogsize: "",
-  // dogdesc: "",
+  dogdesc: "",
 };
 const ReserveFormFixed = styled.div`
   position: fixed;
@@ -27,11 +27,14 @@ const ReserveFormFixed = styled.div`
   }
 `;
 
-const ReserveForm = ({ selectedRoom, setSelectedRoom }) => {
+const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
   const navigate = useNavigate();
   const handleMoveCompletedPage = e => {
     navigate("/reservecomplete");
   };
+
+  const [dogInfo, setDogInfo] = useState(initState);
+  const [dogDesc, setDogDesc] = useState(""); // textarea의 값을 저장할 상태
 
   const [showDogSizeOptions, setShowDogSizeOptions] = useState(false); // 강아지 크기 옵션 표시 여부를 관리하는 상태
   const dogSizeOptionsRef = useRef(null); // ul 요소의 ref 설정
@@ -49,7 +52,6 @@ const ReserveForm = ({ selectedRoom, setSelectedRoom }) => {
         setShowDogSizeOptions(false);
       }
     };
-
     // 이벤트 리스너 등록
     document.addEventListener("mousedown", handleClickOutside);
     // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
@@ -68,17 +70,43 @@ const ReserveForm = ({ selectedRoom, setSelectedRoom }) => {
     setShowDogSizeOptions(false); // 옵션을 선택하면 옵션 창을 닫음
   };
 
+  // form 제출
   const handleSubmit = e => {
     // 새로 고침 막기
     e.preventDefault();
+    // input 및 textarea 초기화
+    setDogInfo(initState);
+    setDogDesc("");
+    // 예약 중인 객실로 담아지도록 함수 구현해야함.
+
+    dogInfo[e.target.name] = e.target.value;
+    setDogInfo({ ...dogInfo });
   };
-  const [dogInfo, setDogInfo] = useState(initState);
-  const [dogDesc, setDogDesc] = useState(""); // textarea의 값을 저장할 상태
+  const formDataArray = [
+    {
+      key: "dogname",
+      value: dogInfo.dogname,
+    },
+    {
+      key: "dogage",
+      value: dogInfo.dogage,
+    },
+    {
+      key: "dogsize",
+      value: dogInfo.dogsize,
+    },
+
+    {
+      key: "dogdesc",
+      value: dogInfo.dogdesc,
+    },
+  ];
+
   const handleChange = e => {
     dogInfo[e.target.name] = e.target.value;
     setDogInfo({ ...dogInfo });
 
-    // setDogDesc(e.target.value); // textarea의 값 변경 시 상태 업데이트
+    //  setDogDesc(e.target.value); // textarea의 값 변경 시 상태 업데이트
     console.log(e);
     console.log(dogInfo);
   };
@@ -103,7 +131,11 @@ const ReserveForm = ({ selectedRoom, setSelectedRoom }) => {
             />
 
             {/* 체크 인/아웃 선택 영역 */}
-            <ReserveDate />
+            <ReserveDate
+              detailId={detailId}
+              resDay={resDay}
+              setResDay={setResDay}
+            />
           </div>
 
           {/* 선택된 객실 정보 영역 */}
@@ -123,10 +155,10 @@ const ReserveForm = ({ selectedRoom, setSelectedRoom }) => {
             />
 
             {/* 선택된 방 이름 출력 */}
-            {selectedRoom && (
+            {/* {selectedRoom && (
               <p className="selected-room">선택된 객실: {selectedRoom}</p>
-            )}
-            {/* <p className="selected-room">선택된 객실 : {selectedRoom}</p> */}
+            )} */}
+            <p className="selected-room">선택된 객실 : {selectedRoom}</p>
           </div>
 
           {/* 반려견 정보 */}
@@ -189,7 +221,7 @@ const ReserveForm = ({ selectedRoom, setSelectedRoom }) => {
                     name="dogsize"
                     value={dogInfo.dogsize}
                   >
-                    {selectedDogSize || "크기를 선택해 주세요."}{" "}
+                    {selectedDogSize || "크기를 선택해 주세요."}
                     {/* 선택된 강아지 크기를 표시 */}
                   </button>
                   {showDogSizeOptions && (
@@ -252,7 +284,11 @@ const ReserveForm = ({ selectedRoom, setSelectedRoom }) => {
             </form>
           </div>
           <div>
-            <button className="reserve-button" type="submit" onClick={() => {}}>
+            <button
+              className="reserve-button"
+              type="submit"
+              onClick={handleSubmit}
+            >
               담기
             </button>
           </div>
@@ -276,9 +312,13 @@ const ReserveForm = ({ selectedRoom, setSelectedRoom }) => {
           />
           {/* 선택된 예약 목록 출력 */}
           <div>
-            <p>
-              {}/{}
-            </p>
+            {formDataArray.map(item => {
+              return (
+                <p key={item.key}>
+                  {item.value}/{selectedRoom}
+                </p>
+              );
+            })}
             {/* button */}
             <button type="button" className="reserve_bt_plus">
               <img
@@ -299,7 +339,9 @@ const ReserveForm = ({ selectedRoom, setSelectedRoom }) => {
             className="reserve-button"
             onClick={() => {
               handleMoveCompletedPage();
+              // !!!!!!!!!!!!!!!!예약 정보들이 마이페이지 예약 내역에 나타나야함
             }}
+            type="submit"
           >
             예약하기
           </button>
