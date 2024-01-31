@@ -22,12 +22,15 @@ const PagePrevBtn = styled(PageNextBtn)`
   transform: rotate(180deg);
 `;
 
-const BoardPagination = ({ page }) => {
-  const [nowPage, setNowPage] = useState(1);
+const BoardPagination = ({ totalPage, nowPage, setNowPage }) => {
+  const paginationItems = Array.from(
+    { length: totalPage },
+    (_, idx) => idx + 1,
+  );
 
   return (
     <PaginationDiv>
-      {page[0] !== 1 && (
+      {nowPage !== 1 && (
         <>
           <PagePrevBtn
             src={`${process.env.PUBLIC_URL}/images/board/pageNextBtn2.svg`}
@@ -40,7 +43,7 @@ const BoardPagination = ({ page }) => {
         </>
       )}
 
-      {page.map((pageNum, idx) => {
+      {paginationItems.map((pageNum, idx) => {
         return (
           <Pagination
             key={idx}

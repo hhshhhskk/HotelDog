@@ -24,7 +24,8 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const MainPage = () => {
-  // 검색 폼 클릭 시 스크롤 이동
+  const navigate = useNavigate();
+  // 필터 폼 클릭 시 스크롤 이동
   const handleClickForm = () => {
     window.scrollTo({ top: 300, behavior: "smooth" });
   };
@@ -57,7 +58,6 @@ const MainPage = () => {
       return { startDay: _st, endDay: _ed };
     });
   };
-
   useEffect(() => {
     console.log(reserveDay);
   }, [reserveDay]);
@@ -113,10 +113,8 @@ const MainPage = () => {
 
             {/* 필터호텔 정렬방식 */}
             <form>
-              <select onChange={handleChangeSorting}>
-                <option value="추천순" selected>
-                  추천순
-                </option>
+              <select value={selectSorting} onChange={handleChangeSorting}>
+                <option value="추천순">추천순</option>
                 <option value="별점순">별점순</option>
                 <option value="리뷰순">리뷰순</option>
               </select>

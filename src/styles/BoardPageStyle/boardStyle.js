@@ -103,7 +103,7 @@ export const BoardFilter = styled.div`
   justify-content: right;
 `;
 export const BoardFilterItem = styled(BoardCategoryItem)`
-  border-right: ${props => (props.idx === 4 ? "1px solid #969696" : "none")};
+  border-right: ${props => (props.idx === 5 ? "1px solid #969696" : "none")};
 `;
 
 export const BoardCreateBtnDiv = styled.div`

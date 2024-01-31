@@ -1,9 +1,9 @@
 import { ClassNames } from "@emotion/react";
 import styled from "@emotion/styled";
 import React, { useState } from "react";
-import Member from "../../components/MyPage/Member";
-import Password from "../../components/MyPage/Password";
-import Mydog from "../../components/MyPage/Mydog";
+import Member from "./Member";
+import Password from "../../components/MyPage/Member/Password";
+import Mydog from "./Mydog";
 import LikeList from "../../components/MyPage/LikeList";
 import Review from "../../components/MyPage/Review";
 import Booking from "./Booking";
@@ -106,7 +106,7 @@ const MyPage = () => {
     "이용 후기",
   ];
 
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(0);
 
   const clickMenu = index => {
     setSelectedCategory(index);
@@ -141,8 +141,21 @@ const MyPage = () => {
               <SideTopCate>
                 <SideTopCateItem>
                   {categoryTop.map((category, index) => (
-                    <li key={index} onClick={() => clickMenu(index)}>
-                      <span>{category}</span>
+                    <li
+                      key={index}
+                      onClick={() => clickMenu(index)}
+                      className={selectedCategory === index ? "selected" : ""}
+                    >
+                      <span
+                        style={{
+                          color:
+                            selectedCategory === index ? "#654222" : "#969696",
+                          fontWeight:
+                            selectedCategory === index ? "600" : "400",
+                        }}
+                      >
+                        {category}
+                      </span>
                     </li>
                   ))}
                 </SideTopCateItem>

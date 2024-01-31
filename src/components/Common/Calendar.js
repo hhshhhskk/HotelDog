@@ -9,6 +9,20 @@ import { useState } from "react";
 import { addDays } from "date-fns";
 import { useEffect } from "react";
 import moment from "moment/moment";
+
+// MainPage 필터폼에 오늘 날짜 출력하는 용도
+export const getCurrentDate = () => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  // 월은 0부터 시작하므로 +1, 1자리 수 월은 0을 붙여 두 자리로 만듦
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  // 1자리 수 일은 0을 붙여 두 자리로 만듦
+  const day = String(currentDate.getDate()).padStart(2, "0");
+
+  // yyyy-mm-dd 형식의 문자열 반환
+  return `${year}-${month}-${day}`;
+};
+
 const Calendar = ({ calendarClose }) => {
   const [selectDay, setSelectDay] = useState([
     {
@@ -34,6 +48,13 @@ const Calendar = ({ calendarClose }) => {
     console.log(startDay, endDay);
     calendarClose(startDay, endDay);
   };
+  // const [state, setState] = useState([
+  //   {
+  //     startDate: new Date(),
+  //     endDate: null,
+  //     key: "selection",
+  //   },
+  // ]);
 
   return (
     <div className="calendar_modal_background">

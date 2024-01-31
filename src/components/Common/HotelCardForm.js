@@ -20,7 +20,10 @@ import {
 import HotelLike from "./HotelLike";
 
 const HotelCardForm = ({ handleSelectGo }) => {
+  const navigate = useNavigate();
+
   // [삭제예정] 더미 데이터
+  // 호텔 pk까지 구현~!~!~!~!
   const hotels = [
     {
       hotel_pk: 1,
@@ -63,6 +66,11 @@ const HotelCardForm = ({ handleSelectGo }) => {
       originalPrice: 30000,
     },
   ];
+
+  // const handleClickHotel = () => {
+  //   // [수정 예정] 데이터 오면 주소 변경
+  //   navigate("/hoteldetail/:detailId");
+  // };
 
   // 숫자 천단위 쉼표 표시
   const formatNumber = number => {

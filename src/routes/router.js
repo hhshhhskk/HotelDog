@@ -48,7 +48,7 @@ export const RouterInfo = [
         label: "board",
       },
       {
-        path: "/boardDetail/:detailId",
+        path: "/boardDetail/:boardPk",
         element: <BoardDetailPage />,
         label: "boardDetail",
       },
