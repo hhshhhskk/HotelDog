@@ -2,7 +2,8 @@ import styled from "@emotion/styled";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { loginAPI } from "../../api/Login/loginApi";
+import { loginPostAsync } from "../../slices/loginSlice";
+import useCustomLogin from "../../hooks/useCustomLogin";
 
 const LoginWrap = styled.div`
   width: 100%;
@@ -162,9 +163,26 @@ const LoginPage = () => {
   const saveClicked = () => {
     setIdSaved(!idSaved);
   };
+
+  const { doLogin, moveToPath } = useCustomLogin();
   const onValid = data => {
     console.log(data);
-    loginAPI(data.id, data.password, navigate);
+    const loginParam = { id: data.id, pw: data.password };
+    doLogin({ loginParam, successFn, failFn, errorFn });
+  };
+  const successFn = result => {
+    console.log("성공", result);
+    moveToPath("/");
+  };
+
+  const failFn = result => {
+    console.log("실패", result);
+    alert("이메일 및 비밀번호 확인하세요.");
+  };
+
+  const errorFn = result => {
+    console.log("서버 에러", result);
+    alert(result);
   };
 
   const onInValid = data => {

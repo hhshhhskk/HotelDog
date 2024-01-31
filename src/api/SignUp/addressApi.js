@@ -110,6 +110,7 @@ export const signUpAPi = async (postData, navigate) => {
       .then(response => {
         // 성공적으로 응답을 받았을 때의 처리
         console.log("Response:", response.data);
+        alert("회원가입이 완료 되었습니다.");
         navigate(`/login`);
       })
       .catch(error => {
