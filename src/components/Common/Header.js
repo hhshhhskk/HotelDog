@@ -14,6 +14,7 @@ import {
   SearchBtnImg,
 } from "../../styles/Common/headerStyle";
 import useCustomLogin from "../../hooks/useCustomLogin";
+import { logoutAPI } from "../../api/Login/logoutApi";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -77,7 +78,9 @@ const Header = () => {
   };
 
   // 로그아웃 클릭 시 쿠키 삭제 및 페이지 이동
-  const handleClickLogOut = e => {
+  const handleClickLogOut = async e => {
+    // 리프레쉬 토큰 삭제
+    await logoutAPI();
     doLogout();
     navigate("/");
   };

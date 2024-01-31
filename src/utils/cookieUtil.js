@@ -15,7 +15,6 @@ export const setCookie = (name, value, day = 1) => {
 // getCookie( 쿠키이름)
 // 로그인된 정보 필요시
 export const getCookie = name => {
-  // console.log(cookie.get(name));
   return cookie.get(name);
 };
 
