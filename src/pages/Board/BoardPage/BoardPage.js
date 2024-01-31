@@ -27,11 +27,12 @@ import {
 import BoardPagination from "../../../components/Board/BoardPagination";
 
 const BoardPage = () => {
-  const category = ["전체글", "공지", "정보", "자유게시판"];
+  const category = ["전체글", "공지", "자유게시판", "질문", "정보"];
   const [cateNum, setCateNum] = useState(0);
   const categoryLength = category.length;
   const navigate = useNavigate();
-  const [page, setPage] = useState([1, 2, 3, 4, 5]);
+  const [totalPage, setTotalPage] = useState(1);
+  const [nowPage, setNowPage] = useState(1);
   return (
     <BoardWrap>
       <BoardContent>
@@ -61,6 +62,7 @@ const BoardPage = () => {
                   categoryLength={categoryLength}
                   onClick={() => {
                     setCateNum(idx);
+                    setNowPage(1);
                   }}
                 >
                   {item}
@@ -73,10 +75,10 @@ const BoardPage = () => {
               return (
                 <BoardFilterItem
                   key={idx}
-                  idx={idx + 4}
+                  idx={idx + 5}
                   cateNum={cateNum}
                   onClick={() => {
-                    setCateNum(idx + 4);
+                    setCateNum(idx + 5);
                   }}
                 >
                   {item}
@@ -85,7 +87,11 @@ const BoardPage = () => {
             })}
           </BoardFilter>
         </BoardTop>
-        <BoardTable cateNum={cateNum} />
+        <BoardTable
+          nowPage={nowPage}
+          setTotalPage={setTotalPage}
+          cateNum={cateNum}
+        />
         <BoardCreateBtnDiv>
           <BoardCreateBtn
             onClick={() => {
@@ -99,7 +105,11 @@ const BoardPage = () => {
             글 작성하기
           </BoardCreateBtn>
         </BoardCreateBtnDiv>
-        <BoardPagination page={page} />
+        <BoardPagination
+          totalPage={totalPage}
+          nowPage={nowPage}
+          setNowPage={setNowPage}
+        />
         <BoardSearchBox>
           <BoardSearchSelect>
             <option value="제목">제목</option>

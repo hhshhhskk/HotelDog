@@ -1,6 +1,12 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
+import {
+  boardListAPI,
+  boardMyCommentListAPI,
+  boardMyListAPI,
+} from "../../api/board/boardApi";
 
 const BoardBox = styled.table`
   width: 100%;
@@ -25,10 +31,10 @@ const BoardTh = styled.th`
     props.idx === 0
       ? "70px"
       : props.idx === 2
-      ? "590px"
+      ? "580px"
       : props.idx === 3
       ? "180px"
-      : "120px"};
+      : "130px"};
   text-align: ${props =>
     props.idx === 2 ? "left" : props.idx === 3 ? "left" : "center"};
 `;
@@ -44,7 +50,7 @@ const BoardTr = styled.tr`
   height: ${props => (props.tr === "head" ? "35px" : "50px")};
   background-color: ${props =>
     props.writer === "관리자" ? "#FFF9EC" : "#fff"};
-  color: ${props => (props.writer === "관리자" ? "#654222" : "#969696")};
+  color: ${props => (props.nickname === "관리자" ? "#654222" : "#969696")};
 `;
 
 const BoardTd = styled.td`
@@ -52,14 +58,14 @@ const BoardTd = styled.td`
     props.propKey === "number"
       ? "70px"
       : props.propKey === "title"
-      ? "590px"
-      : props.propKey === "writer"
+      ? "580px"
+      : props.propKey === "nickname"
       ? "180px"
-      : "120px"};
+      : "130px"};
   text-align: ${props =>
     props.propKey === "title"
       ? "left"
-      : props.propKey === "writer"
+      : props.propKey === "nickname"
       ? "left"
       : "center"};
   border-bottom: 0.5px solid #654222;
@@ -67,98 +73,76 @@ const BoardTd = styled.td`
   cursor: ${props => (props.propKey === "title" ? "pointer" : "default")};
 `;
 
-function BoardTable({ cateNum }) {
+function BoardTable({ nowPage, setTotalPage, cateNum }) {
   const rows = ["번호", "카테고리", "제목", "작성자", "날짜", "조회수"];
   const navigate = useNavigate();
-  let data = [
-    {
-      category: "공지",
-      title: "욕설과 비난은 영구정지입니다. 바른말 고운말을 사용합시다.",
-      writer: "관리자",
-      date: "2024.1.18",
-      views: 402,
-    },
-    {
-      category: "자유게시판",
-      title: "룽지쵝오",
-      writer: "유밍구",
-      date: "2024.1.15",
-      views: 1997,
-    },
-    {
-      category: "자유게시판",
-      title: "콩이최고",
-      writer: "준수르",
-      date: "2024.1.18",
-      views: 510,
-    },
-    {
-      category: "정보",
-      title: "닭꼬치의 비밀",
-      writer: "학재",
-      date: "2024.1.14",
-      views: 2024,
-    },
 
-    {
-      category: "정보",
-      title: "팀원 몰래 닭꼬치 먹는법",
-      writer: "학재",
-      date: "2024.1.17",
-      views: 568,
-    },
+  const { data, isSuccess } = useQuery(["boardList", cateNum, nowPage], () => {
+    const fetchData = async () => {
+      try {
+        let result = "";
+        if (cateNum <= 4) {
+          result = await boardListAPI(cateNum, nowPage);
+        } else if (cateNum === 5) {
+          result = await boardMyListAPI(nowPage);
+        } else {
+          result = await boardMyCommentListAPI(nowPage);
+        }
+        return result;
+      } catch {
+        console.log("에러");
+      }
+    };
 
-    {
-      category: "자유게시판",
-      title: "하... 방금 헤어졌다 질문받는다",
-      writer: "배구이",
-      date: "2024.1.22",
-      views: 23,
-    },
-
-    {
-      category: "정보",
-      title: "성공한 인생",
-      writer: "준수르",
-      date: "2024.1.14",
-      views: 5234,
-    },
-
-    {
-      category: "자유게시판",
-      title: "교수 엿맥이는법좀..",
-      writer: "지은초이",
-      date: "2024.1.19",
-      views: 232,
-    },
-  ];
-
-  if (cateNum === 1) {
-    data = data.filter(item => item.category === "공지");
-  } else if (cateNum === 2) {
-    data = data.filter(item => item.category === "정보");
-  } else if (cateNum === 3) {
-    data = data.filter(item => item.category === "자유게시판");
-  }
-
-  const sortedData = data.sort((a, b) => {
-    // "관리자" 카테고리를 맨 위로 올리기
-    if (a.writer === "관리자" && b.writer !== "관리자") {
-      return -1;
-    } else if (a.writer !== "관리자" && b.writer === "관리자") {
-      return 1;
-    }
-
-    // 날짜가 최신순으로 정렬
-    const dateA = new Date(a.date).getTime();
-    const dateB = new Date(b.date).getTime();
-
-    return dateB - dateA;
+    return fetchData();
   });
 
-  const itmeClick = (key, idx) => {
+  // let dataFil = "";
+  // if (cateNum === 1) {
+  //   dataFil = data.filter(item => item.category === "공지");
+  // } else if (cateNum === 2) {
+  //   dataFil = data.filter(item => item.category === "정보");
+  // } else if (cateNum === 3) {
+  //   dataFil = data.filter(item => item.category === "자유게시판");
+  // }
+
+  let sortedData = [];
+
+  if (isSuccess) {
+    // 데이터가 성공적으로 불러와진 경우에만 정렬 작업 수행
+    if (data?.simpleBoardVoList) {
+      sortedData = data?.simpleBoardVoList.sort((a, b) => {
+        if (a.nickname === "관리자" && b.nickname !== "관리자") {
+          return -1;
+        } else if (a.nickname !== "관리자" && b.nickname === "관리자") {
+          return 1;
+        }
+
+        const dateA = new Date(a.date).getTime();
+        const dateB = new Date(b.date).getTime();
+        return dateB - dateA;
+      });
+    } else if (data?.userCommentVoList) {
+      sortedData = data?.userCommentVoList.sort((a, b) => {
+        if (a.nickname === "관리자" && b.nickname !== "관리자") {
+          return -1;
+        } else if (a.nickname !== "관리자" && b.nickname === "관리자") {
+          return 1;
+        }
+
+        const dateA = new Date(a.date).getTime();
+        const dateB = new Date(b.date).getTime();
+        return dateB - dateA;
+      });
+    }
+  }
+
+  useEffect(() => {
+    setTotalPage(data?.maxPage);
+  }, [data?.maxPage]);
+  const itmeClick = (key, boardPk) => {
     if (key === "title") {
-      navigate(`/boardDetail/${idx}`);
+      navigate(`/boardDetail/${boardPk}`);
     }
   };
 
@@ -174,22 +158,29 @@ function BoardTable({ cateNum }) {
         </BoardTr>
       </BoardThead>
       <BoardTbody>
-        {sortedData.map((item, idx) => (
-          <BoardTr key={idx} writer={item.writer}>
-            <BoardTd propKey="number">{idx + 1}</BoardTd>
-            {["category", "title", "writer", "date", "views"].map(key => (
-              <BoardTd
-                key={key}
-                propKey={key}
-                onClick={() => {
-                  return itmeClick(key, idx + 1);
-                }}
-              >
-                {item[key]}
-              </BoardTd>
-            ))}
-          </BoardTr>
-        ))}
+        {isSuccess &&
+          sortedData.map((item, idx) => (
+            <BoardTr key={idx} writer={item.nickname}>
+              <BoardTd propKey="number">{idx + 1}</BoardTd>
+              {[
+                "categoryNm",
+                "title",
+                "nickname",
+                "createdAt",
+                "boardViewCount",
+              ].map(key => (
+                <BoardTd
+                  key={key}
+                  propKey={key}
+                  onClick={() => {
+                    return itmeClick(key, item.boardPk);
+                  }}
+                >
+                  {item[key]}
+                </BoardTd>
+              ))}
+            </BoardTr>
+          ))}
       </BoardTbody>
     </BoardBox>
   );
