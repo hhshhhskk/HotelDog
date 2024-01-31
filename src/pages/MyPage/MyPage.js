@@ -106,7 +106,7 @@ const MyPage = () => {
     "이용 후기",
   ];
 
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(0);
 
   const clickMenu = index => {
     setSelectedCategory(index);
