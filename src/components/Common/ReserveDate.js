@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React from "react";
 
-const ReserveDate = () => {
+const ReserveDate = ({ resDay }) => {
   const CalendarSelectWrap = styled.div`
     position: relative;
     display: flex;
@@ -49,13 +49,13 @@ const ReserveDate = () => {
       <CalendarSelectLeft>
         <CalendarText>
           <CalendarSelectTitle>체크인</CalendarSelectTitle>
-          <CalendarSelectDate>23.01.01(월)</CalendarSelectDate>
+          <CalendarSelectDate>{resDay.startDay}</CalendarSelectDate>
         </CalendarText>
       </CalendarSelectLeft>
       <CalendarSelectRight>
         <CalendarText>
           <CalendarSelectTitle>체크아웃</CalendarSelectTitle>
-          <CalendarSelectDate>23.01.02(화)</CalendarSelectDate>
+          <CalendarSelectDate>{resDay.endDay}</CalendarSelectDate>
         </CalendarText>
       </CalendarSelectRight>
     </CalendarSelectWrap>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../../styles/Detail/roomtype.css";
 import ReserveForm from "./Reservation/ReserveForm";
 
-const RoomType = () => {
+const RoomType = ({ detailId, resDay, setResDay }) => {
   const hotel_room_info = [
     {
       hotel_room_pk: 1, // 방 pk
@@ -87,9 +87,19 @@ const RoomType = () => {
                   </span>
                 </div>
                 {selectedRoom ? (
-                  <ReserveForm selectedRoom={selectedRoom} />
+                  <ReserveForm
+                    selectedRoom={selectedRoom}
+                    detailId={detailId}
+                    resDay={resDay}
+                    setResDay={resDay}
+                  />
                 ) : (
-                  <ReserveForm />
+                  <ReserveForm
+                    selectedRoom={selectedRoom}
+                    detailId={detailId}
+                    resDay={resDay}
+                    setResDay={resDay}
+                  />
                 )}
                 <button
                   className="button-wrap"

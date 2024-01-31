@@ -6,82 +6,81 @@ import ReserveForm from "../../components/Detail/Reservation/ReserveForm";
 import RoomType from "../../components/Detail/RoomType";
 
 import "../../styles/Detail/hoteldetail.css";
+// 스크롤 영역
+const ReserveFormScroll = styled.div`
+  position: relative;
+  width: 590px;
+  left: 360px;
+  padding-bottom: 50px;
+`;
 
-const HotelDetail = () => {
-  // 스크롤 영역
-  const ReserveFormScroll = styled.div`
-    position: relative;
-    width: 590px;
-    left: 360px;
-    padding-bottom: 50px;
-  `;
+// 리뷰 영역
+const ReviewWrap = styled.div`
+  position: relative;
+  margin-top: 72px;
+`;
+const ReviewHeader = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+`;
+const ReviewTitle = styled.div`
+  position: relative;
+  font-size: 16px;
+  color: #000;
+  font-weight: 600;
+  margin-bottom: 4px;
+  line-height: normal;
+`;
+const ReviewDetailStar = styled.img`
+  position: relative;
+  width: 18px;
+  height: 18px;
+  margin-right: 9px;
+  display: flex;
+`;
+const ReviewLine = styled.img`
+  position: relative;
+  margin-bottom: 22px;
+`;
+const ReviewText = styled.div`
+  position: relative;
+  left: 30px;
 
-  // 리뷰 영역
-  const ReviewWrap = styled.div`
-    position: relative;
-    margin-top: 72px;
-  `;
-  const ReviewHeader = styled.div`
-    position: relative;
-    display: flex;
-    align-items: center;
-    margin-bottom: 14px;
-  `;
-  const ReviewTitle = styled.div`
-    position: relative;
-    font-size: 16px;
-    color: #000;
-    font-weight: 600;
-    margin-bottom: 4px;
-    line-height: normal;
-  `;
-  const ReviewDetailStar = styled.img`
-    position: relative;
-    width: 18px;
-    height: 18px;
-    margin-right: 9px;
-    display: flex;
-  `;
-  const ReviewLine = styled.img`
-    position: relative;
-    margin-bottom: 22px;
-  `;
-  const ReviewText = styled.div`
-    position: relative;
-    left: 30px;
+  width: 560px;
 
-    width: 560px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+`;
+const ReviewTextMoreBt = styled.button`
+  position: relative;
+  font-size: 14px;
+  color: #000;
+  font-weight: 500;
+  line-height: normal;
 
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-  `;
-  const ReviewTextMoreBt = styled.button`
-    position: relative;
-    font-size: 14px;
-    color: #000;
-    font-weight: 500;
-    line-height: normal;
+  background-color: #fff;
+  border: 0;
 
-    background-color: #fff;
-    border: 0;
+  cursor: pointer;
+`;
+const ReviewTextDesc = styled.div`
+  position: relative;
+  font-size: 12px;
+  font-weight: 400;
+  color: #000;
+  line-height: normal;
 
-    cursor: pointer;
-  `;
-  const ReviewTextDesc = styled.div`
-    position: relative;
-    font-size: 12px;
-    font-weight: 400;
-    color: #000;
-    line-height: normal;
+  width: 450px;
 
-    width: 450px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;
 
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  `;
-
+const HotelDetail = ({ detailId, resDay, setResDay }) => {
   // 더미 데이터
   const hotel_option = [
     {
@@ -145,8 +144,8 @@ const HotelDetail = () => {
           <div>
             {hotelInfoVo.map(function (item, index) {
               return (
-                <>
-                  <div className="hotel-text-wrap" key={index}>
+                <div key={index}>
+                  <div className="hotel-text-wrap">
                     <div>
                       <h1 className="hotel-title">{item.hotel_nm}</h1>
                       <span className="hotel-spot">{item.road_address}</span>
@@ -156,12 +155,11 @@ const HotelDetail = () => {
                     </span>
                   </div>
                   <p className="hotel-desc">{item.hotel_detail_info}</p>
-                </>
+                </div>
               );
             })}
           </div>
         </div>
-
         {/* 시설 영역 */}
         <div>
           <span className="facility-title">시설</span>
@@ -181,10 +179,8 @@ const HotelDetail = () => {
             );
           })}
         </div>
-
         {/* 객실 영역 */}
-        <RoomType />
-
+        <RoomType detailId={detailId} resDay={resDay} setResDay={setResDay} />
         {/* 숙소 후기 영역 */}
         <ReviewWrap>
           <ReviewHeader>
@@ -224,7 +220,6 @@ const HotelDetail = () => {
             </ReviewTextMoreBt>
           </ReviewText>
         </ReviewWrap>
-
         {/* <Calendar /> */}
       </ReserveFormScroll>
       {/* 우측 픽스 영역

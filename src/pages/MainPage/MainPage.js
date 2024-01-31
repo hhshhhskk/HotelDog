@@ -21,7 +21,7 @@ import {
 } from "../../styles/MainPageStyle/mainPageStyle";
 import HotelCardForm from "../../components/Common/HotelCardForm";
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const MainPage = () => {
   const navigate = useNavigate();
@@ -46,26 +46,27 @@ const MainPage = () => {
     console.log("선택된 값 :", selectedValue);
   };
 
-  // 날짜 넘겨주기(자식 컴포넌트인 calendar에서 알려 줌)
-  const [reserveDay, setReserveDay] = useState({ startDay: "", endDay: "" });
+  // 자식 컴포넍트 즉, calendar 에서 알려줘야 다른 컴포넌트에 전달할 수 있다.
 
-  const changeSelectDay = (_sd, _ed) => {
-    console.log("시작 :", _sd);
-    console.log("완료 :", _ed);
+  const [reserveDay, setReserveDay] = useState({ startDay: "", endDay: "" });
+  const changeSelectDay = (_st, _ed) => {
+    console.log("시작", _st);
+    console.log("완료", _ed);
+
     setReserveDay(prev => {
-      return { startDay: _sd, endDay: _ed };
+      // 중요: 값을 업데이트할 때 `this.state` 대신 `state` 값을 읽어옵니다.
+      return { startDay: _st, endDay: _ed };
     });
   };
-
-  // 이게 필요하나???
   useEffect(() => {
     console.log(reserveDay);
   }, [reserveDay]);
 
+  const navigate = useNavigate();
   const handleSelectGo = _hotel_pk => {
-    console.log("상세페이지 보기", _hotel_pk);
+    console.log("상세 페이지 보기?? ", _hotel_pk);
     console.log(reserveDay);
-    // useNavigate를 이용하여 이동과 정보를 함께 보내기
+    // useNavigate 를 이용한 이동과 정보를 함께 보내기(state)
     navigate(`/hoteldetail/${_hotel_pk}`, { state: { day: reserveDay } });
   };
 
