@@ -1,16 +1,17 @@
 import styled from "@emotion/styled";
 import axios from "axios";
 import React, { useState } from "react";
-import jwtAxios from "../../utils/jwtUtil";
+import jwtAxios from "../../../utils/jwtUtil";
 
 const PasswordPage = styled.div`
   position: relative;
   width: 250px;
   height: 700px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   text-align: center;
   overflow: hidden;
   margin-top: 80px;
+  margin-left: 250px;
   p {
     position: relative;
     font-size: 16px;
@@ -37,14 +38,16 @@ const PasswordCheck = styled.div`
   overflow: hidden;
   input {
     position: absolute;
-    width: 170px;
+    width: 160px;
     height: 60px;
+    font-family: "Noto Sans";
     left: 5px;
     border-radius: 10px;
     color: #654222;
-    font-size: 4.2rem;
-    padding-bottom: 10px;
+    font-size: 2rem;
+    /* padding-bottom: 10px; */
     border: none;
+    padding-left: 10px;
   }
 `;
 const PasswordCheckBt = styled.div`

@@ -312,6 +312,11 @@ const Mydog = () => {
       <PageTitle>
         <p>반려견 정보</p>
       </PageTitle>
+      <ListNone>
+        <img src={`${process.env.PUBLIC_URL}/images/MyPage/dog.svg`} />
+        <p>반려견 정보가 없습니다.</p>
+        <span>반려견 정보를 등록해주세요</span>
+      </ListNone>
       <DogContents>
         <DogLeft onClick={handleDogLeftClick} hasImage={!!imageURL}>
           {/* hasImage prop 전달 */}
