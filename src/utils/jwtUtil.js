@@ -8,19 +8,19 @@ const jwtAxios = axios.create();
 // 요청(request) intercepter
 // request 가 문제가 있든, 없든 실행될 내용 작성
 const beforeReq = config => {
-  console.log("1. 요청전 전달 .... ", config);
-  console.log("2. 쿠키로 토큰가져오기");
+  // console.log("1. 요청전 전달 .... ", config);
+  // console.log("2. 쿠키로 토큰가져오기");
   const tokenCookie = getCookie("accessToken");
 
   if (!tokenCookie) {
-    console.log("쿠키 정보 없네요.");
+    // console.log("쿠키 정보 없네요.");
     // axios 요청을 중단합니다.
     return Promise.reject({ response: { data: { error: "Login 하세요." } } });
   }
 
-  console.log("3. 쿠키에서 토큰 정보를 뜯는다");
+  // console.log("3. 쿠키에서 토큰 정보를 뜯는다");
   const { accessToken } = tokenCookie;
-  console.log("4. 액세스토큰 정보", accessToken);
+  // console.log("4. 액세스토큰 정보", accessToken);
   // 요청한 Request 에 headers 에 형식이 있어요.
   // jwt 액세스토큰을 붙일때 형식이 있어요.
   // config 는 요청한 axios 이고
@@ -52,13 +52,13 @@ const refreshJWT = async (accessToken, refreshToken) => {
 // 응답(Response) 처리 코드
 // Response 전처리
 const beforeRes = async res => {
-  console.log("Response 전처리 ....", res);
+  // console.log("Response 전처리 ....", res);
   const data = res.data;
   console.log("1. Response 오기전 서버 전달해준 데이터", data);
   if (data && data.error === "ERROR_ACCESS_TOKEN") {
-    console.log("2. 일반적 오류가 아닌 액세스 토큰 에러!! 입니다. ");
-    console.log("3. 새로운 토큰을 요청해야 합니다. ");
-    console.log("4. 쿠키에 있는 정보를 읽어서, 다시 시도합니다.");
+    // console.log("2. 일반적 오류가 아닌 액세스 토큰 에러!! 입니다. ");
+    // console.log("3. 새로운 토큰을 요청해야 합니다. ");
+    // console.log("4. 쿠키에 있는 정보를 읽어서, 다시 시도합니다.");
 
     const tokenCookie = getCookie("accessToken");
     const refreshToken = getCookie("rt");

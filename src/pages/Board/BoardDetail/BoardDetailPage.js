@@ -11,6 +11,9 @@ import {
 } from "../../../styles/BoardPageStyle/boardStyle";
 import Dog from "../../../components/Common/Dog";
 import styled from "@emotion/styled";
+import { useQuery } from "react-query";
+import { boardDtailAPI } from "../../../api/board/boardApi";
+import { useParams } from "react-router-dom";
 
 const BoardDetailTop = styled.div`
   width: 100%;
@@ -52,6 +55,11 @@ const BoardDetailContent = styled.div`
 
   border-bottom: 0.5px solid #654222;
   background-color: #fff;
+`;
+
+const BoardDetailImg = styled.img`
+  width: 200px;
+  height: 200px;
 `;
 
 const BoardDetailCommentBox = styled.div`
@@ -182,8 +190,27 @@ const CommentBtn = styled.button`
 
 const BoardDetailPage = () => {
   const topItem = ["번호", "카테고리", "제목", "작성자", "날짜", "조회수"];
+  const { boardPk } = useParams();
   const [filter, setFilter] = useState(0);
+  const page = 1;
+  const { data, isSuccess } = useQuery(
+    ["boardDetail", boardPk, page],
+    () => {
+      const fetchData = async () => {
+        try {
+          const result = await boardDtailAPI(boardPk, page);
+          return result;
+        } catch {
+          console.log("에러");
+        }
+      };
 
+      return fetchData();
+    },
+    {
+      enabled: Boolean(boardPk), // boardPk 값이 truthy일 때만 쿼리를 활성화
+    },
+  );
   return (
     <BoardWrap>
       <BoardContent>
@@ -212,11 +239,12 @@ const BoardDetailPage = () => {
           })}
         </BoardDetailTop>
         <BoardDetailContent>
-          <img
-            style={{ width: "200px", height: "200px" }}
-            src={`${process.env.PUBLIC_URL}/images/board/happy.jpeg`}
-            alt=""
-          />
+          {data?.pics[0] && (
+            <BoardDetailImg
+              src={`${process.env.REACT_APP_BOARD_IMAGE_URL}/${boardPk}/${data?.pics[0]}`}
+              alt=""
+            />
+          )}
         </BoardDetailContent>
         <BoardDetailCommentBox>
           <DetailCommentTop>
