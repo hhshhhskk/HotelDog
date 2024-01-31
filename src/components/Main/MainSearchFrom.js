@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   ChoiceDiv,
   ChoiceOptionDiv,
@@ -76,12 +76,19 @@ const MainSearchFrom = () => {
     setLocationDropdown(false);
   };
 
-  const handleChangeDog = e => {
-    // !!! 뭘 선택해야 내용이 바뀔지
-    const dogSize = e.target.value;
-    const dogCount = e.target.innerText;
-    setDogValue(dogSize, dogCount);
-  };
+  // const handleChangeDog = (size, count) => {
+  // !!! 뭘 선택해야 내용이 바뀔지
+  // const dogSize = e.target.value;
+  // const dogCount = e.target.innerText;
+  //   setDogValue(`${size} ${count}`);
+  // }, [setDogValue];
+
+  const handleChangeDog = useCallback(
+    (size, count) => {
+      setDogValue(`${size} ${count}`);
+    },
+    [setDogValue],
+  );
 
   // 반려견 마리수 -,+ 에 따른 연산
   const handleIncrement = index => {
@@ -198,14 +205,14 @@ const MainSearchFrom = () => {
                           type="number"
                           value={dog.count}
                           readOnly
-                          // onChange={handleChangeDog}
+                          onChange={handleChangeDog(dog.size, dog.count)}
                         />
                       ) : (
                         <DogNumber
                           type="number"
                           value={dog.count}
                           readOnly
-                          // onChange={handleChangeDog}
+                          onChange={handleChangeDog(dog.size, dog.count)}
                         />
                       )}
                       <div>
