@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dog from "../../../components/Common/Dog";
 import BoardTable from "../../../components/Board/BoardTable";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +25,7 @@ import {
   BoardWrap,
 } from "../../../styles/BoardPageStyle/boardStyle";
 import BoardPagination from "../../../components/Board/BoardPagination";
+import useCustomLogin from "../../../hooks/useCustomLogin";
 
 const BoardPage = () => {
   const category = ["전체글", "공지", "자유게시판", "질문", "정보"];
@@ -33,6 +34,11 @@ const BoardPage = () => {
   const navigate = useNavigate();
   const [totalPage, setTotalPage] = useState(1);
   const [nowPage, setNowPage] = useState(1);
+  const { isLogin } = useCustomLogin();
+
+  useEffect(() => {
+    isLogin === false && alert("로그인 후 이용해주세요.", navigate(`/login`));
+  });
   return (
     <BoardWrap>
       <BoardContent>
