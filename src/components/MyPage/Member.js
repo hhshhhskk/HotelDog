@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Password from "./Password";
+import jwtAxios from "../../utils/jwtUtil";
 
 const MemberPage = styled.div`
   margin-left: 85px;
@@ -119,21 +120,10 @@ const Member = () => {
   useEffect(() => {
     const fetchMemberInfo = async () => {
       try {
-        // 토큰 값 가져오기 // 여기에 실제 토큰 값을 넣어주세요.
-        const jwtToken =
-          "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoie1widXNlclBrXCI6ODN9IiwiaWF0IjoxNzA2NTk3NjMxLCJleHAiOjE3MDY2MDQ4MzF9.dBpJ_Vhkm4tMfWJ7-64EaCyfBrvR06oLz1-cyfQki6s";
         // API 요청 보낼 때 헤더에 토큰 추가
-        const response = await axios.post(
-          "/api/user/info",
-          {
-            upw: "0405dbals",
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${jwtToken}`,
-            },
-          },
-        );
+        const response = await jwtAxios.post("/api/user/info", {
+          upw: "0405dbals",
+        });
 
         // API 요청이 성공했을 때 받아온 데이터를 상태에 저장
         setMemberInfo(response.data);
