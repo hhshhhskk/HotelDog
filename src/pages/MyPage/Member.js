@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import Password from "./Password";
+import Password from "../../components/MyPage/Member/Password";
 import jwtAxios from "../../utils/jwtUtil";
+import AddressPopup from "../../components/SignUp/AddressPopup";
 
 const MemberPage = styled.div`
   margin-left: 85px;
@@ -113,7 +114,7 @@ const InfoFetchBt = styled.button`
   }
 `;
 
-const Member = () => {
+const Member = ({ setPopUp, setAddress }) => {
   // 비밀번호 입력하면 컨텐츠 보여주기
   const [showMemberContents, setShowMemberContents] = useState(false);
   const [passwordVerified, setPasswordVerified] = useState(false);
@@ -187,6 +188,8 @@ const Member = () => {
       // 오류 발생 시 사용자에게 알림 등의 작업 수행
     }
   };
+
+  const REST_API_KEY = process.env.REACT_APP_KAKAO_API_KEY;
 
   return (
     <MemberPage>
