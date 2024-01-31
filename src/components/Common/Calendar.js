@@ -5,15 +5,56 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import "../../styles/Common/calendar.css";
 
 import { useState } from "react";
-import { isWeekend } from "date-fns";
-const Calendar = () => {
-  const [state, setState] = useState([
+// import { isWeekend } from "date-fns";
+import { addDays } from "date-fns";
+import { useEffect } from "react";
+import moment from "moment/moment";
+
+// MainPage 필터폼에 오늘 날짜 출력하는 용도
+export const getCurrentDate = () => {
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  // 월은 0부터 시작하므로 +1, 1자리 수 월은 0을 붙여 두 자리로 만듦
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  // 1자리 수 일은 0을 붙여 두 자리로 만듦
+  const day = String(currentDate.getDate()).padStart(2, "0");
+
+  // yyyy-mm-dd 형식의 문자열 반환
+  return `${year}-${month}-${day}`;
+};
+
+const Calendar = ({ calendarClose }) => {
+  const [selectDay, setSelectDay] = useState([
     {
       startDate: new Date(),
-      endDate: null,
+      endDate: addDays(new Date(), 1),
       key: "selection",
     },
   ]);
+  useEffect(() => {
+    console.log(selectDay);
+    // console.log(state[0].startDate);
+    // console.log(state[0].endDate);
+    // const startDay = moment(selectDay[0].startDate).format("YYYY-MM-DD");
+    // const endDay = moment(selectDay[0].endDate).format("YYYY-MM-DD");
+    // console.log(startDay, endDay);
+  }, [selectDay]);
+
+  const handleSelectDay = () => {
+    // 0131
+    const startDay =
+      moment(selectDay[0].startDate).format("YYYY-MM-DD") + "(수)";
+    const endDay = moment(selectDay[0].endDate).format("YYYY-MM-DD") + "(금)";
+    console.log(startDay, endDay);
+    calendarClose(startDay, endDay);
+  };
+  // const [state, setState] = useState([
+  //   {
+  //     startDate: new Date(),
+  //     endDate: null,
+  //     key: "selection",
+  //   },
+  // ]);
 
   return (
     <div className="calendar_modal_background">
@@ -35,9 +76,9 @@ const Calendar = () => {
           <div className="calendar_wrap">
             <DateRange
               editableDateInputs={true}
-              onChange={item => setState([item.selection])}
+              onChange={item => setSelectDay([item.selection])}
               moveRangeOnFirstSelection={false}
-              ranges={state}
+              ranges={selectDay}
               months={2}
               direction="horizontal"
               locale={ko}
@@ -46,7 +87,9 @@ const Calendar = () => {
             />
           </div>
 
-          <button className="calendar_button">선택</button>
+          <button className="calendar_button" onClick={handleSelectDay}>
+            선택
+          </button>
         </div>
       </div>
     </div>

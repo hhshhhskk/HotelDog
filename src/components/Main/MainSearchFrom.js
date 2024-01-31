@@ -17,7 +17,6 @@ import {
   FilterSelectDiv,
   FilterSelectTitle,
   FilterTitle,
-  LocationOption,
   LocationSelect,
   LocationSelectDiv,
   LocationSelectTitle,
@@ -28,13 +27,16 @@ import {
   SearchForm,
   SubmitButton,
 } from "../../styles/MainPageStyle/MainSearchFromStyle";
-import Calendar from "../Common/Calendar";
+import Calendar, { getCurrentDate } from "../Common/Calendar";
 
-const MainSearchFrom = () => {
-  // 미리보기 useState
+const MainSearchFrom = ({ changeSelectDay }) => {
+  // calendar에서 오늘 날짜 불러오기
+  const currentDate = getCurrentDate();
+
+  // 미리보기 및 선택된 데이터 useState
   const [locationValue, setLocationValue] = useState("지역을 선택해주세요");
-  const [calendarValue, setCalendarValue] = useState("오늘날짜");
-  const [dogValue, setDogValue] = useState("소형견 1");
+  const [calendarValue, setCalendarValue] = useState(`${currentDate}`);
+  const [dogValue, setDogValue] = useState("사이즈 / 마리");
   const [filterValue, setFilterValue] = useState();
 
   // 드롭다운 useState
@@ -42,6 +44,33 @@ const MainSearchFrom = () => {
   const [calendarDropdown, setCalendarDropdown] = useState(false);
   const [dogDropdown, setDogDropdown] = useState(false);
   const [filterDropdown, setFilterDropdown] = useState(false);
+
+  // 캘린더에서 날짜 선택 시 적용
+  const calendarClose = (_sd, _ed) => {
+    changeSelectDay(_sd, _ed);
+    setCalendarDropdown(false);
+  };
+
+  // 반려견 정보에 대한 useState
+  const [dogOption, setDogOption] = useState([
+    { size: "소형견", count: 0 },
+    { size: "중형견", count: 0 },
+    { size: "대형견", count: 0 },
+    { size: "초대형견", count: 0 },
+  ]);
+  // 반려견 총 count 계산
+  const totalDogCount = dogOption.reduce((sum, dog) => sum + dog.count, 0);
+
+  // const handleChangeDog = useCallback((size, count) => {
+  //   console.log("여기되니?");
+
+  //   // setDogValue(`${size} ${count}`);
+  //   console.log("size", size);
+  //   console.log("count", count);
+  //   const dog = dogOption.filter(item => item.size === size);
+  //   console.log(dogOption);
+  //   // setDogOption();
+  // }, []);
 
   // 필터에 대한 useState
   const [selectFilter, setSelectFilter] = useState([]);
@@ -51,54 +80,45 @@ const MainSearchFrom = () => {
     미용: "no",
   });
 
-  // !!! 데이터 연동 시 변경 예정
-  const locationOption = ["서울특별시", "대구광역시"];
-
-  // 사이즈/마리에 대한 useState
-  const [dogOption, setDogOption] = useState([
-    { size: "소형견", count: 1 },
-    { size: "중형견", count: 0 },
-    { size: "대형견", count: 0 },
-    { size: "초대형견", count: 0 },
-  ]);
-
-  // const filterOption = [
-  //   { option: "프로그램" },
-  //   { option: "산책" },
-  //   { option: "미용" },
-  // ];
-
   // 지역 선택 시 미리보기 내용 변경
   const handleChangeLocation = e => {
     const location = e.target.innerText;
     setLocationValue(location);
-    // 드롭다운 닫기
+    // ???드롭다운 닫기 왜 안 먹히지
     setLocationDropdown(false);
   };
 
-  // const handleChangeDog = (size, count) => {
-  // !!! 뭘 선택해야 내용이 바뀔지
-  // const dogSize = e.target.value;
-  // const dogCount = e.target.innerText;
-  //   setDogValue(`${size} ${count}`);
-  // }, [setDogValue];
-
-  const handleChangeDog = useCallback(
-    (size, count) => {
-      setDogValue(`${size} ${count}`);
-    },
-    [setDogValue],
-  );
+  // 드롭다운 선택 시 나타나기 및 사라지기
+  const handleDropdownSelect = dropdownType => {
+    setLocationDropdown(dropdownType === "location");
+    setCalendarDropdown(dropdownType === "calendar");
+    setDogDropdown(dropdownType === "dog");
+    setFilterDropdown(dropdownType === "filter");
+  };
+  const handleCLickSubmit = () => {
+    setLocationDropdown(false);
+    setCalendarDropdown(false);
+    setDogDropdown(false);
+    setFilterDropdown(false);
+  };
+  const handleCLickLocationSelect = () => handleDropdownSelect("location");
+  const handleCLickCalendarSelect = () => handleDropdownSelect("calendar");
+  const handleCLickDogSelect = () => handleDropdownSelect("dog");
+  const handleCLickFilterSelect = () => handleDropdownSelect("filter");
 
   // 반려견 마리수 -,+ 에 따른 연산
-  const handleIncrement = index => {
+  const handleIncrement = (index, size, count) => {
     setDogOption(prevDogOption => {
       const newDogOption = [...prevDogOption];
       newDogOption[index].count += 1;
       return newDogOption;
     });
+
+    // handleChangeDog(size, count);
   };
-  const handleDecrement = index => {
+  const handleDecrement = (index, size, count) => {
+    console.log("index ", index);
+
     setDogOption(prevDogOption => {
       const newDogOption = [...prevDogOption];
       if (newDogOption[index].count > 0) {
@@ -106,10 +126,12 @@ const MainSearchFrom = () => {
       }
       return newDogOption;
     });
+
+    // handleChangeDog(size, count);
   };
 
-  // 필터 선택에 따른 이벤트
   const handleClickFilter = theme => {
+    // console.log("기타 ", theme);
     const Selected = selectFilter.includes(theme);
     if (Selected) {
       // 이미 선택된 경우 선택 해제
@@ -124,6 +146,7 @@ const MainSearchFrom = () => {
 
   // 필터 라디오 버튼 선택에 따른 이벤트
   const handleClickRadio = theme => {
+    // console.log("라디오 ", theme);
     setSelectRadio(prevState => ({
       ...prevState,
       [theme]: prevState[theme] === "yes" ? "no" : "yes",
@@ -132,13 +155,35 @@ const MainSearchFrom = () => {
 
   // [수정예정] 검색폼 데이터 전송을 위한 작업
   const handleSubmit = e => {
+    console.log(dogOption);
+    // 반려견 count가 총 0일 때, 알람 띄우기
+    if (totalDogCount === 0) {
+      alert(`반려견을 최소 1마리 이상 선택해주세요.`);
+      e.preventDefault();
+      return;
+    }
+
+    // 0131 : 어떻게 전달할지만 결정하면 될듯합니다.
+    console.log(selectRadio);
+    console.log(selectFilter);
+
     e.preventDefault();
     const formData = {
       location: locationValue,
-
-      // 다른 필요한 데이터 추가
+      date: "",
+      dogInfo: dogValue,
+      filter: selectFilter,
+      program: selectRadio,
+      option: selectFilter,
+      selectRadio,
     };
+    console.log(formData);
+    // 필터 적용된 호텔 리스트로 이동
+    window.scrollTo({ top: 1550, behavior: "smooth" });
   };
+
+  // [수정예정] 데이터 연동 시 삭제
+  const locationOption = ["서울특별시", "대구광역시"];
 
   return (
     <>
@@ -146,7 +191,7 @@ const MainSearchFrom = () => {
       <SearchForm method="post" action="" onSubmit={handleSubmit}>
         {/* 지역 선택 */}
         <LocationSelectDiv
-          onClick={() => setLocationDropdown(!locationDropdown)}
+          onClick={() => handleCLickLocationSelect(!locationDropdown)}
         >
           <LocationSelectTitle>
             <label>{locationValue}</label>
@@ -170,19 +215,19 @@ const MainSearchFrom = () => {
           <DateSelectTitle
             onClick={() => setCalendarDropdown(!calendarDropdown)}
           >
-            <span>날짜 출력</span>
+            <span>{calendarValue}</span>
             <img src={`${process.env.PUBLIC_URL}/images/toggleArrow.svg`} />
           </DateSelectTitle>
           {calendarDropdown && (
             <DateSelect>
-              <Calendar />
+              <Calendar calendarClose={calendarClose} />
             </DateSelect>
           )}
         </DateSelectDiv>
 
         {/* 반려견 정보 선택 */}
         <DogSelectDiv>
-          <DogSelectTitle onClick={() => setDogDropdown(!dogDropdown)}>
+          <DogSelectTitle onClick={() => handleCLickDogSelect(!dogDropdown)}>
             <img src={`${process.env.PUBLIC_URL}/images/footicon.svg`} alt="" />
             <span>{dogValue}</span>
           </DogSelectTitle>
@@ -197,28 +242,39 @@ const MainSearchFrom = () => {
                       <div>
                         <MinusBt
                           src={`${process.env.PUBLIC_URL}/images/minusBt.svg`}
-                          onClick={() => handleDecrement(index)}
+                          onClick={() =>
+                            handleDecrement(index, dog.size, dog.count)
+                          }
                         />
                       </div>
+
                       {dog.size === "초대형견" ? (
-                        <ExtraDogNumber
-                          type="number"
-                          value={dog.count}
-                          readOnly
-                          onChange={handleChangeDog(dog.size, dog.count)}
-                        />
+                        <>
+                          <ExtraDogNumber
+                            type="number"
+                            value={dog.count}
+                            readOnly
+                            // onChange={() =>
+                            //   handleChangeDogGo(dog.size, dog.count)
+                            // }
+                          />
+                        </>
                       ) : (
                         <DogNumber
                           type="number"
                           value={dog.count}
                           readOnly
-                          onChange={handleChangeDog(dog.size, dog.count)}
+                          // onChange={() =>
+                          //   handleChangeDogGo(dog.size, dog.count)
+                          // }
                         />
                       )}
                       <div>
                         <PlusBt
                           src={`${process.env.PUBLIC_URL}/images/plusBt.svg`}
-                          onClick={() => handleIncrement(index)}
+                          onClick={() =>
+                            handleIncrement(index, dog.size, dog.count)
+                          }
                         />
                       </div>
                     </DogNumberDiv>
@@ -231,7 +287,9 @@ const MainSearchFrom = () => {
 
         {/* 필터 선택*/}
         <FilterSelectDiv>
-          <FilterSelectTitle onClick={() => setFilterDropdown(!filterDropdown)}>
+          <FilterSelectTitle
+            onClick={() => handleCLickFilterSelect(!filterDropdown)}
+          >
             <img
               src={`${process.env.PUBLIC_URL}/images/filtericon.svg`}
               alt=""
@@ -291,7 +349,9 @@ const MainSearchFrom = () => {
             </FilterSelect>
           )}
         </FilterSelectDiv>
-        <SubmitButton type="submit">적용</SubmitButton>
+        <SubmitButton type="submit" onClick={handleCLickSubmit}>
+          적용
+        </SubmitButton>
       </SearchForm>
     </>
   );
