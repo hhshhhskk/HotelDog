@@ -97,7 +97,7 @@ const RoomType = () => {
                   // selectedRoom = {selectedRoom}
                   // setSelectedRoom={setSelectedRoom}
                 >
-                  예약하기
+                  선택하기
                 </button>
               </div>
             </div>
