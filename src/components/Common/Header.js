@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getCookie, removeCookie } from "../../api/cookieUtil";
 import {
   HeaderCategory,
   HeaderContent,
@@ -14,17 +13,17 @@ import {
   SearchBt,
   SearchBtnImg,
 } from "../../styles/Common/headerStyle";
+import useCustomLogin from "../../hooks/useCustomLogin";
 
 const Header = () => {
-  // 쿠키 정보 읽기
-  const loginInState = getCookie("user");
-  console.log("loginInState", loginInState);
-
   const navigate = useNavigate();
   const location = useLocation();
 
   // 메인페이지 주소
   const mainPage = location.pathname === "/";
+
+  // 로그인 상태 값 받기
+  const { isLogin, doLogout } = useCustomLogin();
 
   // 스크롤 위치에 대한 useState
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -79,10 +78,7 @@ const Header = () => {
 
   // 로그아웃 클릭 시 쿠키 삭제 및 페이지 이동
   const handleClickLogOut = e => {
-    removeCookie("user", "/");
-    // 서버에서 구워주는 쿠키
-    // removeCookie("rt", "/");
-    alert("로그아웃이 완료되었습니다.");
+    doLogout();
     navigate("/");
   };
 
@@ -159,7 +155,7 @@ const Header = () => {
         </InputDiv>
 
         <HeaderCategory>
-          {loginInState ? (
+          {isLogin ? (
             <ul>
               <li>
                 <span onClick={handleClickCate}>게시판</span>
