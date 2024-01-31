@@ -161,7 +161,7 @@ function BoardTable({ nowPage, setTotalPage, cateNum }) {
         {isSuccess &&
           sortedData.map((item, idx) => (
             <BoardTr key={idx} writer={item.nickname}>
-              <BoardTd propKey="number">{idx + 1}</BoardTd>
+              <BoardTd propKey="number">{idx + 1 + (nowPage - 1) * 8}</BoardTd>
               {[
                 "categoryNm",
                 "title",

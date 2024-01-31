@@ -59,7 +59,7 @@ export const boardMyCommentListAPI = async page => {
 };
 
 // 게시글 상세페이지 API (댓글 포함)
-export const boardDtailAPI = async (boardPk, page) => {
+export const boardDetailAPI = async (boardPk, page) => {
   try {
     const res = await jwtAxios({
       method: "get",
@@ -68,11 +68,10 @@ export const boardDtailAPI = async (boardPk, page) => {
         "Content-Type": "application/json",
       },
     });
-    console.log(res.data);
     return res.data;
   } catch (error) {
     // 오류가 발생했을 때의 처리
     console.log(error);
-    // alert(error.response.data.message);
+    return error.response.status;
   }
 };
