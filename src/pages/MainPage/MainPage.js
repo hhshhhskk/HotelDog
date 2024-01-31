@@ -62,7 +62,6 @@ const MainPage = () => {
     console.log(reserveDay);
   }, [reserveDay]);
 
-  const navigate = useNavigate();
   const handleSelectGo = _hotel_pk => {
     console.log("상세 페이지 보기?? ", _hotel_pk);
     console.log(reserveDay);
