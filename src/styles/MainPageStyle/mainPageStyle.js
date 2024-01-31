@@ -15,7 +15,6 @@ export const VisualDiv = styled.div`
   position: relative;
   width: 100%;
   height: 630px;
-  /* overflow: hidden; */
 `;
 
 export const VisualImg = styled.div`
@@ -51,10 +50,6 @@ export const VisualInner = styled.div`
   left: 0;
   right: 0;
   margin: auto;
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
-  /* background-color: hotpink; */
 `;
 
 export const VisualText = styled.div`
@@ -86,9 +81,9 @@ export const VisualForm = styled.div`
 export const HotelListDiv = styled.div`
   position: relative;
   /* display: flex;
-  flex-wrap: wrap;
-  background-color: aquamarine; */
-  margin: 70px 0px;
+  flex-wrap: wrap; */
+  /* background-color: aquamarine; */
+  margin: 80px 0px;
   width: 1200px;
 `;
 
@@ -101,17 +96,22 @@ export const AdListDiv = styled.div`
 export const AdText = styled.div`
   position: relative;
   display: block;
-  padding-bottom: 13px;
+  padding-bottom: 20px;
   width: 100%;
   span {
     color: #9c9c9c;
     font-size: 1.4rem;
+    /* padding-top: 5px; */
+    /* background-color: aqua; */
   }
 `;
 
 export const AdTitle = styled.h1`
   position: relative;
   color: #654222;
+  /* background-color: beige; */
+  margin: 0;
+  padding-bottom: 5px;
 `;
 
 export const HotelCardDiv = styled.div`
@@ -131,7 +131,7 @@ export const FilterListDiv = styled.div`
 export const FilterText = styled.div`
   position: relative;
   display: block;
-  padding-bottom: 13px;
+  padding-bottom: 20px;
   width: 100%;
   span {
     color: #9c9c9c;
@@ -140,9 +140,11 @@ export const FilterText = styled.div`
   form {
     position: absolute;
     right: 0;
-    bottom: 15px;
+    bottom: 20px;
     select {
-      padding: 3px 17px;
+      /* background-color: beige; */
+      font-size: 1.4rem;
+      padding: 0 10px;
       border-radius: 5px;
       border: 1px solid #969696;
       color: #969696;
@@ -150,8 +152,28 @@ export const FilterText = styled.div`
   }
 `;
 
-// 화면에 마진이 왜 들어가 있지?
 export const FilterTitle = styled.h1`
   position: relative;
   color: #654222;
+  margin: 0;
+  padding-bottom: 5px;
+`;
+
+export const HotelPlusBtDiv = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  cursor: pointer;
+  img {
+    padding-left: 5px;
+  }
+`;
+
+export const HotelPlusBt = styled.div`
+  position: relative;
+  font-size: 1.5rem;
+  border: none;
+  color: #654222;
+  font-weight: 700;
 `;

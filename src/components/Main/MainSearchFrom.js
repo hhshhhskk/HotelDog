@@ -33,7 +33,9 @@ import Calendar from "../Common/Calendar";
 const MainSearchFrom = () => {
   // 미리보기 useState
   const [locationValue, setLocationValue] = useState("지역을 선택해주세요");
-  // const [dogValue, setDogValue] = useState("사이즈 / 마리");
+  const [calendarValue, setCalendarValue] = useState("오늘날짜");
+  const [dogValue, setDogValue] = useState("소형견 1");
+  const [filterValue, setFilterValue] = useState();
 
   // 드롭다운 useState
   const [locationDropdown, setLocationDropdown] = useState(false);
@@ -54,7 +56,7 @@ const MainSearchFrom = () => {
 
   // 사이즈/마리에 대한 useState
   const [dogOption, setDogOption] = useState([
-    { size: "소형견", count: 0 },
+    { size: "소형견", count: 1 },
     { size: "중형견", count: 0 },
     { size: "대형견", count: 0 },
     { size: "초대형견", count: 0 },
@@ -73,11 +75,13 @@ const MainSearchFrom = () => {
     // 드롭다운 닫기
     setLocationDropdown(false);
   };
-  // const handleChangeDog = e => {
-  //   // !!! 뭘 선택해야 내용이 바뀔지
-  //   const dogPick = e.target.value;
-  //   setDogValue(dogPick);
-  // };
+
+  const handleChangeDog = e => {
+    // !!! 뭘 선택해야 내용이 바뀔지
+    const dogSize = e.target.value;
+    const dogCount = e.target.innerText;
+    setDogValue(dogSize, dogCount);
+  };
 
   // 반려견 마리수 -,+ 에 따른 연산
   const handleIncrement = index => {
@@ -119,10 +123,20 @@ const MainSearchFrom = () => {
     }));
   };
 
+  // [수정예정] 검색폼 데이터 전송을 위한 작업
+  const handleSubmit = e => {
+    e.preventDefault();
+    const formData = {
+      location: locationValue,
+
+      // 다른 필요한 데이터 추가
+    };
+  };
+
   return (
     <>
       {/* !!!form 전송을 위한 작업 예정 */}
-      <SearchForm method="post" action="">
+      <SearchForm method="post" action="" onSubmit={handleSubmit}>
         {/* 지역 선택 */}
         <LocationSelectDiv
           onClick={() => setLocationDropdown(!locationDropdown)}
@@ -135,9 +149,9 @@ const MainSearchFrom = () => {
             <LocationSelect>
               <ul>
                 {locationOption.map((location, index) => (
-                  <LocationOption key={index} onClick={handleChangeLocation}>
+                  <li key={index} onClick={handleChangeLocation}>
                     {location}
-                  </LocationOption>
+                  </li>
                 ))}
               </ul>
             </LocationSelect>
@@ -145,7 +159,6 @@ const MainSearchFrom = () => {
         </LocationSelectDiv>
 
         {/* !!!날짜 선택 : 달력 삽입하기*/}
-        {/* <DateSelect type="date" /> */}
         <DateSelectDiv>
           <DateSelectTitle
             onClick={() => setCalendarDropdown(!calendarDropdown)}
@@ -160,12 +173,13 @@ const MainSearchFrom = () => {
           )}
         </DateSelectDiv>
 
-        {/* 사이즈/마리 선택*/}
+        {/* 반려견 정보 선택 */}
         <DogSelectDiv>
           <DogSelectTitle onClick={() => setDogDropdown(!dogDropdown)}>
             <img src={`${process.env.PUBLIC_URL}/images/footicon.svg`} alt="" />
-            <span>사이즈 / 마리</span>
+            <span>{dogValue}</span>
           </DogSelectTitle>
+
           {dogDropdown && (
             <DogSelect>
               <ul>
