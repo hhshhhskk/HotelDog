@@ -20,9 +20,12 @@ import {
   VisualText,
 } from "../../styles/MainPageStyle/mainPageStyle";
 import HotelCardForm from "../../components/Common/HotelCardForm";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 const MainPage = () => {
-  // 검색 폼 클릭 시 스크롤 이동
+  const navigate = useNavigate();
+  // 필터 폼 클릭 시 스크롤 이동
   const handleClickForm = () => {
     window.scrollTo({ top: 300, behavior: "smooth" });
   };
@@ -43,6 +46,29 @@ const MainPage = () => {
     console.log("선택된 값 :", selectedValue);
   };
 
+  // 날짜 넘겨주기(자식 컴포넌트인 calendar에서 알려 줌)
+  const [reserveDay, setReserveDay] = useState({ startDay: "", endDay: "" });
+
+  const changeSelectDay = (_sd, _ed) => {
+    console.log("시작 :", _sd);
+    console.log("완료 :", _ed);
+    setReserveDay(prev => {
+      return { startDay: _sd, endDay: _ed };
+    });
+  };
+
+  // 이게 필요하나???
+  useEffect(() => {
+    console.log(reserveDay);
+  }, [reserveDay]);
+
+  const handleSelectGo = _hotel_pk => {
+    console.log("상세페이지 보기", _hotel_pk);
+    console.log(reserveDay);
+    // useNavigate를 이용하여 이동과 정보를 함께 보내기
+    navigate(`/hoteldetail/${_hotel_pk}`, { state: { day: reserveDay } });
+  };
+
   return (
     <MainPageDiv>
       <VisualDiv>
@@ -60,7 +86,7 @@ const MainPage = () => {
 
           {/* 검색 */}
           <VisualForm onClick={handleClickForm}>
-            <MainSearchFrom />
+            <MainSearchFrom changeSelectDay={changeSelectDay} />
           </VisualForm>
         </VisualInner>
       </VisualDiv>
@@ -74,7 +100,7 @@ const MainPage = () => {
             <span>핫한 광고 상품을 추천드립니다!</span>
           </AdText>
           <HotelCardDiv>
-            <HotelCardForm />
+            <HotelCardForm handleSelectGo={handleSelectGo} />
           </HotelCardDiv>
         </AdListDiv>
 
@@ -86,17 +112,15 @@ const MainPage = () => {
 
             {/* 필터호텔 정렬방식 */}
             <form>
-              <select onChange={handleChangeSorting}>
-                <option value="추천순" selected>
-                  추천순
-                </option>
+              <select value={selectSorting} onChange={handleChangeSorting}>
+                <option value="추천순">추천순</option>
                 <option value="별점순">별점순</option>
                 <option value="리뷰순">리뷰순</option>
               </select>
             </form>
           </FilterText>
           <HotelCardDiv>
-            <HotelCardForm />
+            <HotelCardForm handleSelectGo={handleSelectGo} />
           </HotelCardDiv>
           {/* 호텔 더 불러오기 버튼 */}
           <HotelPlusBtDiv>
