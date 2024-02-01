@@ -112,26 +112,32 @@ function BoardTable({ nowPage, setTotalPage, cateNum }) {
     // 데이터가 성공적으로 불러와진 경우에만 정렬 작업 수행
     if (data?.simpleBoardVoList) {
       sortedData = data?.simpleBoardVoList.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+
+        // 우선 "관리자"인 경우 우선순위를 둡니다.
         if (a.nickname === "관리자" && b.nickname !== "관리자") {
           return -1;
         } else if (a.nickname !== "관리자" && b.nickname === "관리자") {
           return 1;
         }
 
-        const dateA = new Date(a.date).getTime();
-        const dateB = new Date(b.date).getTime();
+        // 그 다음에는 날짜를 기준으로 최신순으로 정렬합니다.
         return dateB - dateA;
       });
     } else if (data?.userCommentVoList) {
       sortedData = data?.userCommentVoList.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+
+        // 우선 "관리자"인 경우 우선순위를 둡니다.
         if (a.nickname === "관리자" && b.nickname !== "관리자") {
           return -1;
         } else if (a.nickname !== "관리자" && b.nickname === "관리자") {
           return 1;
         }
 
-        const dateA = new Date(a.date).getTime();
-        const dateB = new Date(b.date).getTime();
+        // 그 다음에는 날짜를 기준으로 최신순으로 정렬합니다.
         return dateB - dateA;
       });
     }

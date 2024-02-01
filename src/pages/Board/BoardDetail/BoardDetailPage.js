@@ -12,8 +12,9 @@ import {
 import Dog from "../../../components/Common/Dog";
 import styled from "@emotion/styled";
 import { useQuery } from "react-query";
-import { boardDetailAPI } from "../../../api/board/boardApi";
+import { boardDeleteAPI, boardDetailAPI } from "../../../api/board/boardApi";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const BoardDetailTop = styled.div`
   width: 100%;
@@ -58,6 +59,12 @@ const BoardDetailContentBox = styled.div`
 
   border-bottom: 0.5px solid #654222;
   background-color: #fff;
+`;
+
+const DetailImgBox = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 10px;
 `;
 
 const BoardDetailImg = styled.img`
@@ -224,7 +231,7 @@ const NavigateLast = styled(NavigateFirst)`
   justify-content: right;
 `;
 
-const NavigateBtn = styled.div`
+const DetailBtn = styled.div`
   width: 60px;
   height: 30px;
 
@@ -245,6 +252,7 @@ const BoardDetailPage = () => {
   ];
   const navigate = useNavigate();
   const { boardPk } = useParams();
+  const loginUserPk = useSelector(state => state.loginSlice.userPk);
   const [filter, setFilter] = useState(0);
   const [commentPage, setCommentPage] = useState(1);
   const { data, isLoading, isSuccess } = useQuery(
@@ -253,10 +261,6 @@ const BoardDetailPage = () => {
       const fetchData = async () => {
         try {
           const result = await boardDetailAPI(boardPk, commentPage);
-          if (result === 500) {
-            alert("다음페이지가 없어요.");
-            navigate(`/boardDetail/${parseInt(boardPk) - 1}`);
-          }
           return result;
         } catch {
           console.log("에러");
@@ -311,10 +315,17 @@ const BoardDetailPage = () => {
           </BoardDetailTop>
           <BoardDetailContentBox>
             {data?.pics[0] && (
-              <BoardDetailImg
-                src={`${process.env.REACT_APP_BOARD_IMAGE_URL}/${boardPk}/${data?.pics[0]}`}
-                alt=""
-              />
+              <DetailImgBox>
+                {data.pics.map((pic, idx) => {
+                  return (
+                    <BoardDetailImg
+                      key={idx}
+                      src={`${process.env.REACT_APP_BOARD_IMAGE_URL}/${boardPk}/${pic}`}
+                      alt=""
+                    />
+                  );
+                })}
+              </DetailImgBox>
             )}
             <BoardDetailContent>{data?.contents}</BoardDetailContent>
           </BoardDetailContentBox>
@@ -367,29 +378,35 @@ const BoardDetailPage = () => {
           </BoardDetailCommentBox>
           <NavigateDiv>
             <NavigateFirst>
-              <NavigateBtn
+              <DetailBtn
                 onClick={() => {
                   navigate(`/board`);
                 }}
               >
                 목록
-              </NavigateBtn>
+              </DetailBtn>
             </NavigateFirst>
             <NavigateLast>
-              <NavigateBtn
-                onClick={() => {
-                  navigate(`/boardDetail/${parseInt(boardPk) - 1}`);
-                }}
-              >
-                이전글
-              </NavigateBtn>
-              <NavigateBtn
-                onClick={() => {
-                  navigate(`/boardDetail/${parseInt(boardPk) + 1}`);
-                }}
-              >
-                다음글
-              </NavigateBtn>
+              {loginUserPk === data.userPk && (
+                <>
+                  <DetailBtn onClick={() => {}}>수정</DetailBtn>
+                  <DetailBtn
+                    onClick={async () => {
+                      const answer = confirm("정말로 삭제 하시겠습니까?");
+                      if (answer) {
+                        const result = await boardDeleteAPI(boardPk);
+
+                        if (result === 1) {
+                          navigate("/board");
+                          alert("삭제 되었습니다.");
+                        }
+                      }
+                    }}
+                  >
+                    삭제
+                  </DetailBtn>
+                </>
+              )}
             </NavigateLast>
           </NavigateDiv>
         </BoardContent>
