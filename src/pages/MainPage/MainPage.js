@@ -22,9 +22,61 @@ import {
 import HotelCardForm from "../../components/Common/HotelCardForm";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { hotelListAPI } from "../../api/Main/HotelApi";
+
+// 호텔 전체 리스트 데이터 형식
+const initHotellist = {
+  hotel_advertise_list: [
+    {
+      star: 0,
+      price: "",
+      hotel_pk: 0,
+      hotel_nm: "",
+      address_name: "",
+      hotel_pic: "",
+      discount_per: 0,
+      book_mark: 0,
+      review_count: 0,
+    },
+  ],
+  hotel_list: [
+    {
+      star: 0,
+      price: "",
+      hotel_pk: 0,
+      hotel_nm: "",
+      address_name: "",
+      hotel_pic: "",
+      discount_per: 0,
+      book_mark: 0,
+      review_count: 0,
+    },
+  ],
+};
 
 const MainPage = () => {
+  // 전체 호텔 리스트 useState
+  const [hotelListData, setHotelListData] = useState(initHotellist);
+
+  // 전체 호텔 리스트 가져오기
+  const getHotelList = async () => {
+    // hotelListAPI(setHotelListData);
+    try {
+      const data = await hotelListAPI(/* 여기에 필요한 값들 전달 */);
+      setHotelListData(data);
+    } catch (error) {
+      console.log(error);
+      // 에러 처리 로직 추가
+    }
+  };
+
+  // 초기 화면 불러오기
+  useEffect(() => {
+    getHotelList();
+  }, []);
+
   const navigate = useNavigate();
+
   // 필터 폼 클릭 시 스크롤 이동
   const handleClickForm = () => {
     window.scrollTo({ top: 300, behavior: "smooth" });
@@ -46,8 +98,7 @@ const MainPage = () => {
     console.log("선택된 값 :", selectedValue);
   };
 
-  // 자식 컴포넍트 즉, calendar 에서 알려줘야 다른 컴포넌트에 전달할 수 있다.
-
+  // 자식 컴포넌트 즉, calendar 에서 알려줘야 다른 컴포넌트에 전달할 수 있다.
   const [reserveDay, setReserveDay] = useState({ startDay: "", endDay: "" });
   const changeSelectDay = (_st, _ed) => {
     console.log("시작", _st);
@@ -100,7 +151,11 @@ const MainPage = () => {
             <span>핫한 광고 상품을 추천드립니다!</span>
           </AdText>
           <HotelCardDiv>
-            <HotelCardForm handleSelectGo={handleSelectGo} />
+            {hotelListData.hotel_advertise_list.map((hotel, index) => (
+              <div key={index}>
+                <HotelCardForm hotel={hotel} handleSelectGo={handleSelectGo} />
+              </div>
+            ))}
           </HotelCardDiv>
         </AdListDiv>
 
@@ -120,7 +175,11 @@ const MainPage = () => {
             </form>
           </FilterText>
           <HotelCardDiv>
-            <HotelCardForm handleSelectGo={handleSelectGo} />
+            {hotelListData.hotel_list.map((hotel, index) => (
+              <div key={index}>
+                <HotelCardForm hotel={hotel} handleSelectGo={handleSelectGo} />
+              </div>
+            ))}
           </HotelCardDiv>
           {/* 호텔 더 불러오기 버튼 */}
           <HotelPlusBtDiv>
