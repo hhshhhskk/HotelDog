@@ -1,4 +1,6 @@
+import { useState } from "react";
 import {
+  BookMarkImgDiv,
   Discount,
   FinalPrice,
   FinalPriceDiv,
@@ -19,6 +21,10 @@ import {
 import HotelLike from "./HotelLike";
 
 const HotelCardForm = ({ hotel, handleSelectGo }) => {
+  // !!!초기값은 데이터 불러오면 변경 예정
+  const [bookMark, setBookMark] = useState(hotel.book_mark);
+  const toggleBookMark = () => setBookMark(prev => !prev);
+
   // 가격 천단위 표시
   const formatNumber = number => {
     return number.toLocaleString();
@@ -38,10 +44,18 @@ const HotelCardForm = ({ hotel, handleSelectGo }) => {
       <HotelCardDiv>
         <HotelImgDiv>
           <img
-            src={`${process.env.PUBLIC_URL}/images/hotel1.jpg`}
+            src={hotel.hotel_pic}
             onClick={() => handleSelectGo(hotel.hotel_pk)}
           />
-          <HotelLike />
+          {/* 북마크 넘겨주거나 컴포넌트를 해지해야 함. */}
+          {/* <HotelLike /> */}
+          <BookMarkImgDiv onClick={toggleBookMark}>
+            {bookMark ? (
+              <img src={`${process.env.PUBLIC_URL}/images/like_after.svg`} />
+            ) : (
+              <img src={`${process.env.PUBLIC_URL}/images/like_before.svg`} />
+            )}
+          </BookMarkImgDiv>
         </HotelImgDiv>
 
         <HotelContentsDiv onClick={() => handleSelectGo(hotel.hotel_pk)}>
@@ -77,7 +91,6 @@ const HotelCardForm = ({ hotel, handleSelectGo }) => {
           </HotelPriceDiv>
         </HotelContentsDiv>
       </HotelCardDiv>
-      ))
     </>
   );
 };

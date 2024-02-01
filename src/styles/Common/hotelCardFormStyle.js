@@ -20,6 +20,20 @@ export const HotelImgDiv = styled.div`
   }
 `;
 
+export const BookMarkImgDiv = styled.div`
+  top: 240px;
+  left: 300px;
+  position: absolute;
+
+  img {
+    position: relative;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+`;
+
 export const HotelContentsDiv = styled.div`
   position: relative;
   display: block;
