@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { mailAuthCodeAPI } from "../../api/SignUp/addressApi";
+import { mailAuthAPI, mailAuthCodeAPI } from "../../api/SignUp/addressApi";
 
 const Wrapper = styled.div`
   position: absolute;
@@ -127,6 +127,8 @@ const ReSendBtn = styled.div`
 
   margin-top: 10px;
   margin-bottom: 52px;
+
+  cursor: pointer;
 `;
 
 const ModalInnerBox = styled.div`
@@ -188,6 +190,7 @@ const MailModal = ({ mail, closeMailModal, setMailChecked }) => {
     }, 1000);
 
     if (count === 0) {
+      alert("인증시간이 만료되었습니다.");
       closeMailModal();
       setCount(60 * 5);
     }
@@ -246,9 +249,16 @@ const MailModal = ({ mail, closeMailModal, setMailChecked }) => {
           <CodeBtn onClick={mailCodeClick} type="button" value="확 인" />
         </CodeBox>
         <CodeTime>
-          {minutes}:{seconds}
+          {minutes}:{seconds - 10 < 0 ? `0${seconds}` : seconds}
         </CodeTime>
-        <ReSendBtn>인증 코드 재발송</ReSendBtn>
+        <ReSendBtn
+          onClick={() => {
+            mailAuthAPI(mail);
+            setCount(60 * 5 - 1);
+          }}
+        >
+          인증 코드 재발송
+        </ReSendBtn>
         <ModalInnerBox>
           <ModalInnerBigText>유의사항</ModalInnerBigText>
           <TextBox>

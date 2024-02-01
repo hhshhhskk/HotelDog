@@ -95,6 +95,8 @@ const SignUpPage = () => {
     const result = await nickNameCheckAPI(nickName);
     if (result === 1) {
       setNickNameChecked(true);
+    } else {
+      alert("사용중인 닉네임 입니다.");
     }
   };
 
@@ -125,8 +127,11 @@ const SignUpPage = () => {
                 detailAddress: data.detail,
               },
             };
-            console.log(postData);
-            signUpAPi(postData, navigate);
+            // console.log(postData);
+            const res = signUpAPi(postData, navigate);
+            if (res === 1) {
+              alert("회원가입이 성공적으로 완료 되었습니다.");
+            }
           } else {
             alert("이용약관동의를 해주세요.");
           }
