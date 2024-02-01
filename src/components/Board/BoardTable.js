@@ -29,12 +29,13 @@ const BoardThead = styled.thead`
 const BoardTh = styled.th`
   width: ${props =>
     props.idx === 0
-      ? "70px"
+      ? "62px"
       : props.idx === 2
-      ? "580px"
+      ? "550px"
       : props.idx === 3
       ? "180px"
-      : "130px"};
+      : "136px"};
+  width: ${props => (props.idx === 6 ? "50px" : "none")};
   text-align: ${props =>
     props.idx === 2 ? "left" : props.idx === 3 ? "left" : "center"};
 `;
@@ -56,12 +57,14 @@ const BoardTr = styled.tr`
 const BoardTd = styled.td`
   width: ${props =>
     props.propKey === "number"
-      ? "70px"
+      ? "62px"
       : props.propKey === "title"
-      ? "580px"
+      ? "550px"
       : props.propKey === "nickname"
       ? "180px"
-      : "130px"};
+      : "136px"};
+  width: ${props => (props.idx === 6 ? "50px" : "none")};
+
   text-align: ${props =>
     props.propKey === "title"
       ? "left"
@@ -156,6 +159,11 @@ function BoardTable({ nowPage, setTotalPage, cateNum }) {
     <BoardBox>
       <BoardThead>
         <BoardTr tr="head">
+          {cateNum >= 5 && (
+            <BoardTh idx={6}>
+              <input type="checkbox" name="select" value="select" />
+            </BoardTh>
+          )}
           {rows.map((item, idx) => (
             <BoardTh key={idx} idx={idx}>
               {item}
@@ -167,6 +175,11 @@ function BoardTable({ nowPage, setTotalPage, cateNum }) {
         {isSuccess &&
           sortedData.map((item, idx) => (
             <BoardTr key={idx} writer={item.nickname}>
+              {cateNum >= 5 && (
+                <BoardTd idx={6}>
+                  <input type="checkbox" name="select" value="select" />
+                </BoardTd>
+              )}
               <BoardTd propKey="number">{idx + 1 + (nowPage - 1) * 8}</BoardTd>
               {[
                 "categoryNm",

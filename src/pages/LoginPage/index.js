@@ -164,7 +164,6 @@ const LoginPage = () => {
   const { doLogin, moveToPath } = useCustomLogin();
 
   const saveClicked = () => {
-    console.log(idSaved);
     if (idSaved === true) {
       //로컬스토리지에 아이디 제거
       localStorage.removeItem("savedId");
