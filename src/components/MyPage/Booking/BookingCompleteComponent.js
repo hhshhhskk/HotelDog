@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import React, { useState } from "react";
 import ReserveDate from "../../Common/ReserveDate";
 import ReviewModal from "./ReviewModal";
+import BookingDate from "./BookingDate";
 
 const BookingCompleteList = styled.div`
   position: relative;
@@ -147,7 +148,7 @@ const BookingCompleteComponent = ({ bookingData }) => {
               <p>이용 완료</p>
             </BookingLeft>
             <BookingRight>
-              <ReserveDate></ReserveDate>
+              <BookingDate />
               <BookInfo>
                 <Line />
                 <span>예약 정보</span>
