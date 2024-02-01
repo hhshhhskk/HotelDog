@@ -159,16 +159,26 @@ const LoginPage = () => {
   } = useForm();
   const navigate = useNavigate();
   const [userType, setUserType] = useState(1);
-  const [idSaved, setIdSaved] = useState(false);
+  const savedId = localStorage.getItem("savedId");
+  const [idSaved, setIdSaved] = useState(savedId ? true : false);
+  const { doLogin, moveToPath } = useCustomLogin();
+
   const saveClicked = () => {
+    console.log(idSaved);
+    if (idSaved === true) {
+      //로컬스토리지에 아이디 제거
+      localStorage.removeItem("savedId");
+    }
     setIdSaved(!idSaved);
   };
 
-  const { doLogin, moveToPath } = useCustomLogin();
   const onValid = data => {
     console.log(data);
     const loginParam = { id: data.id, pw: data.password };
     doLogin({ loginParam, successFn, failFn, errorFn });
+    if (idSaved) {
+      localStorage.setItem("savedId", data.id);
+    }
   };
   const successFn = result => {
     console.log("성공", result);
@@ -231,6 +241,7 @@ const LoginPage = () => {
                     {...register("id", {
                       required: "아이디는 필수사항입니다.",
                     })}
+                    defaultValue={savedId ? savedId : ""}
                     placeholder="아이디 (example@gmail.com)"
                   />
                   <LoginInput
