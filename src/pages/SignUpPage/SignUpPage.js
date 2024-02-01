@@ -283,7 +283,7 @@ const SignUpPage = () => {
               })}
               placeholder="전화번호를 입력해주세요(-제외)"
             />
-            {/* <InnerDiv>
+            <InnerDiv>
               <InputName style={styleBtn}>주소</InputName>
               <AddressBox>{address?.address_name}</AddressBox>
               <InnerBtn
@@ -297,7 +297,7 @@ const SignUpPage = () => {
             <InputBox
               {...register("detail")}
               placeholder="상세주소를 입력해주세요"
-            /> */}
+            />
             <AgreeDiv>
               이용약관동의
               {agree ? (
