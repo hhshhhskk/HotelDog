@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../../styles/Detail/roomtype.css";
 import ReserveForm from "./Reservation/ReserveForm";
 
-const RoomType = ({ detailId, resDay, setResDay }) => {
+const RoomType = ({ selectedRoom, setSelectedRoom }) => {
   const hotel_room_info = [
     {
       hotel_room_pk: 1, // 방 pk
@@ -42,17 +42,11 @@ const RoomType = ({ detailId, resDay, setResDay }) => {
     },
   ];
 
-  const [selectedRoom, setSelectedRoom] = useState(null);
-
-  const handleReserve = roomName => {
-    console.log("예약하기 버튼이 클릭되었습니다.");
-    console.log("선택된 객실 이름:", roomName);
-    // 여기에 선택된 객실에 대한 처리 로직을 추가할 수 있습니다.
-    // ReserveForm(roomName);
+  const handleroomselect = roomName => {
+    // console.log("예약하기 버튼이 클릭되었습니다.");
+    // console.log("선택된 객실 이름:", roomName);
     setSelectedRoom(roomName); // 선택된 객실 정보를 부모 컴포넌트로 전달
   };
-
-  const [reserveForm, setReserveForm] = useState(true);
 
   return (
     <div className="roomtype-flex">
@@ -86,24 +80,9 @@ const RoomType = ({ detailId, resDay, setResDay }) => {
                     <h3>{item.hotel_room_cost}</h3>원
                   </span>
                 </div>
-                {selectedRoom ? (
-                  <ReserveForm
-                    selectedRoom={selectedRoom}
-                    detailId={detailId}
-                    resDay={resDay}
-                    setResDay={resDay}
-                  />
-                ) : (
-                  <ReserveForm
-                    selectedRoom={selectedRoom}
-                    detailId={detailId}
-                    resDay={resDay}
-                    setResDay={resDay}
-                  />
-                )}
                 <button
                   className="button-wrap"
-                  onClick={() => handleReserve(item.hotel_room_nm)}
+                  onClick={() => handleroomselect(item.hotel_room_nm)}
                   // selectedRoom = {selectedRoom}
                   // setSelectedRoom={setSelectedRoom}
                 >

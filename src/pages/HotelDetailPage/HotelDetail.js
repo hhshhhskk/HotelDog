@@ -6,6 +6,7 @@ import ReserveForm from "../../components/Detail/Reservation/ReserveForm";
 import RoomType from "../../components/Detail/RoomType";
 
 import "../../styles/Detail/hoteldetail.css";
+import { useLocation } from "react-router";
 // 스크롤 영역
 const ReserveFormScroll = styled.div`
   position: relative;
@@ -13,7 +14,6 @@ const ReserveFormScroll = styled.div`
   left: 360px;
   padding-bottom: 50px;
 `;
-
 // 리뷰 영역
 const ReviewWrap = styled.div`
   position: relative;
@@ -81,6 +81,7 @@ const ReviewTextDesc = styled.div`
 `;
 
 const HotelDetail = ({ detailId, resDay, setResDay }) => {
+  const [selectedRoom, setSelectedRoom] = useState(null);
   // 더미 데이터
   const hotel_option = [
     {
@@ -120,6 +121,16 @@ const HotelDetail = ({ detailId, resDay, setResDay }) => {
   };
 
   const [reserveForm, setReserveForm] = useState(true);
+
+  // // useNaviate 로 전달된 state 를 알아내기
+  // const location = useLocation();
+  // const { state } = location;
+  // // console.log(state.day);
+  // const [resDay, setResDay] = useState(state.day);
+  // // console.log(startDay);
+  // // console.log(endDay);
+
+  // detailId={detailId} resDay={resDay} setResDay={setResDay}
 
   return (
     <div>
@@ -180,7 +191,13 @@ const HotelDetail = ({ detailId, resDay, setResDay }) => {
           })}
         </div>
         {/* 객실 영역 */}
-        <RoomType detailId={detailId} resDay={resDay} setResDay={setResDay} />
+        <RoomType
+          detailId={detailId}
+          resDay={resDay}
+          setResDay={setResDay}
+          selectedRoom={selectedRoom}
+          setSelectedRoom={setSelectedRoom}
+        />
         {/* 숙소 후기 영역 */}
         <ReviewWrap>
           <ReviewHeader>
@@ -222,8 +239,15 @@ const HotelDetail = ({ detailId, resDay, setResDay }) => {
         </ReviewWrap>
         {/* <Calendar /> */}
       </ReserveFormScroll>
-      {/* 우측 픽스 영역
-      <div className="reserveform-fixed"><ReserveForm /></div> */}
+      {/* 우측 픽스 영역 */}
+      <div className="reserveform-fixed">
+        <ReserveForm
+          selectedRoom={selectedRoom}
+          detailId={detailId}
+          resDay={resDay}
+          setResDay={setResDay}
+        />
+      </div>
     </div>
   );
 };
