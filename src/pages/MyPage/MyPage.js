@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import Member from "./Member";
 import Password from "../../components/MyPage/Member/Password";
 import Mydog from "./Mydog";
-import LikeList from "../../components/MyPage/LikeList";
-import Review from "../../components/MyPage/Review";
+import LikeList from "./LikeList";
+import Review from "./Review";
 import Booking from "./Booking";
 
 const MyPageWrap = styled.div`

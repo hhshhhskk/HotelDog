@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 import React from "react";
+import HotelLike from "../../components/Common/HotelLike";
+import HotelCardForm from "../../components/Common/HotelCardForm";
 
 const BookingPage = styled.div`
   margin-left: 85px;
@@ -75,6 +77,8 @@ const LikeList = () => {
         <span>다양한 호텔 상품들을 만나보세요</span>
         <a href="/"> 호텔 목록 보러가기</a>
       </BookingList>
+      <HotelCardForm />
+      <HotelLike />
     </BookingPage>
   );
 };

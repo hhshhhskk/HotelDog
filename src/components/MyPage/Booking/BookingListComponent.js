@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
-import ReserveDate from "../../Common/ReserveDate";
+import BookingDate from "./BookingDate";
+import axios from "axios";
+import jwtAxios from "../../../utils/jwtUtil";
 
 const BookingList = styled.div`
   position: relative;
@@ -98,6 +100,28 @@ const Cancel = styled.button`
 `;
 
 const BookingListComponent = ({ bookingData }) => {
+  // 상태 설정
+  const [bookings, setBookings] = useState([]);
+
+  useEffect(() => {
+    const fetchBookingData = async () => {
+      try {
+        // Axios를 사용하여 API에서 데이터 가져오기
+        const response = await jwtAxios.get("/api/reservation");
+
+        // API 응답에서 데이터 추출
+        const data = response.data;
+
+        // 데이터를 상태로 설정
+        setBookings(data);
+      } catch (error) {
+        console.error("데이터를 불러오는 중 오류 발생:", error);
+      }
+    };
+
+    // 데이터 불러오기 함수 호출
+    fetchBookingData();
+  }, []); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때만 실행되도록 함
   return (
     <>
       {bookingData.map((booking, index) => (
@@ -113,7 +137,7 @@ const BookingListComponent = ({ bookingData }) => {
               />
             </BookingLeft>
             <BookingRight>
-              <ReserveDate />
+              <BookingDate />
               <BookInfo>
                 <Line />
                 <span>예약 정보</span>
