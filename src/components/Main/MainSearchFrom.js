@@ -182,7 +182,7 @@ const MainSearchFrom = ({ changeSelectDay }) => {
     window.scrollTo({ top: 1550, behavior: "smooth" });
   };
 
-  // [수정예정] 데이터 연동 시 삭제
+  // [수정예정임] 데이터 연동 시 삭제
   const locationOption = ["서울특별시", "대구광역시"];
 
   return (
