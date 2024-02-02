@@ -4,13 +4,8 @@ import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/Detail/reserveformstyle.css";
 import ReserveDate from "../../Common/ReserveDate";
-// 반려견 정보 초기값
-const initState = {
-  dogname: "",
-  dogage: "",
-  dogsize: "",
-  dogdesc: "",
-};
+import Calendar from "../../Common/Calendar";
+
 const ReserveFormFixed = styled.div`
   position: fixed;
   width: 420px;
@@ -26,15 +21,18 @@ const ReserveFormFixed = styled.div`
     overflow-y: auto;
   }
 `;
-
+// 반려견 정보 초기값
+const initState = {
+  dogname: "",
+  dogage: "",
+  dogsize: "",
+  dogdesc: "",
+};
 const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
   const navigate = useNavigate();
   const handleMoveCompletedPage = e => {
     navigate("/reservecomplete");
   };
-
-  const [dogInfo, setDogInfo] = useState(initState);
-  const [dogDesc, setDogDesc] = useState(""); // textarea의 값을 저장할 상태
 
   const [showDogSizeOptions, setShowDogSizeOptions] = useState(false); // 강아지 크기 옵션 표시 여부를 관리하는 상태
   const dogSizeOptionsRef = useRef(null); // ul 요소의 ref 설정
@@ -63,24 +61,46 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
   const handleDogSizeButtonClick = () => {
     setShowDogSizeOptions(!showDogSizeOptions);
   };
+  const [dogInfo, setDogInfo] = useState(initState);
+  // const [dogDesc, setDogDesc] = useState(""); // textarea의 값을 저장할 상태
+  const handleChange = e => {
+    dogInfo[e.target.name] = e.target.value;
+    setDogInfo({ ...dogInfo });
+    //  setDogDesc(e.target.value); // textarea의 값 변경 시 상태 업데이트
+    console.log(dogInfo);
+  };
+  // form 제출
+  const handleSubmit = e => {
+    e.preventDefault();
+    // 예약 중인 객실로 담아지도록 함수 구현해야함.
+    // dogInfo[e.target.name] = e.target.value;
+    setDogInfo({ ...dogInfo });
+    console.log(dogInfo);
+    // setDogDesc("");
+    // setDogInfo("");
+    // setDogInfo(initState);
+  };
 
   const [selectedDogSize, setSelectedDogSize] = useState(""); // 선택된 강아지 크기를 저장하는 상태
   const handleDogSizeSelect = size => {
-    setSelectedDogSize(size); // 선택된 강아지 크기를 상태에 저장
-    setShowDogSizeOptions(false); // 옵션을 선택하면 옵션 창을 닫음
-  };
+    // 선택된 강아지 크기가 현재 선택한 크기와 같으면 초기화
+    if (selectedDogSize === size) {
+      setSelectedDogSize(""); // 선택된 강아지 크기 초기화
+      setDogInfo(prevState => ({
+        ...prevState,
+        dogsize: "", // dogsize 초기화
+      }));
+    } else {
+      setSelectedDogSize(size); // 선택된 강아지 크기를 상태에 저장
+      setShowDogSizeOptions(false); // 옵션을 선택하면 옵션 창을 닫음
 
-  // form 제출
-  const handleSubmit = e => {
-    // 새로 고침 막기
-    e.preventDefault();
-    // input 및 textarea 초기화
-    setDogInfo(initState);
-    setDogDesc("");
-    // 예약 중인 객실로 담아지도록 함수 구현해야함.
-
-    dogInfo[e.target.name] = e.target.value;
-    setDogInfo({ ...dogInfo });
+      // 선택된 강아지 크기를 dogInfo에 저장
+      setDogInfo(prevState => ({
+        ...prevState,
+        dogsize: size,
+      }));
+      console.log(dogInfo.dogsize);
+    }
   };
   const formDataArray = [
     {
@@ -95,21 +115,28 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
       key: "dogsize",
       value: dogInfo.dogsize,
     },
-
     {
       key: "dogdesc",
       value: dogInfo.dogdesc,
     },
   ];
+  const [reservedList, setReservedList] = useState([]);
 
-  const handleChange = e => {
-    dogInfo[e.target.name] = e.target.value;
-    setDogInfo({ ...dogInfo });
-
-    //  setDogDesc(e.target.value); // textarea의 값 변경 시 상태 업데이트
-    console.log(e);
-    console.log(dogInfo);
+  const removeFromReservedList = () => {
+    const updatedList = [...reservedList];
+    updatedList.pop(); // 리스트의 마지막 항목을 제거
+    setReservedList(updatedList);
   };
+
+  // 후기 모달 관련
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const handleMoveCalendar = () => {
+    setCalendarOpen(true);
+    document.body.style.overflow = "hidden";
+
+    console.log(calendarOpen);
+  };
+
   return (
     <ReserveFormFixed>
       <div className="reserveform">
@@ -131,10 +158,21 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
             />
 
             {/* 체크 인/아웃 선택 영역 */}
+            {calendarOpen && (
+              <Calendar
+                // props로 상태 전달
+                // setReviewModalOpen 함수. reviewModalOpen은 변수
+                calendarOpen={calendarOpen}
+                setCalendarOpen={setCalendarOpen}
+              />
+            )}
             <ReserveDate
               detailId={detailId}
               resDay={resDay}
               setResDay={setResDay}
+              onClick={() => {
+                handleMoveCalendar();
+              }}
             />
           </div>
 
@@ -272,9 +310,11 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
 
                 <textarea
                   name="dogdesc"
-                  value={dogDesc}
+                  // 진짜 얘가 문제네. 있으니 textarea 가 안써지네.
+                  // value={dogInfo.dogdesc}
                   onChange={e => {
-                    setDogDesc(e.target.value);
+                    // setDogDesc(e.target.value);
+                    handleChange(e);
                   }}
                   className="dog-input-textarea"
                   placeholder="특이사항 및 요청 사항을 입력해 주세요."
@@ -312,15 +352,15 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
           />
           {/* 선택된 예약 목록 출력 */}
           <div>
-            {formDataArray.map(item => {
-              return (
-                <p key={item.key}>
-                  {item.value}/{selectedRoom}
-                </p>
-              );
-            })}
+            <p className="reserved-list">
+              {resDay.startDay}~{resDay.endDay}/{dogInfo.dogname}/{selectedRoom}
+            </p>
             {/* button */}
-            <button type="button" className="reserve_bt_plus">
+            <button
+              type="button"
+              className="reserve_bt_plus"
+              onClick={removeFromReservedList}
+            >
               <img
                 src={`${process.env.PUBLIC_URL}/images/bt_plus.svg`}
                 alt=""
@@ -331,7 +371,7 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
           <div>
             <span className="reserved-price">
               <b>총 금액</b>
-              {}원
+              {/* {selectedRoom.hotel_room_cost}원 */}
             </span>
           </div>
 

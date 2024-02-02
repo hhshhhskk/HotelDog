@@ -207,3 +207,10 @@ input::-webkit-inner-spin-button {
   cursor: pointer;
   border-radius: 2px;
 }
+
+/* 예약 중인 객실 영역 */
+.reserved-list {
+  position: relative;
+  font-size: 13px;
+  font-weight: 500;
+}

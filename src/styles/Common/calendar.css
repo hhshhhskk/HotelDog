@@ -24,6 +24,8 @@
   justify-content: center;
   align-items: center;
   background-color: #fff;
+
+  /* cursor: pointer; */
 }
 .calendar_header {
   position: relative;
@@ -36,7 +38,7 @@
 .calendar_header-img {
   position: relative;
   width: 20px;
-  
+
   height: 23px;
   margin-right: 10px;
 }
