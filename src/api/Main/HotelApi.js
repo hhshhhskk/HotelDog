@@ -21,16 +21,7 @@ const removeEmptyValues = obj => {
 // 호텔 전체 리스트 API
 export const postHotelListAPI = async ({ page, setHotelListData }) => {
   try {
-    // const res = await jwtAxios({
-    //   method: "post",
-    //   url: `/api/hotel?page=${page}
-    //   `,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
     const parseData = removeEmptyValues(setHotelListData);
-
     const header = { headers: { "Content-Type": "application/json" } };
     // console.log("최지은 : 페이지 정보 호출 ", setHotelListData);
     // console.log("정리된 데이터 : ", parseData);
