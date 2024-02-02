@@ -53,13 +53,13 @@ const HotelCardForm = ({ hotel, handleSelectGo }) => {
           />
           {/* 북마크 넘겨주거나 컴포넌트를 해지해야 함. */}
           {/* <HotelLike /> */}
-          {/* <BookMarkImgDiv onClick={toggleBookMark}>
-            {bookMark ? (
+          <BookMarkImgDiv onClick={toggleBookMark}>
+            {hotel.bookMark === 1 ? (
               <img src={`${process.env.PUBLIC_URL}/images/like_after.svg`} />
             ) : (
               <img src={`${process.env.PUBLIC_URL}/images/like_before.svg`} />
             )}
-          </BookMarkImgDiv> */}
+          </BookMarkImgDiv>
         </HotelImgDiv>
 
         <HotelContentsDiv onClick={() => handleSelectGo(hotel.hotel_pk)}>
@@ -81,7 +81,7 @@ const HotelCardForm = ({ hotel, handleSelectGo }) => {
                 </OriginalPrice>
                 <FinalPriceDiv>
                   <FinalPrice>
-                    {salePrice(hotel.price, hotel.discount_per)}
+                    {salePrice(hotel.hotelRoomCost, hotel.discount_per)}
                   </FinalPrice>
                   <Unit>원~</Unit>
                   <OneNight>/1박</OneNight>
