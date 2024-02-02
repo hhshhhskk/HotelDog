@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/Detail/reserveformstyle.css";
 import ReserveDate from "../../Common/ReserveDate";
+import Calendar from "../../Common/Calendar";
 
 const ReserveFormFixed = styled.div`
   position: fixed;
@@ -127,6 +128,15 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
     setReservedList(updatedList);
   };
 
+  // 후기 모달 관련
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const handleMoveCalendar = () => {
+    setCalendarOpen(true);
+    document.body.style.overflow = "hidden";
+
+    console.log(calendarOpen);
+  };
+
   return (
     <ReserveFormFixed>
       <div className="reserveform">
@@ -148,10 +158,21 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
             />
 
             {/* 체크 인/아웃 선택 영역 */}
+            {calendarOpen && (
+              <Calendar
+                // props로 상태 전달
+                // setReviewModalOpen 함수. reviewModalOpen은 변수
+                calendarOpen={calendarOpen}
+                setCalendarOpen={setCalendarOpen}
+              />
+            )}
             <ReserveDate
               detailId={detailId}
               resDay={resDay}
               setResDay={setResDay}
+              onClick={() => {
+                handleMoveCalendar();
+              }}
             />
           </div>
 

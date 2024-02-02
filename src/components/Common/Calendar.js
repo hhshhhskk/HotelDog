@@ -23,7 +23,7 @@ export const getCurrentDate = () => {
   return `${year}-${month}-${day}`;
 };
 
-const Calendar = ({ calendarClose }) => {
+const Calendar = ({ calendarClose, calendarOpen, setCalendarOpen }) => {
   const [selectDay, setSelectDay] = useState([
     {
       startDate: new Date(),

@@ -1,11 +1,15 @@
 import styled from "@emotion/styled";
 import React from "react";
-const CalendarSelectWrap = styled.div`
+const CalendarSelectWrap = styled.button`
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 10px;
+
+  cursor: pointer;
+  border: none;
+  background-color: #fff;
 `;
 const CalendarSelectLeft = styled.div`
   position: relative;
