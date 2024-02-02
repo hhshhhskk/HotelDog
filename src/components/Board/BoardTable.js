@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import {
@@ -78,6 +78,8 @@ const BoardTd = styled.td`
 
 function BoardTable({ nowPage, setTotalPage, cateNum }) {
   const rows = ["번호", "카테고리", "제목", "작성자", "날짜", "조회수"];
+  const [selectAll, setSelectAll] = useState(false);
+
   const navigate = useNavigate();
 
   const { data, isSuccess } = useQuery(["boardList", cateNum, nowPage], () => {
@@ -161,7 +163,12 @@ function BoardTable({ nowPage, setTotalPage, cateNum }) {
         <BoardTr tr="head">
           {cateNum >= 5 && (
             <BoardTh idx={6}>
-              <input type="checkbox" name="select" value="select" />
+              <input
+                type="checkbox"
+                checked={selectAll}
+                name="select"
+                value="select"
+              />
             </BoardTh>
           )}
           {rows.map((item, idx) => (
