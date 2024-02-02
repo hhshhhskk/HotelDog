@@ -21,13 +21,18 @@ import {
 import HotelLike from "./HotelLike";
 
 const HotelCardForm = ({ hotel, handleSelectGo }) => {
+  // console.log(hotel);
   // !!!초기값은 데이터 불러오면 변경 예정
   const [bookMark, setBookMark] = useState(hotel.book_mark);
   const toggleBookMark = () => setBookMark(prev => !prev);
 
   // 가격 천단위 표시
   const formatNumber = number => {
-    return number.toLocaleString();
+    if (number) {
+      return number.toLocaleString();
+    } else {
+      return 0;
+    }
   };
   // 호텔 할인가 계산식
   const salePrice = (originalPrice, sale) => {
@@ -40,42 +45,43 @@ const HotelCardForm = ({ hotel, handleSelectGo }) => {
 
   return (
     <>
-      {/* [수정 예정] 컴포넌트를 쓰는 페이지에서 데이터를 받아 올 수 있게 변경*/}
       <HotelCardDiv>
         <HotelImgDiv>
           <img
-            src={hotel.hotel_pic}
+            src={`http://112.222.157.156:5222/pic/hotel/${hotel.hotel_pk}/${hotel.hotel_pic}`}
             onClick={() => handleSelectGo(hotel.hotel_pk)}
           />
           {/* 북마크 넘겨주거나 컴포넌트를 해지해야 함. */}
           {/* <HotelLike /> */}
-          <BookMarkImgDiv onClick={toggleBookMark}>
+          {/* <BookMarkImgDiv onClick={toggleBookMark}>
             {bookMark ? (
               <img src={`${process.env.PUBLIC_URL}/images/like_after.svg`} />
             ) : (
               <img src={`${process.env.PUBLIC_URL}/images/like_before.svg`} />
             )}
-          </BookMarkImgDiv>
+          </BookMarkImgDiv> */}
         </HotelImgDiv>
 
         <HotelContentsDiv onClick={() => handleSelectGo(hotel.hotel_pk)}>
           <TitleDiv>
-            <HotelName>{hotel.hotel_name}</HotelName>
+            <HotelName>{hotel.hotel_nm}</HotelName>
             <HotelEvaluationDiv>
-              <Star>★ {hotel.hotel_star}</Star>
+              <Star>★ {hotel.avgStar}</Star>
               {/* 데이터에 리뷰수 누락 */}
               <Review>({formatNumber(hotel.review_count)})</Review>
             </HotelEvaluationDiv>
           </TitleDiv>
-          <HotelAddress>{hotel.hotel_address}</HotelAddress>
+          <HotelAddress>{hotel.address_name}</HotelAddress>
           <HotelPriceDiv>
-            {hotel.hotel_discount_per ? (
+            {hotel.discount_per ? (
               <>
-                <Discount>{hotel.hotel_discount_per}%</Discount>
-                <OriginalPrice>{formatNumber(hotel.price)}</OriginalPrice>
+                <Discount>{hotel.discount_per}%</Discount>
+                <OriginalPrice>
+                  {formatNumber(hotel.hotelRoomCost)}
+                </OriginalPrice>
                 <FinalPriceDiv>
                   <FinalPrice>
-                    {salePrice(hotel.price, hotel.hotel_discount_per)}
+                    {salePrice(hotel.price, hotel.discount_per)}
                   </FinalPrice>
                   <Unit>원~</Unit>
                   <OneNight>/1박</OneNight>
@@ -83,7 +89,7 @@ const HotelCardForm = ({ hotel, handleSelectGo }) => {
               </>
             ) : (
               <FinalPriceDiv>
-                <FinalPrice>{formatNumber(hotel.price)}</FinalPrice>
+                <FinalPrice>{formatNumber(hotel.hotelRoomCost)}</FinalPrice>
                 <Unit>원~</Unit>
                 <OneNight>/1박</OneNight>
               </FinalPriceDiv>

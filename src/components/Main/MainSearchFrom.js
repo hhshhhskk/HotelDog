@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import {
   ChoiceDiv,
   ChoiceOptionDiv,
@@ -29,7 +29,11 @@ import {
 } from "../../styles/MainPageStyle/MainSearchFromStyle";
 import Calendar, { getCurrentDate } from "../Common/Calendar";
 
-const MainSearchFrom = ({ searchValue, changeSelectDay }) => {
+const MainSearchFrom = ({
+  searchValue,
+  changeSelectDay,
+  setSaveSearchData,
+}) => {
   // calendar 현재 날짜 불러오기
   const currentDate = getCurrentDate();
 
@@ -37,7 +41,7 @@ const MainSearchFrom = ({ searchValue, changeSelectDay }) => {
   const [locationValue, setLocationValue] = useState("지역을 선택해주세요");
   const [calendarValue, setCalendarValue] = useState(`${currentDate}`);
   const [dogValue, setDogValue] = useState("사이즈 / 마리");
-  const [filterValue, setFilterValue] = useState();
+  const [filterValue, setFilterValue] = useState(0);
 
   // 드롭다운 useState
   const [locationDropdown, setLocationDropdown] = useState(false);
@@ -53,10 +57,11 @@ const MainSearchFrom = ({ searchValue, changeSelectDay }) => {
     setFilterDropdown(dropdownType === "filter");
   };
   const handleCLickSubmit = () => {
-    setLocationDropdown(false);
-    setCalendarDropdown(false);
-    setDogDropdown(false);
-    setFilterDropdown(false);
+    // setLocationDropdown(false);
+    // setCalendarDropdown(false);
+    // setDogDropdown(false);
+    // setFilterDropdown(false);
+    allHide();
   };
   const handleCLickLocationSelect = () => handleDropdownSelect("location");
   const handleCLickCalendarSelect = () => handleDropdownSelect("calendar");
@@ -66,7 +71,8 @@ const MainSearchFrom = ({ searchValue, changeSelectDay }) => {
   // 캘린더에서 날짜 선택 시 적용
   const calendarClose = (_sd, _ed) => {
     changeSelectDay(_sd, _ed);
-    setCalendarDropdown(false);
+    allHide();
+    // setCalendarDropdown(false);
   };
 
   // [수정예정임] 데이터 연동 시 삭제
@@ -95,7 +101,17 @@ const MainSearchFrom = ({ searchValue, changeSelectDay }) => {
     const location = e.target.innerText;
     setLocationValue(location);
     // ???드롭다운 닫기 왜 안 먹히지
+    // setLocationDropdown(false);
+    allHide();
+  };
+
+  // 전체 목록 닫기
+  const allHide = () => {
+    console.log("모두 닫아요..");
     setLocationDropdown(false);
+    setCalendarDropdown(false);
+    setDogDropdown(false);
+    setFilterDropdown(false);
   };
 
   // 반려견 마리수 증감에 따른 연산
@@ -154,6 +170,8 @@ const MainSearchFrom = ({ searchValue, changeSelectDay }) => {
 
   // [수정예정] 검색폼 데이터 전송을 위한 작업
   const handleSubmit = e => {
+    console.log("선택완료");
+
     if (totalDogCount === 0) {
       alert(`반려견을 최소 1마리 이상 선택해주세요.`);
       e.preventDefault();
@@ -161,19 +179,44 @@ const MainSearchFrom = ({ searchValue, changeSelectDay }) => {
     }
 
     // 0131 : 어떻게 전달할지만 결정하면 될듯합니다.
-    console.log(selectRadio);
-    console.log(selectFilter);
+    let optionValue = [];
+    // console.log("selectFilter", selectFilter);
+    if (selectFilter[0] === "수영장") {
+      optionValue.push(1);
+    }
+    if (selectFilter[1] === "운동장") {
+      optionValue.push(2);
+    }
+    if (selectFilter[2] === "수제식") {
+      optionValue.push(3);
+    }
+    if (selectFilter[3] === "셔틀운행") {
+      optionValue.push(4);
+    }
+    console.log("selectRadio", selectRadio);
+    if (selectRadio["프로그램"] === "yes") {
+      optionValue.push(5);
+    }
+    if (selectRadio["산책"] === "yes") {
+      optionValue.push(6);
+    }
+    if (selectRadio["미용"] === "yes") {
+      optionValue.push(7);
+    }
+
+    // console.log("optionValue", optionValue);
 
     e.preventDefault();
+
     const formData = {
       address: locationValue,
-      search: searchValue, // 헤더에서 props로 받아오기?
+      search: searchValue ? searchValue : "", // 헤더에서 props로 받아오기?
       main_filter: 0, // (필수)메인필터 값이 하나라도 있으면 1 아닐 시 0
       from_date: "", // (필수)2023-01-01 형식으로 전송
-      to_date: "",
+      to_date: "", // (필수)2023-01-01 형식으로 전송
       dog_info: dogInfo, // (필수)
-      hotel_option_pk: [],
-      filter_type: 0, // [props] 정렬방식 (0 추천순, 1 별점순, 2 리뷰순)
+      hotel_option_pk: optionValue,
+      filter_type: filterValue, // [props] 정렬방식 (0 추천순, 1 별점순, 2 리뷰순)
     };
 
     // 필터폼 데이터가 하나라도 있으면
@@ -188,6 +231,7 @@ const MainSearchFrom = ({ searchValue, changeSelectDay }) => {
     }
 
     console.log(formData);
+    setSaveSearchData(formData);
     // 필터 적용된 호텔 리스트로 이동
     window.scrollTo({ top: 1550, behavior: "smooth" });
   };

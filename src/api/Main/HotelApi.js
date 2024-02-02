@@ -1,16 +1,50 @@
 import jwtAxios from "../../utils/jwtUtil";
 
 // 호텔 전체 리스트 API(POST)
-export const hotelListAPI = async ({ page, setHotelListData }) => {
+const removeEmptyValues = obj => {
+  for (var prop in obj) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (obj.hasOwnProperty(prop)) {
+      if (
+        obj[prop] === null ||
+        obj[prop] === undefined ||
+        obj[prop] === "" ||
+        (typeof obj[prop] === "object" && Object.keys(obj[prop]).length === 0)
+      ) {
+        delete obj[prop];
+      }
+    }
+  }
+  return obj;
+};
+export const postHotelListAPI = async ({ page, setHotelListData }) => {
   try {
-    const res = await jwtAxios({
-      method: "post",
-      url: `/api/hotel?page=${page}
-      `,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    // const res = await jwtAxios({
+    //   method: "post",
+    //   url: `/api/hotel?page=${page}
+    //   `,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+
+    // {
+    //   "address": "",
+    //   "search": "",
+    //   "main_filter": 0,
+    //   "from_date": "",
+    //   "to_date": "",
+    //   "dog_info": [],
+    //   "hotel_option_pk": [],
+    //   "filter_type": 0
+    // }
+
+    const parseData = removeEmptyValues(setHotelListData);
+
+    const header = { headers: { "Content-Type": "application/json" } };
+    console.log("최지은 : 페이지 정보 호출 ", setHotelListData);
+    console.log("정리된 데이터 : ", parseData);
+    const res = await jwtAxios.post(`/api/hotel?page=${page}`, parseData);
     return res.data;
   } catch (error) {
     console.log(error);
