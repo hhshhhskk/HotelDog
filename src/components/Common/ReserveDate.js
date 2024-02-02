@@ -45,12 +45,12 @@ const CalendarSelectDate = styled.div`
   font-weight: 700;
   color: #654222;
 `;
-const ReserveDate = ({ resDay }) => {
+const ReserveDate = ({ resDay, handleMoveCalendar }) => {
   // const startDay = resDay.startDay;
   // const endDay = resDay.endDay;
   // console.log(resDay);
   return (
-    <CalendarSelectWrap>
+    <CalendarSelectWrap onClick={handleMoveCalendar}>
       <CalendarSelectLeft>
         <CalendarText>
           <CalendarSelectTitle>체크인</CalendarSelectTitle>

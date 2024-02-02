@@ -150,6 +150,17 @@ const SignUpBtn = styled.span`
   cursor: pointer;
 `;
 
+// 상요자 정보
+// {
+//   "userEmail": "testid@naver.com",
+//   "upw": "test123"
+// }
+
+// {
+//   "userEmail": "testid2@naver.com",
+//   "upw": "test123"
+// }
+
 // 로그인 페이지
 const LoginPage = () => {
   const {
@@ -164,7 +175,6 @@ const LoginPage = () => {
   const { doLogin, moveToPath } = useCustomLogin();
 
   const saveClicked = () => {
-    console.log(idSaved);
     if (idSaved === true) {
       //로컬스토리지에 아이디 제거
       localStorage.removeItem("savedId");
@@ -243,6 +253,7 @@ const LoginPage = () => {
                     })}
                     defaultValue={savedId ? savedId : ""}
                     placeholder="아이디 (example@gmail.com)"
+                    value="testid2@naver.com"
                   />
                   <LoginInput
                     {...register("password", {
@@ -250,6 +261,7 @@ const LoginPage = () => {
                     })}
                     type="password"
                     placeholder="비밀번호"
+                    value="test123"
                   />
                 </InputDiv>
                 <LoginBtn>로그인</LoginBtn>

@@ -1,87 +1,23 @@
-import styled from "@emotion/styled";
-import React, { useEffect, useState } from "react";
-import Calendar from "../../components/Common/Calendar";
+import React, { useEffect, useRef, useState } from "react";
 import HotelReview from "../../components/Detail/HotelReview";
 import ReserveForm from "../../components/Detail/Reservation/ReserveForm";
 import RoomType from "../../components/Detail/RoomType";
-
 import "../../styles/Detail/hoteldetail.css";
-import { useLocation } from "react-router";
-// 스크롤 영역
-const ReserveFormScroll = styled.div`
-  position: relative;
-  width: 590px;
-  left: 360px;
-  padding-bottom: 50px;
-`;
-// 리뷰 영역
-const ReviewWrap = styled.div`
-  position: relative;
-  margin-top: 72px;
-`;
-const ReviewHeader = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin-bottom: 14px;
-`;
-const ReviewTitle = styled.div`
-  position: relative;
-  font-size: 16px;
-  color: #000;
-  font-weight: 600;
-  margin-bottom: 4px;
-  line-height: normal;
-`;
-const ReviewDetailStar = styled.img`
-  position: relative;
-  width: 18px;
-  height: 18px;
-  margin-right: 9px;
-  display: flex;
-`;
-const ReviewLine = styled.img`
-  position: relative;
-  margin-bottom: 22px;
-`;
-const ReviewText = styled.div`
-  position: relative;
-  left: 30px;
+import {
+  ReserveFormScroll,
+  ReviewDetailStar,
+  ReviewHeader,
+  ReviewLine,
+  ReviewText,
+  ReviewTextDesc,
+  ReviewTextMoreBt,
+  ReviewTitle,
+  ReviewWrap,
+} from "../../styles/Detail/hoteldetailStyle";
 
-  width: 560px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-`;
-const ReviewTextMoreBt = styled.button`
-  position: relative;
-  font-size: 14px;
-  color: #000;
-  font-weight: 500;
-  line-height: normal;
-
-  background-color: #fff;
-  border: 0;
-
-  cursor: pointer;
-`;
-const ReviewTextDesc = styled.div`
-  position: relative;
-  font-size: 12px;
-  font-weight: 400;
-  color: #000;
-  line-height: normal;
-
-  width: 450px;
-
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-`;
-
-const HotelDetail = ({ detailId, resDay, setResDay }) => {
+const HotelDetail = ({ hotelList, detailId, resDay, setResDay }) => {
   const [selectedRoom, setSelectedRoom] = useState(null);
+  console.log("HotelDetail =========== : ", hotelList);
   // 더미 데이터
   const hotel_option = [
     {
@@ -117,7 +53,7 @@ const HotelDetail = ({ detailId, resDay, setResDay }) => {
 
   const handleMoveReviewModal = () => {
     setReviewModalOpen(true);
-    document.body.style.overflow = "hidden";
+    // document.body.style.overflow = "hidden";
   };
 
   const [reserveForm, setReserveForm] = useState(true);
@@ -132,6 +68,24 @@ const HotelDetail = ({ detailId, resDay, setResDay }) => {
 
   // detailId={detailId} resDay={resDay} setResDay={setResDay}
 
+  const [reserveFormVisible, setReserveFormVisible] = useState(false);
+  useEffect(() => {
+    window.addEventListener("scroll", scrollEvent);
+    return () => window.removeEventListener("scroll", scrollEvent);
+  }, []);
+
+  const scrollEvent = () => {
+    // 현재 스크롤 위치를 가져오기
+    const scrollTop = window.pageYOffset;
+    // const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    console.log("현재 스크롤 위치:", scrollTop);
+    if (scrollTop > 150 && scrollTop < 1000) {
+      setReserveFormVisible(true);
+    } else {
+      setReserveFormVisible(false);
+    }
+    // 스크롤 이벤트에 대한 추가 처리를 여기에 작성
+  };
   return (
     <div>
       {/* 좌측 스크롤 영역 */}
@@ -140,16 +94,19 @@ const HotelDetail = ({ detailId, resDay, setResDay }) => {
         <div>
           <img
             className="hotelrepresentive-bigimg"
-            src={`${process.env.PUBLIC_URL}/images/hotelDetail/hotelRepresentiveImg.svg`}
+            src={`http://112.222.157.156:5222/pic/hotel/${detailId}/${hotelList.hotel_info_vo.pics[0]}`}
             alt=""
           />
           <div className="hotelrepresentive-smallimg-wrap">
             {/* !!!!!!!! 호텔 상세 작은 이미지 map 뿌려야함 */}
-            <img
-              className="hotelrepresentive-smallimg"
-              src={`${process.env.PUBLIC_URL}/images/hotelDetail/hotelsmallRepresentiveImg.svg`}
-              alt=""
-            />
+            {hotelList.hotel_info_vo.pics.map((item, index) => (
+              <img
+                key={index}
+                className="hotelrepresentive-smallimg"
+                src={`http://112.222.157.156:5222/pic/hotel/${detailId}/${hotelList.hotel_info_vo.pics[index]}`}
+                alt=""
+              />
+            ))}
           </div>
 
           <div>
@@ -239,15 +196,23 @@ const HotelDetail = ({ detailId, resDay, setResDay }) => {
         </ReviewWrap>
         {/* <Calendar /> */}
       </ReserveFormScroll>
+
       {/* 우측 픽스 영역 */}
-      <div className="reserveform-fixed">
+      {/* <div> */}
+      {reserveFormVisible && (
         <ReserveForm
           selectedRoom={selectedRoom}
           detailId={detailId}
           resDay={resDay}
           setResDay={setResDay}
+          className={
+            reserveFormVisible
+              ? "reserveForm"
+              : "reserveForm reserveForm-hidden"
+          }
         />
-      </div>
+      )}
+      {/* </div> */}
     </div>
   );
 };

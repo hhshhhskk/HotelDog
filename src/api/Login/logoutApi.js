@@ -12,6 +12,6 @@ export const logoutAPI = async () => {
     });
   } catch (error) {
     // 오류가 발생했을 때의 처리
-    alert(error.response.data.message);
+    alert("로그아웃 되었습니다.");
   }
 };

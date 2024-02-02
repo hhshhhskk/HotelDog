@@ -7,9 +7,16 @@
   justify-content: center;
   border: 1px solid #9c9c9c;
 
-  box-shadow: 0px 0px 10px 0px rgba(101, 66, 34, 0.15);
+  box-shadow: 0px 0px 10px 0px rgba(101, 66, 34, 0.25);
   border-radius: 10px;
+
+  transition: opacity 1s ease-in-out; /* opacity 속성에 대한 애니메이션 적용 */
+  opacity: 1; /* 초기값 설정 */
 }
+.reserveForm-hidden {
+  opacity: 0; /* reserveFormVisible이 false일 때 투명도를 0으로 설정하여 사라지는 애니메이션 적용 */
+}
+
 .reserveform-margin {
   position: relative;
   margin: 25px 50px 0px 50px;
@@ -37,10 +44,10 @@
   margin-bottom: 11px;
   border: 0;
 
-  box-shadow: 0px 0px 10px 0px rgba(101, 66, 34, 0.1);
+  box-shadow: 0px 0px 10px 0px rgba(101, 66, 34, 0.25);
   background-color: #654222;
   font-size: 18px;
-  /* font-weight: 600; */
+  font-weight: 600;
   color: #fff;
   cursor: pointer;
   border-radius: 5px;
@@ -69,19 +76,21 @@
   position: relative;
   display: inline;
   font-size: 16px;
-  /* font-weight: 600; */
+  font-weight: 600;
   color: #654222;
 }
 /* 담은 객실 영역 */
 .reserved-wrap {
-  position: relative;
+  position: sticky;
   width: 420px;
   min-height: 220px;
   margin-top: 25px;
   border: 1px solid #9c9c9c;
-  box-shadow: 0px 0px 10px 0px rgba(101, 66, 34, 0.1);
+  box-shadow: 0px 0px 10px 0px rgba(101, 66, 34, 0.25);
   border-radius: 10px;
   /* margin-bottom: 1000px; */
+  /* top: 1000px; */
+  /* z-index: 2; */
 }
 .reserved-margin {
   position: relative;
@@ -213,4 +222,9 @@ input::-webkit-inner-spin-button {
   position: relative;
   font-size: 13px;
   font-weight: 500;
+}
+.reserved-list-wrap {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
 }

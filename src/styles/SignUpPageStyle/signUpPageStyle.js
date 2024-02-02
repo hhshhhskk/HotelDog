@@ -75,7 +75,7 @@ export const InnerDiv = styled.div`
 export const InnerBtn = styled.div`
   position: absolute;
   top: 36px;
-  right: 10px;
+  right: 5px;
   width: 80px;
   height: 30px;
   background-color: #654222;

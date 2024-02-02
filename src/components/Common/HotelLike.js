@@ -16,6 +16,10 @@ const LikeImgDiv = styled.div`
   }
 `;
 
+const initData = {
+  result: 0,
+};
+
 const HotelLike = () => {
   // 좋아요 저장 및 업데이트
   // !!!초기값은 데이터 불러오면 변경 예정

@@ -22,9 +22,88 @@ import {
 import HotelCardForm from "../../components/Common/HotelCardForm";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { postHotelListAPI } from "../../api/Main/HotelApi";
+
+// 호텔 전체 리스트 데이터 형식
+const initDataList = {
+  address: "",
+  search: "",
+  main_filter: 0,
+  from_date: "",
+  to_date: "",
+  dog_info: [],
+  hotel_option_pk: [],
+  filter_type: 0,
+};
+
+const initHotellist = {
+  hotel_advertise_list: [
+    {
+      star: 0,
+      price: "",
+      hotel_pk: 0,
+      hotel_nm: "",
+      address_name: "",
+      hotel_pic: "",
+      discount_per: 0,
+      book_mark: 0,
+      review_count: 0,
+    },
+  ],
+  hotel_list: [
+    {
+      star: 0,
+      price: "",
+      hotel_pk: 0,
+      hotel_nm: "",
+      address_name: "",
+      hotel_pic: "",
+      discount_per: 0,
+      book_mark: 0,
+      review_count: 0,
+    },
+  ],
+};
 
 const MainPage = () => {
+  // 전체 호텔 리스트 useState
+  const [hotelListData, setHotelListData] = useState(initDataList);
+  const [getServerListData, setGetServerListData] = useState(initHotellist);
+  // 검색 폼 데이타 관리
+  const [saveSearchData, setSaveSearchData] = useState(null);
+  // 초기 화면 불러오기
+  const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    // console.log("바뀐데이터", saveSearchData);
+    if (saveSearchData) {
+      setHotelListData(saveSearchData);
+    }
+  }, [saveSearchData]);
+
+  // 전체 호텔 리스트 가져오기
+  const getHotelList = async () => {
+    // hotelListAPI(setHotelListData);
+
+    try {
+      const data = await postHotelListAPI({
+        page: 1,
+        setHotelListData: hotelListData,
+        // setHotelListData: hotelListData,
+      });
+      setGetServerListData(data);
+    } catch (error) {
+      console.log(error);
+      // 에러 처리 로직 추가
+    }
+  };
+
+  useEffect(() => {
+    getHotelList();
+  }, [page, hotelListData]);
+
   const navigate = useNavigate();
+
   // 필터 폼 클릭 시 스크롤 이동
   const handleClickForm = () => {
     window.scrollTo({ top: 300, behavior: "smooth" });
@@ -36,6 +115,8 @@ const MainPage = () => {
   //  정렬방식(별점순, 리뷰순) 선택
   const handleChangeSorting = e => {
     const selectedValue = e.target.value;
+    // setFilterValue
+    console.log(selectedValue);
     setSelectSorting(selectedValue);
     filterData(selectedValue);
   };
@@ -44,10 +125,13 @@ const MainPage = () => {
   const filterData = selectedValue => {
     // 선택된 값을 이용해서 데이터 필터링
     console.log("선택된 값 :", selectedValue);
+    console.log("변경전 후 데이터 ", hotelListData);
+    const nowData = { ...hotelListData, filter_type: parseInt(selectedValue) };
+    console.log("선택 후 바뀐 데이터 ", nowData);
+    setHotelListData(nowData);
   };
 
-  // 자식 컴포넍트 즉, calendar 에서 알려줘야 다른 컴포넌트에 전달할 수 있다.
-
+  // 자식 컴포넌트 즉, calendar 에서 알려줘야 다른 컴포넌트에 전달할 수 있다.
   const [reserveDay, setReserveDay] = useState({ startDay: "", endDay: "" });
   const changeSelectDay = (_st, _ed) => {
     console.log("시작", _st);
@@ -86,7 +170,10 @@ const MainPage = () => {
 
           {/* 검색 */}
           <VisualForm onClick={handleClickForm}>
-            <MainSearchFrom changeSelectDay={changeSelectDay} />
+            <MainSearchFrom
+              changeSelectDay={changeSelectDay}
+              setSaveSearchData={setSaveSearchData}
+            />
           </VisualForm>
         </VisualInner>
       </VisualDiv>
@@ -100,7 +187,11 @@ const MainPage = () => {
             <span>핫한 광고 상품을 추천드립니다!</span>
           </AdText>
           <HotelCardDiv>
-            <HotelCardForm handleSelectGo={handleSelectGo} />
+            {getServerListData.hotel_advertise_list?.map((hotel, index) => (
+              <div key={index}>
+                <HotelCardForm hotel={hotel} handleSelectGo={handleSelectGo} />
+              </div>
+            ))}
           </HotelCardDiv>
         </AdListDiv>
 
@@ -113,14 +204,18 @@ const MainPage = () => {
             {/* 필터호텔 정렬방식 */}
             <form>
               <select value={selectSorting} onChange={handleChangeSorting}>
-                <option value="추천순">추천순</option>
-                <option value="별점순">별점순</option>
-                <option value="리뷰순">리뷰순</option>
+                <option value="0">추천순</option>
+                <option value="1">별점순</option>
+                <option value="2">리뷰순</option>
               </select>
             </form>
           </FilterText>
           <HotelCardDiv>
-            <HotelCardForm handleSelectGo={handleSelectGo} />
+            {getServerListData.hotel_list?.map((hotel, index) => (
+              <div key={index}>
+                <HotelCardForm hotel={hotel} handleSelectGo={handleSelectGo} />
+              </div>
+            ))}
           </HotelCardDiv>
           {/* 호텔 더 불러오기 버튼 */}
           <HotelPlusBtDiv>

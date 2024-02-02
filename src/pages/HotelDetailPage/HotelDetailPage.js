@@ -6,7 +6,11 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import HotelDetail from "./HotelDetail";
-import { getOneReservation } from "../../api/Detail/reservationApi";
+import {
+  getHotel,
+  getHotelId,
+  getOneReservation,
+} from "../../api/Detail/hoteldetailApi";
 
 // 호텔 상세페이지
 const HotelDetailPage = () => {
@@ -18,20 +22,39 @@ const HotelDetailPage = () => {
   const location = useLocation();
   const { state } = location;
   console.log(state.day);
-  // const startDay = state.startDay; // 시작일
-  // const endDay = state.endDay; // 종료일
   const [resDay, setResDay] = useState(state.day);
 
-  // console.log(startDay);
-  // console.log(endDay);
+  // jwtAxios 연동
+  // 추가할부분이 userPk, hotelPk, hotelList
+  const [userPk, setUserPk] = useState(detailId);
+  const [hotel_pk, setHotel_pk] = useState(detailId);
+  const [hotelList, setHotelList] = useState([]);
+
+  const reloadgetHotelId = () => {
+    // jwtAxios.get 에서 userPk, hotelPk, setHotelList  호텔 리스트 목록 불러오기
+    console.log("hotel_pk", hotel_pk);
+    getHotelId(hotel_pk, setHotelList);
+  };
+
+  // 화면 준비되면 그때 반영
+  useEffect(() => {
+    reloadgetHotelId();
+  }, []);
 
   return (
     <div>
       <h1>호텔 상세페이지</h1>
       <h2>호텔 고유 번호 : {detailId}</h2>
-
       {/* 호텔 디테일을 HotelDetailPage 에 옮겨야하는지? */}
-      <HotelDetail detailId={detailId} resDay={resDay} setResDay={setResDay} />
+      {hotelList.hotel_info_vo ? (
+        <HotelDetail
+          hotelList={hotelList}
+          detailId={detailId}
+          resDay={resDay}
+          setResDay={setResDay}
+          reloadgetHotelId={reloadgetHotelId}
+        />
+      ) : null}
       {/* <h1>HotelDetailPage pk : {detailId}</h1> */}
     </div>
   );
