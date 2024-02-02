@@ -81,6 +81,9 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
     // setDogInfo(initState);
   };
 
+  // 담기 버튼 클릭 시, 예약 중인 객실에 목록이 뜨도록 해야한다.
+  const handleListPlus = () => {};
+
   const [selectedDogSize, setSelectedDogSize] = useState(""); // 선택된 강아지 크기를 저장하는 상태
   const handleDogSizeSelect = size => {
     // 선택된 강아지 크기가 현재 선택한 크기와 같으면 초기화
@@ -327,7 +330,7 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
             <button
               className="reserve-button"
               type="submit"
-              onClick={handleSubmit}
+              onClick={handleListPlus}
             >
               담기
             </button>
@@ -351,7 +354,8 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
             alt=""
           />
           {/* 선택된 예약 목록 출력 */}
-          <div>
+          <div className="reserved-list-wrap">
+            {}
             <p className="reserved-list">
               {resDay.startDay}~{resDay.endDay}/{dogInfo.dogname}/{selectedRoom}
             </p>
