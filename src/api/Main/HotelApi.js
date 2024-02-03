@@ -1,6 +1,8 @@
+import axios from "axios";
 import jwtAxios from "../../utils/jwtUtil";
+import useCustomLogin from "../../hooks/useCustomLogin";
 
-// 빈 데이터 값은 거르는 작업
+// POST 시에 빈 데이터 값은 거르는 작업
 const removeEmptyValues = obj => {
   for (var prop in obj) {
     // eslint-disable-next-line no-prototype-builtins
@@ -18,14 +20,15 @@ const removeEmptyValues = obj => {
   return obj;
 };
 
-// 호텔 전체 리스트 API
-export const postHotelListAPI = async ({ page, setHotelListData }) => {
+// JWTAxios : 호텔 전체 리스트 API
+export const postJwtHotelListAPI = async ({ page, setHotelListData }) => {
   try {
     const parseData = removeEmptyValues(setHotelListData);
-    const header = { headers: { "Content-Type": "application/json" } };
+    // const header = { headers: { "Content-Type": "application/json" } };
     // console.log("최지은 : 페이지 정보 호출 ", setHotelListData);
     // console.log("정리된 데이터 : ", parseData);
     const res = await jwtAxios.post(`/api/hotel?page=${page}`, parseData);
+    // console.log(res.data);
     return res.data;
   } catch (error) {
     console.log(error);
@@ -33,20 +36,30 @@ export const postHotelListAPI = async ({ page, setHotelListData }) => {
   }
 };
 
-// 호텔 좋아요 마크 API(GET)
-export const hotelMarkAPI = async hotelPk => {
+// Axios : 호텔 전체 리스트 API
+export const postHotelListAPI = async ({ page, setHotelListData }) => {
   try {
-    const res = await jwtAxios({
-      method: "get",
-      url: `/api/hotel?mark?hotelPk=${hotelPk}
-      `,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const parseData = removeEmptyValues(setHotelListData);
+    // const header = { headers: { "Content-Type": "application/json" } };
+    const res = await axios.post(`/api/hotel?page=${page}`, parseData);
     return res.data;
   } catch (error) {
     console.log(error);
+    alert("서버가 불안정합니다.");
+  }
+};
+
+// 호텔 좋아요 북마크 API(GET)
+export const getHotelBookMarkAPI = async (hotelPk, isLogin) => {
+  if (isLogin) {
+    try {
+      const res = await jwtAxios.get(`/api/hotel/mark?hotelPk=${hotelPk}`);
+      return res.data.result;
+    } catch (error) {
+      console.log("error", error);
+    }
+  } else {
+    alert("로그인이 필요한 서비스입니다.");
   }
 };
 
