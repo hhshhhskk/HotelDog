@@ -84,7 +84,7 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
   const successFn = result => {
     console.log("성공", result);
     // ------
-    // navigate("/reservecomplete");
+    navigate("/reservecomplete");
   };
   const failFn = result => {
     console.log("다시 시도해주세요.", result);
@@ -200,13 +200,32 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const handleMoveCalendar = () => {
     setCalendarOpen(true);
-    document.body.style.overflow = "hidden";
-
-    console.log(calendarOpen);
+    // document.body.style.overflow = "hidden";
   };
 
-  const calendarClose = () => {
+  // const calendarClose = () => {};
+
+  // 자식 컴포넌트 즉, calendar 에서 알려줘야 다른 컴포넌트에 전달할 수 있다.
+  const [reserveDay, setReserveDay] = useState({ startDay: "", endDay: "" });
+  const changeSelectDay = (_st, _ed) => {
+    console.log("시작", _st);
+    console.log("완료", _ed);
+
+    setReserveDay(prev => {
+      // 중요: 값을 업데이트할 때 `this.state` 대신 `state` 값을 읽어옵니다.
+      return { startDay: _st, endDay: _ed };
+    });
+  };
+
+  const [calendarNow, setCalendarNow] = useState(`${resDay}`);
+  // 캘린더에서 날짜 선택 시 적용
+  const calendarClose = (_startDay, _endDay) => {
     setCalendarOpen(false);
+    // changeSelectDay(_sd, _ed);
+
+    // console.log("체크인 날짜 : ", _startDay);
+    // console.log("체크아웃 날짜 : ", _endDay);
+    setCalendarNow({ startDay: _startDay, endDay: _endDay });
   };
 
   return (
@@ -230,7 +249,7 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
             />
 
             {/* 체크 인/아웃 선택 영역 */}
-            {calendarOpen ? "참" : "거짓"}
+            {/* {calendarOpen ? "참" : "거짓"} */}
             {calendarOpen && (
               <Calendar
                 // props로 상태 전달
@@ -245,9 +264,10 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
               resDay={resDay}
               setResDay={setResDay}
               handleMoveCalendar={handleMoveCalendar}
-              // onClick={() => {
-              //   handleMoveCalendar();
-              // }}
+              // changeSelectDay={changeSelectDay}
+              // calendarValue={calendarValue}
+              calendarNow={calendarNow}
+              setCalendarNow={setCalendarNow}
             />
           </div>
 
