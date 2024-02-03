@@ -21,11 +21,11 @@ const removeEmptyValues = obj => {
 };
 
 // JWTAxios : 호텔 전체 리스트 API
-export const postJwtHotelListAPI = async ({ page, setHotelListData }) => {
+export const postJwtHotelListAPI = async ({ page, setPostData }) => {
   try {
-    const parseData = removeEmptyValues(setHotelListData);
+    const parseData = removeEmptyValues(setPostData);
     // const header = { headers: { "Content-Type": "application/json" } };
-    // console.log("최지은 : 페이지 정보 호출 ", setHotelListData);
+    // console.log("최지은 : 페이지 정보 호출 ", setPostData);
     // console.log("정리된 데이터 : ", parseData);
     const res = await jwtAxios.post(`/api/hotel?page=${page}`, parseData);
     // console.log(res.data);
@@ -37,9 +37,9 @@ export const postJwtHotelListAPI = async ({ page, setHotelListData }) => {
 };
 
 // Axios : 호텔 전체 리스트 API
-export const postHotelListAPI = async ({ page, setHotelListData }) => {
+export const postHotelListAPI = async ({ page, setPostData }) => {
   try {
-    const parseData = removeEmptyValues(setHotelListData);
+    const parseData = removeEmptyValues(setPostData);
     // const header = { headers: { "Content-Type": "application/json" } };
     const res = await axios.post(`/api/hotel?page=${page}`, parseData);
     return res.data;
@@ -50,7 +50,7 @@ export const postHotelListAPI = async ({ page, setHotelListData }) => {
 };
 
 // 호텔 좋아요 북마크 API(GET)
-export const getHotelBookMarkAPI = async (hotelPk, isLogin) => {
+export const getHotelBookMarkAPI = async (hotelPk, isLogin, navigate) => {
   if (isLogin) {
     try {
       const res = await jwtAxios.get(`/api/hotel/mark?hotelPk=${hotelPk}`);
@@ -60,6 +60,7 @@ export const getHotelBookMarkAPI = async (hotelPk, isLogin) => {
     }
   } else {
     alert("로그인이 필요한 서비스입니다.");
+    navigate(`/login`);
   }
 };
 
