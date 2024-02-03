@@ -1,6 +1,6 @@
 import jwtAxios from "../../utils/jwtUtil";
 
-// 호텔 전체 리스트 API(POST)
+// 빈 데이터 값은 거르는 작업
 const removeEmptyValues = obj => {
   for (var prop in obj) {
     // eslint-disable-next-line no-prototype-builtins
@@ -17,67 +17,19 @@ const removeEmptyValues = obj => {
   }
   return obj;
 };
+
+// 호텔 전체 리스트 API
 export const postHotelListAPI = async ({ page, setHotelListData }) => {
   try {
-    // const res = await jwtAxios({
-    //   method: "post",
-    //   url: `/api/hotel?page=${page}
-    //   `,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
-
-    // {
-    //   "address": "",
-    //   "search": "",
-    //   "main_filter": 0,
-    //   "from_date": "",
-    //   "to_date": "",
-    //   "dog_info": [],
-    //   "hotel_option_pk": [],
-    //   "filter_type": 0
-    // }
-
     const parseData = removeEmptyValues(setHotelListData);
-
     const header = { headers: { "Content-Type": "application/json" } };
-    console.log("최지은 : 페이지 정보 호출 ", setHotelListData);
-    console.log("정리된 데이터 : ", parseData);
+    // console.log("최지은 : 페이지 정보 호출 ", setHotelListData);
+    // console.log("정리된 데이터 : ", parseData);
     const res = await jwtAxios.post(`/api/hotel?page=${page}`, parseData);
     return res.data;
   } catch (error) {
     console.log(error);
-    alert("서버가 불안정합니다. 더미 데이터를 사용합니다.");
-    const fakeData = {
-      hotel_advertise_list: [
-        {
-          star: 5,
-          price: "50000",
-          hotel_pk: 1,
-          hotel_nm: "멍멍낸내",
-          address_name: "대구시 중구",
-          hotel_pic: `${process.env.PUBLIC_URL}/images/hotel1.jpg`,
-          discount_per: 10,
-          book_mark: 0,
-          review_count: 22,
-        },
-      ],
-      hotel_list: [
-        {
-          star: 4,
-          price: "35000",
-          hotel_pk: 2,
-          hotel_nm: "곰젤리",
-          address_name: "대구시 북구",
-          hotel_pic: `${process.env.PUBLIC_URL}/images/hotel1.jpg`,
-          discount_per: 0,
-          book_mark: 1,
-          review_count: 109,
-        },
-      ],
-    };
-    setHotelListData(fakeData);
+    alert("서버가 불안정합니다.");
   }
 };
 

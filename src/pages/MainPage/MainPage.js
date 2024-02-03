@@ -124,10 +124,10 @@ const MainPage = () => {
   // 호텔리스트 정렬방식(별점순, 리뷰순) 필터
   const filterData = selectedValue => {
     // 선택된 값을 이용해서 데이터 필터링
-    console.log("선택된 값 :", selectedValue);
-    console.log("변경전 후 데이터 ", hotelListData);
+    // console.log("선택된 값 :", selectedValue);
+    // console.log("변경전 후 데이터 ", hotelListData);
     const nowData = { ...hotelListData, filter_type: parseInt(selectedValue) };
-    console.log("선택 후 바뀐 데이터 ", nowData);
+    // console.log("선택 후 바뀐 데이터 ", nowData);
     setHotelListData(nowData);
   };
 
@@ -151,6 +151,30 @@ const MainPage = () => {
     console.log(reserveDay);
     // useNavigate 를 이용한 이동과 정보를 함께 보내기(state)
     navigate(`/hoteldetail/${_hotel_pk}`, { state: { day: reserveDay } });
+  };
+
+  // 호텔 리스트 페이지네이션
+  const handleClickLoad = async () => {
+    try {
+      const nextPage = page + 1;
+      // 다음 페이지 데이터를 가져오기
+      const data = await postHotelListAPI({
+        page: nextPage,
+        setHotelListData: hotelListData,
+      });
+
+      // 현재 호텔 리스트 데이터와 새로운 데이터를 합치기
+      setGetServerListData(prevData => ({
+        ...prevData,
+        hotel_list: [...prevData.hotel_list, ...data.hotel_list],
+      }));
+
+      // 페이지 번호 업데이트
+      setPage(nextPage);
+    } catch (error) {
+      console.log(error);
+      // 에러 처리 로직 추가
+    }
   };
 
   return (
@@ -218,7 +242,7 @@ const MainPage = () => {
             ))}
           </HotelCardDiv>
           {/* 호텔 더 불러오기 버튼 */}
-          <HotelPlusBtDiv>
+          <HotelPlusBtDiv onClick={handleClickLoad}>
             <HotelPlusBt>더 불러오기</HotelPlusBt>
             <img
               src={`${process.env.PUBLIC_URL}/images/hotelPlusArrow2.svg`}
