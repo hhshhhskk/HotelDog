@@ -45,22 +45,34 @@ const CalendarSelectDate = styled.div`
   font-weight: 700;
   color: #654222;
 `;
-const ReserveDate = ({ resDay, handleMoveCalendar }) => {
+const ReserveDate = ({ resDay, handleMoveCalendar, calendarNow }) => {
   // const startDay = resDay.startDay;
   // const endDay = resDay.endDay;
   // console.log(resDay);
+  console.log(calendarNow);
   return (
     <CalendarSelectWrap onClick={handleMoveCalendar}>
       <CalendarSelectLeft>
         <CalendarText>
           <CalendarSelectTitle>체크인</CalendarSelectTitle>
-          <CalendarSelectDate>{resDay.startDay}</CalendarSelectDate>
+          {resDay ? (
+            <CalendarSelectDate>{resDay.startDay}</CalendarSelectDate>
+          ) : null}
+          {calendarNow ? (
+            <CalendarSelectDate>{calendarNow.startDay}</CalendarSelectDate>
+          ) : null}
         </CalendarText>
       </CalendarSelectLeft>
       <CalendarSelectRight>
         <CalendarText>
           <CalendarSelectTitle>체크아웃</CalendarSelectTitle>
-          <CalendarSelectDate>{resDay.endDay}</CalendarSelectDate>
+
+          {resDay ? (
+            <CalendarSelectDate>{resDay.endDay}</CalendarSelectDate>
+          ) : null}
+          {calendarNow ? (
+            <CalendarSelectDate>{calendarNow.endDay}</CalendarSelectDate>
+          ) : null}
         </CalendarText>
       </CalendarSelectRight>
     </CalendarSelectWrap>

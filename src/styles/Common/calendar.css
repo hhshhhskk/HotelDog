@@ -17,15 +17,15 @@
   border: 1px solid #c1bfbf;
   width: 750px;
   height: 500px;
-  top: 55%;
-  left: 60%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #fff;
 
-  /* cursor: pointer; */
+  /* margin: 0 auto; */
 }
 .calendar_header {
   position: relative;

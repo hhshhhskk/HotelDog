@@ -42,9 +42,10 @@ const Calendar = ({ calendarClose, calendarOpen, setCalendarOpen }) => {
 
   const handleSelectDay = () => {
     // 0131
-    const startDay =
-      moment(selectDay[0].startDate).format("YYYY-MM-DD") + "(수)";
-    const endDay = moment(selectDay[0].endDate).format("YYYY-MM-DD") + "(금)";
+    // const startDay = moment(selectDay[0].startDate).format("YYYY-MM-DD") + "()";
+    // const endDay = moment(selectDay[0].endDate).format("YYYY-MM-DD") + "()";
+    const startDay = moment(selectDay[0].startDate).format("YYYY-MM-DD");
+    const endDay = moment(selectDay[0].endDate).format("YYYY-MM-DD");
     console.log(startDay, endDay);
     calendarClose(startDay, endDay);
   };
