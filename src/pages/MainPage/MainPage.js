@@ -22,9 +22,10 @@ import {
 import HotelCardForm from "../../components/Common/HotelCardForm";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { postHotelListAPI } from "../../api/Main/HotelApi";
+import { postHotelListAPI, postJwtHotelListAPI } from "../../api/Main/HotelApi";
+import useCustomLogin from "../../hooks/useCustomLogin";
 
-// 호텔 전체 리스트 데이터 형식
+// 메인페이지 POST 데이터 형식
 const initDataList = {
   address: "",
   search: "",
@@ -36,6 +37,7 @@ const initDataList = {
   filter_type: 0,
 };
 
+// 호텔 전체 리스트 데이터 형식
 const initHotellist = {
   hotel_advertise_list: [
     {
@@ -66,13 +68,17 @@ const initHotellist = {
 };
 
 const MainPage = () => {
-  // 전체 호텔 리스트 useState
+  // 로그인 상태 불러오기
+  const { isLogin } = useCustomLogin();
+
+  // POST 데이터 useState
   const [hotelListData, setHotelListData] = useState(initDataList);
+  // 전체 호텔 리스트 useState
   const [getServerListData, setGetServerListData] = useState(initHotellist);
-  // 검색 폼 데이타 관리
+  // 검색 폼 데이터 관리
   const [saveSearchData, setSaveSearchData] = useState(null);
   // 초기 화면 불러오기
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     // console.log("바뀐데이터", saveSearchData);
@@ -80,13 +86,12 @@ const MainPage = () => {
       setHotelListData(saveSearchData);
     }
   }, [saveSearchData]);
-
   // 전체 호텔 리스트 가져오기
   const getHotelList = async () => {
     // hotelListAPI(setHotelListData);
-
     try {
-      const data = await postHotelListAPI({
+      const LoginState = isLogin ? postJwtHotelListAPI : postHotelListAPI;
+      const data = await LoginState({
         page: 1,
         setHotelListData: hotelListData,
         // setHotelListData: hotelListData,
@@ -100,7 +105,7 @@ const MainPage = () => {
 
   useEffect(() => {
     getHotelList();
-  }, [page, hotelListData]);
+  }, []);
 
   const navigate = useNavigate();
 
@@ -143,7 +148,7 @@ const MainPage = () => {
     });
   };
   useEffect(() => {
-    console.log(reserveDay);
+    // console.log(reserveDay);
   }, [reserveDay]);
 
   const handleSelectGo = _hotel_pk => {
@@ -158,17 +163,19 @@ const MainPage = () => {
     try {
       const nextPage = page + 1;
       // 다음 페이지 데이터를 가져오기
-      const data = await postHotelListAPI({
+      const LoginState = isLogin ? postJwtHotelListAPI : postHotelListAPI;
+      const data = await LoginState({
         page: nextPage,
         setHotelListData: hotelListData,
       });
-
       // 현재 호텔 리스트 데이터와 새로운 데이터를 합치기
-      setGetServerListData(prevData => ({
-        ...prevData,
-        hotel_list: [...prevData.hotel_list, ...data.hotel_list],
-      }));
+      const prevData = { ...getServerListData };
 
+      const mergedData = {
+        hotel_advertise_list: data.hotel_advertise_list,
+        hotel_list: [...prevData.hotel_list, ...data.hotel_list],
+      };
+      setGetServerListData(mergedData);
       // 페이지 번호 업데이트
       setPage(nextPage);
     } catch (error) {

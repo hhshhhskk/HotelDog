@@ -76,7 +76,7 @@ const MainSearchFrom = ({
   };
 
   // [수정예정임] 데이터 연동 시 삭제
-  const locationOption = ["서울특별시", "대구광역시"];
+  const locationOption = ["서울", "대구"];
 
   // 반려견 정보에 대한 useState
   const [dogOption, setDogOption] = useState([
@@ -107,7 +107,7 @@ const MainSearchFrom = ({
 
   // 전체 목록 닫기
   const allHide = () => {
-    console.log("모두 닫아요..");
+    // console.log("모두 닫아요..");
     setLocationDropdown(false);
     setCalendarDropdown(false);
     setDogDropdown(false);

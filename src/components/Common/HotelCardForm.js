@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BookMarkImgDiv,
   Discount,
@@ -19,13 +19,37 @@ import {
   Unit,
 } from "../../styles/Common/hotelCardFormStyle";
 import HotelLike from "./HotelLike";
+import { getHotelBookMarkAPI } from "../../api/Main/HotelApi";
+import useCustomLogin from "../../hooks/useCustomLogin";
 
 const HotelCardForm = ({ hotel, handleSelectGo }) => {
   // console.log(hotel);
   // !!!초기값은 데이터 불러오면 변경 예정
-  const [bookMark, setBookMark] = useState(hotel.book_mark);
-  const toggleBookMark = () => setBookMark(prev => !prev);
+  const [bookMark, setBookMark] = useState("");
+  const [bookMarkCheck, setBookMarkCheck] = useState(0);
+  const { isLogin } = useCustomLogin();
 
+  useEffect(() => {
+    if (hotel) {
+      setBookMarkCheck(hotel.book_mark);
+    }
+  }, [hotel]);
+
+  // 호텔 좋아요 북마크
+  const hotelBookMark = async () => {
+    try {
+      const result = await getHotelBookMarkAPI(hotel?.hotel_pk, isLogin);
+
+      if (result === 2) {
+        setBookMarkCheck(0);
+      } else {
+        setBookMarkCheck(1);
+      }
+    } catch (error) {
+      console.log(error);
+      // 에러 처리 로직 추가
+    }
+  };
   // 가격 천단위 표시
   const formatNumber = number => {
     if (number) {
@@ -53,8 +77,8 @@ const HotelCardForm = ({ hotel, handleSelectGo }) => {
           />
           {/* 북마크 넘겨주거나 컴포넌트를 해지해야 함. */}
           {/* <HotelLike /> */}
-          <BookMarkImgDiv onClick={toggleBookMark}>
-            {hotel.bookMark === 1 ? (
+          <BookMarkImgDiv onClick={hotelBookMark}>
+            {bookMarkCheck === 1 ? (
               <img src={`${process.env.PUBLIC_URL}/images/like_after.svg`} />
             ) : (
               <img src={`${process.env.PUBLIC_URL}/images/like_before.svg`} />
