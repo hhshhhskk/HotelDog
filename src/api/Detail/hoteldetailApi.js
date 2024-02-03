@@ -40,16 +40,39 @@ export const getHotelId = async (hotel_pk, successGetHotelId) => {
 };
 
 // 예약 등록(post)
-export const postReservation = async userPk => {
+// export const postReservation = async userPk => {
+//   try {
+//     const url = `${prefix}/api/reservation?userPk=${userPk}`;
+//     // http://112.222.157.156:5222/api/reservation?userPk=0
+//     const res = await jwtAxios.post(url);
+//     const resStatus = res.status.toString();
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+export const postReservation = async ({
+  sendData,
+  successFn,
+  failFn,
+  errorFn,
+}) => {
   try {
-    const url = `${prefix}/api/reservation?userPk=${userPk}`;
-    // http://112.222.157.156:5222/api/reservation?userPk=0
-    const res = await jwtAxios.post(url);
-    const resStatus = res.status.toString();
+    //
+    const url = `${prefix}/api/reservation/hotel/res`;
+    const res = await jwtAxios.post(url, sendData);
+
+    const status = res.status.toString();
+    if (status.charAt(0) === "2") {
+      successFn(res.data);
+    } else {
+      failFn("전송 오류입니다.");
+    }
   } catch (error) {
-    console.log(error);
+    errorFn("서버에러에요");
   }
 };
+
 // 예약 삭제(delete)
 export const deleteReservation = async () => {
   try {

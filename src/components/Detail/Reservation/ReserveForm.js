@@ -5,21 +5,14 @@ import { useNavigate } from "react-router-dom";
 import "../../../styles/Detail/reserveformstyle.css";
 import ReserveDate from "../../Common/ReserveDate";
 import Calendar from "../../Common/Calendar";
+import { postReservation } from "../../../api/Detail/hoteldetailApi";
 
 const ReserveFormFixed = styled.div`
-  position: fixed;
+  position: fixed; /* 이 부분이 수정되었습니다. */
   width: 420px;
   min-height: 921px;
-  top: 122px;
-  right: 360px;
-  padding-bottom: 122px;
-  bottom: 0px;
-  z-index: 2;
-  @media (max-height: 921px) {
-    padding-bottom: 0;
-    height: calc(100vh - 122px);
-    overflow-y: auto;
-  }
+  top: 150px;
+  left: 1140px;
 `;
 // 반려견 정보 초기값
 const initState = {
@@ -30,8 +23,74 @@ const initState = {
 };
 const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
   const navigate = useNavigate();
+  console.log("ReserveForm", detailId);
   const handleMoveCompletedPage = e => {
-    navigate("/reservecomplete");
+    if (!checkReservation) {
+      // 아직 안담았다면 안내창
+      alert("담아야해요");
+      return;
+    }
+    // 예약정보 보내기
+    // 성공적으로 등록이 되면 이동한다.
+    // [
+    //   {
+    //     "hotel_pk": 0,
+    //     "from_date": "2024-02-02",
+    //     "to_date": "2024-02-02",
+    //     "dog_info": [
+    //       {
+    //         "information": "string",
+    //         "size_pk": 0,
+    //         "dog_nm": "string",
+    //         "dog_age": 0,
+    //         "hotel_room_pk": 0
+    //       },
+    //       {
+    //         "information": "string",
+    //         "size_pk": 0,
+    //         "dog_nm": "string",
+    //         "dog_age": 0,
+    //         "hotel_room_pk": 0
+    //       }
+    //     ]
+    //   },
+    // ]
+    const sendData = [
+      {
+        hotel_pk: detailId,
+        from_date: "2024-02-02",
+        to_date: "2024-02-02",
+        dog_info: [
+          {
+            information: "string",
+            size_pk: 0,
+            dog_nm: "string",
+            dog_age: 0,
+            hotel_room_pk: 0,
+          },
+          {
+            information: "string",
+            size_pk: 0,
+            dog_nm: "string",
+            dog_age: 0,
+            hotel_room_pk: 0,
+          },
+        ],
+      },
+    ];
+    postReservation({ sendData, successFn, failFn, errorFn });
+  };
+
+  const successFn = result => {
+    console.log("성공", result);
+    // ------
+    // navigate("/reservecomplete");
+  };
+  const failFn = result => {
+    console.log("다시 시도해주세요.", result);
+  };
+  const errorFn = result => {
+    console.log("서버에러", result);
   };
 
   const [showDogSizeOptions, setShowDogSizeOptions] = useState(false); // 강아지 크기 옵션 표시 여부를 관리하는 상태
@@ -82,7 +141,13 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
   };
 
   // 담기 버튼 클릭 시, 예약 중인 객실에 목록이 뜨도록 해야한다.
-  const handleListPlus = () => {};
+  // 예약을 담았는지 아닌지 체크 해주 상태
+  const [checkReservation, setCheckReservation] = useState(false);
+  const handleListPlus = () => {
+    // 담기가 정상처리가된다면...
+
+    setCheckReservation(true);
+  };
 
   const [selectedDogSize, setSelectedDogSize] = useState(""); // 선택된 강아지 크기를 저장하는 상태
   const handleDogSizeSelect = size => {
@@ -140,6 +205,10 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
     console.log(calendarOpen);
   };
 
+  const calendarClose = () => {
+    setCalendarOpen(false);
+  };
+
   return (
     <ReserveFormFixed>
       <div className="reserveform">
@@ -161,10 +230,12 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
             />
 
             {/* 체크 인/아웃 선택 영역 */}
+            {calendarOpen ? "참" : "거짓"}
             {calendarOpen && (
               <Calendar
                 // props로 상태 전달
                 // setReviewModalOpen 함수. reviewModalOpen은 변수
+                calendarClose={calendarClose}
                 calendarOpen={calendarOpen}
                 setCalendarOpen={setCalendarOpen}
               />
@@ -173,9 +244,10 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
               detailId={detailId}
               resDay={resDay}
               setResDay={setResDay}
-              onClick={() => {
-                handleMoveCalendar();
-              }}
+              handleMoveCalendar={handleMoveCalendar}
+              // onClick={() => {
+              //   handleMoveCalendar();
+              // }}
             />
           </div>
 
@@ -371,13 +443,6 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
               />
             </button>
           </div>
-          {/* 총 금액 나타나는 영역 */}
-          <div>
-            <span className="reserved-price">
-              <b>총 금액</b>
-              {/* {selectedRoom.hotel_room_cost}원 */}
-            </span>
-          </div>
 
           <button
             className="reserve-button"
@@ -385,7 +450,7 @@ const ReserveForm = ({ selectedRoom, detailId, resDay, setResDay }) => {
               handleMoveCompletedPage();
               // !!!!!!!!!!!!!!!!예약 정보들이 마이페이지 예약 내역에 나타나야함
             }}
-            type="submit"
+            type="button"
           >
             예약하기
           </button>
