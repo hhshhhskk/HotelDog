@@ -14,10 +14,10 @@ import styled from "@emotion/styled";
 import { useQuery } from "react-query";
 import { boardDeleteAPI, boardDetailAPI } from "../../../api/board/boardApi";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import {
   commentCreateAPI,
   commentDeleteAPI,
+  commentUpdateAPI,
 } from "../../../api/board/boardCommentApi";
 import BoardPagination from "../../../components/Board/BoardPagination";
 
@@ -181,6 +181,38 @@ const CommentCtrlBtn = styled.div`
   cursor: pointer;
 `;
 
+const CommentUpdateBox = styled.div`
+  display: flex;
+  margin-bottom: 5px;
+`;
+
+const CommentUpdateInput = styled.input`
+  width: 900px;
+  height: 30px;
+  margin-right: 5px;
+  padding-left: 10px;
+  border-radius: 5px;
+  border: 1px solid #654222;
+  background: #fff;
+`;
+
+const CommentUpdateBtn = styled.div`
+  width: 40px;
+  height: 30px;
+
+  color: #fff;
+  text-align: center;
+  line-height: 30px;
+  border-radius: 5px;
+  border: none;
+
+  background-color: #654222;
+  &:hover {
+    background-color: rgba(101, 66, 34, 0.9);
+  }
+  cursor: pointer;
+`;
+
 const Comment = styled.div`
   width: 100%;
   height: 50%;
@@ -220,7 +252,9 @@ const CommentBtn = styled.button`
   border: none;
 
   background-color: #654222;
-
+  &:hover {
+    background-color: rgba(101, 66, 34, 0.9);
+  }
   cursor: pointer;
 `;
 
@@ -273,7 +307,7 @@ const BoardDetailPage = () => {
   ];
   const navigate = useNavigate();
   const { boardPk } = useParams();
-  const loginUserPk = useSelector(state => state.loginSlice.userPk);
+  const loginUserPk = parseInt(sessionStorage.getItem("userPk"));
   const [filter, setFilter] = useState(0);
   const category = ["공지", "자유게시판", "질문", "정보"];
   const [commentPage, setCommentPage] = useState(1);
@@ -282,6 +316,7 @@ const BoardDetailPage = () => {
     update: false,
     idx: "",
   });
+  const [commentModify, setCommentModify] = useState("");
   const { data, isLoading, isSuccess, refetch } = useQuery(
     ["boardDetail", boardPk, commentPage],
     () => {
@@ -312,11 +347,11 @@ const BoardDetailPage = () => {
     });
   }
 
+  // 댓글 작성
   const commentChanged = e => {
     // console.log(e.target.value);
     setComment(e.target.value);
   };
-
   const commentBtnClicked = async e => {
     e.preventDefault();
     if (comment === "") {
@@ -331,6 +366,30 @@ const BoardDetailPage = () => {
         console.log("리패치요청");
         refetch();
         setComment("");
+      }
+    }
+  };
+
+  // 댓글 수정
+  const commentUpdateChanged = e => {
+    // console.log(e.target.value);
+    setCommentModify(e.target.value);
+  };
+  const commentUpdateBtnClicked = async (e, idx) => {
+    e.preventDefault();
+    if (commentModify === "") {
+      alert("수정할 댓글을 작성해주세요.");
+    } else {
+      const commentData = {
+        commentPk: data?.comments[idx].commentPk,
+        comment: commentModify,
+      };
+      const result = await commentUpdateAPI(commentData);
+      if (result === 1) {
+        alert("댓글이 수정되었습니다.");
+        refetch();
+        setCommentModify("");
+        setCommentUpdate({ update: false });
       }
     }
   };
@@ -387,7 +446,7 @@ const BoardDetailPage = () => {
               />
               <DetailCommentCnt>댓글({data?.commentCount})</DetailCommentCnt>
               <DetailCommentFilter>
-                {["등록순", "최신순"].map((data, idx) => {
+                {["최신순", "등록순"].map((data, idx) => {
                   return (
                     <CommentFilter
                       key={idx}
@@ -418,6 +477,7 @@ const BoardDetailPage = () => {
                                 update: !commentUpdate.update,
                                 idx,
                               });
+                              setCommentModify(item?.comment);
                             }}
                           >
                             수정
@@ -443,8 +503,21 @@ const BoardDetailPage = () => {
                         </>
                       )}
                     </CommentDivTop>
-                    {commentUpdate.update ? (
-                      <input />
+                    {commentUpdate.update && commentUpdate.idx === idx ? (
+                      <CommentUpdateBox>
+                        <CommentUpdateInput
+                          type="text"
+                          value={commentModify}
+                          onChange={commentUpdateChanged}
+                        />
+                        <CommentUpdateBtn
+                          onClick={e => {
+                            commentUpdateBtnClicked(e, idx);
+                          }}
+                        >
+                          수정
+                        </CommentUpdateBtn>
+                      </CommentUpdateBox>
                     ) : (
                       <Comment>{item?.comment}</Comment>
                     )}

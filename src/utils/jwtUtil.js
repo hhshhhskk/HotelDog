@@ -39,10 +39,16 @@ const requestFail = err => {
 
 // Refresh Token
 // 액세스 요청 실패시 무조건 시도해 봄
-const refreshJWT = async (accessToken, refreshToken) => {
-  const header = { headers: { Authorization: `Bearer ${accessToken}` } };
+const refreshJWT = async () => {
+  const tokenCookie = getCookie("accessToken");
   // API 백엔드 Refresh 해줄 주소(URI)를 요청
-  const res = await axios.get(`/api/user/refresh-token`, header);
+  console.log(tokenCookie.accessToken);
+  const res = await axios.get(`/api/user/refresh-token`, {
+    headers: {
+      Authorization: `Bearer ${tokenCookie.accessToken}`,
+      // 다른 헤더들...
+    },
+  });
   console.log("1. refreshToken 토큰 요청");
   // 새로 만든 AccessToken 과 RefereshToken 리턴
   console.log("2. 백엔드에서 새로 준 값", res.data);
@@ -55,34 +61,24 @@ const beforeRes = async res => {
   // console.log("Response 전처리 ....", res);
   const data = res.data;
   console.log("1. Response 오기전 서버 전달해준 데이터", data);
-  if (data && data.error === "ERROR_ACCESS_TOKEN") {
-    // console.log("2. 일반적 오류가 아닌 액세스 토큰 에러!! 입니다. ");
-    // console.log("3. 새로운 토큰을 요청해야 합니다. ");
-    // console.log("4. 쿠키에 있는 정보를 읽어서, 다시 시도합니다.");
+  if (res.status === 401) {
+    console.log(" 일반적 오류가 아닌 액세스 토큰 에러!! 입니다. ");
 
-    const tokenCookie = getCookie("accessToken");
-    const refreshToken = getCookie("rt");
-    console.log("5. 쿠키 토큰 정보 AccessToken ", tokenCookie.accessToken);
-    console.log("6. 쿠키 토큰 정보 RefreshToken ", refreshToken.rt);
-    console.log("7. 위의 정보로 새로운 토큰을 요청합니다.");
-    const result = await refreshJWT(tokenCookie.accessToken, refreshToken.rt);
-    console.log("8. 요청 이후 되돌아와서 새로운 정보로 쿠키를 업데이트 ");
+    const result = await refreshJWT();
+    console.log("요청 이후 되돌아와서 새로운 정보로 쿠키를 업데이트 ");
 
-    (tokenCookie.accessToken = result.accessToken),
-      (refreshToken.rt = result.rt),
-      setCookie("accessToken", JSON.stringify(tokenCookie));
+    setCookie("accessToken", JSON.stringify(result.accessToken));
 
-    console.log("9. 데이터 요청하던 API 재 요청");
+    console.log("데이터 요청하던 API 재 요청");
     const originalRequest = res.config;
     originalRequest.headers.Authorization = `Bearer ${result.accessToken}`;
 
     return await axios(originalRequest);
   }
-
   return res;
 };
 // Response Fail 처리
-const responseFail = err => {
+const responseFail = async err => {
   console.log("Response Fail Err", err);
   return Promise.reject(err);
 };

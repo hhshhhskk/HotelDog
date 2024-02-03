@@ -110,6 +110,26 @@ export const BoardCreateBtnDiv = styled.div`
   width: 100%;
   display: flex;
   justify-content: right;
+  gap: 10px;
+`;
+
+export const BoardDeleteBtn = styled.div`
+  width: 120px;
+  height: 40px;
+  background-color: #654222;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 40px;
+
+  margin-top: 17px;
+  text-align: center;
+
+  &:hover {
+    background-color: rgba(101, 66, 34, 0.9);
+  }
+  cursor: pointer;
 `;
 
 export const BoardCreateBtn = styled.div`
@@ -118,8 +138,7 @@ export const BoardCreateBtn = styled.div`
   background-color: #654222;
   color: #fff;
   border-radius: 5px;
-  font-family: Noto Sans;
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 700;
   line-height: 40px;
 
@@ -159,6 +178,8 @@ export const BoardSearchSelect = styled.select`
 export const BoardSearchInput = styled.input`
   width: 500px;
   height: 30px;
+  font-size: 1.4rem;
+  padding-left: 10px;
   border: 1px solid #654222;
   border-radius: 5px 0 0 5px;
 `;
@@ -174,4 +195,8 @@ export const BoardSearchBtn = styled.input`
   text-align: center;
   font-size: 1.4rem;
   font-weight: 600;
+  &:hover {
+    background-color: rgba(101, 66, 34, 0.9);
+  }
+  cursor: pointer;
 `;

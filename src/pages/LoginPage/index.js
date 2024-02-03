@@ -257,7 +257,6 @@ const LoginPage = () => {
                     })}
                     defaultValue={savedId ? savedId : ""}
                     placeholder="아이디 (example@gmail.com)"
-                    value="testid2@naver.com"
                   />
                   <LoginInput
                     {...register("password", {
@@ -265,7 +264,6 @@ const LoginPage = () => {
                     })}
                     type="password"
                     placeholder="비밀번호"
-                    value="test123"
                   />
                 </InputDiv>
                 <LoginBtn>로그인</LoginBtn>

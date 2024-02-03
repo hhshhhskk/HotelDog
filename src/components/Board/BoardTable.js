@@ -6,6 +6,7 @@ import {
   boardListAPI,
   boardMyCommentListAPI,
   boardMyListAPI,
+  boardSearchListAPI,
 } from "../../api/board/boardApi";
 
 const BoardBox = styled.table`
@@ -76,11 +77,18 @@ const BoardTd = styled.td`
   cursor: ${props => (props.propKey === "title" ? "pointer" : "default")};
 `;
 
-function BoardTable({ nowPage, setTotalPage, cateNum }) {
+function BoardTable({
+  nowPage,
+  setTotalPage,
+  cateNum,
+  checkboxStates,
+  setCheckboxStates,
+  searchType,
+  searchKeyword,
+}) {
   const rows = ["번호", "카테고리", "제목", "작성자", "날짜", "조회수"];
-  const [selectAll, setSelectAll] = useState(false);
-
   const navigate = useNavigate();
+  const [selectAll, setSelectAll] = useState(false);
 
   const { data, isSuccess } = useQuery(["boardList", cateNum, nowPage], () => {
     const fetchData = async () => {
@@ -90,10 +98,12 @@ function BoardTable({ nowPage, setTotalPage, cateNum }) {
           result = await boardListAPI(cateNum, nowPage);
         } else if (cateNum === 5) {
           result = await boardMyListAPI(nowPage);
-        } else {
+        } else if (cateNum === 6) {
           result = await boardMyCommentListAPI(nowPage);
+        } else {
+          result = await boardSearchListAPI(nowPage, searchKeyword, searchType);
         }
-        return result;
+        return result.data;
       } catch {
         console.log("에러");
       }
@@ -101,7 +111,6 @@ function BoardTable({ nowPage, setTotalPage, cateNum }) {
 
     return fetchData();
   });
-
   // let dataFil = "";
   // if (cateNum === 1) {
   //   dataFil = data.filter(item => item.category === "공지");
@@ -111,8 +120,30 @@ function BoardTable({ nowPage, setTotalPage, cateNum }) {
   //   dataFil = data.filter(item => item.category === "자유게시판");
   // }
 
-  let sortedData = [];
+  // 게시판 체크박스 전체 선택
+  const handleCheckboxAllChange = () => {
+    if (selectAll) {
+      // 전체 체크가 되어 있을 때, 빈 배열로 초기화
+      setCheckboxStates([]);
+    } else {
+      // 전체 체크가 안되어 있을 때, 각 항목의 boardPk를 담은 배열로 설정
+      setCheckboxStates(sortedData.map(item => item.boardPk));
+    }
+    // selectAll 상태를 반전시킴
+    setSelectAll(!selectAll);
+  };
+  // 게시판 체크박스 선택시 boardPk 배열에 담기
+  const handleCheckboxChange = (item, idx) => {
+    // checkboxStates 배열에 item.boardPk가 이미 있다면 해당 항목을 제거하고,
+    // 없다면 추가한 새로운 배열을 만들어 설정
+    const updatedCheckboxStates = checkboxStates.includes(item.boardPk)
+      ? checkboxStates.filter(pk => pk !== item.boardPk)
+      : [...checkboxStates, item.boardPk];
 
+    setCheckboxStates(updatedCheckboxStates);
+  };
+
+  let sortedData = [];
   if (isSuccess) {
     // 데이터가 성공적으로 불러와진 경우에만 정렬 작업 수행
     if (data?.simpleBoardVoList) {
@@ -161,19 +192,19 @@ function BoardTable({ nowPage, setTotalPage, cateNum }) {
     <BoardBox>
       <BoardThead>
         <BoardTr tr="head">
-          {cateNum >= 5 && (
+          {(cateNum === 5 || cateNum === 6) && (
             <BoardTh idx={6}>
               <input
                 type="checkbox"
                 checked={selectAll}
                 name="select"
-                value="select"
+                onChange={handleCheckboxAllChange}
               />
             </BoardTh>
           )}
           {rows.map((item, idx) => (
             <BoardTh key={idx} idx={idx}>
-              {item}
+              {cateNum === 6 && item === "제목" ? "게시글 / 댓글" : item}
             </BoardTh>
           ))}
         </BoardTr>
@@ -182,9 +213,14 @@ function BoardTable({ nowPage, setTotalPage, cateNum }) {
         {isSuccess &&
           sortedData.map((item, idx) => (
             <BoardTr key={idx} writer={item.nickname}>
-              {cateNum >= 5 && (
+              {(cateNum === 5 || cateNum === 6) && (
                 <BoardTd idx={6}>
-                  <input type="checkbox" name="select" value="select" />
+                  <input
+                    type="checkbox"
+                    name="select"
+                    checked={checkboxStates.includes(item.boardPk)}
+                    onChange={() => handleCheckboxChange(item)}
+                  />
                 </BoardTd>
               )}
               <BoardTd propKey="number">{idx + 1 + (nowPage - 1) * 8}</BoardTd>
@@ -202,7 +238,14 @@ function BoardTable({ nowPage, setTotalPage, cateNum }) {
                     return itmeClick(key, item.boardPk);
                   }}
                 >
-                  {item[key]}
+                  {cateNum === 6 && key === "title" ? (
+                    <>
+                      <div style={{ marginBottom: 6 }}>{item[key]}</div>
+                      <div>💬 {item["comment"]}</div>
+                    </>
+                  ) : (
+                    item[key]
+                  )}
                 </BoardTd>
               ))}
             </BoardTr>
