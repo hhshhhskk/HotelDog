@@ -5,6 +5,7 @@ import Password from "../../components/MyPage/Member/Password";
 import jwtAxios from "../../utils/jwtUtil";
 import AddressPopup from "../../components/SignUp/AddressPopup";
 import { nickNameCheckAPI } from "../../api/SignUp/addressApi";
+import { fetchMemberInfo, getNickNameUpdate } from "../../api/mypage/mypageApi";
 
 const MemberPage = styled.div`
   margin-left: 85px;
@@ -222,10 +223,11 @@ const NickCheckBt = styled.div`
   display: flex;
 `;
 
-const Member = ({ setPopUp, setAddress }) => {
+const Member = () => {
   // 비밀번호 입력하면 컨텐츠 보여주기
   const [showMemberContents, setShowMemberContents] = useState(false);
   const [passwordVerified, setPasswordVerified] = useState(false);
+  const [password, setPassword] = useState("");
   const [memberInfo, setMemberInfo] = useState({
     userPk: 0,
     userEmail: "",
@@ -233,54 +235,56 @@ const Member = ({ setPopUp, setAddress }) => {
     phoneNum: "",
     userAddress: "",
   });
-
+  // 주소관련
+  const [popUp, setPopUp] = useState(false);
+  const [address, setAddress] = useState();
+  // 닉네임 보관
+  const [originInfo, setOriginInfo] = useState(null);
   const handlePasswordVerified = () => {
     setPasswordVerified(true); // 비밀번호 확인 완료 시 상태 변경
   };
 
   useEffect(() => {
     if (passwordVerified) {
-      setShowMemberContents(true); // 비밀번호 확인 완료 후 MemberContents 표시
+      setShowMemberContents(true);
+      fetchMemberInfo(password, { successFn, failFn, erroFn }); // 비밀번호 확인 완료 후 MemberContents 표시
     }
   }, [passwordVerified]);
 
-  const fetchMemberInfo = async () => {
-    try {
-      // 스웨거에서 제공하는 API 엔드포인트를 사용하여 데이터를 요청
-      const response = await jwtAxios.post("/api/user/info");
-      setMemberInfo(response.data);
-    } catch (error) {
-      console.error("Error fetching member info:", error);
-    }
+  const successFn = result => {
+    console.log("성공", result);
+    setMemberInfo(result);
+    setOriginInfo(result);
+  };
+  const failFn = result => {
+    console.log("에러", result);
+  };
+  const erroFn = result => {
+    console.log("서버에러", result);
   };
 
-  const handleUpdateMemberInfo = async () => {
-    try {
-      // 수정할 데이터를 서버에 전송
-      const response = await jwtAxios.put("/api/user/info", {
-        nickname: memberInfo.nickname,
-        phoneNum: memberInfo.phoneNum,
-        userAddress: memberInfo.userAddress,
-        // 필요한 데이터 추가
-      });
-      const newMemberInfo = response.data;
-      setMemberInfo(newMemberInfo);
-      console.log("Member info updated:", newMemberInfo);
-      alert("정보 수정이 완료되었습니다.");
-    } catch (error) {
-      console.error("Error updating member info:", error);
-      alert("정보 수정을 실패하였습니다.");
+  const handleChangeNicname = e => {
+    if (originInfo.nickname === memberInfo.nickname) {
+      alert("새로운 닉네임을 입력하세요.");
+      return;
     }
+    // 닉넹
+    const result = getNickNameUpdate(memberInfo.nickname);
+    console.log(result);
   };
 
-  useEffect(() => {
-    fetchMemberInfo(); // 컴포넌트가 마운트될 때 한 번만 회원 정보를 불러옴
-  }, []);
+  const handleClickAddress = () => {};
 
   return (
     <MemberPage>
+      {popUp && <AddressPopup setPopUp={setPopUp} setAddress={setAddress} />}
+
       {!passwordVerified && !showMemberContents && (
-        <Password onPasswordVerified={handlePasswordVerified} />
+        <Password
+          onPasswordVerified={handlePasswordVerified}
+          password={password}
+          setPassword={setPassword}
+        />
       )}
       {showMemberContents && (
         <>
@@ -292,14 +296,6 @@ const Member = ({ setPopUp, setAddress }) => {
               <p>아이디</p>
               <span>{memberInfo.userEmail}</span>
             </MemberId>
-            {/* <MemberPassword>
-          <p>비밀번호</p>
-          <InfoBox>{memberInfo.password}</InfoBox>
-        </MemberPassword>
-        <PasswordCheck>
-          <p>비밀번호 확인</p>
-          <InfoBox>{memberInfo.password}</InfoBox>
-        </PasswordCheck> */}
             <MemberNm>
               <p>닉네임</p>
               <NickBox>
@@ -310,8 +306,9 @@ const Member = ({ setPopUp, setAddress }) => {
                     setMemberInfo({ ...memberInfo, nickname: e.target.value })
                   }
                   placeholder="수정할 닉네임을 입력하세요"
+                  name="nickname"
                 />
-                <NickBt>
+                <NickBt onClick={handleChangeNicname}>
                   <NickCheckBt>중복 확인</NickCheckBt>
                 </NickBt>
               </NickBox>
@@ -330,14 +327,19 @@ const Member = ({ setPopUp, setAddress }) => {
                   defaultValue={memberInfo.userAddress}
                   placeholder="수정할 주소를 입력하세요"
                 />
-                <AddressBt>
+
+                <AddressBt onClick={handleClickAddress}>
                   <AddressPutBt>주소 찾기</AddressPutBt>
                 </AddressBt>
               </AdBox>
-              <DetailAddress placeholder="상세 주소"></DetailAddress>
+              <DetailAddress
+                placeholder="상세 주소"
+                defaultValue={memberInfo.userAddress}
+              ></DetailAddress>
             </MemberAd>
             <InfoFetch>
-              <InfoFetchBt onClick={handleUpdateMemberInfo}>
+              {/* <InfoFetchBt onClick={handleUpdateMemberInfo}> */}
+              <InfoFetchBt>
                 <p>회원정보 수정하기</p>
               </InfoFetchBt>
             </InfoFetch>

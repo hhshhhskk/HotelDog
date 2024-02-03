@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import HotelLike from "../../components/Common/HotelLike";
 import HotelCardForm from "../../components/Common/HotelCardForm";
+import { HotelCardDiv } from "../../styles/Common/hotelCardFormStyle";
+import jwtAxios from "../../utils/jwtUtil";
 
-const BookingPage = styled.div`
+const LikePage = styled.div`
   margin-left: 85px;
   position: relative;
   /* display: flex; */
@@ -14,13 +16,15 @@ const BookingPage = styled.div`
 const PageTitle = styled.div`
   position: relative;
   height: auto;
+  margin-bottom: 35px;
   p {
     font-weight: 700;
     font-size: 24px;
     color: #654222;
   }
 `;
-const BookingList = styled.div`
+// ListNone공통 스타일로 빼도됨
+const ListNone = styled.div`
   position: relative;
   display: flex;
   width: 950px;
@@ -49,7 +53,6 @@ const BookingList = styled.div`
     color: #969696;
     margin-bottom: 14px;
   }
-
   a {
     display: flex;
     justify-content: center;
@@ -65,21 +68,72 @@ const BookingList = styled.div`
   }
 `;
 
-const LikeList = () => {
+const TwoColumns = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: space-between; */
+`;
+
+const LikeList = ({ handleSelectGo, getLikeListData }) => {
+  const [likeListData, setLikeListData] = useState([]);
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    const getLikeListData = async () => {
+      try {
+        // 페이지에 해당하는 요청 URL 생성
+        const url = `/api/hotel/like?page=${page}`;
+
+        // 스웨거에서 데이터 가져오는 요청 보내기
+        const res = await jwtAxios({
+          method: "get",
+          url: url,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        console.log(res.data);
+
+        setLikeListData(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    // 데이터 불러오기 함수 호출
+    getLikeListData();
+  }, []); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때만 실행되도록 함
+
+  if (!getLikeListData) getLikeListData = [];
+
   return (
-    <BookingPage>
+    <LikePage>
       <PageTitle>
         <p>찜한 호텔</p>
       </PageTitle>
-      <BookingList>
-        <img src={`${process.env.PUBLIC_URL}/images/MyPage/heart.svg`} />
-        <p>찜한 목록이 없습니다.</p>
-        <span>다양한 호텔 상품들을 만나보세요</span>
-        <a href="/"> 호텔 목록 보러가기</a>
-      </BookingList>
-      <HotelCardForm />
-      <HotelLike />
-    </BookingPage>
+
+      {likeListData.length > 0 ? (
+        <TwoColumns>
+          {likeListData.map((hotel, index) => (
+            <div
+              key={index}
+              style={{ marginBottom: "20px", width: "calc(50% - 10px)" }}
+            >
+              <HotelCardDiv>
+                <HotelCardForm hotel={hotel} handleSelectGo={handleSelectGo} />
+              </HotelCardDiv>
+            </div>
+          ))}
+        </TwoColumns>
+      ) : (
+        <ListNone>
+          <img src={`${process.env.PUBLIC_URL}/images/MyPage/heart.svg`} />
+          <p>찜한 목록이 없습니다.</p>
+          <span>다양한 호텔 상품들을 만나보세요</span>
+          <a href="/"> 호텔 목록 보러가기</a>
+        </ListNone>
+      )}
+    </LikePage>
   );
 };
 

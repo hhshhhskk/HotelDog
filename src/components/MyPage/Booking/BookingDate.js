@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React from "react";
 
-const BookingDate = () => {
+const BookingDate = ({ bookingData }) => {
   const DateWrap = styled.div`
     position: relative;
     display: flex;
@@ -49,13 +49,13 @@ const BookingDate = () => {
       <DateLeft>
         <DateTxt>
           <CheckIn>체크인</CheckIn>
-          <CheckInDate>날짜정보받아오기</CheckInDate>
+          <CheckInDate>{bookingData?.from_date}</CheckInDate>
         </DateTxt>
       </DateLeft>
       <DateRright>
         <DateTxt>
           <CheckIn>체크아웃</CheckIn>
-          <CheckInDate>날짜정보받아오기</CheckInDate>
+          <CheckInDate>{bookingData?.to_date}</CheckInDate>
         </DateTxt>
       </DateRright>
     </DateWrap>

@@ -100,28 +100,8 @@ const Cancel = styled.button`
 `;
 
 const BookingListComponent = ({ bookingData }) => {
-  // 상태 설정
-  const [bookings, setBookings] = useState([]);
-
-  useEffect(() => {
-    const fetchBookingData = async () => {
-      try {
-        // Axios를 사용하여 API에서 데이터 가져오기
-        const response = await jwtAxios.get("/api/reservation");
-
-        // API 응답에서 데이터 추출
-        const data = response.data;
-
-        // 데이터를 상태로 설정
-        setBookings(data);
-      } catch (error) {
-        console.error("데이터를 불러오는 중 오류 발생:", error);
-      }
-    };
-
-    // 데이터 불러오기 함수 호출
-    fetchBookingData();
-  }, []); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때만 실행되도록 함
+  // bookingData가 존재하지 않는 경우 빈 배열로 설정
+  if (!bookingData) bookingData = [];
   return (
     <>
       {bookingData.map((booking, index) => (
@@ -137,22 +117,22 @@ const BookingListComponent = ({ bookingData }) => {
               />
             </BookingLeft>
             <BookingRight>
-              <BookingDate />
+              <BookingDate bookingData={booking} />
               <BookInfo>
                 <Line />
                 <span>예약 정보</span>
                 <BookInfoTxt>
-                  <p>예약 번호 : {booking.reservationInfo.reservationNumber}</p>
-                  <p>객실 : {booking.reservationInfo.room}</p>
-                  <p>강아지 : {booking.reservationInfo.pet}</p>
+                  <p>예약 번호 : {booking?.res_pk}</p>
+                  <p>객실 : {booking?.hotel_room_nm}</p>
+                  <p>강아지 : {booking?.res_dog_info_vo_list[0].dot_nm}</p>
                 </BookInfoTxt>
               </BookInfo>
               <PayInfo>
                 <Line />
                 <span>결제 정보</span>
                 <PayInfoTxt>
-                  <p>결제 금액 : {booking.paymentInfo.amount}</p>
-                  <p>결제 수단 : {booking.paymentInfo.paymentMethod}</p>
+                  <p>결제 금액 : </p>
+                  <p>결제 수단 : </p>
                 </PayInfoTxt>
               </PayInfo>
               <CancelBt>
