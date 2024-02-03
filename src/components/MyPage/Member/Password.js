@@ -69,9 +69,7 @@ const PasswordPostBt = styled.button`
   cursor: pointer;
 `;
 
-const Password = ({ onPasswordVerified }) => {
-  const [password, setPassword] = useState("");
-
+const Password = ({ onPasswordVerified, password, setPassword }) => {
   const handlePasswordChange = event => {
     setPassword(event.target.value);
   };
