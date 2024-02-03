@@ -211,7 +211,6 @@ const BoardUpdatePage = () => {
       navigate(-1);
     }
   };
-
   const onValid = async data => {
     try {
       console.log(data);
@@ -219,12 +218,12 @@ const BoardUpdatePage = () => {
       const formData = new FormData();
 
       // 텍스트 데이터 추가 (JSON.stringify를 사용하여 문자열로 변환 후 직접 FormData에 추가)
-
       formData.append(
         "dto",
         new Blob(
           [
             JSON.stringify({
+              boardPk: postData.boardPk,
               boardCategoryPk: data.selectOption,
               title: data.title,
               contents: data.contents,
@@ -245,7 +244,7 @@ const BoardUpdatePage = () => {
 
       const result = await boardUpdateAPI(formData);
       if (result === 1) {
-        navigate("/board");
+        navigate(-1);
       }
     } catch (error) {
       // 에러 처리
@@ -315,6 +314,7 @@ const BoardUpdatePage = () => {
                 {...register("contents", {
                   required: "내용은 필수사항입니다.",
                 })}
+                defaultValue={postData?.contents}
                 placeholder="정보통신망을 통하여 불법촬영물등, 음란, 저작권 침해 명예훼손, 청소년 유해물, 기타 위법 자료 들을 게시 또는 배포하면 해당 게시물은 경고 없이 삭제되며, 게시자는 법률에 따라 징역형 또는 벌금형에 처해질 수 있습니다."
               />
               {/* <Editor>

@@ -1,9 +1,10 @@
+import axios from "axios";
 import jwtAxios from "../../utils/jwtUtil";
 
 // 게시판 전체리스트 API
 export const boardListAPI = async (boardCategoryPk, page) => {
   try {
-    const res = await jwtAxios({
+    const res = await axios({
       method: "get",
       url: `/api/board?boardCategoryPk=${boardCategoryPk}&page=${page}
       `,
@@ -11,8 +12,26 @@ export const boardListAPI = async (boardCategoryPk, page) => {
         "Content-Type": "application/json",
       },
     });
+    return res;
+  } catch (error) {
+    // 오류가 발생했을 때의 처리
+    console.log(error);
+    // alert(error.response.data.message);
+  }
+};
 
-    return res.data;
+// 게시판 전체리스트 검색 API
+export const boardSearchListAPI = async (page, search, searchType) => {
+  try {
+    const res = await axios({
+      method: "get",
+      url: `/api/board?boardCategoryPk=0&page=${page}&search=${search}&searchType=${searchType}
+      `,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return res;
   } catch (error) {
     // 오류가 발생했을 때의 처리
     console.log(error);
@@ -30,8 +49,8 @@ export const boardMyListAPI = async page => {
         "Content-Type": "application/json",
       },
     });
-
-    return res.data;
+    // console.log(res);
+    return res;
   } catch (error) {
     // 오류가 발생했을 때의 처리
     console.log(error);
@@ -119,7 +138,10 @@ export const boardDeleteAPI = async boardPkList => {
   try {
     const res = await jwtAxios({
       method: "delete",
-      url: `/api/board?boardPkList=${boardPkList}`,
+      url: `/api/board`,
+      data: {
+        boardPkList,
+      },
       headers: {
         "Content-Type": "application/json", // Content-Type 설정
       },
