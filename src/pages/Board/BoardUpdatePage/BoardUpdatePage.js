@@ -11,9 +11,9 @@ import {
   BoardTitleRight,
   BoardWrap,
 } from "../../../styles/BoardPageStyle/boardStyle";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
-import { boardUpdateAPI } from "../../api/board/boardApi";
+import { boardUpdateAPI } from "../../../api/board/boardApi";
 
 const BoardCreateBox = styled.div`
   width: 100%;
@@ -190,8 +190,10 @@ const FormBtn = styled.button`
   cursor: pointer;
 `;
 
-const BoardUpdate = () => {
+const BoardUpdatePage = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const postData = state ? state.data : null;
   const {
     register,
     handleSubmit,
@@ -232,10 +234,14 @@ const BoardUpdate = () => {
         ),
       );
 
-      // 선택된 파일들을 FormData에 추가
-      data.files.forEach((file, index) => {
-        formData.append(`pics`, file);
-      });
+      if (data.files !== undefined) {
+        // 선택된 파일들을 FormData에 추가
+        data.files.forEach((file, index) => {
+          formData.append(`pics`, file);
+        });
+      } else {
+        formData.append(`pics`, []);
+      }
 
       const result = await boardUpdateAPI(formData);
       if (result === 1) {
@@ -248,88 +254,111 @@ const BoardUpdate = () => {
   };
 
   return (
-    <BoardCreateBox>
-      <BoardCreateTitleBox>
-        <BoardCreateTitleImg
-          src={`${process.env.PUBLIC_URL}/images/board/boardCreateBtn2.svg`}
-          alt=""
-        />
-        <BoardCreateTitle>글수정하기</BoardCreateTitle>
-      </BoardCreateTitleBox>
-      <BoardCreateForm onSubmit={handleSubmit(onValid)}>
-        <FormTitle>
-          <FormLabel htmlFor="title">제목</FormLabel>
-          <FormInput
-            {...register("title", {
-              required: "제목은 필수사항입니다.",
-            })}
-          />
-        </FormTitle>
-        <FormCategory>
-          <FormLabel htmlFor="category">카테고리</FormLabel>
-          <Controller
-            name="selectOption"
-            control={control}
-            defaultValue="" // 선택된 옵션을 초기화할 경우 빈 문자열로 설정
-            render={({ field }) => (
-              <CategorySelect {...field}>
-                <option value="" disabled hidden>
-                  카테고리
-                </option>
-                <option value="2">자유게시판</option>
-                <option value="3">질문</option>
-                <option value="4">정보</option>
-              </CategorySelect>
-            )}
-          />
-        </FormCategory>
-        <FormContent>
-          <FormLabel htmlFor="contents" id="contents">
-            내용
-          </FormLabel>
-          <FormTextArea
-            {...register("contents", {
-              required: "내용은 필수사항입니다.",
-            })}
-            placeholder="정보통신망을 통하여 불법촬영물등, 음란, 저작권 침해 명예훼손, 청소년 유해물, 기타 위법 자료 들을 게시 또는 배포하면 해당 게시물은 경고 없이 삭제되며, 게시자는 법률에 따라 징역형 또는 벌금형에 처해질 수 있습니다."
-          />
-          {/* <Editor>
+    <BoardWrap>
+      <BoardContent>
+        <BoardTitle>
+          <BoardTitleLeft>
+            <BoardBigText>게시판</BoardBigText>
+            <BoardSmallText>
+              나의 강아지를 위한 커뮤니티 공간입니다.
+            </BoardSmallText>
+          </BoardTitleLeft>
+          <BoardTitleRight>
+            <Dog />
+            <BoardImg
+              src={`${process.env.PUBLIC_URL}/images/board/boardImg.svg`}
+              alt=""
+            />
+          </BoardTitleRight>
+        </BoardTitle>
+        <BoardCreateBox>
+          <BoardCreateTitleBox>
+            <BoardCreateTitleImg
+              src={`${process.env.PUBLIC_URL}/images/board/boardCreateBtn2.svg`}
+              alt=""
+            />
+            <BoardCreateTitle>글수정하기</BoardCreateTitle>
+          </BoardCreateTitleBox>
+          <BoardCreateForm onSubmit={handleSubmit(onValid)}>
+            <FormTitle>
+              <FormLabel htmlFor="title">제목</FormLabel>
+              <FormInput
+                defaultValue={postData?.title}
+                {...register("title", {
+                  required: "제목은 필수사항입니다.",
+                })}
+              />
+            </FormTitle>
+            <FormCategory>
+              <FormLabel htmlFor="category">카테고리</FormLabel>
+              <Controller
+                name="selectOption"
+                control={control}
+                defaultValue="" // 선택된 옵션을 초기화할 경우 빈 문자열로 설정
+                render={({ field }) => (
+                  <CategorySelect {...field}>
+                    <option value="" disabled hidden>
+                      카테고리
+                    </option>
+                    <option value="2">자유게시판</option>
+                    <option value="3">질문</option>
+                    <option value="4">정보</option>
+                  </CategorySelect>
+                )}
+              />
+            </FormCategory>
+            <FormContent>
+              <FormLabel htmlFor="contents" id="contents">
+                내용
+              </FormLabel>
+              <FormTextArea
+                {...register("contents", {
+                  required: "내용은 필수사항입니다.",
+                })}
+                placeholder="정보통신망을 통하여 불법촬영물등, 음란, 저작권 침해 명예훼손, 청소년 유해물, 기타 위법 자료 들을 게시 또는 배포하면 해당 게시물은 경고 없이 삭제되며, 게시자는 법률에 따라 징역형 또는 벌금형에 처해질 수 있습니다."
+              />
+              {/* <Editor>
                 <QuillEditor />
               </Editor> */}
-        </FormContent>
-        <FormFile>
-          <FormLabel htmlFor="file">첨부파일</FormLabel>
-          <Controller
-            name="files"
-            control={control}
-            render={({ field }) => (
-              <FileInput
-                type="file"
-                onChange={e => {
-                  // 최대 3개까지만 선택하도록 제한
-                  const selectedFiles = Array.from(e.target.files).slice(0, 3);
-                  setViewFile([...selectedFiles]);
-                  field.onChange(selectedFiles);
-                }}
-                multiple
+            </FormContent>
+            <FormFile>
+              <FormLabel htmlFor="file">첨부파일</FormLabel>
+              <Controller
+                name="files"
+                control={control}
+                render={({ field }) => (
+                  <FileInput
+                    type="file"
+                    onChange={e => {
+                      // 최대 3개까지만 선택하도록 제한
+                      const selectedFiles = Array.from(e.target.files).slice(
+                        0,
+                        3,
+                      );
+                      setViewFile([...selectedFiles]);
+                      field.onChange(selectedFiles);
+                    }}
+                    multiple
+                  />
+                )}
               />
-            )}
-          />
-          <File>
-            {viewFile.map((file, idx) => {
-              return <span key={idx}>{file.name}</span>;
-            })}
-          </File>
-        </FormFile>
-        <FormBtnDiv>
-          <FormBtn bg="cancle" onClick={cancleClick}>
-            취소
-          </FormBtn>
-          <FormBtn>확인</FormBtn>
-        </FormBtnDiv>
-      </BoardCreateForm>
-    </BoardCreateBox>
+              <File>
+                {viewFile.map((file, idx) => {
+                  return <span key={idx}>{file.name}</span>;
+                })}
+              </File>
+            </FormFile>
+            <FormBtnDiv>
+              <FormBtn bg="cancle" onClick={cancleClick}>
+                취소
+              </FormBtn>
+              <FormBtn>확인</FormBtn>
+            </FormBtnDiv>
+          </BoardCreateForm>
+        </BoardCreateBox>
+      </BoardContent>
+    </BoardWrap>
   );
 };
 
-export default BoardUpdate;
+export default BoardUpdatePage;

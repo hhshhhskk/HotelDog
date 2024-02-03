@@ -126,6 +126,9 @@ export const BoardCreateBtn = styled.div`
   margin-top: 17px;
   text-align: center;
 
+  &:hover {
+    background-color: rgba(101, 66, 34, 0.9);
+  }
   cursor: pointer;
 `;
 

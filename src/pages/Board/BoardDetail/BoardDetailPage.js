@@ -15,6 +15,15 @@ import { useQuery } from "react-query";
 import { boardDeleteAPI, boardDetailAPI } from "../../../api/board/boardApi";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import {
+  commentCreateAPI,
+  commentDeleteAPI,
+} from "../../../api/board/boardCommentApi";
+import BoardPagination from "../../../components/Board/BoardPagination";
+
+const BoardDetailWrap = styled(BoardWrap)`
+  height: auto;
+`;
 
 const BoardDetailTop = styled.div`
   width: 100%;
@@ -83,7 +92,6 @@ const BoardDetailCommentBox = styled.div`
   background-color: #fffaf0;
   width: 100%;
   min-height: 150px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -137,16 +145,17 @@ const CommentFilter = styled.div`
 const CommentDiv = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  gap: 10px;
   width: 1100px;
-  min-height: 70px;
+  min-height: 60px;
+  margin-top: 12px;
   padding-left: 21px;
   border-bottom: 1px solid rgba(101, 66, 34, 0.3);
 `;
 
 const CommentDivTop = styled.div`
   display: flex;
-  width: 100%;
+  width: 50%;
   height: 50%;
   align-items: center;
 `;
@@ -163,6 +172,13 @@ const CommentDate = styled.div`
   color: #969696;
   font-size: 1.2rem;
   font-weight: 400;
+`;
+
+const CommentCtrlBtn = styled.div`
+  color: #654222;
+  margin-left: 10px;
+
+  cursor: pointer;
 `;
 
 const Comment = styled.div`
@@ -204,6 +220,8 @@ const CommentBtn = styled.button`
   border: none;
 
   background-color: #654222;
+
+  cursor: pointer;
 `;
 
 const NavigateDiv = styled.div`
@@ -238,13 +256,16 @@ const DetailBtn = styled.div`
   border-radius: 5px;
   border: 1px solid #654222;
   background-color: #fff;
+  &:hover {
+    background-color: #e8e8e8;
+  }
   cursor: pointer;
 `;
 
 const BoardDetailPage = () => {
   const topItem = [
     "boardPk",
-    "카테고리",
+    "boardCategoryPk",
     "title",
     "nickname",
     "createdAt",
@@ -254,8 +275,14 @@ const BoardDetailPage = () => {
   const { boardPk } = useParams();
   const loginUserPk = useSelector(state => state.loginSlice.userPk);
   const [filter, setFilter] = useState(0);
+  const category = ["공지", "자유게시판", "질문", "정보"];
   const [commentPage, setCommentPage] = useState(1);
-  const { data, isLoading, isSuccess } = useQuery(
+  const [comment, setComment] = useState("");
+  const [commentUpdate, setCommentUpdate] = useState({
+    update: false,
+    idx: "",
+  });
+  const { data, isLoading, isSuccess, refetch } = useQuery(
     ["boardDetail", boardPk, commentPage],
     () => {
       const fetchData = async () => {
@@ -281,12 +308,35 @@ const BoardDetailPage = () => {
       const dateA = new Date(a.createdAt);
       const dateB = new Date(b.createdAt);
 
-      return dateB - dateA;
+      return dateA - dateB;
     });
   }
 
+  const commentChanged = e => {
+    // console.log(e.target.value);
+    setComment(e.target.value);
+  };
+
+  const commentBtnClicked = async e => {
+    e.preventDefault();
+    if (comment === "") {
+      alert("댓글을 작성해주세요.");
+    } else {
+      const commentData = {
+        boardPk,
+        comment,
+      };
+      const result = await commentCreateAPI(commentData);
+      if (result === 1) {
+        console.log("리패치요청");
+        refetch();
+        setComment("");
+      }
+    }
+  };
+
   return (
-    <BoardWrap>
+    <BoardDetailWrap>
       {isLoading || !isSuccess || (
         <BoardContent>
           <BoardTitle>
@@ -308,7 +358,7 @@ const BoardDetailPage = () => {
             {topItem.map((item, idx) => {
               return (
                 <DetailTopItem key={idx} idx={idx}>
-                  {data?.[item]}
+                  {idx === 1 ? category[data?.[item] - 1] : data?.[item]}
                 </DetailTopItem>
               );
             })}
@@ -335,7 +385,7 @@ const BoardDetailPage = () => {
                 src={`${process.env.PUBLIC_URL}/images/board/comment.svg`}
                 alt=""
               />
-              <DetailCommentCnt>댓글(1)</DetailCommentCnt>
+              <DetailCommentCnt>댓글({data?.commentCount})</DetailCommentCnt>
               <DetailCommentFilter>
                 {["등록순", "최신순"].map((data, idx) => {
                   return (
@@ -354,27 +404,67 @@ const BoardDetailPage = () => {
               </DetailCommentFilter>
             </DetailCommentTop>
             {data?.comments[0] &&
-              (filter === 0 ? data.comments : sortedComments)?.map(
-                (item, idx) => {
-                  return (
-                    <CommentDiv key={idx}>
-                      <CommentDivTop>
-                        <CommentNickName>{item?.userNickname}</CommentNickName>
-                        <CommentDate>({item?.createdAt})</CommentDate>
-                      </CommentDivTop>
+              data.comments.map((item, idx) => {
+                return (
+                  <CommentDiv key={idx}>
+                    <CommentDivTop>
+                      <CommentNickName>{item?.userNickname}</CommentNickName>
+                      <CommentDate>({item?.createdAt})</CommentDate>
+                      {loginUserPk === item?.userPk && (
+                        <>
+                          <CommentCtrlBtn
+                            onClick={() => {
+                              setCommentUpdate({
+                                update: !commentUpdate.update,
+                                idx,
+                              });
+                            }}
+                          >
+                            수정
+                          </CommentCtrlBtn>
+                          <CommentCtrlBtn
+                            onClick={async () => {
+                              const answer =
+                                confirm("정말로 삭제 하시겠습니까?");
+                              if (answer) {
+                                const result = await commentDeleteAPI(
+                                  item?.commentPk,
+                                );
 
+                                if (result === 1) {
+                                  alert("삭제 되었습니다.");
+                                  refetch();
+                                }
+                              }
+                            }}
+                          >
+                            삭제
+                          </CommentCtrlBtn>
+                        </>
+                      )}
+                    </CommentDivTop>
+                    {commentUpdate.update ? (
+                      <input />
+                    ) : (
                       <Comment>{item?.comment}</Comment>
-                    </CommentDiv>
-                  );
-                },
-              )}
+                    )}
+                  </CommentDiv>
+                );
+              })}
             <CommentInputDiv>
               <CommentInput
                 type="text"
+                onChange={commentChanged}
+                value={comment}
                 placeholder="명예훼손, 개인정보 유출, 분쟁 유발, 허위사실 유포 등의 글은 이용약관에 의해 제재는 물론 법률에 의해 처벌 받을 수 있습니다. 건전한 커뮤니티를 위해 자제를 당부 드립니다."
               />
-              <CommentBtn>등록</CommentBtn>
+              <CommentBtn onClick={commentBtnClicked}>등록</CommentBtn>
             </CommentInputDiv>
+            <BoardPagination
+              totalPage={data?.commentMaxPage}
+              nowPage={commentPage}
+              setNowPage={setCommentPage}
+            />
           </BoardDetailCommentBox>
           <NavigateDiv>
             <NavigateFirst>
@@ -389,7 +479,15 @@ const BoardDetailPage = () => {
             <NavigateLast>
               {loginUserPk === data.userPk && (
                 <>
-                  <DetailBtn onClick={() => {}}>수정</DetailBtn>
+                  <DetailBtn
+                    onClick={() => {
+                      navigate(`/boardUpdate`, {
+                        state: { data }, // postData는 현재 페이지의 데이터
+                      });
+                    }}
+                  >
+                    수정
+                  </DetailBtn>
                   <DetailBtn
                     onClick={async () => {
                       const answer = confirm("정말로 삭제 하시겠습니까?");
@@ -411,7 +509,7 @@ const BoardDetailPage = () => {
           </NavigateDiv>
         </BoardContent>
       )}
-    </BoardWrap>
+    </BoardDetailWrap>
   );
 };
 

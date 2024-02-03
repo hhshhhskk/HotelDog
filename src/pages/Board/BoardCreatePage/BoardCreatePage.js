@@ -12,7 +12,6 @@ import {
   BoardWrap,
 } from "../../../styles/BoardPageStyle/boardStyle";
 import { useNavigate } from "react-router-dom";
-import QuillEditor from "../../../components/Board/QuillEditor";
 import { Controller, useForm } from "react-hook-form";
 import { boardCreateAPI } from "../../../api/board/boardApi";
 

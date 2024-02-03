@@ -120,6 +120,10 @@ const LoginBtn = styled.button`
 
   border: none;
   border-radius: 10px;
+  &:hover {
+    background-color: rgba(101, 66, 34, 0.9);
+  }
+  cursor: pointer;
 `;
 
 const IdSave = styled.div`

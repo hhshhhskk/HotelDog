@@ -2,6 +2,7 @@ import Layout from "../components/Layout/Layout";
 import BoardCreatePage from "../pages/Board/BoardCreatePage/BoardCreatePage";
 import BoardDetailPage from "../pages/Board/BoardDetail/BoardDetailPage";
 import BoardPage from "../pages/Board/BoardPage/BoardPage";
+import BoardUpdatePage from "../pages/Board/BoardUpdatePage/BoardUpdatePage";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import EventPage from "../pages/EventPage/EventPage";
 import HotelDetailPage from "../pages/HotelDetailPage/HotelDetailPage";
@@ -56,6 +57,11 @@ export const RouterInfo = [
         path: "/boardCreate",
         element: <BoardCreatePage />,
         label: "boardCreate",
+      },
+      {
+        path: "/boardUpdate",
+        element: <BoardUpdatePage />,
+        label: "boardUpdate",
       },
       {
         path: "/hotelDetail/:detailId",
