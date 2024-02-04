@@ -92,27 +92,27 @@ const MainPage = () => {
 
   useEffect(() => {
     totalHotelList();
-  }, [saveSearchData]);
-  
+  }, [saveFilterData]);
+
   // 전체 호텔 리스트 가져오기
   const totalHotelList = async () => {
     try {
       let filter = {};
-      if (saveSearchData) {
-        console.log("필터링 데이터", saveSearchData);
-        filter = await saveSearchData;
+      if (saveFilterData) {
+        console.log("필터링 데이터", saveFilterData);
+        filter = await saveFilterData;
       } else {
-        console.log("기본 데이터", hotelListData);
-        filter = await hotelListData;
+        console.log("기본 데이터", postData);
+        filter = await postData;
       }
 
       const LoginState = isLogin ? postJwtHotelListAPI : postHotelListAPI;
       const data = await LoginState({
         page: 1,
-        setHotelListData: filter,
+        setPostData: filter,
       });
 
-      setGetServerListData(data);
+      setHotelListData(data);
     } catch (error) {
       console.log(error);
     }
