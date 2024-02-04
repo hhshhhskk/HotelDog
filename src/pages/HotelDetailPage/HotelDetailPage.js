@@ -10,6 +10,7 @@ import {
   getHotel,
   getHotelId,
   getOneReservation,
+  getSelectRoomId,
 } from "../../api/Detail/hoteldetailApi";
 
 // 호텔 상세페이지
@@ -29,16 +30,23 @@ const HotelDetailPage = () => {
   const [userPk, setUserPk] = useState(detailId);
   const [hotel_pk, setHotel_pk] = useState(detailId);
   const [hotelList, setHotelList] = useState([]);
+  const [roomlList, setRoomList] = useState([]);
 
   const reloadgetHotelId = () => {
     // jwtAxios.get 에서 userPk, hotelPk, setHotelList  호텔 리스트 목록 불러오기
     console.log("hotel_pk", hotel_pk);
     getHotelId(hotel_pk, setHotelList);
   };
+  const reloadgetSelectRoomId = () => {
+    // jwtAxios.get 에서 userPk, hotelPk, setRoomList  객실 리스트 목록 불러오기
+    console.log("hotel_pk", hotel_pk);
+    getSelectRoomId(hotel_pk, setRoomList);
+  };
 
   // 화면 준비되면 그때 반영
   useEffect(() => {
     reloadgetHotelId();
+    reloadgetSelectRoomId();
   }, []);
 
   return (
@@ -53,6 +61,7 @@ const HotelDetailPage = () => {
           resDay={resDay}
           setResDay={setResDay}
           reloadgetHotelId={reloadgetHotelId}
+          reloadgetSelectRoomId={reloadgetSelectRoomId}
         />
       ) : null}
       {/* <h1>HotelDetailPage pk : {detailId}</h1> */}
