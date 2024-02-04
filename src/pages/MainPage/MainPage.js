@@ -81,31 +81,32 @@ const MainPage = () => {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    // console.log("바뀐데이터", saveSearchData);
-    if (saveSearchData) {
-      setHotelListData(saveSearchData);
-    }
+    getHotelList();
   }, [saveSearchData]);
   // 전체 호텔 리스트 가져오기
   const getHotelList = async () => {
-    // hotelListAPI(setHotelListData);
     try {
+      let filter = {};
+      if (saveSearchData) {
+        console.log("필터링 데이터", saveSearchData);
+        filter = await saveSearchData;
+      } else {
+        console.log("기본 데이터", hotelListData);
+        filter = await hotelListData;
+      }
+
       const LoginState = isLogin ? postJwtHotelListAPI : postHotelListAPI;
       const data = await LoginState({
         page: 1,
-        setHotelListData: hotelListData,
-        // setHotelListData: hotelListData,
+        setHotelListData: filter,
       });
+
       setGetServerListData(data);
     } catch (error) {
       console.log(error);
       // 에러 처리 로직 추가
     }
   };
-
-  useEffect(() => {
-    getHotelList();
-  }, []);
 
   const navigate = useNavigate();
 
