@@ -21,7 +21,7 @@ export const loginPostAsync = createAsyncThunk(
 );
 
 const initState = {
-  loadAccessTokenCookie: "",
+  accessToken: "",
 };
 
 // 쿠키 정보 읽어와서 initState 변경하기
@@ -33,8 +33,7 @@ const loadAccessTokenCookie = () => {
 const loginSlice = createSlice({
   name: "loginSlice",
   initialState: {
-    accessToken: loadAccessTokenCookie() || initState,
-    userPk: 0,
+    accessToken: loadAccessTokenCookie() || initState.accessToken,
   },
 
   // store 의 state 를 업데이트 하는 함수 모음

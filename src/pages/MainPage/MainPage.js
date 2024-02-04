@@ -90,32 +90,33 @@ const MainPage = () => {
   // 선택한 날짜 useState
   const [reserveDay, setReserveDay] = useState({ startDay: "", endDay: "" });
 
+  useEffect(() => {
+    totalHotelList();
+  }, [saveSearchData]);
+  
   // 전체 호텔 리스트 가져오기
   const totalHotelList = async () => {
     try {
+      let filter = {};
+      if (saveSearchData) {
+        console.log("필터링 데이터", saveSearchData);
+        filter = await saveSearchData;
+      } else {
+        console.log("기본 데이터", hotelListData);
+        filter = await hotelListData;
+      }
+
       const LoginState = isLogin ? postJwtHotelListAPI : postHotelListAPI;
       const data = await LoginState({
         page: 1,
-        setPostData: postData,
+        setHotelListData: filter,
       });
-      setHotelListData(data);
+
+      setGetServerListData(data);
     } catch (error) {
       console.log(error);
     }
   };
-
-  // ??? 이 작업이 필요있나
-  useEffect(() => {
-    totalHotelList();
-  }, []);
-
-  // ??? 배치될 자리
-  // 필터 데이터가 오면 POST 데이터에 업데이트
-  useEffect(() => {
-    if (saveFilterData) {
-      setPostData(saveFilterData);
-    }
-  }, [saveFilterData]);
 
   //  정렬방식(추천순, 별점순, 리뷰순) 선택
   const handleChangeSorting = e => {

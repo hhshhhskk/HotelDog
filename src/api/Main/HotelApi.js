@@ -39,9 +39,11 @@ export const postJwtHotelListAPI = async ({ page, setPostData }) => {
 // Axios : 호텔 전체 리스트 API
 export const postHotelListAPI = async ({ page, setPostData }) => {
   try {
-    const parseData = removeEmptyValues(setPostData);
+    
+    const parseData = await removeEmptyValues(setHotelListData);
     // const header = { headers: { "Content-Type": "application/json" } };
     const res = await axios.post(`/api/hotel?page=${page}`, parseData);
+    console.log(res.data);
     return res.data;
   } catch (error) {
     console.log(error);
