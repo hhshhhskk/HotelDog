@@ -25,8 +25,8 @@ import { useNavigate } from "react-router-dom";
 import { postHotelListAPI, postJwtHotelListAPI } from "../../api/Main/HotelApi";
 import useCustomLogin from "../../hooks/useCustomLogin";
 
-// 메인페이지 POST 데이터 형식
-const initDataList = {
+// POST 데이터 형식
+const initPostData = {
   address: "",
   search: "",
   main_filter: 0,
@@ -37,7 +37,7 @@ const initDataList = {
   filter_type: 0,
 };
 
-// 호텔 전체 리스트 데이터 형식
+// 호텔 리스트 데이터 형식
 const initHotellist = {
   hotel_advertise_list: [
     {
@@ -68,80 +68,76 @@ const initHotellist = {
 };
 
 const MainPage = () => {
-  // 로그인 상태 불러오기
+  const navigate = useNavigate();
   const { isLogin } = useCustomLogin();
 
-  // POST 데이터 useState
-  const [hotelListData, setHotelListData] = useState(initDataList);
-  // 전체 호텔 리스트 useState
-  const [getServerListData, setGetServerListData] = useState(initHotellist);
-  // 검색 폼 데이터 관리
-  const [saveSearchData, setSaveSearchData] = useState(null);
-  // 초기 화면 불러오기
-  const [page, setPage] = useState(1);
+  // 필터 폼 클릭 시 스크롤 이동
+  const handleClickFilterForm = () => {
+    window.scrollTo({ top: 300, behavior: "smooth" });
+  };
 
-  useEffect(() => {
-    // console.log("바뀐데이터", saveSearchData);
-    if (saveSearchData) {
-      setHotelListData(saveSearchData);
-    }
-  }, [saveSearchData]);
+  // POST 데이터 useState
+  const [postData, setPostData] = useState(initPostData);
+  // 필터 데이터 ustState
+  const [saveFilterData, setSaveFilterData] = useState(null);
+  // 호텔 리스트 useState
+  const [hotelListData, setHotelListData] = useState(initHotellist);
+  // 호텔 리스트 페이지 useState
+  const [page, setPage] = useState(1);
+  // 호텔 리스트 정렬방식(추천순, 별점순, 리뷰순) useState
+  const [selectSorting, setSelectSorting] = useState("추천순");
+
+  // 선택한 날짜 useState
+  const [reserveDay, setReserveDay] = useState({ startDay: "", endDay: "" });
+
   // 전체 호텔 리스트 가져오기
-  const getHotelList = async () => {
-    // hotelListAPI(setHotelListData);
+  const totalHotelList = async () => {
     try {
       const LoginState = isLogin ? postJwtHotelListAPI : postHotelListAPI;
       const data = await LoginState({
         page: 1,
-        setHotelListData: hotelListData,
-        // setHotelListData: hotelListData,
+        setPostData: postData,
       });
-      setGetServerListData(data);
+      setHotelListData(data);
     } catch (error) {
       console.log(error);
-      // 에러 처리 로직 추가
     }
   };
 
+  // ??? 이 작업이 필요있나
   useEffect(() => {
-    getHotelList();
+    totalHotelList();
   }, []);
 
-  const navigate = useNavigate();
+  // ??? 배치될 자리
+  // 필터 데이터가 오면 POST 데이터에 업데이트
+  useEffect(() => {
+    if (saveFilterData) {
+      setPostData(saveFilterData);
+    }
+  }, [saveFilterData]);
 
-  // 필터 폼 클릭 시 스크롤 이동
-  const handleClickForm = () => {
-    window.scrollTo({ top: 300, behavior: "smooth" });
-  };
-
-  // 정렬방식에 대한 useState, 초기값은 추천순
-  const [selectSorting, setSelectSorting] = useState("추천순");
-
-  //  정렬방식(별점순, 리뷰순) 선택
+  //  정렬방식(추천순, 별점순, 리뷰순) 선택
   const handleChangeSorting = e => {
     const selectedValue = e.target.value;
-    // setFilterValue
-    console.log(selectedValue);
+    // console.log(selectedValue);
     setSelectSorting(selectedValue);
-    filterData(selectedValue);
+    sortingData(selectedValue);
   };
 
   // 호텔리스트 정렬방식(별점순, 리뷰순) 필터
-  const filterData = selectedValue => {
-    // 선택된 값을 이용해서 데이터 필터링
-    // console.log("선택된 값 :", selectedValue);
-    // console.log("변경전 후 데이터 ", hotelListData);
-    const nowData = { ...hotelListData, filter_type: parseInt(selectedValue) };
-    // console.log("선택 후 바뀐 데이터 ", nowData);
-    setHotelListData(nowData);
+  const sortingData = selectedValue => {
+    // console.log("정렬방식 :", selectedValue);
+    console.log("정렬방식 변경 전 :", postData);
+    const nowData = { ...postData, filter_type: parseInt(selectedValue) };
+    console.log("정렬방식 변경 후 :", nowData);
+    setPostData(nowData);
   };
 
   // 자식 컴포넌트 즉, calendar 에서 알려줘야 다른 컴포넌트에 전달할 수 있다.
-  const [reserveDay, setReserveDay] = useState({ startDay: "", endDay: "" });
   const changeSelectDay = (_st, _ed) => {
-    console.log("시작", _st);
-    console.log("완료", _ed);
-
+    console.log("체크인 :", _st);
+    console.log("체크아웃 :", _ed);
     setReserveDay(prev => {
       // 중요: 값을 업데이트할 때 `this.state` 대신 `state` 값을 읽어옵니다.
       return { startDay: _st, endDay: _ed };
@@ -151,36 +147,35 @@ const MainPage = () => {
     // console.log(reserveDay);
   }, [reserveDay]);
 
-  const handleSelectGo = _hotel_pk => {
-    console.log("상세 페이지 보기?? ", _hotel_pk);
-    console.log(reserveDay);
+  // 호텔 상세페이지 이동
+  const handleClickHotel = _hotel_pk => {
+    // console.log("호텔 상세보기 :", _hotel_pk);
+    // console.log(reserveDay);
     // useNavigate 를 이용한 이동과 정보를 함께 보내기(state)
     navigate(`/hoteldetail/${_hotel_pk}`, { state: { day: reserveDay } });
   };
 
   // 호텔 리스트 페이지네이션
-  const handleClickLoad = async () => {
+  const handleClickPage = async () => {
     try {
-      const nextPage = page + 1;
       // 다음 페이지 데이터를 가져오기
+      const nextPage = page + 1;
       const LoginState = isLogin ? postJwtHotelListAPI : postHotelListAPI;
       const data = await LoginState({
         page: nextPage,
-        setHotelListData: hotelListData,
+        setPostData: postData,
       });
       // 현재 호텔 리스트 데이터와 새로운 데이터를 합치기
-      const prevData = { ...getServerListData };
-
+      const prevData = { ...hotelListData };
       const mergedData = {
         hotel_advertise_list: data.hotel_advertise_list,
         hotel_list: [...prevData.hotel_list, ...data.hotel_list],
       };
-      setGetServerListData(mergedData);
+      setHotelListData(mergedData);
       // 페이지 번호 업데이트
       setPage(nextPage);
     } catch (error) {
       console.log(error);
-      // 에러 처리 로직 추가
     }
   };
 
@@ -199,11 +194,11 @@ const MainPage = () => {
             </span>
           </VisualText>
 
-          {/* 검색 */}
-          <VisualForm onClick={handleClickForm}>
+          {/* 필터 */}
+          <VisualForm onClick={handleClickFilterForm}>
             <MainSearchFrom
               changeSelectDay={changeSelectDay}
-              setSaveSearchData={setSaveSearchData}
+              setSaveFilterData={setSaveFilterData}
             />
           </VisualForm>
         </VisualInner>
@@ -218,21 +213,24 @@ const MainPage = () => {
             <span>핫한 광고 상품을 추천드립니다!</span>
           </AdText>
           <HotelCardDiv>
-            {getServerListData.hotel_advertise_list?.map((hotel, index) => (
+            {hotelListData.hotel_advertise_list?.map((hotel, index) => (
               <div key={index}>
-                <HotelCardForm hotel={hotel} handleSelectGo={handleSelectGo} />
+                <HotelCardForm
+                  hotel={hotel}
+                  handleClickHotel={handleClickHotel}
+                />
               </div>
             ))}
           </HotelCardDiv>
         </AdListDiv>
 
-        {/* 필터호텔 */}
+        {/* 호텔 */}
         <FilterListDiv>
           <FilterText>
             <FilterTitle>호텔 리스트 </FilterTitle>
             <span>등록된 주소 기준으로 보여드립니다</span>
 
-            {/* 필터호텔 정렬방식 */}
+            {/* 정렬방식 */}
             <form>
               <select value={selectSorting} onChange={handleChangeSorting}>
                 <option value="0">추천순</option>
@@ -242,14 +240,17 @@ const MainPage = () => {
             </form>
           </FilterText>
           <HotelCardDiv>
-            {getServerListData.hotel_list?.map((hotel, index) => (
+            {hotelListData.hotel_list?.map((hotel, index) => (
               <div key={index}>
-                <HotelCardForm hotel={hotel} handleSelectGo={handleSelectGo} />
+                <HotelCardForm
+                  hotel={hotel}
+                  handleClickHotel={handleClickHotel}
+                />
               </div>
             ))}
           </HotelCardDiv>
-          {/* 호텔 더 불러오기 버튼 */}
-          <HotelPlusBtDiv onClick={handleClickLoad}>
+          {/* 페이지네이션 버튼 */}
+          <HotelPlusBtDiv onClick={handleClickPage}>
             <HotelPlusBt>더 불러오기</HotelPlusBt>
             <img
               src={`${process.env.PUBLIC_URL}/images/hotelPlusArrow2.svg`}

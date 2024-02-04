@@ -21,13 +21,14 @@ import {
 import HotelLike from "./HotelLike";
 import { getHotelBookMarkAPI } from "../../api/Main/HotelApi";
 import useCustomLogin from "../../hooks/useCustomLogin";
+import { useNavigate } from "react-router-dom";
 
-const HotelCardForm = ({ hotel, handleSelectGo }) => {
-  // console.log(hotel);
-  // !!!초기값은 데이터 불러오면 변경 예정
-  const [bookMark, setBookMark] = useState("");
-  const [bookMarkCheck, setBookMarkCheck] = useState(0);
+const HotelCardForm = ({ hotel, handleClickHotel }) => {
+  const navigate = useNavigate();
   const { isLogin } = useCustomLogin();
+
+  // 호텔 좋아요 북마크 useState
+  const [bookMarkCheck, setBookMarkCheck] = useState(0);
 
   useEffect(() => {
     if (hotel) {
@@ -35,11 +36,14 @@ const HotelCardForm = ({ hotel, handleSelectGo }) => {
     }
   }, [hotel]);
 
-  // 호텔 좋아요 북마크
+  // 호텔 좋아요 북마크 처리
   const hotelBookMark = async () => {
     try {
-      const result = await getHotelBookMarkAPI(hotel?.hotel_pk, isLogin);
-
+      const result = await getHotelBookMarkAPI(
+        hotel?.hotel_pk,
+        isLogin,
+        navigate,
+      );
       if (result === 2) {
         setBookMarkCheck(0);
       } else {
@@ -47,9 +51,9 @@ const HotelCardForm = ({ hotel, handleSelectGo }) => {
       }
     } catch (error) {
       console.log(error);
-      // 에러 처리 로직 추가
     }
   };
+
   // 가격 천단위 표시
   const formatNumber = number => {
     if (number) {
@@ -58,7 +62,8 @@ const HotelCardForm = ({ hotel, handleSelectGo }) => {
       return 0;
     }
   };
-  // 호텔 할인가 계산식
+
+  // 호텔 할인가 계산
   const salePrice = (originalPrice, sale) => {
     if (originalPrice && sale) {
       const discount = (parseFloat(sale) / 100) * parseFloat(originalPrice);
@@ -73,10 +78,9 @@ const HotelCardForm = ({ hotel, handleSelectGo }) => {
         <HotelImgDiv>
           <img
             src={`http://112.222.157.156:5222/pic/hotel/${hotel.hotel_pk}/${hotel.hotel_pic}`}
-            onClick={() => handleSelectGo(hotel.hotel_pk)}
+            onClick={() => handleClickHotel(hotel.hotel_pk)}
           />
-          {/* 북마크 넘겨주거나 컴포넌트를 해지해야 함. */}
-          {/* <HotelLike /> */}
+          {/* 호텔 좋아요 북마크 */}
           <BookMarkImgDiv onClick={hotelBookMark}>
             {bookMarkCheck === 1 ? (
               <img src={`${process.env.PUBLIC_URL}/images/like_after.svg`} />
@@ -86,16 +90,18 @@ const HotelCardForm = ({ hotel, handleSelectGo }) => {
           </BookMarkImgDiv>
         </HotelImgDiv>
 
-        <HotelContentsDiv onClick={() => handleSelectGo(hotel.hotel_pk)}>
+        {/* 호텔 정보 */}
+        <HotelContentsDiv onClick={() => handleClickHotel(hotel.hotel_pk)}>
           <TitleDiv>
             <HotelName>{hotel.hotel_nm}</HotelName>
             <HotelEvaluationDiv>
               <Star>★ {hotel.avgStar}</Star>
-              {/* 데이터에 리뷰수 누락 */}
               <Review>({formatNumber(hotel.review_count)})</Review>
             </HotelEvaluationDiv>
           </TitleDiv>
           <HotelAddress>{hotel.address_name}</HotelAddress>
+
+          {/* 호텔 가격 */}
           <HotelPriceDiv>
             {hotel.discount_per ? (
               <>
