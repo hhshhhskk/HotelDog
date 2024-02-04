@@ -15,7 +15,7 @@ import {
   ReviewWrap,
 } from "../../styles/Detail/hoteldetailStyle";
 
-const HotelDetail = ({ hotelList, detailId, resDay, setResDay }) => {
+const HotelDetail = ({ hotelList, detailId, resDay, setResDay,  }) => {
   const [selectedRoom, setSelectedRoom] = useState(null);
   console.log("HotelDetail =========== : ", hotelList);
   // 더미 데이터
@@ -78,8 +78,8 @@ const HotelDetail = ({ hotelList, detailId, resDay, setResDay }) => {
     // 현재 스크롤 위치를 가져오기
     const scrollTop = window.pageYOffset;
     // const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    console.log("현재 스크롤 위치:", scrollTop);
-    if (scrollTop > 150 && scrollTop < 1000) {
+    // console.log("현재 스크롤 위치:", scrollTop);
+    if (scrollTop < 1000) {
       setReserveFormVisible(true);
     } else {
       setReserveFormVisible(false);
@@ -110,7 +110,24 @@ const HotelDetail = ({ hotelList, detailId, resDay, setResDay }) => {
           </div>
 
           <div>
-            {hotelInfoVo.map(function (item, index) {
+            <div className="hotel-text-wrap">
+              <div>
+                <h1 className="hotel-title">
+                  {hotelList.hotel_info_vo.hotel_nm}
+                </h1>
+                <span className="hotel-spot">
+                  {hotelList.hotel_info_vo.road_address}
+                </span>
+              </div>
+              {/* <span className="hotel-won">
+                      <b className="hotel-price">110,000</b>원
+                    </span> */}
+            </div>
+            <p className="hotel-desc">
+              {hotelList.hotel_info_vo.hotel_detail_info}
+            </p>
+
+            {/* {hotelList.hotel_info_vo.map(function (item, index) {
               return (
                 <div key={index}>
                   <div className="hotel-text-wrap">
@@ -125,11 +142,11 @@ const HotelDetail = ({ hotelList, detailId, resDay, setResDay }) => {
                   <p className="hotel-desc">{item.hotel_detail_info}</p>
                 </div>
               );
-            })}
+            })} */}
           </div>
         </div>
         {/* 시설 영역 */}
-        <div>
+        {/* <div>
           <span className="facility-title">시설</span>
           {hotel_option.map(function (item, index) {
             return (
@@ -146,6 +163,25 @@ const HotelDetail = ({ hotelList, detailId, resDay, setResDay }) => {
               </div>
             );
           })}
+        </div> */}
+        <div>
+          <span className="facility-title">시설</span>
+          {/* {hotelList.hotel_info_vo.hotel_option.map(function (item, index) {
+            return (
+              <div key={index} className="facility-flex">
+                {item ? <div className="facility-content">{item}</div> : null}
+              </div>
+            );
+          })} */}
+          <div className="facility-flex">
+            {hotelList.hotel_info_vo.hotel_option.map(function (item, index) {
+              return (
+                <div key={index}>
+                  {item ? <div className="facility-content">{item}</div> : null}
+                </div>
+              );
+            })}
+          </div>
         </div>
         {/* 객실 영역 */}
         <RoomType

@@ -32,7 +32,7 @@ import Calendar, { getCurrentDate } from "../Common/Calendar";
 const MainSearchFrom = ({
   searchValue,
   changeSelectDay,
-  setSaveSearchData,
+  setSaveFilterData,
 }) => {
   // calendar 현재 날짜 불러오기
   const currentDate = getCurrentDate();
@@ -56,12 +56,14 @@ const MainSearchFrom = ({
     setDogDropdown(dropdownType === "dog");
     setFilterDropdown(dropdownType === "filter");
   };
+
+  // 드롭다운 모두 닫기
   const handleCLickSubmit = () => {
-    // setLocationDropdown(false);
-    // setCalendarDropdown(false);
-    // setDogDropdown(false);
-    // setFilterDropdown(false);
-    allHide();
+    setLocationDropdown(false);
+    setCalendarDropdown(false);
+    setDogDropdown(false);
+    setFilterDropdown(false);
+    // allHide();
   };
   const handleCLickLocationSelect = () => handleDropdownSelect("location");
   const handleCLickCalendarSelect = () => handleDropdownSelect("calendar");
@@ -71,12 +73,31 @@ const MainSearchFrom = ({
   // 캘린더에서 날짜 선택 시 적용
   const calendarClose = (_sd, _ed) => {
     changeSelectDay(_sd, _ed);
-    allHide();
+    handleCLickSubmit();
+    // allHide();
     // setCalendarDropdown(false);
   };
 
-  // [수정예정임] 데이터 연동 시 삭제
-  const locationOption = ["서울", "대구"];
+  // 드롭다운 데이터
+  const locationOption = [
+    "서울",
+    "부산",
+    "대구",
+    "인천",
+    "광주",
+    "대전",
+    "울산",
+    "세종특별자치시",
+    "경기",
+    "충북",
+    "충남",
+    "전북",
+    "전남",
+    "경북",
+    "경남",
+    "제주특별자치도",
+    "강원특별자치도",
+  ];
 
   // 반려견 정보에 대한 useState
   const [dogOption, setDogOption] = useState([
@@ -101,18 +122,19 @@ const MainSearchFrom = ({
     const location = e.target.innerText;
     setLocationValue(location);
     // ???드롭다운 닫기 왜 안 먹히지
+    handleCLickSubmit();
     // setLocationDropdown(false);
-    allHide();
+    // allHide();
   };
 
   // 전체 목록 닫기
-  const allHide = () => {
-    // console.log("모두 닫아요..");
-    setLocationDropdown(false);
-    setCalendarDropdown(false);
-    setDogDropdown(false);
-    setFilterDropdown(false);
-  };
+  // const allHide = () => {
+  //   // console.log("모두 닫아요..");
+  //   setLocationDropdown(false);
+  //   setCalendarDropdown(false);
+  //   setDogDropdown(false);
+  //   setFilterDropdown(false);
+  // };
 
   // 반려견 마리수 증감에 따른 연산
   const handleIncrement = index => {
@@ -168,7 +190,7 @@ const MainSearchFrom = ({
       dogCount: count,
     }));
 
-  // [수정예정] 검색폼 데이터 전송을 위한 작업
+  // POST 데이터 전송을 위한 작업
   const handleSubmit = e => {
     console.log("선택완료");
 
@@ -178,7 +200,6 @@ const MainSearchFrom = ({
       return;
     }
 
-    // 0131 : 어떻게 전달할지만 결정하면 될듯합니다.
     let optionValue = [];
     // console.log("selectFilter", selectFilter);
     if (selectFilter[0] === "수영장") {
@@ -210,16 +231,16 @@ const MainSearchFrom = ({
 
     const formData = {
       address: locationValue,
-      search: searchValue ? searchValue : "", // 헤더에서 props로 받아오기?
-      main_filter: 0, // (필수)메인필터 값이 하나라도 있으면 1 아닐 시 0
+      search: searchValue ? searchValue : "", // 3차 프로젝트에 구현
+      main_filter: 0,
       from_date: "", // (필수)2023-01-01 형식으로 전송
       to_date: "", // (필수)2023-01-01 형식으로 전송
-      dog_info: dogInfo, // (필수)
+      dog_info: dogInfo,
       hotel_option_pk: optionValue,
-      filter_type: filterValue, // [props] 정렬방식 (0 추천순, 1 별점순, 2 리뷰순)
+      filter_type: filterValue,
     };
 
-    // 필터폼 데이터가 하나라도 있으면
+    // 필터 데이터가 하나라도 있으면 main_filter: 1
     if (
       formData.address ||
       formData.from_date ||
@@ -231,9 +252,9 @@ const MainSearchFrom = ({
     }
 
     console.log(formData);
-    setSaveSearchData(formData);
+    setSaveFilterData(formData);
     // 필터 적용된 호텔 리스트로 이동
-    window.scrollTo({ top: 1550, behavior: "smooth" });
+    // window.scrollTo({ top: 1550, behavior: "smooth" });
   };
 
   return (

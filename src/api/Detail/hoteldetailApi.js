@@ -51,6 +51,32 @@ export const getHotelId = async (hotel_pk, successGetHotelId) => {
 //   }
 // };
 
+// 날짜 선택 시, 가능한 객실 리스트 뜨도록.f
+export const getSelectRoomId = async (
+  hotelPk,
+  startDate,
+  endDate,
+  successFn,
+  failFn,
+  errorFn,
+) => {
+  // http://112.222.157.156:5222/api/hotel/info?hotelPk=1&startDate=240204&endDate=240205
+  try {
+    const url = `${prefix}/api/hotel/info?hotelPk=${hotelPk}&startDate=${startDate}&endDate=${endDate}`;
+    const res = await jwtAxios.get(url);
+
+    const status = res.status.toString();
+    if (status.charAt(0) === "2") {
+      successFn(res.data);
+    } else {
+      failFn("전송 오류입니다.");
+    }
+  } catch (error) {
+    errorFn("서버에러에요");
+  }
+};
+
+// 예약 등록하기 post
 export const postReservation = async ({
   sendData,
   successFn,

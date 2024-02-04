@@ -10,7 +10,7 @@ export const ReserveFormScroll = styled.div`
 // 리뷰 영역
 export const ReviewWrap = styled.div`
   position: relative;
-  margin-top: 79px;
+  margin-top: 50px;
 `;
 export const ReviewHeader = styled.div`
   position: relative;
