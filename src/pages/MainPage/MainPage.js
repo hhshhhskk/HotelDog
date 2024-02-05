@@ -71,6 +71,9 @@ const MainPage = () => {
   const navigate = useNavigate();
   const { isLogin } = useCustomLogin();
 
+  const [startDay, setStartDay] = useState(null);
+  const [endDay, setEndDay] = useState(null);
+
   // 필터 폼 클릭 시 스크롤 이동
   const handleClickFilterForm = () => {
     window.scrollTo({ top: 300, behavior: "smooth" });
@@ -84,7 +87,7 @@ const MainPage = () => {
   const [hotelListData, setHotelListData] = useState(initHotellist);
   // 호텔 리스트 페이지 useState
   const [page, setPage] = useState(1);
-  // 호텔 리스트 정렬방식(추천순, 별점순, 리뷰순) useState
+  // 호텔 리스트 정렬방식 useState
   const [selectSorting, setSelectSorting] = useState("추천순");
 
   // 선택한 날짜 useState
@@ -111,9 +114,8 @@ const MainPage = () => {
         page: 1,
         setPostData: filter,
       });
-      
+
       setHotelListData(data);
-      
     } catch (error) {
       console.log(error);
     }
@@ -131,7 +133,14 @@ const MainPage = () => {
   const sortingData = selectedValue => {
     // console.log("정렬방식 :", selectedValue);
     console.log("정렬방식 변경 전 :", postData);
-    const nowData = { ...postData, filter_type: parseInt(selectedValue) };
+    let nowData = {};
+    console.log("saveFilterData", saveFilterData);
+    if (saveFilterData !== null) {
+      nowData = { ...postData, filter_type: parseInt(selectedValue) };
+    } else {
+      nowData = { ...hotelListData, filter_type: parseInt(selectedValue) };
+    }
+
     console.log("정렬방식 변경 후 :", nowData);
     setPostData(nowData);
   };
@@ -140,12 +149,12 @@ const MainPage = () => {
   const changeSelectDay = (_sd, _ed) => {
     console.log("체크인 :", _sd);
     console.log("체크아웃 :", _ed);
-    // const nowData = { ...postData, filter_type: }
-    // setPostData(nowData)
     setReserveDay(prev => {
       // 중요: 값을 업데이트할 때 `this.state` 대신 `state` 값을 읽어옵니다.
       return { startDay: _sd, endDay: _ed };
     });
+    setStartDay(_sd);
+    setEndDay(_ed);
   };
   useEffect(() => {
     // console.log(reserveDay);
@@ -187,7 +196,7 @@ const MainPage = () => {
     <MainPageDiv>
       <VisualDiv>
         <VisualImg>
-          <img src={`${process.env.PUBLIC_URL}/images/main.png`} alt="" />
+          <img src={`${process.env.PUBLIC_URL}/images/main2.svg`} alt="" />
         </VisualImg>
 
         <VisualInner>
@@ -203,6 +212,8 @@ const MainPage = () => {
             <MainSearchFrom
               changeSelectDay={changeSelectDay}
               setSaveFilterData={setSaveFilterData}
+              startDay={startDay}
+              endDay={endDay}
             />
           </VisualForm>
         </VisualInner>
@@ -210,6 +221,17 @@ const MainPage = () => {
 
       {/* 호텔리스트 */}
       <HotelListDiv>
+        {/* <div>
+          <div>
+            <span>사이즈 / 마리</span>
+            <button>소형견 1</button>
+          </div>
+          <div>
+            <span>필터</span>
+            <button>수영장</button>
+          </div>
+        </div> */}
+
         {/* 광고호텔 */}
         <AdListDiv>
           <AdText>
@@ -232,7 +254,7 @@ const MainPage = () => {
         <FilterListDiv>
           <FilterText>
             <FilterTitle>호텔 리스트 </FilterTitle>
-            <span>등록된 주소 기준으로 보여드립니다</span>
+            <span>등록된 주소를 기반하여 보여드립니다 : )</span>
 
             {/* 정렬방식 */}
             <form>

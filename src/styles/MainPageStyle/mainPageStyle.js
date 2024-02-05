@@ -31,7 +31,7 @@ export const VisualImg = styled.div`
   }
   /* 이미지 앞에 검은색 투명도 주기 */
   &::before {
-    position: relative;
+    /* position: relative; */
     content: "";
     position: absolute;
     top: 0;
