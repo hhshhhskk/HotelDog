@@ -39,10 +39,23 @@ export const postJwtHotelListAPI = async ({ page, setPostData }) => {
 // Axios : 호텔 전체 리스트 API
 export const postHotelListAPI = async ({ page, setPostData }) => {
   try {
+    console.log(setPostData);
     const parseData = await removeEmptyValues(setPostData);
+    console.log("팔스데이터", parseData);
+    console.log({
+      address: "대구",
+      main_filter: 0,
+      dog_info: [
+        {
+          dogSize: 1,
+          dogCount: 1,
+        },
+      ],
+      filter_type: 1,
+    });
     // const header = { headers: { "Content-Type": "application/json" } };
     const res = await axios.post(`/api/hotel?page=${page}`, parseData);
-    // console.log(res.data);
+    console.log("성공", res.data);
     return res.data;
   } catch (error) {
     console.log(error);

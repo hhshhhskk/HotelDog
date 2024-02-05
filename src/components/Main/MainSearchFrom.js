@@ -29,11 +29,7 @@ import {
 } from "../../styles/MainPageStyle/MainSearchFromStyle";
 import Calendar, { getCurrentDate } from "../Common/Calendar";
 
-const MainSearchFrom = ({
-  searchValue,
-  changeSelectDay,
-  setSaveFilterData,
-}) => {
+const MainSearchFrom = ({ changeSelectDay, setSaveFilterData }) => {
   // calendar 현재 날짜 불러오기
   const currentDate = getCurrentDate();
 
@@ -58,7 +54,7 @@ const MainSearchFrom = ({
   };
 
   // 드롭다운 모두 닫기
-  const handleCLickSubmit = () => {
+  const handleCLickDropdownClose = () => {
     setLocationDropdown(false);
     setCalendarDropdown(false);
     setDogDropdown(false);
@@ -72,10 +68,12 @@ const MainSearchFrom = ({
 
   // 캘린더에서 날짜 선택 시 적용
   const calendarClose = (_sd, _ed) => {
+    // 메인 변수에 전달
     changeSelectDay(_sd, _ed);
-    handleCLickSubmit();
+    handleCLickDropdownClose();
     // allHide();
     // setCalendarDropdown(false);
+    // return(_sd,_ed)
   };
 
   // 드롭다운 데이터
@@ -122,7 +120,7 @@ const MainSearchFrom = ({
     const location = e.target.innerText;
     setLocationValue(location);
     // ???드롭다운 닫기 왜 안 먹히지
-    handleCLickSubmit();
+    handleCLickDropdownClose();
     // setLocationDropdown(false);
     // allHide();
   };
@@ -231,7 +229,7 @@ const MainSearchFrom = ({
 
     const formData = {
       address: locationValue,
-      search: searchValue ? searchValue : "", // 3차 프로젝트에 구현
+      // search: searchValue ? searchValue : "", // 3차 프로젝트에 구현
       main_filter: 0,
       from_date: "", // (필수)2023-01-01 형식으로 전송
       to_date: "", // (필수)2023-01-01 형식으로 전송
@@ -248,10 +246,10 @@ const MainSearchFrom = ({
       formData.dog_info.length > 0 ||
       formData.hotel_option_pk.length > 0
     ) {
-      formData.main_filter = 1;
+      formData.main_filter = 0;
     }
 
-    console.log(formData);
+    console.log("데이터 전송 :", formData);
     setSaveFilterData(formData);
     // 필터 적용된 호텔 리스트로 이동
     // window.scrollTo({ top: 1550, behavior: "smooth" });
@@ -259,7 +257,6 @@ const MainSearchFrom = ({
 
   return (
     <>
-      {/* !!!form 전송을 위한 작업 예정 */}
       <SearchForm method="post" action="" onSubmit={handleSubmit}>
         {/* 지역 선택 */}
         <LocationSelectDiv
@@ -282,7 +279,7 @@ const MainSearchFrom = ({
           )}
         </LocationSelectDiv>
 
-        {/* !!!날짜 선택 : 달력 삽입하기*/}
+        {/* 날짜 선택 */}
         <DateSelectDiv>
           <DateSelectTitle
             onClick={() => setCalendarDropdown(!calendarDropdown)}
@@ -421,7 +418,7 @@ const MainSearchFrom = ({
             </FilterSelect>
           )}
         </FilterSelectDiv>
-        <SubmitButton type="submit" onClick={handleCLickSubmit}>
+        <SubmitButton type="submit" onClick={handleCLickDropdownClose}>
           적용
         </SubmitButton>
       </SearchForm>

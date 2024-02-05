@@ -92,7 +92,7 @@ const MainPage = () => {
 
   useEffect(() => {
     totalHotelList();
-  }, [saveFilterData]);
+  }, [saveFilterData, postData]);
 
   // 전체 호텔 리스트 가져오기
   const totalHotelList = async () => {
@@ -136,12 +136,14 @@ const MainPage = () => {
   };
 
   // 자식 컴포넌트 즉, calendar 에서 알려줘야 다른 컴포넌트에 전달할 수 있다.
-  const changeSelectDay = (_st, _ed) => {
-    console.log("체크인 :", _st);
+  const changeSelectDay = (_sd, _ed) => {
+    console.log("체크인 :", _sd);
     console.log("체크아웃 :", _ed);
+    // const nowData = { ...postData, filter_type: }
+    // setPostData(nowData)
     setReserveDay(prev => {
       // 중요: 값을 업데이트할 때 `this.state` 대신 `state` 값을 읽어옵니다.
-      return { startDay: _st, endDay: _ed };
+      return { startDay: _sd, endDay: _ed };
     });
   };
   useEffect(() => {
