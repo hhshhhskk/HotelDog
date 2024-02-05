@@ -99,10 +99,10 @@ const MainPage = () => {
     try {
       let filter = {};
       if (saveFilterData) {
-        console.log("필터링 데이터", saveFilterData);
+        // console.log("필터링 데이터", saveFilterData);
         filter = await saveFilterData;
       } else {
-        console.log("기본 데이터", postData);
+        // console.log("기본 데이터", postData);
         filter = await postData;
       }
 
@@ -111,9 +111,8 @@ const MainPage = () => {
         page: 1,
         setPostData: filter,
       });
-      
+
       setHotelListData(data);
-      
     } catch (error) {
       console.log(error);
     }
