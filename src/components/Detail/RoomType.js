@@ -60,12 +60,13 @@ const RoomType = ({ data, setSelectedRoom, detailId, hotelList }) => {
         return (
           <div className="roomtype-wrap" key={index}>
             <div className="img-wrap">
+              {/* 호텔 방 사진 : /pic/room/{호텔 방pk값}/{사진파일명} */}
               {/* <img
                 src={`http://112.222.157.156:5222/pic/hotel/${detailId}/${hotelList.hotel_info_vo.rooooommInfos.pics[0]}`}
                 alt=""
               /> */}
               <img
-                src={`${process.env.PUBLIC_URL}/images/${item.pic}.svg`}
+                src={`${process.env.PUBLIC_URL}/images/hoteldetail/roomtype1.svg`}
                 alt=""
               />
             </div>

@@ -527,7 +527,8 @@ const ReserveForm = ({
               <div key={index} style={{ width: "100%" }}>
                 <p className="reserved-list">
                   {/* {resDay.startDay}~{resDay.endDay}/{dogInfo.dogname}/{selectedRoom} */}
-                  {item.dog_nm} / {item.dog_age} / {selectedRoom.hotel_room_nm}
+                  {index + 1}. {item.dog_nm} / {item.dog_age} /
+                  {selectedRoom.hotel_room_nm}
                 </p>
                 {/* button */}
                 <button

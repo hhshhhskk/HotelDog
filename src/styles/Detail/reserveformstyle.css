@@ -41,6 +41,7 @@
   width: 320px;
   height: 62px;
   display: block;
+  margin-top: 11px;
   margin-bottom: 11px;
   border: 0;
 
@@ -108,7 +109,7 @@
 .selected-room {
   position: relative;
   font-size: 14px;
-  font-weight: 300;
+  font-weight: 500;
 }
 /* 반려견 정보 영역 */
 .reserve-dog {
@@ -213,7 +214,7 @@ input::-webkit-inner-spin-button {
 /* 예약 중인 객실 영역 */
 .reserved-list {
   position: relative;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
 }
 .reserved-list-wrap {
