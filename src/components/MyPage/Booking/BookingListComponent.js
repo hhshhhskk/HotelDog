@@ -35,6 +35,12 @@ const BookingRight = styled.div`
 `;
 const BookingLeft = styled.div`
   position: relative;
+  img {
+    width: 360px;
+    height: 290px;
+    border-radius: 10px;
+    object-fit: cover;
+  }
 `;
 
 const BookInfo = styled.div`
@@ -110,12 +116,12 @@ const BookingListComponent = ({ bookingData }) => {
       <BookingList>
         <ListTitle>
           <p>{bookingData.hotel_nm}</p>
-          <span>{bookingData.hotel_call}</span>
+          <span>{bookingData.address_name}</span>
         </ListTitle>
         <BookingContents>
           <BookingLeft>
             <img
-              src={`${process.env.PUBLIC_URL}/images/MyPage/example_booking.svg`}
+              src={`http://112.222.157.156:5222/pic/hotel/${bookingData.hotel_pk}/${bookingData.hotel_pic}`}
             />
           </BookingLeft>
           <BookingRight>
@@ -126,15 +132,14 @@ const BookingListComponent = ({ bookingData }) => {
               <BookInfoTxt>
                 <p>예약 번호 : {bookingData?.res_pk}</p>
                 <p>객실 : {bookingData?.hotel_room_nm}</p>
-                <p>강아지 : {bookingData.res_dog_info_vo_list?.[0].dot_nm}</p>
+                <p>강아지 : {bookingData.res_dog_info_vo_list[0].dog_nm}</p>
               </BookInfoTxt>
             </BookInfo>
             <PayInfo>
               <Line />
-              <span>결제 정보</span>
+              <span>호텔 정보</span>
               <PayInfoTxt>
-                <p>결제 금액 : </p>
-                <p>결제 수단 : </p>
+                <p>전화번호 : {bookingData.hotel_call}</p>
               </PayInfoTxt>
             </PayInfo>
             <CancelBt>

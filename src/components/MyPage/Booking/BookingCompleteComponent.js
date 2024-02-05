@@ -37,6 +37,10 @@ const BookingLeft = styled.div`
   position: relative;
   img {
     position: relative;
+    width: 360px;
+    height: 290px;
+    border-radius: 10px;
+    object-fit: cover;
     opacity: 0.3;
   }
   p {
@@ -135,7 +139,6 @@ const BookingCompleteComponent = ({ bookingData }) => {
 
   // 데이터가 없으면 null 반환
   if (!bookingData) return null;
-
   return (
     <>
       <BookingCompleteList>
@@ -146,7 +149,7 @@ const BookingCompleteComponent = ({ bookingData }) => {
         <BookingContents>
           <BookingLeft>
             <img
-              src={`http://112.222.157.156:5222/pic/hotel/${bookingData.hotel_pk}/${bookingData.room_pic}`}
+              src={`http://112.222.157.156:5222/pic/hotel/${bookingData.hotel_pk}/${bookingData.hotel_pic}`}
               alt="booking"
             />
             <p>이용 완료</p>
@@ -159,14 +162,14 @@ const BookingCompleteComponent = ({ bookingData }) => {
               <BookInfoTxt>
                 <p>예약 번호 : {bookingData.res_pk}</p>
                 <p>객실 : {bookingData.hotel_room_nm}</p>
-                <p>강아지 : {bookingData.res_dog_info_vo_list?.[0].dot_nm}</p>
+                <p>강아지 : {bookingData.res_dog_info_vo_list[0].dog_nm}</p>
               </BookInfoTxt>
             </BookInfo>
             <PayInfo>
               <Line />
               <span>호텔 정보</span>
               <PayInfoTxt>
-                <p>호텔 전화번호 : {bookingData.hotel_call}</p>
+                <p>전화번호 : {bookingData.hotel_call}</p>
               </PayInfoTxt>
             </PayInfo>
             <CompleteBt>
