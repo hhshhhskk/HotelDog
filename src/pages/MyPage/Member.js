@@ -244,6 +244,8 @@ const Member = () => {
     setPasswordVerified(true); // 비밀번호 확인 완료 시 상태 변경
   };
 
+  // kakao address
+
   useEffect(() => {
     if (passwordVerified) {
       setShowMemberContents(true);
@@ -273,7 +275,33 @@ const Member = () => {
     console.log(result);
   };
 
+  const [changeData, setChangeData] = useState({});
+
   const handleClickAddress = () => {};
+
+  const initData = {
+    nickname: "",
+    phoneNum: "",
+    userAddress: "",
+    addressEntity: {
+      addressName: "",
+      region1DepthName: "",
+      region2DepthName: "",
+      region3DepthName: "",
+      zoneNum: "1",
+      x: "",
+      y: "",
+      detailAddress: "",
+    },
+  };
+  const handleChangeData = e => {
+    setChangeData({ ...changeData, [e.target.name]: e.target.value });
+  };
+  const handleSubmitClick = e => {
+    // console.log("데이터임", data.nickname);
+  };
+
+  // console.log(address.address_name);
 
   return (
     <MemberPage>
@@ -328,7 +356,11 @@ const Member = () => {
                   placeholder="수정할 주소를 입력하세요"
                 />
 
-                <AddressBt onClick={handleClickAddress}>
+                <AddressBt
+                  onClick={() => {
+                    setPopUp(true);
+                  }}
+                >
                   <AddressPutBt>주소 찾기</AddressPutBt>
                 </AddressBt>
               </AdBox>
@@ -339,7 +371,8 @@ const Member = () => {
             </MemberAd>
             <InfoFetch>
               {/* <InfoFetchBt onClick={handleUpdateMemberInfo}> */}
-              <InfoFetchBt>
+
+              <InfoFetchBt onclick={handleSubmitClick}>
                 <p>회원정보 수정하기</p>
               </InfoFetchBt>
             </InfoFetch>

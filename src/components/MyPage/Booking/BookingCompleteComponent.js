@@ -116,6 +116,7 @@ const Complete = styled.button`
   font-size: 14px;
 `;
 const BookingCompleteComponent = ({ bookingData }) => {
+  // console.log("지난날짜 입니다.");
   // 모달 열림/닫힘 상태를 관리
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
@@ -131,57 +132,59 @@ const BookingCompleteComponent = ({ bookingData }) => {
     setIsModalOpen(false);
     setSelectedBooking(null);
   };
+
+  // 데이터가 없으면 null 반환
+  if (!bookingData) return null;
+
   return (
     <>
-      {bookingData.map((booking, index) => (
-        <BookingCompleteList key={index}>
-          <ListTitle>
-            <p>{booking.hotelName}</p>
-            <span>{booking.hotelLocation}</span>
-          </ListTitle>
-          <BookingContents>
-            <BookingLeft>
-              <img
-                src={`${process.env.PUBLIC_URL}/images/MyPage/example_booking.svg`}
-                alt="booking"
-              />
-              <p>이용 완료</p>
-            </BookingLeft>
-            <BookingRight>
-              <BookingDate />
-              <BookInfo>
-                <Line />
-                <span>예약 정보</span>
-                <BookInfoTxt>
-                  <p>예약 번호 : {booking.reservationInfo.reservationNumber}</p>
-                  <p>객실 : {booking.reservationInfo.room}</p>
-                  <p>강아지 : {booking.reservationInfo.pet}</p>
-                </BookInfoTxt>
-              </BookInfo>
-              <PayInfo>
-                <Line />
-                <span>결제 정보</span>
-                <PayInfoTxt>
-                  <p>결제 금액 : {booking.paymentInfo.amount}</p>
-                  <p>결제 수단 : {booking.paymentInfo.paymentMethod}</p>
-                </PayInfoTxt>
-              </PayInfo>
-              <CompleteBt>
-                {/* "숙소 후기" 버튼에 모달을 열기 위한 onClick 이벤트 추가 */}
-                <Complete onClick={() => handleOpenModal(booking)}>
-                  숙소 후기
-                </Complete>
-              </CompleteBt>
-              {/* 모달 컴포넌트 */}
-              <ReviewModal
-                isOpen={isModalOpen}
-                onClose={handleCloseModal}
-                bookingData={selectedBooking}
-              />
-            </BookingRight>
-          </BookingContents>
-        </BookingCompleteList>
-      ))}
+      <BookingCompleteList>
+        <ListTitle>
+          <p>{bookingData.hotel_nm}</p>
+          <span>{bookingData.hotel_call}</span>
+        </ListTitle>
+        <BookingContents>
+          <BookingLeft>
+            <img
+              src={`http://112.222.157.156:5222/pic/hotel/${bookingData.res_pk}/${bookingData.room_pic}`}
+              alt="booking"
+            />
+            <p>이용 완료</p>
+          </BookingLeft>
+          <BookingRight>
+            <BookingDate bookingData={bookingData} />
+            <BookInfo>
+              <Line />
+              <span>예약 정보</span>
+              <BookInfoTxt>
+                <p>예약 번호 : {bookingData.res_pk}</p>
+                <p>객실 : {bookingData.hotel_room_nm}</p>
+                <p>강아지 : {bookingData.res_dog_info_vo_list?.[0].dot_nm}</p>
+              </BookInfoTxt>
+            </BookInfo>
+            <PayInfo>
+              <Line />
+              <span>결제 정보</span>
+              <PayInfoTxt>
+                <p>결제 금액 : </p>
+                <p>결제 수단 : </p>
+              </PayInfoTxt>
+            </PayInfo>
+            <CompleteBt>
+              {/* "숙소 후기" 버튼에 모달을 열기 위한 onClick 이벤트 추가 */}
+              <Complete onClick={() => handleOpenModal(bookingData)}>
+                숙소 후기
+              </Complete>
+            </CompleteBt>
+            {/* 모달 컴포넌트 */}
+            <ReviewModal
+              isOpen={isModalOpen}
+              onClose={handleCloseModal}
+              bookingData={selectedBooking}
+            />
+          </BookingRight>
+        </BookingContents>
+      </BookingCompleteList>
     </>
   );
 };

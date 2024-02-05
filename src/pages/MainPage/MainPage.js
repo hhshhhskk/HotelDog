@@ -96,6 +96,7 @@ const MainPage = () => {
         setHotelListData: hotelListData,
         // setHotelListData: hotelListData,
       });
+      console.log(data);
       setGetServerListData(data);
     } catch (error) {
       console.log(error);

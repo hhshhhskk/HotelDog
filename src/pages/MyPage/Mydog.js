@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
+import { postDogInfoApi } from "../../api/mypage/mypageApi";
 
 const MydogPage = styled.div`
   margin-left: 85px;
@@ -252,28 +253,27 @@ const Mydog = () => {
   // 이미지 업로드 부분
   const [imageURL, setImageURL] = useState(null);
   const inputRef = useRef(null);
+  const [imgFileList, setImgFileList] = useState([]);
+  const [imgFileListType, setImgFileListType] = useState([]);
 
-  const handleImageChange = event => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImageURL(reader.result);
-    };
+  const handleImageChange = e => {
+    const file = e.target.files[0];
     if (file) {
-      reader.readAsDataURL(file);
+      // 미리보기
+      const tempUrl = URL.createObjectURL(file);
+      const tempArr = [tempUrl];
+      const typeArr = [file.type];
+      setImgFileList(tempArr);
+      setImgFileListType(typeArr);
     }
   };
 
   // 반려견 정보 상태
   const [dogInfo, setDogInfo] = useState({
-    pic: "",
-    dto: {
-      sizePk: 0,
-      dogNm: "",
-      dogAge: 0,
-      dogPic: "",
-      dogEtc: "",
-    },
+    sizePk: 0,
+    dogNm: "",
+    dogAge: 0,
+    dogEtc: "",
   });
 
   // 반려견 정보 입력 핸들러
@@ -281,26 +281,61 @@ const Mydog = () => {
     const { name, value } = e.target;
     setDogInfo(prevState => ({
       ...prevState,
-      dto: {
-        ...prevState.dto,
-        [name]: value,
-      },
+      [name]: value,
     }));
   };
+
   // 반려견 정보 저장하기
   const handleDogSubmit = async () => {
-    try {
-      // 서버에 데이터 전송
-      const response = await axios.post("/api/dog", {
-        pic: imageURL, // 이미지 URL은 이미지 업로드 후에 설정
-        dto: dogInfo.dto,
-      });
-      // 응답 처리
-      console.log("서버 응답 데이터:", response.data);
-      // 필요한 작업 수행
-    } catch (error) {
-      console.error("오류 발생:", error);
-    }
+    // 작성된 후기 데이터 전달
+    const formData = new FormData();
+    const dto = new Blob(
+      [
+        JSON.stringify({
+          sizePk: dogInfo.sizePk,
+          dogNm: dogInfo.dogNm,
+          dogAge: dogInfo.dogAge,
+          dogEtc: dogInfo.dogEtc,
+        }),
+      ],
+      // JSON 형식으로 설정
+      { type: "application/json" },
+    );
+
+    formData.append("dto", dto);
+
+    const imagePromises = imgFileList.map(async (image, index) => {
+      const response = await fetch(image);
+      const blob = await response.blob();
+      const currentDate = new Date();
+      const types = imgFileListType;
+      // console.log("types", types);
+      // console.log("types", types[index].split("/"));
+      const seconds = Math.floor(currentDate.getTime() / 1000);
+      const file = new File(
+        [blob],
+        `image${seconds}.${types[index].split("/")[1]}`,
+        {
+          type: `image/${types[index].split("/")[1]}`,
+        },
+      );
+      formData.append("pic", file);
+    });
+    await Promise.all(imagePromises);
+
+    postDogInfoApi({ sendData: formData }, { successFn, failFn, errorFn });
+  };
+
+  const successFn = result => {
+    console.log("successFn", result);
+    alert("정보등록이 완료되었습니다.");
+  };
+  const failFn = result => {
+    console.log("failFn", result);
+  };
+
+  const errorFn = result => {
+    console.log("errorFn", result);
   };
 
   const handleDogLeftClick = () => {
@@ -318,7 +353,7 @@ const Mydog = () => {
         <span>반려견 정보를 등록해주세요</span>
       </ListNone>
       <DogContents>
-        <DogLeft onClick={handleDogLeftClick} hasImage={!!imageURL}>
+        <DogLeft onClick={handleDogLeftClick} hasImage={imgFileList[0]}>
           {/* hasImage prop 전달 */}
           <input
             type="file"
@@ -327,8 +362,8 @@ const Mydog = () => {
             style={{ display: "none" }}
             ref={inputRef}
           />
-          <p>사진을 선택하세요</p>
-          {imageURL && <img src={imageURL} alt="Selected" />}
+          <p>사진을 선택하세요 : {imgFileList[0]} </p>
+          {imgFileList[0] && <img src={imgFileList[0]} alt="Selected" />}
         </DogLeft>
         <DogRight>
           <DogName>
@@ -337,7 +372,7 @@ const Mydog = () => {
             <DogNameArea
               type="text"
               name="dogNm"
-              value={dogInfo.dto.dogNm}
+              value={dogInfo.dogNm}
               onChange={handleInputChange}
             />
           </DogName>
@@ -347,14 +382,14 @@ const Mydog = () => {
             <DogAgeArea
               type="text"
               name="dogAge"
-              value={dogInfo.dto.dogAge}
+              value={dogInfo.dogAge}
               onChange={handleInputChange}
             />
             <p>살</p>
             <Line />
             <span>사이즈</span>
             <DogSizeSelect
-              value={dogInfo.dto.sizePk}
+              value={dogInfo.sizePk}
               onChange={handleInputChange}
               name="sizePk"
             >
@@ -366,7 +401,7 @@ const Mydog = () => {
           <DogInfo
             placeholder="특이 사항 및 요청 사항을 입력해 주세요."
             name="dogEtc"
-            value={dogInfo.dto.dogEtc}
+            value={dogInfo.dogEtc}
             onChange={handleInputChange}
           />
           <DogBt>
