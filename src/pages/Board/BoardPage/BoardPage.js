@@ -28,6 +28,7 @@ import {
 import BoardPagination from "../../../components/Board/BoardPagination";
 import useCustomLogin from "../../../hooks/useCustomLogin";
 import { boardDeleteAPI, boardListAPI } from "../../../api/board/boardApi";
+import { commentDeleteAPI } from "../../../api/board/boardCommentApi";
 
 const BoardPage = () => {
   const category = ["전체글", "공지", "자유게시판", "질문", "정보"];
@@ -84,6 +85,7 @@ const BoardPage = () => {
                   onClick={() => {
                     setCateNum(idx);
                     setNowPage(1);
+                    setCheckboxStates([]);
                   }}
                 >
                   {item}
@@ -100,6 +102,7 @@ const BoardPage = () => {
                   cateNum={cateNum}
                   onClick={() => {
                     setCateNum(idx + 5);
+                    setCheckboxStates([]);
                   }}
                 >
                   {item}
@@ -130,7 +133,17 @@ const BoardPage = () => {
               글 삭제하기
             </BoardDeleteBtn>
           ) : cateNum === 6 ? (
-            <BoardDeleteBtn>댓글 삭제하기</BoardDeleteBtn>
+            <BoardDeleteBtn
+              onClick={async () => {
+                const result = await commentDeleteAPI(checkboxStates);
+
+                if (result === 1) {
+                  setCateNum(0);
+                }
+              }}
+            >
+              댓글 삭제하기
+            </BoardDeleteBtn>
           ) : (
             <BoardCreateBtn
               onClick={() => {
@@ -157,7 +170,7 @@ const BoardPage = () => {
           >
             <option value="0">제목</option>
             <option value="1">내용</option>
-            {/* <option value="2">닉네임</option> */}
+            <option value="2">닉네임</option>
           </BoardSearchSelect>
           <BoardSearchInput
             type="text"

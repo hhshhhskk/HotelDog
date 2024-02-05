@@ -69,7 +69,7 @@ export const boardMyCommentListAPI = async page => {
       },
     });
 
-    return res.data;
+    return res;
   } catch (error) {
     // 오류가 발생했을 때의 처리
     console.log(error);
