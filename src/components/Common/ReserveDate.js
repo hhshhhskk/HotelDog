@@ -49,7 +49,7 @@ const ReserveDate = ({ resDay, handleMoveCalendar, calendarNow }) => {
   // const startDay = resDay.startDay;
   // const endDay = resDay.endDay;
   // console.log(resDay);
-  console.log(calendarNow);
+  // console.log(calendarNow);
   return (
     <CalendarSelectWrap onClick={handleMoveCalendar}>
       <CalendarSelectLeft>

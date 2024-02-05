@@ -218,6 +218,11 @@ input::-webkit-inner-spin-button {
 }
 .reserved-list-wrap {
   position: relative;
+  display: block;
+  /* display: flex; */
+  /* justify-content: space-between; */
+}
+.reserved-list-wrap > div {
   display: flex;
   justify-content: space-between;
 }

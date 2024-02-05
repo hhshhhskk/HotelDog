@@ -1,51 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/Detail/roomtype.css";
 import ReserveForm from "./Reservation/ReserveForm";
+// const hotel_room_info = [
+//   {
+//     hotel_room_pk: 1, // 방 pk
+//     pic: "string", // 사진
+//     maximum: 5, // 방당 수용가능 마리수
+//     hotel_room_nm: "1호 개인실", // 호텔 방 이름
+//     hotel_room_ea: 3, // 호텔 방 개수
+//     hotel_room_cost: 70000, // 방 가격
+//     size: 3, // 방에 수용가능한 사이즈(클수록 큰 강아지 수용가능)
+//   },
+//   {
+//     hotel_room_pk: 2, // 방 pk
+//     pic: "string", // 사진
+//     maximum: 5, // 방당 수용가능 마리수
+//     hotel_room_nm: "2호 개인실", // 호텔 방 이름
+//     hotel_room_ea: 1, // 호텔 방 개수
+//     hotel_room_cost: 50000, // 방 가격
+//     size: 3, // 방에 수용가능한 사이즈(클수록 큰 강아지 수용가능)
+//   },
+//   {
+//     hotel_room_pk: 3, // 방 pk
+//     pic: "string", // 사진
+//     maximum: 5, // 방당 수용가능 마리수
+//     hotel_room_nm: "3호 개인실", // 호텔 방 이름
+//     hotel_room_ea: 2, // 호텔 방 개수
+//     hotel_room_cost: 90000, // 방 가격
+//     size: 3, // 방에 수용가능한 사이즈(클수록 큰 강아지 수용가능)
+//   },
+//   {
+//     hotel_room_pk: 4, // 방 pk
+//     pic: "string", // 사진
+//     maximum: 5, // 방당 수용가능 마리수
+//     hotel_room_nm: "4호 개인실", // 호텔 방 이름
+//     hotel_room_ea: 1, // 호텔 방 개수
+//     hotel_room_cost: 110000, // 방 가격
+//     size: 3, // 방에 수용가능한 사이즈(클수록 큰 강아지 수용가능)
+//   },
+// ];
 
-const RoomType = ({ selectedRoom, setSelectedRoom }) => {
-  const hotel_room_info = [
-    {
-      hotel_room_pk: 1, // 방 pk
-      pic: "string", // 사진
-      maximum: 5, // 방당 수용가능 마리수
-      hotel_room_nm: "1호 개인실", // 호텔 방 이름
-      hotel_room_ea: 3, // 호텔 방 개수
-      hotel_room_cost: 70000, // 방 가격
-      size: 3, // 방에 수용가능한 사이즈(클수록 큰 강아지 수용가능)
-    },
-    {
-      hotel_room_pk: 2, // 방 pk
-      pic: "string", // 사진
-      maximum: 5, // 방당 수용가능 마리수
-      hotel_room_nm: "2호 개인실", // 호텔 방 이름
-      hotel_room_ea: 1, // 호텔 방 개수
-      hotel_room_cost: 50000, // 방 가격
-      size: 3, // 방에 수용가능한 사이즈(클수록 큰 강아지 수용가능)
-    },
-    {
-      hotel_room_pk: 3, // 방 pk
-      pic: "string", // 사진
-      maximum: 5, // 방당 수용가능 마리수
-      hotel_room_nm: "3호 개인실", // 호텔 방 이름
-      hotel_room_ea: 2, // 호텔 방 개수
-      hotel_room_cost: 90000, // 방 가격
-      size: 3, // 방에 수용가능한 사이즈(클수록 큰 강아지 수용가능)
-    },
-    {
-      hotel_room_pk: 4, // 방 pk
-      pic: "string", // 사진
-      maximum: 5, // 방당 수용가능 마리수
-      hotel_room_nm: "4호 개인실", // 호텔 방 이름
-      hotel_room_ea: 1, // 호텔 방 개수
-      hotel_room_cost: 110000, // 방 가격
-      size: 3, // 방에 수용가능한 사이즈(클수록 큰 강아지 수용가능)
-    },
-  ];
-
-  const handleroomselect = roomName => {
+const RoomType = ({ data, setSelectedRoom, detailId, hotelList }) => {
+  const hotel_room_info = hotelList.hotel_info_vo.room_list;
+  const handleroomselect = roomData => {
     // console.log("예약하기 버튼이 클릭되었습니다.");
     // console.log("선택된 객실 이름:", roomName);
-    setSelectedRoom(roomName); // 선택된 객실 정보를 부모 컴포넌트로 전달
+    setSelectedRoom(roomData); // 선택된 객실 정보를 부모 컴포넌트로 전달
   };
 
   return (
@@ -60,6 +60,10 @@ const RoomType = ({ selectedRoom, setSelectedRoom }) => {
         return (
           <div className="roomtype-wrap" key={index}>
             <div className="img-wrap">
+              {/* <img
+                src={`http://112.222.157.156:5222/pic/hotel/${detailId}/${hotelList.hotel_info_vo.rooooommInfos.pics[0]}`}
+                alt=""
+              /> */}
               <img
                 src={`${process.env.PUBLIC_URL}/images/${item.pic}.svg`}
                 alt=""
@@ -82,7 +86,7 @@ const RoomType = ({ selectedRoom, setSelectedRoom }) => {
                 </div>
                 <button
                   className="button-wrap"
-                  onClick={() => handleroomselect(item.hotel_room_nm)}
+                  onClick={() => handleroomselect(item)}
                   // selectedRoom = {selectedRoom}
                   // setSelectedRoom={setSelectedRoom}
                 >
