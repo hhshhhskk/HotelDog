@@ -14,10 +14,14 @@ import {
   ReviewTitle,
   ReviewWrap,
 } from "../../styles/Detail/hoteldetailStyle";
+import { getReview, getSelDateRmId } from "../../api/Detail/hoteldetailApi";
 
-const HotelDetail = ({ hotelList, detailId, resDay, setResDay,  }) => {
+const HotelDetail = ({ hotelList, detailId, resDay, setResDay, roomList }) => {
   const [selectedRoom, setSelectedRoom] = useState(null);
-  console.log("HotelDetail =========== : ", hotelList);
+  const [data, setData] = useState("");
+  // console.log("HotelDetail =========== : ", hotelList);
+  // console.log("dateSelectRoom =========== : ", roomList);
+
   // 더미 데이터
   const hotel_option = [
     {
@@ -48,16 +52,6 @@ const HotelDetail = ({ hotelList, detailId, resDay, setResDay,  }) => {
     },
   ];
 
-  // 후기 모달 관련
-  const [reviewModalOpen, setReviewModalOpen] = useState(false);
-
-  const handleMoveReviewModal = () => {
-    setReviewModalOpen(true);
-    // document.body.style.overflow = "hidden";
-  };
-
-  const [reserveForm, setReserveForm] = useState(true);
-
   // // useNaviate 로 전달된 state 를 알아내기
   // const location = useLocation();
   // const { state } = location;
@@ -86,6 +80,51 @@ const HotelDetail = ({ hotelList, detailId, resDay, setResDay,  }) => {
     }
     // 스크롤 이벤트에 대한 추가 처리를 여기에 작성
   };
+
+  const [calendarOpen, setCalendarOpen] = useState(false);
+
+  const [calendarNow, setCalendarNow] = useState(`${resDay}`);
+  // 캘린더에서 날짜 선택 시 적용
+
+  const calendarClose = async (_startDay, _endDay) => {
+    setCalendarOpen(false);
+    // changeSelectDay(_sd, _ed);
+    // console.log("체크인 날짜 : ", _startDay);
+    // console.log("체크아웃 날짜 : ", _endDay);
+    setCalendarNow({ startDay: _startDay, endDay: _endDay });
+
+    const result = await getSelDateRmId(detailId, _startDay, _endDay, setData);
+  };
+
+  // 후기 모달 관련
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+
+  const handleMoveReviewModal = () => {
+    setReviewModalOpen(true);
+    // document.body.style.overflow = "hidden";
+
+    // 모달 open 시, axios 가져와야한다?!
+    console.log("aaaaaaaaaaaaaaaaaaaa");
+    reloadGetReviewP();
+  };
+
+  const [reserveForm, setReserveForm] = useState(true);
+
+  // 리뷰 axios 가져오기
+  const reloadGetReviewP = page => {
+    getReview(page, successFn, failFn, errorFn);
+  };
+  const successFn = result => {
+    console.log("성공", result);
+    // ------
+  };
+  const failFn = result => {
+    console.log("다시 시도해주세요.", result);
+  };
+  const errorFn = result => {
+    console.log("서버에러", result);
+  };
+
   return (
     <div>
       {/* 좌측 스크롤 영역 */}
@@ -126,44 +165,9 @@ const HotelDetail = ({ hotelList, detailId, resDay, setResDay,  }) => {
             <p className="hotel-desc">
               {hotelList.hotel_info_vo.hotel_detail_info}
             </p>
-
-            {/* {hotelList.hotel_info_vo.map(function (item, index) {
-              return (
-                <div key={index}>
-                  <div className="hotel-text-wrap">
-                    <div>
-                      <h1 className="hotel-title">{item.hotel_nm}</h1>
-                      <span className="hotel-spot">{item.road_address}</span>
-                    </div>
-                    <span className="hotel-won">
-                      <b className="hotel-price">110,000</b>원
-                    </span>
-                  </div>
-                  <p className="hotel-desc">{item.hotel_detail_info}</p>
-                </div>
-              );
-            })} */}
           </div>
         </div>
         {/* 시설 영역 */}
-        {/* <div>
-          <span className="facility-title">시설</span>
-          {hotel_option.map(function (item, index) {
-            return (
-              <div key={index} className="facility-flex">
-                {Object.keys(item).map(function (key, i) {
-                  return (
-                    item[key] && (
-                      <div key={i} className="facility-content">
-                        {key}
-                      </div>
-                    )
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div> */}
         <div>
           <span className="facility-title">시설</span>
           {/* {hotelList.hotel_info_vo.hotel_option.map(function (item, index) {
@@ -177,7 +181,9 @@ const HotelDetail = ({ hotelList, detailId, resDay, setResDay,  }) => {
             {hotelList.hotel_info_vo.hotel_option.map(function (item, index) {
               return (
                 <div key={index}>
-                  {item ? <div className="facility-content">{item}</div> : null}
+                  {item.option_nm ? (
+                    <div className="facility-content">{item.option_nm}</div>
+                  ) : null}
                 </div>
               );
             })}
@@ -185,11 +191,9 @@ const HotelDetail = ({ hotelList, detailId, resDay, setResDay,  }) => {
         </div>
         {/* 객실 영역 */}
         <RoomType
-          detailId={detailId}
-          resDay={resDay}
-          setResDay={setResDay}
-          selectedRoom={selectedRoom}
+          data={data}
           setSelectedRoom={setSelectedRoom}
+          hotelList={hotelList}
         />
         {/* 숙소 후기 영역 */}
         <ReviewWrap>
@@ -237,10 +241,14 @@ const HotelDetail = ({ hotelList, detailId, resDay, setResDay,  }) => {
       {/* <div> */}
       {reserveFormVisible && (
         <ReserveForm
+          calendarOpen={calendarOpen}
+          calendarNow={calendarNow}
+          calendarClose={calendarClose}
+          setCalendarOpen={setCalendarOpen}
+          setCalendarNow={setCalendarNow}
           selectedRoom={selectedRoom}
           detailId={detailId}
           resDay={resDay}
-          setResDay={setResDay}
           className={
             reserveFormVisible
               ? "reserveForm"
