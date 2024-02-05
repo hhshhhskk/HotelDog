@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import BookingDate from "./BookingDate";
 import axios from "axios";
 import jwtAxios from "../../../utils/jwtUtil";
+import { mypageBookingListDeleteApi } from "../../../api/mypage/mypageApi";
 
 const BookingList = styled.div`
   position: relative;
@@ -105,12 +106,17 @@ const Cancel = styled.button`
   font-size: 14px;
 `;
 
-const BookingListComponent = ({ bookingData }) => {
+const BookingListComponent = ({ bookingData, setRendering }) => {
   // console.log("대기중 날짜입니다.");
-
   // bookingData가 존재하지 않는 경우 빈 배열로 설정
   if (!bookingData) return null; // 데이터가 없는 경우 null 반환
 
+  const bookingCancle = async () => {
+    const result = await mypageBookingListDeleteApi(bookingData.res_pk);
+    if (result === 1) {
+      setRendering(prev => !prev);
+    }
+  };
   return (
     <>
       <BookingList>
@@ -143,7 +149,7 @@ const BookingListComponent = ({ bookingData }) => {
               </PayInfoTxt>
             </PayInfo>
             <CancelBt>
-              <Cancel>예약취소</Cancel>
+              <Cancel onClick={bookingCancle}>예약취소</Cancel>
             </CancelBt>
           </BookingRight>
         </BookingContents>

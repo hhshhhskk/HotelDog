@@ -109,7 +109,7 @@ const ReviewComplete = styled.button`
   margin: 0 auto;
   width: 150px;
   height: 50px;
-  margin-top: 50px;
+  /* margin-top: 50px; */
   border-radius: 10px;
   border: 1px solid #654222;
   background: #654222;
@@ -147,9 +147,6 @@ const ImgContetnts = styled.div`
     background-color: #fafafa;
     border: 1px solid #eee;
     border-radius: 5px;
-    p {
-      display: block;
-    }
   }
 `;
 
@@ -168,10 +165,12 @@ const ReviewModal = ({
 
   // 후기 이미지 선택 처리 함수
   const [imgFileList, setImgFileList] = useState([]);
+  const [sendImgFileList, setSendImgFileList] = useState([]);
   const [imgFileListType, setImgFileListType] = useState([]);
   const handleChangeFile = e => {
     // console.log(e);
     const file = e.target.files[0];
+    setSendImgFileList(e.target.files);
     if (file && imgFileList.length < 3) {
       // 미리보기
       const tempUrl = URL.createObjectURL(file);
@@ -200,43 +199,48 @@ const ReviewModal = ({
     setImgFileList(imgFileArr);
     setImgFileListType(imgTypeArr);
   };
+
   // 후기 작성 완료 시 처리 함수
   const handleReviewSubmit = async () => {
     // 작성된 후기 데이터 전달
-    const formData = new FormData();
-    const dto = new Blob(
-      [
-        JSON.stringify({
-          resPk: bookingData.res_pk,
-          comment: reviewText,
-          score: rating,
-        }),
-      ],
-      // JSON 형식으로 설정
-      { type: "application/json" },
-    );
+    console.log("클릭 위쪽", rating, reviewText, sendImgFileList);
+    try {
+      // FormData 생성
+      const formData = new FormData();
 
-    formData.append("dto", dto);
+      // 텍스트 데이터 추가 (JSON.stringify를 사용하여 문자열로 변환 후 직접 FormData에 추가)
 
-    const imagePromises = imgFileList.map(async (image, index) => {
-      const response = await fetch(image);
-      const blob = await response.blob();
-      const currentDate = new Date();
-      const types = imgFileListType;
-      const seconds = Math.floor(currentDate.getTime() / 1000);
-      const file = new File(
-        [blob],
-        `image${seconds}.${types[index].split("/")[1]}`,
-        {
-          type: `image/${types[index].split("/")[1]}`,
-        },
+      formData.append(
+        "dto",
+        new Blob(
+          [
+            JSON.stringify({
+              resPk: bookingData.res_pk,
+              comment: "reviewText",
+              score: rating,
+            }),
+          ],
+          { type: "application/json" },
+        ),
       );
-      formData.append("pics", file);
-    });
-    await Promise.all(imagePromises);
 
-    postReviewApi({ sendData: formData }, { successFn, failFn, errorFn });
+      if (sendImgFileList !== undefined) {
+        // 선택된 파일들을 FormData에 추가
+        formData.append(`pics`, sendImgFileList);
+      } else {
+        formData.append(`pics`, []);
+      }
+      console.log(rating, reviewText, sendImgFileList);
+      const result = await postReviewApi(formData);
+      if (result === 1) {
+        console.log("성공");
+      }
+    } catch (error) {
+      // 에러 처리
+      console.error("Error uploading files:", error);
+    }
   };
+
   const successFn = result => {
     console.log("successFn", result);
     alert("후기가 작성되었습니다.");
@@ -250,8 +254,6 @@ const ReviewModal = ({
   const errorFn = result => {
     console.log("errorFn", result);
   };
-
-  console.log(bookingData);
 
   return (
     <ModalContainer>

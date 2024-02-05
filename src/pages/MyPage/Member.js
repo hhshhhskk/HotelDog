@@ -231,26 +231,9 @@ const NickCheckBt = styled.div`
 const Member = () => {
   const navigate = useNavigate();
   // 비밀번호 입력하면 컨텐츠 보여주기
-  const [showMemberContents, setShowMemberContents] = useState(false);
   const [passwordVerified, setPasswordVerified] = useState(false);
   const [password, setPassword] = useState("");
-  const [memberInfo, setMemberInfo] = useState({
-    userPk: 0,
-    userEmail: "",
-    nickname: "",
-    phoneNum: "",
-    userAddress: "",
-    addressEntity: {
-      addressName: "",
-      region1DepthName: "",
-      region2DepthName: "",
-      region3DepthName: "",
-      zoneNum: "",
-      x: "",
-      y: "",
-      detailAddress: "",
-    },
-  });
+  const [email, setEmail] = useState("");
   // 주소관련
   const [popUp, setPopUp] = useState(false);
   const [address, setAddress] = useState();
@@ -282,7 +265,6 @@ const Member = () => {
 
   useEffect(() => {
     if (passwordVerified) {
-      setShowMemberContents(true);
       fetchMemberInfo(password, { successFn, failFn, erroFn }); // 비밀번호 확인 완료 후 MemberContents 표시
     }
   }, [passwordVerified]);
@@ -290,6 +272,7 @@ const Member = () => {
   const successFn = result => {
     // console.log("성공", result);
     setDetailAddressState(result.addressEntity.detailAddress);
+    setEmail(result.userEmail);
     setSendData(prevState => ({
       ...prevState,
       nickname: result.nickname,
@@ -311,7 +294,7 @@ const Member = () => {
       return;
     }
     // 닉넹
-    const result = getNickNameUpdate(memberInfo.nickname);
+    const result = getNickNameUpdate(sendData.nickname);
     console.log(result);
   };
 
@@ -337,21 +320,21 @@ const Member = () => {
     console.log(result);
     if (result === 1) {
       alert("수정이 완료되었습니다.");
-      navigate("/");
+      setPasswordVerified(false);
     }
   };
   return (
     <MemberPage>
       {popUp && <AddressPopup setPopUp={setPopUp} setAddress={setAddress} />}
 
-      {!passwordVerified && !showMemberContents && (
+      {!passwordVerified && (
         <Password
           onPasswordVerified={handlePasswordVerified}
           password={password}
           setPassword={setPassword}
         />
       )}
-      {showMemberContents && (
+      {passwordVerified && (
         <>
           <PageTitle>
             <p>회원정보</p>
@@ -359,7 +342,7 @@ const Member = () => {
           <MemberContents>
             <MemberId>
               <p>아이디</p>
-              <span>{memberInfo.userEmail}</span>
+              <span>{email}</span>
             </MemberId>
             <MemberNm>
               <p>닉네임</p>
