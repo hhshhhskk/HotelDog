@@ -60,6 +60,10 @@ const RoomType = ({ data, setSelectedRoom, detailId, hotelList }) => {
         return (
           <div className="roomtype-wrap" key={index}>
             <div className="img-wrap">
+              {/* <img
+                src={`http://112.222.157.156:5222/pic/hotel/${detailId}/${hotelList.hotel_info_vo.rooooommInfos.pics[0]}`}
+                alt=""
+              /> */}
               <img
                 src={`${process.env.PUBLIC_URL}/images/${item.pic}.svg`}
                 alt=""
