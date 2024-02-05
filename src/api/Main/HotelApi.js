@@ -42,20 +42,9 @@ export const postHotelListAPI = async ({ page, setPostData }) => {
     console.log(setPostData);
     const parseData = await removeEmptyValues(setPostData);
     console.log("팔스데이터", parseData);
-    console.log({
-      address: "대구",
-      main_filter: 0,
-      dog_info: [
-        {
-          dogSize: 1,
-          dogCount: 1,
-        },
-      ],
-      filter_type: 1,
-    });
     // const header = { headers: { "Content-Type": "application/json" } };
     const res = await axios.post(`/api/hotel?page=${page}`, parseData);
-    console.log("성공", res.data);
+    console.log("성공", res.data.hotel_list);
     return res.data;
   } catch (error) {
     console.log(error);

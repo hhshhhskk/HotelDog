@@ -29,9 +29,16 @@ import {
 } from "../../styles/MainPageStyle/MainSearchFromStyle";
 import Calendar, { getCurrentDate } from "../Common/Calendar";
 
-const MainSearchFrom = ({ changeSelectDay, setSaveFilterData }) => {
+const MainSearchFrom = ({
+  changeSelectDay,
+  setSaveFilterData,
+  startDay,
+  endDay,
+}) => {
   // calendar 현재 날짜 불러오기
   const currentDate = getCurrentDate();
+  console.log(startDay);
+  console.log(endDay);
 
   // 미리보기 및 선택된 데이터 useState
   const [locationValue, setLocationValue] = useState("지역을 선택해주세요");
@@ -231,13 +238,14 @@ const MainSearchFrom = ({ changeSelectDay, setSaveFilterData }) => {
       address: locationValue,
       // search: searchValue ? searchValue : "", // 3차 프로젝트에 구현
       main_filter: 0,
-      from_date: "", // (필수)2023-01-01 형식으로 전송
-      to_date: "", // (필수)2023-01-01 형식으로 전송
+      from_date: startDay, // (필수)2023-01-01 형식으로 전송
+      to_date: endDay, // (필수)2023-01-01 형식으로 전송
       dog_info: dogInfo,
       hotel_option_pk: optionValue,
       filter_type: filterValue,
     };
 
+    // !!! 날짜 데이터가 없으면 오늘~내일 날짜
     // 필터 데이터가 하나라도 있으면 main_filter: 1
     if (
       formData.address ||
@@ -246,7 +254,7 @@ const MainSearchFrom = ({ changeSelectDay, setSaveFilterData }) => {
       formData.dog_info.length > 0 ||
       formData.hotel_option_pk.length > 0
     ) {
-      formData.main_filter = 0;
+      formData.main_filter = 1;
     }
 
     console.log("데이터 전송 :", formData);
