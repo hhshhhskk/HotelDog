@@ -141,12 +141,12 @@ const BookingCompleteComponent = ({ bookingData }) => {
       <BookingCompleteList>
         <ListTitle>
           <p>{bookingData.hotel_nm}</p>
-          <span>{bookingData.hotel_call}</span>
+          <span>{bookingData.address_name}</span>
         </ListTitle>
         <BookingContents>
           <BookingLeft>
             <img
-              src={`http://112.222.157.156:5222/pic/hotel/${bookingData.res_pk}/${bookingData.room_pic}`}
+              src={`http://112.222.157.156:5222/pic/hotel/${bookingData.hotel_pk}/${bookingData.room_pic}`}
               alt="booking"
             />
             <p>이용 완료</p>
@@ -164,10 +164,9 @@ const BookingCompleteComponent = ({ bookingData }) => {
             </BookInfo>
             <PayInfo>
               <Line />
-              <span>결제 정보</span>
+              <span>호텔 정보</span>
               <PayInfoTxt>
-                <p>결제 금액 : </p>
-                <p>결제 수단 : </p>
+                <p>호텔 전화번호 : {bookingData.hotel_call}</p>
               </PayInfoTxt>
             </PayInfo>
             <CompleteBt>

@@ -109,7 +109,7 @@ const ReviewComplete = styled.button`
   margin: 0 auto;
   width: 150px;
   height: 50px;
-  margin-top: 90px;
+  margin-top: 50px;
   border-radius: 10px;
   border: 1px solid #654222;
   background: #654222;
@@ -120,6 +120,36 @@ const ReviewComplete = styled.button`
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+  }
+`;
+const ImgContetnts = styled.div`
+  position: relative;
+  display: flex;
+  width: 590px;
+  height: 100px;
+  gap: 10px;
+
+  margin-top: 20px;
+
+  cursor: pointer;
+  img {
+    position: relative;
+  }
+  input {
+    position: relative;
+
+    background-color: red;
+  }
+  button {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    background-color: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    p {
+      display: block;
+    }
   }
 `;
 
@@ -265,7 +295,7 @@ const ReviewModal = ({
           </p>
         </ReviewTxt>
 
-        <div>
+        <ImgContetnts>
           {/* 디자인 부분 */}
           <button type="button" onClick={() => handleClickFileSelect()}>
             파일선택
@@ -286,10 +316,19 @@ const ReviewModal = ({
           {/* 미리보기이미지 */}
           {imgFileList.map((item, index) => (
             <div key={index} onClick={() => handleClickDeleteFile(index)}>
-              <img src={item} />
+              <img
+                src={item}
+                style={{
+                  width: "80px",
+                  height: "80px",
+                  overflow: "hidden",
+                  objectFit: "cover",
+                  borderRadius: "5px",
+                }}
+              />
             </div>
           ))}
-        </div>
+        </ImgContetnts>
 
         <ReviewComplete onClick={handleReviewSubmit}>
           <p>작성완료</p>
