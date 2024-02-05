@@ -10,6 +10,7 @@ import {
   BoardContent,
   BoardCreateBtn,
   BoardCreateBtnDiv,
+  BoardDeleteBtn,
   BoardFilter,
   BoardFilterItem,
   BoardImg,
@@ -26,6 +27,7 @@ import {
 } from "../../../styles/BoardPageStyle/boardStyle";
 import BoardPagination from "../../../components/Board/BoardPagination";
 import useCustomLogin from "../../../hooks/useCustomLogin";
+import { boardDeleteAPI, boardListAPI } from "../../../api/board/boardApi";
 
 const BoardPage = () => {
   const category = ["전체글", "공지", "자유게시판", "질문", "정보"];
@@ -35,10 +37,23 @@ const BoardPage = () => {
   const [totalPage, setTotalPage] = useState(1);
   const [nowPage, setNowPage] = useState(1);
   const { isLogin } = useCustomLogin();
+  const [checkboxStates, setCheckboxStates] = useState([]);
+  const [searchType, setSearchType] = useState("0");
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   useEffect(() => {
     isLogin === false && alert("로그인 후 이용해주세요.", navigate(`/login`));
   });
+
+  const searchClick = e => {
+    e.preventDefault();
+    if (cateNum === 7) {
+      setCateNum(8);
+    } else {
+      setCateNum(7);
+    }
+  };
+
   return (
     <BoardWrap>
       <BoardContent>
@@ -97,19 +112,38 @@ const BoardPage = () => {
           nowPage={nowPage}
           setTotalPage={setTotalPage}
           cateNum={cateNum}
+          checkboxStates={checkboxStates}
+          setCheckboxStates={setCheckboxStates}
+          searchType={searchType}
+          searchKeyword={searchKeyword}
         />
         <BoardCreateBtnDiv>
-          <BoardCreateBtn
-            onClick={() => {
-              navigate("/boardcreate");
-            }}
-          >
-            <BoardBtnImg
-              src={`${process.env.PUBLIC_URL}/images/board/boardCreateBtn.svg`}
-              alt=""
-            />
-            글 작성하기
-          </BoardCreateBtn>
+          {cateNum === 5 ? (
+            <BoardDeleteBtn
+              onClick={async () => {
+                const result = await boardDeleteAPI(checkboxStates);
+                if (result === 1) {
+                  setCateNum(0);
+                }
+              }}
+            >
+              글 삭제하기
+            </BoardDeleteBtn>
+          ) : cateNum === 6 ? (
+            <BoardDeleteBtn>댓글 삭제하기</BoardDeleteBtn>
+          ) : (
+            <BoardCreateBtn
+              onClick={() => {
+                navigate("/boardcreate");
+              }}
+            >
+              <BoardBtnImg
+                src={`${process.env.PUBLIC_URL}/images/board/boardCreateBtn.svg`}
+                alt=""
+              />
+              글 작성하기
+            </BoardCreateBtn>
+          )}
         </BoardCreateBtnDiv>
         <BoardPagination
           totalPage={totalPage}
@@ -117,12 +151,20 @@ const BoardPage = () => {
           setNowPage={setNowPage}
         />
         <BoardSearchBox>
-          <BoardSearchSelect>
-            <option value="제목">제목</option>
-            <option value="작성자">작성자</option>
+          <BoardSearchSelect
+            value={searchType}
+            onChange={e => setSearchType(e.target.value)}
+          >
+            <option value="0">제목</option>
+            <option value="1">내용</option>
+            {/* <option value="2">닉네임</option> */}
           </BoardSearchSelect>
-          <BoardSearchInput type="text" />
-          <BoardSearchBtn type="button" value="검색" />
+          <BoardSearchInput
+            type="text"
+            value={searchKeyword}
+            onChange={e => setSearchKeyword(e.target.value)}
+          />
+          <BoardSearchBtn onClick={searchClick} type="button" value="검색" />
         </BoardSearchBox>
       </BoardContent>
     </BoardWrap>

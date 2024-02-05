@@ -11,7 +11,7 @@ const ReserveFormFixed = styled.div`
   position: fixed; /* 이 부분이 수정되었습니다. */
   width: 420px;
   min-height: 921px;
-  top: 150px;
+  top: 130px;
   left: 1140px;
 `;
 // 반려견 정보 초기값

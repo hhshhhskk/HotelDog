@@ -14,7 +14,7 @@ export const loginAPI = async ({ loginParam, successFn, failFn, errorFn }) => {
         "Content-Type": "application/json",
       },
     });
-
+    sessionStorage.setItem("userPk", response.data.userPk);
     const status = response.status.toString();
 
     if (status.charAt(0) === "2") {
