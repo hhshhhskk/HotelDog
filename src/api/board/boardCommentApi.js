@@ -41,8 +41,9 @@ export const commentUpdateAPI = async data => {
 };
 
 // 게시판 댓글 삭제 API
-export const commentDeleteAPI = async commentPk => {
+export const commentDeleteAPI = async commentPkList => {
   try {
+    console.log(commentPkList);
     const res = await jwtAxios({
       method: "delete",
       url: `/api/board/comment`,
@@ -50,7 +51,7 @@ export const commentDeleteAPI = async commentPk => {
         "Content-Type": "application/json", // Content-Type 설정
       },
       data: {
-        commentPkList: [commentPk],
+        commentPkList,
       },
     });
     return res.data.result;

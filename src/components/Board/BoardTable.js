@@ -143,6 +143,29 @@ function BoardTable({
     setCheckboxStates(updatedCheckboxStates);
   };
 
+  // 게시판 댓글 체크박스 전체 선택
+  const handleCommentCheckboxAllChange = () => {
+    if (selectAll) {
+      // 전체 체크가 되어 있을 때, 빈 배열로 초기화
+      setCheckboxStates([]);
+    } else {
+      // 전체 체크가 안되어 있을 때, 각 항목의 commentPk를 담은 배열로 설정
+      setCheckboxStates(sortedData.map(item => item.commentPk));
+    }
+    // selectAll 상태를 반전시킴
+    setSelectAll(!selectAll);
+  };
+  // 게시판 댓글 체크박스 선택시 commentPk 배열에 담기
+  const handleCommentCheckboxChange = (item, idx) => {
+    // checkboxStates 배열에 item.commentPk가 이미 있다면 해당 항목을 제거하고,
+    // 없다면 추가한 새로운 배열을 만들어 설정
+    const updatedCheckboxStates = checkboxStates.includes(item.commentPk)
+      ? checkboxStates.filter(pk => pk !== item.commentPk)
+      : [...checkboxStates, item.commentPk];
+
+    setCheckboxStates(updatedCheckboxStates);
+  };
+
   let sortedData = [];
   if (isSuccess) {
     // 데이터가 성공적으로 불러와진 경우에만 정렬 작업 수행
@@ -198,7 +221,11 @@ function BoardTable({
                 type="checkbox"
                 checked={selectAll}
                 name="select"
-                onChange={handleCheckboxAllChange}
+                onChange={
+                  cateNum === 5
+                    ? handleCheckboxAllChange
+                    : handleCommentCheckboxAllChange
+                }
               />
             </BoardTh>
           )}
@@ -218,8 +245,16 @@ function BoardTable({
                   <input
                     type="checkbox"
                     name="select"
-                    checked={checkboxStates.includes(item.boardPk)}
-                    onChange={() => handleCheckboxChange(item)}
+                    checked={
+                      cateNum === 5
+                        ? checkboxStates.includes(item.boardPk)
+                        : checkboxStates.includes(item.commentPk)
+                    }
+                    onChange={() =>
+                      cateNum === 5
+                        ? handleCheckboxChange(item)
+                        : handleCommentCheckboxChange(item)
+                    }
                   />
                 </BoardTd>
               )}
