@@ -51,6 +51,53 @@ export const getNickNameUpdate = async nickname => {
   }
 };
 
+// 마이페이지 예약목록 출력
+export const mypageBookingListApi = async (
+  page,
+  { successFn, failFn, erroFn },
+) => {
+  try {
+    const res = await jwtAxios({
+      method: "get",
+      url: `/api/reservation?page=${page}`,
+      headers: {
+        "Content-Type": "application/json", // Content-Type 설정
+      },
+    });
+
+    const resStatus = res.status.toString();
+    if (resStatus.charAt(0) === "2") {
+      successFn(res.data);
+    } else {
+      failFn(res.data);
+    }
+  } catch (error) {
+    // 오류가 발생했을 때의 처리
+    // console.error(error);
+    // return error.response?.status || 500; // 에러 응답 상태 코드 반환
+    erroFn(error);
+  }
+};
+
+// 마이페이지 반려견 정보 출력
+export const postDogInfoApi = async (
+  { sendData },
+  { successFn, failFn, errorFn },
+) => {
+  try {
+    const header = { headers: { "Content-Type": "multipart/form-data" } };
+    const res = await jwtAxios.post("/api/dog", sendData, header);
+    const resStatus = res.status.toString();
+    if (resStatus.charAt(0) === "2") {
+      successFn(res.data);
+    } else {
+      failFn("업로드 실패입니다.");
+    }
+  } catch (error) {
+    errorFn(error);
+  }
+};
+
 // 게시글 수정 API
 export const boardUpdateAPI = async formData => {
   try {
@@ -85,5 +132,24 @@ export const boardDeleteAPI = async boardPkList => {
     // 오류가 발생했을 때의 처리
     console.error(error);
     return error.response?.status || 500; // 에러 응답 상태 코드 반환
+  }
+};
+
+// 리뷰 관련
+export const postReviewApi = async (
+  { sendData },
+  { successFn, failFn, errorFn },
+) => {
+  try {
+    const header = { headers: { "Content-Type": "multipart/form-data" } };
+    const res = await jwtAxios.post("/api/review", sendData, header);
+    const resStatus = res.status.toString();
+    if (resStatus.charAt(0) === "2") {
+      successFn(res.data);
+    } else {
+      failFn("업로드 실패입니다.");
+    }
+  } catch (error) {
+    errorFn(error);
   }
 };

@@ -111,8 +111,9 @@ const MainPage = () => {
         page: 1,
         setPostData: filter,
       });
-
+      
       setHotelListData(data);
+      
     } catch (error) {
       console.log(error);
     }

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
 import styled from "@emotion/styled";
+import React, { useRef, useState } from "react";
+import { postReviewApi } from "../../../api/mypage/mypageApi";
 
 // 모달을 감싸는 컨테이너 스타일 정의
 const ModalContainer = styled.div`
@@ -131,27 +132,104 @@ const ReviewModal = ({
   onReviewSubmit,
 }) => {
   if (!isOpen) return null;
-  const [rating, setRating] = useState(3);
+
+  const [rating, setRating] = useState(5);
   const [reviewText, setReviewText] = useState("");
 
+  // 후기 이미지 선택 처리 함수
+  const [imgFileList, setImgFileList] = useState([]);
+  const [imgFileListType, setImgFileListType] = useState([]);
+  const handleChangeFile = e => {
+    // console.log(e);
+    const file = e.target.files[0];
+    if (file && imgFileList.length < 3) {
+      // 미리보기
+      const tempUrl = URL.createObjectURL(file);
+      console.log(tempUrl);
+      console.log(file);
+      // 업로드한 파일의 URL (웹브라우저상의 가상의 URL)
+      setImgFileList(prevImages => [...prevImages, tempUrl]);
+      // 업로드한 파일의 타입을 저장
+      setImgFileListType(prevTypes => [...prevTypes, file.type]);
+    } else {
+      alert("이미지는 3개까지만 가능합니다.");
+    }
+  };
+
+  // 파일 선택 UI 변경
+  const handleClickFileSelect = () => {
+    document.getElementById("fileBt").click();
+  };
+
+  // 첨부된 이미지 클릭시 삭제 함수
+  const handleClickDeleteFile = index => {
+    const imgFileArr = [...imgFileList];
+    const imgTypeArr = [...imgFileListType];
+    imgFileArr.splice(index, 1);
+    imgTypeArr.splice(index, 1);
+    setImgFileList(imgFileArr);
+    setImgFileListType(imgTypeArr);
+  };
   // 후기 작성 완료 시 처리 함수
-  const handleReviewSubmit = () => {
+  const handleReviewSubmit = async () => {
     // 작성된 후기 데이터 전달
-    // onReviewSubmit({ rating, reviewText });
-    // 얼럿 창 띄우기
+    const formData = new FormData();
+    const dto = new Blob(
+      [
+        JSON.stringify({
+          resPk: bookingData.res_pk,
+          comment: reviewText,
+          score: rating,
+        }),
+      ],
+      // JSON 형식으로 설정
+      { type: "application/json" },
+    );
+
+    formData.append("dto", dto);
+
+    const imagePromises = imgFileList.map(async (image, index) => {
+      const response = await fetch(image);
+      const blob = await response.blob();
+      const currentDate = new Date();
+      const types = imgFileListType;
+      const seconds = Math.floor(currentDate.getTime() / 1000);
+      const file = new File(
+        [blob],
+        `image${seconds}.${types[index].split("/")[1]}`,
+        {
+          type: `image/${types[index].split("/")[1]}`,
+        },
+      );
+      formData.append("pics", file);
+    });
+    await Promise.all(imagePromises);
+
+    postReviewApi({ sendData: formData }, { successFn, failFn, errorFn });
+  };
+  const successFn = result => {
+    console.log("successFn", result);
     alert("후기가 작성되었습니다.");
     // 모달 닫기
     onClose();
-    
   };
+  const failFn = result => {
+    console.log("failFn", result);
+  };
+
+  const errorFn = result => {
+    console.log("errorFn", result);
+  };
+
+  console.log(bookingData);
 
   return (
     <ModalContainer>
       <ModalContent>
         <ModalTitle>
           <h2>숙소 후기</h2>
-          <p>{bookingData.hotelName}</p>
-          <span>{bookingData.hotelLocation}</span>
+          <p>{bookingData.hotel_nm}</p>
+          <span>{bookingData.hotel_call}</span>
           {/* ? 날짜는 어떻게 불러오지 */}
         </ModalTitle>
         <Star>
@@ -186,6 +264,33 @@ const ReviewModal = ({
             ></textarea>
           </p>
         </ReviewTxt>
+
+        <div>
+          {/* 디자인 부분 */}
+          <button type="button" onClick={() => handleClickFileSelect()}>
+            파일선택
+          </button>
+          {/* 그대로사용 */}
+          <input
+            type="file"
+            accept="image/png, image/gif, image/jpeg"
+            onChange={e => {
+              handleChangeFile(e);
+            }}
+            onClick={() => {
+              document.getElementById("fileBt").click();
+            }}
+            id="fileBt"
+            style={{ display: "none" }}
+          />
+          {/* 미리보기이미지 */}
+          {imgFileList.map((item, index) => (
+            <div key={index} onClick={() => handleClickDeleteFile(index)}>
+              <img src={item} />
+            </div>
+          ))}
+        </div>
+
         <ReviewComplete onClick={handleReviewSubmit}>
           <p>작성완료</p>
         </ReviewComplete>

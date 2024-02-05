@@ -100,48 +100,49 @@ const Cancel = styled.button`
 `;
 
 const BookingListComponent = ({ bookingData }) => {
+  // console.log("대기중 날짜입니다.");
+
   // bookingData가 존재하지 않는 경우 빈 배열로 설정
-  if (!bookingData) bookingData = [];
+  if (!bookingData) return null; // 데이터가 없는 경우 null 반환
+
   return (
     <>
-      {bookingData.map((booking, index) => (
-        <BookingList key={index}>
-          <ListTitle>
-            <p>{booking.hotelName}</p>
-            <span>{booking.hotelLocation}</span>
-          </ListTitle>
-          <BookingContents>
-            <BookingLeft>
-              <img
-                src={`${process.env.PUBLIC_URL}/images/MyPage/example_booking.svg`}
-              />
-            </BookingLeft>
-            <BookingRight>
-              <BookingDate bookingData={booking} />
-              <BookInfo>
-                <Line />
-                <span>예약 정보</span>
-                <BookInfoTxt>
-                  <p>예약 번호 : {booking?.res_pk}</p>
-                  <p>객실 : {booking?.hotel_room_nm}</p>
-                  <p>강아지 : {booking?.res_dog_info_vo_list[0].dot_nm}</p>
-                </BookInfoTxt>
-              </BookInfo>
-              <PayInfo>
-                <Line />
-                <span>결제 정보</span>
-                <PayInfoTxt>
-                  <p>결제 금액 : </p>
-                  <p>결제 수단 : </p>
-                </PayInfoTxt>
-              </PayInfo>
-              <CancelBt>
-                <Cancel>예약취소</Cancel>
-              </CancelBt>
-            </BookingRight>
-          </BookingContents>
-        </BookingList>
-      ))}
+      <BookingList>
+        <ListTitle>
+          <p>{bookingData.hotel_nm}</p>
+          <span>{bookingData.hotel_call}</span>
+        </ListTitle>
+        <BookingContents>
+          <BookingLeft>
+            <img
+              src={`${process.env.PUBLIC_URL}/images/MyPage/example_booking.svg`}
+            />
+          </BookingLeft>
+          <BookingRight>
+            <BookingDate bookingData={bookingData} />
+            <BookInfo>
+              <Line />
+              <span>예약 정보</span>
+              <BookInfoTxt>
+                <p>예약 번호 : {bookingData?.res_pk}</p>
+                <p>객실 : {bookingData?.hotel_room_nm}</p>
+                <p>강아지 : {bookingData.res_dog_info_vo_list?.[0].dot_nm}</p>
+              </BookInfoTxt>
+            </BookInfo>
+            <PayInfo>
+              <Line />
+              <span>결제 정보</span>
+              <PayInfoTxt>
+                <p>결제 금액 : </p>
+                <p>결제 수단 : </p>
+              </PayInfoTxt>
+            </PayInfo>
+            <CancelBt>
+              <Cancel>예약취소</Cancel>
+            </CancelBt>
+          </BookingRight>
+        </BookingContents>
+      </BookingList>
     </>
   );
 };
