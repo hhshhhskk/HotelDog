@@ -51,6 +51,26 @@ export const getNickNameUpdate = async nickname => {
   }
 };
 
+// 회원정보 수정 API
+export const signupUpdateApi = async data => {
+  try {
+    console.log(data);
+    const res = await jwtAxios({
+      method: "put",
+      url: `/api/user/info`,
+      data,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return res.data.result;
+  } catch (error) {
+    // 오류가 발생했을 때의 처리
+    console.log(error);
+    // alert(error.response.data.message);
+  }
+};
+
 // 마이페이지 예약목록 출력
 export const mypageBookingListApi = async (
   page,

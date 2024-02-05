@@ -39,7 +39,7 @@ const loginSlice = createSlice({
   // store 의 state 를 업데이트 하는 함수 모음
   reducers: {
     login: (state, action) => {
-      console.log("login.....");
+      // console.log("login.....");
 
       return {
         accessToken: action.payload.accessToken,
@@ -48,7 +48,7 @@ const loginSlice = createSlice({
     },
     // 로그아웃
     logout: (state, action) => {
-      console.log("logout.....");
+      // console.log("logout.....");
       // 엑세스 토큰 삭제
       removeCookie("accessToken", "/");
 
@@ -62,10 +62,10 @@ const loginSlice = createSlice({
         // 외부 연동 성공
         // state : 기존 값(store 의 loginSate)
         // action : 받아온 값
-        console.log("fulfilled", state);
+        // console.log("fulfilled", state);
         // console.log(action);
         const payload = action.payload;
-        console.log("payload", payload);
+        // console.log("payload", payload);
         if (!payload.error) {
           // 이때 필요한 정보를 보관한다.
           // 쿠키는 문자열입니다. 객체를 JSON 문자로 변환
@@ -77,13 +77,13 @@ const loginSlice = createSlice({
         // 외부 연동 시도중..
         // state : 기존 값(store 의 loginSate)
         // action : 받아온 값
-        console.log("pending", state);
+        // console.log("pending", state);
       })
       .addCase(loginPostAsync.rejected, (state, action) => {
         // 외부 연동 실패
         // state : 기존 값(store 의 loginSate)
         // action : 받아온 값
-        console.log("rejected", state);
+        // console.log("rejected", state);
       });
   },
 });

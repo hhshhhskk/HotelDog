@@ -187,7 +187,7 @@ const LoginPage = () => {
   };
 
   const onValid = data => {
-    console.log(data);
+    // console.log(data);
     const loginParam = { id: data.id, pw: data.password };
     doLogin({ loginParam, successFn, failFn, errorFn });
     if (idSaved) {
@@ -195,7 +195,7 @@ const LoginPage = () => {
     }
   };
   const successFn = result => {
-    console.log("성공", result);
+    // console.log("성공", result);
     moveToPath("/");
   };
 

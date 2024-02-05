@@ -5,7 +5,12 @@ import Password from "../../components/MyPage/Member/Password";
 import jwtAxios from "../../utils/jwtUtil";
 import AddressPopup from "../../components/SignUp/AddressPopup";
 import { nickNameCheckAPI } from "../../api/SignUp/addressApi";
-import { fetchMemberInfo, getNickNameUpdate } from "../../api/mypage/mypageApi";
+import {
+  fetchMemberInfo,
+  getNickNameUpdate,
+  signupUpdateApi,
+} from "../../api/mypage/mypageApi";
+import { useNavigate } from "react-router-dom";
 
 const MemberPage = styled.div`
   margin-left: 85px;
@@ -128,7 +133,7 @@ const AdBox = styled.div`
   padding-left: 20px;
   overflow: hidden;
 `;
-const AddInfoBox = styled.input`
+const AddInfoBox = styled.div`
   position: relative;
   display: flex;
   align-items: center;
@@ -224,6 +229,7 @@ const NickCheckBt = styled.div`
 `;
 
 const Member = () => {
+  const navigate = useNavigate();
   // 비밀번호 입력하면 컨텐츠 보여주기
   const [showMemberContents, setShowMemberContents] = useState(false);
   const [passwordVerified, setPasswordVerified] = useState(false);
@@ -234,15 +240,43 @@ const Member = () => {
     nickname: "",
     phoneNum: "",
     userAddress: "",
+    addressEntity: {
+      addressName: "",
+      region1DepthName: "",
+      region2DepthName: "",
+      region3DepthName: "",
+      zoneNum: "",
+      x: "",
+      y: "",
+      detailAddress: "",
+    },
   });
   // 주소관련
   const [popUp, setPopUp] = useState(false);
   const [address, setAddress] = useState();
+  const [detailAddressState, setDetailAddressState] = useState("");
   // 닉네임 보관
   const [originInfo, setOriginInfo] = useState(null);
   const handlePasswordVerified = () => {
     setPasswordVerified(true); // 비밀번호 확인 완료 시 상태 변경
   };
+
+  // 전송할 데이터
+  const [sendData, setSendData] = useState({
+    nickname: "",
+    phoneNum: "",
+    userAddress: "",
+    addressEntity: {
+      addressName: "",
+      region1DepthName: "",
+      region2DepthName: "",
+      region3DepthName: "",
+      zoneNum: "",
+      x: "",
+      y: "",
+      detailAddress: "",
+    },
+  });
 
   // kakao address
 
@@ -254,8 +288,14 @@ const Member = () => {
   }, [passwordVerified]);
 
   const successFn = result => {
-    console.log("성공", result);
-    setMemberInfo(result);
+    // console.log("성공", result);
+    setDetailAddressState(result.addressEntity.detailAddress);
+    setSendData(prevState => ({
+      ...prevState,
+      nickname: result.nickname,
+      phoneNum: result.phoneNum,
+      userAddress: result.userAddress,
+    }));
     setOriginInfo(result);
   };
   const failFn = result => {
@@ -266,7 +306,7 @@ const Member = () => {
   };
 
   const handleChangeNicname = e => {
-    if (originInfo.nickname === memberInfo.nickname) {
+    if (originInfo.nickname === sendData.nickname) {
       alert("새로운 닉네임을 입력하세요.");
       return;
     }
@@ -275,34 +315,31 @@ const Member = () => {
     console.log(result);
   };
 
-  const [changeData, setChangeData] = useState({});
-
-  const handleClickAddress = () => {};
-
-  const initData = {
-    nickname: "",
-    phoneNum: "",
-    userAddress: "",
-    addressEntity: {
-      addressName: "",
-      region1DepthName: "",
-      region2DepthName: "",
-      region3DepthName: "",
-      zoneNum: "1",
-      x: "",
-      y: "",
-      detailAddress: "",
-    },
-  };
-  const handleChangeData = e => {
-    setChangeData({ ...changeData, [e.target.name]: e.target.value });
-  };
-  const handleSubmitClick = e => {
+  const handleSubmitClick = async e => {
     // console.log("데이터임", data.nickname);
+    const formData = {
+      ...sendData,
+      userAddress: address.address_name,
+      addressEntity: {
+        addressName: address.address_name,
+        region1DepthName: address.region_1depth_name,
+        region2DepthName: address.region_2depth_name,
+        region3DepthName: address.region_3depth_name,
+        zoneNum: address.zone_no,
+        x: address.x,
+        y: address.y,
+        detailAddress: detailAddressState,
+      },
+    };
+
+    // console.log("폼데이터", formData);
+    const result = await signupUpdateApi(formData);
+    console.log(result);
+    if (result === 1) {
+      alert("수정이 완료되었습니다.");
+      navigate("/");
+    }
   };
-
-  // console.log(address.address_name);
-
   return (
     <MemberPage>
       {popUp && <AddressPopup setPopUp={setPopUp} setAddress={setAddress} />}
@@ -329,9 +366,12 @@ const Member = () => {
               <NickBox>
                 <NickFetchBox
                   type="text"
-                  value={memberInfo.nickname}
+                  value={sendData.nickname}
                   onChange={e =>
-                    setMemberInfo({ ...memberInfo, nickname: e.target.value })
+                    setSendData(prevState => ({
+                      ...prevState,
+                      nickname: e.target.value,
+                    }))
                   }
                   placeholder="수정할 닉네임을 입력하세요"
                   name="nickname"
@@ -344,17 +384,22 @@ const Member = () => {
             <MemberNb>
               <p>전화번호(+82)</p>
               <InfoBox
-                defaultValue={memberInfo.phoneNum}
+                defaultValue={sendData.phoneNum}
+                onChange={e =>
+                  setSendData(prevState => ({
+                    ...prevState,
+                    phoneNum: e.target.value,
+                  }))
+                }
                 placeholder="수정할 전화번호를 입력하세요"
               />
             </MemberNb>
             <MemberAd>
               <p>주소</p>
               <AdBox>
-                <AddInfoBox
-                  defaultValue={memberInfo.userAddress}
-                  placeholder="수정할 주소를 입력하세요"
-                />
+                <AddInfoBox placeholder="수정할 주소를 입력하세요">
+                  {address ? address.address_name : sendData.userAddress}
+                </AddInfoBox>
 
                 <AddressBt
                   onClick={() => {
@@ -366,13 +411,20 @@ const Member = () => {
               </AdBox>
               <DetailAddress
                 placeholder="상세 주소"
-                defaultValue={memberInfo.userAddress}
-              ></DetailAddress>
+                defaultValue={
+                  sendData.addressEntity.detailAddress
+                    ? sendData.addressEntity.detailAddress
+                    : detailAddressState
+                }
+                onChange={e => {
+                  setDetailAddressState(e.target.value);
+                }}
+              />
             </MemberAd>
             <InfoFetch>
               {/* <InfoFetchBt onClick={handleUpdateMemberInfo}> */}
 
-              <InfoFetchBt onclick={handleSubmitClick}>
+              <InfoFetchBt onClick={handleSubmitClick}>
                 <p>회원정보 수정하기</p>
               </InfoFetchBt>
             </InfoFetch>
