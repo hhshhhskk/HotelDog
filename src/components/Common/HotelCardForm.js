@@ -23,7 +23,7 @@ import { getHotelBookMarkAPI } from "../../api/Main/HotelApi";
 import useCustomLogin from "../../hooks/useCustomLogin";
 import { useNavigate } from "react-router-dom";
 
-const HotelCardForm = ({ hotel, handleClickHotel }) => {
+const HotelCardForm = ({ hotel, handleClickHotel, setRendering }) => {
   const navigate = useNavigate();
   const { isLogin } = useCustomLogin();
 
@@ -46,6 +46,7 @@ const HotelCardForm = ({ hotel, handleClickHotel }) => {
       );
       if (result === 2) {
         setBookMarkCheck(0);
+        setRendering(prev => !prev);
       } else {
         setBookMarkCheck(1);
       }
