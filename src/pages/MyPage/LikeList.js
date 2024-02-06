@@ -77,6 +77,7 @@ const TwoColumns = styled.div`
 const LikeList = ({ handleSelectGo, getLikeListData }) => {
   const [likeListData, setLikeListData] = useState([]);
   const [page, setPage] = useState(1);
+  const [rendering, setRendering] = useState(false);
 
   useEffect(() => {
     const getLikeListData = async () => {
@@ -102,7 +103,7 @@ const LikeList = ({ handleSelectGo, getLikeListData }) => {
 
     // 데이터 불러오기 함수 호출
     getLikeListData();
-  }, []); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때만 실행되도록 함
+  }, [rendering]); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때만 실행되도록 함
 
   if (!getLikeListData) getLikeListData = [];
 
@@ -120,7 +121,7 @@ const LikeList = ({ handleSelectGo, getLikeListData }) => {
               style={{ marginBottom: "20px", width: "calc(50% - 10px)" }}
             >
               <HotelCardDiv>
-                <HotelCardForm hotel={hotel} handleSelectGo={handleSelectGo} />
+                <HotelCardForm hotel={hotel} handleSelectGo={handleSelectGo} setRendering={setRendering} />
               </HotelCardDiv>
             </div>
           ))}
