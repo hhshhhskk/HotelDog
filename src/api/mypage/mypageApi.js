@@ -99,6 +99,23 @@ export const mypageBookingListApi = async (
   }
 };
 
+// 마이페이지 예약 삭제
+export const mypageBookingListDeleteApi = async resPk => {
+  try {
+    const res = await jwtAxios({
+      method: "delete",
+      url: `/api/reservation/hotel/res?resPk=${resPk}`,
+      headers: {
+        "Content-Type": "application/json", // Content-Type 설정
+      },
+    });
+
+    return res.data.result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // 마이페이지 반려견 정보 출력
 export const postDogInfoApi = async (
   { sendData },
@@ -118,12 +135,13 @@ export const postDogInfoApi = async (
   }
 };
 
-// 게시글 수정 API
-export const boardUpdateAPI = async formData => {
+// 리뷰  등록 API
+export const postReviewApi = async formData => {
   try {
+    console.log(formData);
     const res = await jwtAxios({
-      method: "put",
-      url: "/api/board",
+      method: "post",
+      url: "/api/review",
       data: formData,
       headers: {
         "Content-Type": "multipart/form-data", // Content-Type 설정
@@ -134,42 +152,5 @@ export const boardUpdateAPI = async formData => {
     // 오류가 발생했을 때의 처리
     console.error(error);
     return error.response?.status || 500; // 에러 응답 상태 코드 반환
-  }
-};
-
-// 게시글 삭제 API
-export const boardDeleteAPI = async boardPkList => {
-  try {
-    const res = await jwtAxios({
-      method: "delete",
-      url: `/api/board?boardPkList=${boardPkList}`,
-      headers: {
-        "Content-Type": "application/json", // Content-Type 설정
-      },
-    });
-    return res.data.result;
-  } catch (error) {
-    // 오류가 발생했을 때의 처리
-    console.error(error);
-    return error.response?.status || 500; // 에러 응답 상태 코드 반환
-  }
-};
-
-// 리뷰 관련
-export const postReviewApi = async (
-  { sendData },
-  { successFn, failFn, errorFn },
-) => {
-  try {
-    const header = { headers: { "Content-Type": "multipart/form-data" } };
-    const res = await jwtAxios.post("/api/review", sendData, header);
-    const resStatus = res.status.toString();
-    if (resStatus.charAt(0) === "2") {
-      successFn(res.data);
-    } else {
-      failFn("업로드 실패입니다.");
-    }
-  } catch (error) {
-    errorFn(error);
   }
 };

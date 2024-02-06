@@ -73,56 +73,9 @@ const ListNone = styled.div`
 
 const Booking = () => {
   const [bookingData, setBookingData] = useState([]);
+  const [rendering, setRendering] = useState(false);
   const [bookingCompleteData, setBookingCompleteData] = useState([]);
   const [page, setPage] = useState(1);
-
-  // const DemoDagta = [
-  //   {
-  //     hotel_nm: "더 꼬냥 컴포트 호텔",
-  //     hotel_call: "010-4823-7331",
-  //     hotel_room_nm: "단체룸(소)",
-  //     from_date: "2024-01-04",
-  //     to_date: "2024-02-25",
-  //     room_pic: "8b1aa9c7-7e0a-42f5-9a83-303b3d6e5bc5.png",
-  //     res_pk: 264,
-  //     res_dog_info_vo_list: [
-  //       {
-  //         res_pk: 264,
-  //         dot_nm: "odio.",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     hotel_nm: "헤어볼 티어라스 호텔",
-  //     hotel_call: "010-2056-4431",
-  //     hotel_room_nm: "케이지(대)",
-  //     from_date: "2023-12-31",
-  //     to_date: "2024-01-30",
-  //     room_pic: "52e035ca-e556-42d3-9d49-d5c80fd1e6dc.png",
-  //     res_pk: 373,
-  //     res_dog_info_vo_list: [
-  //       {
-  //         res_pk: 373,
-  //         dot_nm: "mattis",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     hotel_nm: "가짜.......",
-  //     hotel_call: "010-4823-7331",
-  //     hotel_room_nm: "단체룸(소)",
-  //     from_date: "2024-01-04",
-  //     to_date: "2024-01-31",
-  //     room_pic: "8b1aa9c7-7e0a-42f5-9a83-303b3d6e5bc5.png",
-  //     res_pk: 264,
-  //     res_dog_info_vo_list: [
-  //       {
-  //         res_pk: 264,
-  //         dot_nm: "odio.",
-  //       },
-  //     ],
-  //   },
-  // ];
 
   // 날짜를 비교해서 지났는지 아닌지 판단하는 함수
 
@@ -141,12 +94,14 @@ const Booking = () => {
 
   // // 임시 예약 데이터
   useEffect(() => {
+    console.log("유즈이펙트 렌더링", rendering);
     mypageBookingListApi(page, { successFn, failFn, errorFn });
-  }, []);
+  }, [rendering]);
 
   const successFn = result => {
     console.log("successFn", result);
     setBookingData(result);
+    // setRendering(2);
   };
   const failFn = result => {
     console.log("failFn", result);
@@ -173,7 +128,10 @@ const Booking = () => {
             {dayCheck(item.to_date) ? (
               <BookingCompleteComponent bookingData={item} />
             ) : (
-              <BookingListComponent bookingData={item} />
+              <BookingListComponent
+                bookingData={item}
+                setRendering={setRendering}
+              />
             )}
           </div>
         ))
