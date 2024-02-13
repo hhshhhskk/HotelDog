@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { loginPostAsync } from "../../slices/loginSlice";
 import useCustomLogin from "../../hooks/useCustomLogin";
 
 const LoginWrap = styled.div`
