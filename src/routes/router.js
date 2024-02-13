@@ -1,4 +1,4 @@
-import Layout from "../components/Layout/Layout";
+import Layout from "../layouts/Layout";
 import BoardCreatePage from "../pages/Board/BoardCreatePage/BoardCreatePage";
 import BoardDetailPage from "../pages/Board/BoardDetail/BoardDetailPage";
 import BoardPage from "../pages/Board/BoardPage/BoardPage";

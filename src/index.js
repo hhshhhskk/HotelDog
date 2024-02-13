@@ -10,7 +10,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { CookiesProvider } from "react-cookie";
 import { Provider } from "react-redux";
 
-import store from "./store";
+import store from "./store/store";
 import Loading from "./components/Loading/Loading";
 
 const queryClient = new QueryClient();

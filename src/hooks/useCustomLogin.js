@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
-import { loginPostAsync, logout } from "../slices/loginSlice";
+import { loginPostAsync, logout } from "../redux/loginSlice";
 
 const useCustomLogin = () => {
   // 패스 이동하기
