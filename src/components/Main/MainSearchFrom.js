@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ChoiceDiv,
   ChoiceOptionDiv,
@@ -27,7 +27,8 @@ import {
   SearchForm,
   SubmitButton,
 } from "../../styles/MainPageStyle/MainSearchFromStyle";
-import Calendar, { getCurrentDate } from "../Common/Calendar";
+import Calendar, { getCurrentDate, getTomorrowDate } from "../Common/Calendar";
+import dayjs from "dayjs";
 
 const MainSearchFrom = ({
   changeSelectDay,
@@ -35,16 +36,26 @@ const MainSearchFrom = ({
   startDay,
   endDay,
 }) => {
-  // calendar 현재 날짜 불러오기
+  // calendar에서 오늘 날짜 불러오기
   const currentDate = getCurrentDate();
-  console.log(startDay);
-  console.log(endDay);
-
+  // const currentDate = dayjs();
+  // const formattedDate = currentDate.format("YYYY-MM-DD");
+  // calendar에서 내일 날짜 불러오기
+  const nextDate = getTomorrowDate();
+  // console.log(formattedDate);
   // 미리보기 및 선택된 데이터 useState
   const [locationValue, setLocationValue] = useState("지역을 선택해주세요");
-  const [calendarValue, setCalendarValue] = useState(`${currentDate}`);
+  // !!! 초기값이 null이 뜨는 이슈
+  const [calendarValue, setCalendarValue] = useState(
+    `${currentDate} ~ ${nextDate}`,
+  );
   const [dogValue, setDogValue] = useState("사이즈 / 마리");
   const [filterValue, setFilterValue] = useState(0);
+
+  // startDay 또는 endDay가 변경될 때마다 calendarValue를 업데이트
+  useEffect(() => {
+    setCalendarValue(`${startDay} ~ ${endDay}`);
+  }, [startDay, endDay]);
 
   // 드롭다운 useState
   const [locationDropdown, setLocationDropdown] = useState(false);
@@ -68,6 +79,7 @@ const MainSearchFrom = ({
     setFilterDropdown(false);
     // allHide();
   };
+
   const handleCLickLocationSelect = () => handleDropdownSelect("location");
   const handleCLickCalendarSelect = () => handleDropdownSelect("calendar");
   const handleCLickDogSelect = () => handleDropdownSelect("dog");
@@ -83,7 +95,7 @@ const MainSearchFrom = ({
     // return(_sd,_ed)
   };
 
-  // 드롭다운 데이터
+  // 지역에 대한 드롭다운 데이터
   const locationOption = [
     "서울",
     "부산",
@@ -106,7 +118,7 @@ const MainSearchFrom = ({
 
   // 반려견 정보에 대한 useState
   const [dogOption, setDogOption] = useState([
-    { size: "소형견", count: 0 },
+    { size: "소형견", count: 1 },
     { size: "중형견", count: 0 },
     { size: "대형견", count: 0 },
     { size: "초대형견", count: 0 },
@@ -122,18 +134,18 @@ const MainSearchFrom = ({
     미용: "no",
   });
 
-  // 지역 선택 시 미리보기 내용 변경
+  // 지역 선택 시 미리보기 변경
   const handleChangeLocation = e => {
     const location = e.target.innerText;
     setLocationValue(location);
     // ???드롭다운 닫기 왜 안 먹히지
     handleCLickDropdownClose();
     // setLocationDropdown(false);
-    // allHide();
+    // allDropdownClose();
   };
 
   // 전체 목록 닫기
-  // const allHide = () => {
+  // const allDropdownClose = () => {
   //   // console.log("모두 닫아요..");
   //   setLocationDropdown(false);
   //   setCalendarDropdown(false);
@@ -235,17 +247,16 @@ const MainSearchFrom = ({
     e.preventDefault();
 
     const formData = {
-      address: locationValue,
+      address: locationValue === "지역을 선택해주세요" ? "" : locationValue,
       // search: searchValue ? searchValue : "", // 3차 프로젝트에 구현
       main_filter: 0,
-      from_date: startDay, // (필수)2023-01-01 형식으로 전송
-      to_date: endDay, // (필수)2023-01-01 형식으로 전송
+      from_date: startDay === null ? `${currentDate}` : startDay,
+      to_date: endDay === null ? `${nextDate}` : endDay,
       dog_info: dogInfo,
       hotel_option_pk: optionValue,
       filter_type: filterValue,
     };
 
-    // !!! 날짜 데이터가 없으면 오늘~내일 날짜
     // 필터 데이터가 하나라도 있으면 main_filter: 1
     if (
       formData.address ||
@@ -257,7 +268,7 @@ const MainSearchFrom = ({
       formData.main_filter = 1;
     }
 
-    console.log("데이터 전송 :", formData);
+    console.log("최종 데이터 전송 :", formData);
     setSaveFilterData(formData);
     // 필터 적용된 호텔 리스트로 이동
     // window.scrollTo({ top: 1550, behavior: "smooth" });
@@ -297,7 +308,10 @@ const MainSearchFrom = ({
           </DateSelectTitle>
           {calendarDropdown && (
             <DateSelect>
-              <Calendar calendarClose={calendarClose} />
+              <Calendar
+                calendarClose={calendarClose}
+                // onChange={handleChangeDate}
+              />
             </DateSelect>
           )}
         </DateSelectDiv>
