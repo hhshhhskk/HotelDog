@@ -136,9 +136,15 @@ const MainPage = () => {
     let nowData = {};
     console.log("saveFilterData", saveFilterData);
     if (saveFilterData !== null) {
-      nowData = { ...postData, filter_type: parseInt(selectedValue) };
+      nowData = {
+        filter_type: parseInt(selectedValue),
+        main_filter: 0,
+      };
     } else {
-      nowData = { ...hotelListData, filter_type: parseInt(selectedValue) };
+      nowData = {
+        filter_type: parseInt(selectedValue),
+        main_filter: 0,
+      };
     }
 
     console.log("정렬방식 변경 후 :", nowData);

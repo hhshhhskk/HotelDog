@@ -11,6 +11,7 @@ const removeEmptyValues = obj => {
         obj[prop] === null ||
         obj[prop] === undefined ||
         obj[prop] === "" ||
+        // obj[prop] === "지역을 선택해주세요" ||
         (typeof obj[prop] === "object" && Object.keys(obj[prop]).length === 0)
       ) {
         delete obj[prop];
@@ -23,6 +24,7 @@ const removeEmptyValues = obj => {
 // JWTAxios : 호텔 전체 리스트 API
 export const postJwtHotelListAPI = async ({ page, setPostData }) => {
   try {
+    // console.log("", setPostData);
     const parseData = removeEmptyValues(setPostData);
     // const header = { headers: { "Content-Type": "application/json" } };
     // console.log("최지은 : 페이지 정보 호출 ", setPostData);
