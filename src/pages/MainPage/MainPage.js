@@ -239,7 +239,7 @@ const MainPage = () => {
             <span>핫한 광고 상품을 추천드립니다!</span>
           </AdText>
           <HotelCardDiv>
-            {hotelListData.hotel_advertise_list?.map((hotel, index) => (
+            {hotelListData?.hotel_advertise_list?.map((hotel, index) => (
               <div key={index}>
                 <HotelCardForm
                   hotel={hotel}
@@ -266,7 +266,7 @@ const MainPage = () => {
             </form>
           </FilterText>
           <HotelCardDiv>
-            {hotelListData.hotel_list?.map((hotel, index) => (
+            {hotelListData?.hotel_list?.map((hotel, index) => (
               <div key={index}>
                 <HotelCardForm
                   hotel={hotel}
