@@ -15,42 +15,32 @@ import {
   ReviewWrap,
 } from "../../styles/Detail/hoteldetailStyle";
 import { getReview, getSelDateRmId } from "../../api/Detail/hoteldetailApi";
+// 리뷰 페이지 네이션 초기값
+const initState = [
+  {
+    comment: "",
+    score: 0,
+    pics: [""],
+    review_pk: 0,
+    nick_name: "",
+    updated_at: "",
+    fav_count: 0,
+  },
+];
 
-const HotelDetail = ({ hotelList, detailId, resDay, setResDay, roomList }) => {
+const HotelDetail = ({
+  hotelList,
+  detailId,
+  resDay,
+  setResDay,
+  roomList,
+  hotel_pk,
+  page,
+}) => {
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [data, setData] = useState("");
   // console.log("HotelDetail =========== : ", hotelList);
   // console.log("dateSelectRoom =========== : ", roomList);
-
-  // 더미 데이터
-  const hotel_option = [
-    {
-      주차장: false,
-      미용전문: true,
-      미용자격증: true,
-      드라이기: false,
-      에어컨: true,
-      음용수: true,
-      놀이: true,
-      훈련자격증: true,
-      조식: true,
-      수제간식: true,
-    },
-  ];
-  const hotelInfoVo = [
-    {
-      hotel_nm: "가고파",
-      hotel_detail_info:
-        "자연과 함께, 강아지가 마음껏 뛰어다닐 수 있는 공간을 제공합니다. * 인증 사진 찍어 보내드려요ㅎㅎ",
-      maximum: "1",
-      business_num: "5888888",
-      hotel_call: "02-123-4567",
-      road_address: "서울 대전 대구 부산 찍고 62-3",
-      // pics : {
-      //   {사진줘}
-      // }
-    },
-  ];
 
   // // useNaviate 로 전달된 state 를 알아내기
   // const location = useLocation();
@@ -96,32 +86,36 @@ const HotelDetail = ({ hotelList, detailId, resDay, setResDay, roomList }) => {
     const result = await getSelDateRmId(detailId, _startDay, _endDay, setData);
   };
 
-  // 후기 모달 관련
+  // 후기 모달 열고 닫기
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
 
-  const handleMoveReviewModal = () => {
+  // 후기 모달 처음 상태와 불러온 상태 관리
+  const [getreview, setGetReview] = useState(initState);
+  console.log(initState);
+  const handleMoveReviewModal = e => {
     setReviewModalOpen(true);
     // document.body.style.overflow = "hidden";
 
     // 모달 open 시, axios 가져와야한다?!
-    console.log("aaaaaaaaaaaaaaaaaaaa");
-    reloadGetReviewP();
+    console.log("모달 열 때, axios 불러와야한다.");
+    setGetReview({ ...getreview });
+    getReview(hotel_pk, page, successFnReview, failFnReview);
   };
 
   const [reserveForm, setReserveForm] = useState(true);
 
   // 리뷰 axios 가져오기
-  const reloadGetReviewP = page => {
-    getReview(page, successFn, failFn, errorFn);
-  };
-  const successFn = result => {
+  // const reloadGetReviewP = page => {
+  //   getReview(page, successFn, failFn, errorFn);
+  // };
+  const successFnReview = result => {
     console.log("성공", result);
     // ------
   };
-  const failFn = result => {
+  const failFnReview = result => {
     console.log("다시 시도해주세요.", result);
   };
-  const errorFn = result => {
+  const errorFnReview = result => {
     console.log("서버에러", result);
   };
 
