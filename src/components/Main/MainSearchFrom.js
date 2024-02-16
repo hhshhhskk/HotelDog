@@ -43,9 +43,9 @@ const MainSearchFrom = ({
   // calendar에서 내일 날짜 불러오기
   const nextDate = getTomorrowDate();
   // console.log(formattedDate);
+
   // 미리보기 및 선택된 데이터 useState
   const [locationValue, setLocationValue] = useState("지역을 선택해주세요");
-  // !!! 초기값이 null이 뜨는 이슈
   const [calendarValue, setCalendarValue] = useState(
     `${currentDate} ~ ${nextDate}`,
   );
@@ -77,7 +77,6 @@ const MainSearchFrom = ({
     setCalendarDropdown(false);
     setDogDropdown(false);
     setFilterDropdown(false);
-    // allHide();
   };
 
   const handleCLickLocationSelect = () => handleDropdownSelect("location");
@@ -90,7 +89,6 @@ const MainSearchFrom = ({
     // 메인 변수에 전달
     changeSelectDay(_sd, _ed);
     handleCLickDropdownClose();
-    // allHide();
     // setCalendarDropdown(false);
     // return(_sd,_ed)
   };
@@ -138,20 +136,12 @@ const MainSearchFrom = ({
   const handleChangeLocation = e => {
     const location = e.target.innerText;
     setLocationValue(location);
-    // ???드롭다운 닫기 왜 안 먹히지
-    handleCLickDropdownClose();
-    // setLocationDropdown(false);
-    // allDropdownClose();
   };
 
-  // 전체 목록 닫기
-  // const allDropdownClose = () => {
-  //   // console.log("모두 닫아요..");
-  //   setLocationDropdown(false);
-  //   setCalendarDropdown(false);
-  //   setDogDropdown(false);
-  //   setFilterDropdown(false);
-  // };
+  // 지역 선택 시 드롭다운 닫기
+  useEffect(() => {
+    handleCLickDropdownClose();
+  }, [locationValue]);
 
   // 반려견 마리수 증감에 따른 연산
   const handleIncrement = index => {
@@ -419,7 +409,7 @@ const MainSearchFrom = ({
                         <input
                           type="radio"
                           value="yes"
-                          checked={selectRadio[option] === "yes"}
+                          defaultChecked={selectRadio[option] === "yes"}
                           onClick={() => handleClickRadio(option)}
                         />
                         <span>선택</span>
@@ -428,7 +418,7 @@ const MainSearchFrom = ({
                         <input
                           type="radio"
                           value="no"
-                          checked={selectRadio[option] === "no"}
+                          defaultChecked={selectRadio[option] === "no"}
                           onClick={() => handleClickRadio(option)}
                         />
                         <span>미선택</span>

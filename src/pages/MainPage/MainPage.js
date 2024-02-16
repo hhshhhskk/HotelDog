@@ -230,11 +230,15 @@ const MainPage = () => {
         {/* <div>
           <div>
             <span>사이즈 / 마리</span>
+            <div>
+              <span>소형견</span>
+              <span>1</span>
+            </div>
             <button>소형견 1</button>
           </div>
           <div>
             <span>필터</span>
-            <button>수영장</button>
+            <div>수영장</div>
           </div>
         </div> */}
 
