@@ -31,9 +31,10 @@
 
 <div align="center">
   
-|   사진   |   사진   |   사진   |   사진   |
-| :---: | :---: | :---: | :---: |
 |  곽민성  |  최지은  |  박유민  |  황예지  |
+| :---: | :---: | :---: | :---: |
+|   <img width="165" alt="스크린샷 2024-02-16 오후 6 46 02" src="https://github.com/hhshhhskk/HotelDog/assets/67895755/39e1fd63-b069-4669-a451-73bf59ff731a">|  <img width="165" alt="스크린샷 2024-02-16 오후 6 42 50" src="https://github.com/hhshhhskk/HotelDog/assets/67895755/62d6fdf9-3aaa-4fc0-a140-7cfceaa7fc98"> | <img width="165" alt="스크린샷 2024-02-16 오후 6 44 03" src="https://github.com/hhshhhskk/HotelDog/assets/67895755/60786360-5a50-4399-9569-ad6e83b44d7c"> | <img width="165" alt="스크린샷 2024-02-16 오후 6 45 27" src="https://github.com/hhshhhskk/HotelDog/assets/67895755/39c2340b-106d-4eb5-b8c5-a8192b642ab9"> |
+| [hhshhhskk](https://github.com/hhshhhskk) | [zdmszdms](https://github.com/zdmszdms) | [Umingoo](https://github.com/Umingoo) | [rillyyy](https://github.com/rillyyy) | 
 
 </div>
 
