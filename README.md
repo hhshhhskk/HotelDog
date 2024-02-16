@@ -83,126 +83,50 @@
 📦src</br>
  ┣ 📂api</br>
  ┃ ┣ 📂Detail</br>
- ┃ ┃ ┗ 📜hoteldetailApi.js</br>
  ┃ ┣ 📂Login</br>
- ┃ ┃ ┣ 📜loginApi.js</br>
- ┃ ┃ ┗ 📜logoutApi.js</br>
  ┃ ┣ 📂Main</br>
- ┃ ┃ ┗ 📜HotelApi.js</br>
  ┃ ┣ 📂SignUp</br>
- ┃ ┃ ┗ 📜addressApi.js</br>
  ┃ ┣ 📂board</br>
- ┃ ┃ ┣ 📜boardApi.js</br>
- ┃ ┃ ┗ 📜boardCommentApi.js</br>
  ┃ ┗ 📂mypage</br>
- ┃ ┃ ┗ 📜mypageApi.js</br>
  ┣ 📂components</br>
  ┃ ┣ 📂Board</br>
- ┃ ┃ ┣ 📜BoardPagination.js</br>
- ┃ ┃ ┣ 📜BoardTable.js</br>
- ┃ ┃ ┣ 📜CustomToolbar.js</br>
- ┃ ┃ ┗ 📜QuillEditor.js</br>
  ┃ ┣ 📂Common</br>
- ┃ ┃ ┣ 📜Calendar.js</br>
- ┃ ┃ ┣ 📜DefaultButton.js</br>
- ┃ ┃ ┣ 📜Dog.js</br>
- ┃ ┃ ┣ 📜Footer.js</br>
- ┃ ┃ ┣ 📜Header.js</br>
- ┃ ┃ ┣ 📜HotelCardForm.js</br>
- ┃ ┃ ┣ 📜HotelLike.js</br>
- ┃ ┃ ┗ 📜ReserveDate.js</br>
  ┃ ┣ 📂Detail</br>
  ┃ ┃ ┣ 📂Reservation</br>
- ┃ ┃ ┃ ┗ 📜ReserveForm.js</br>
- ┃ ┃ ┣ 📜HotelReview.js</br>
- ┃ ┃ ┗ 📜RoomType.js</br>
  ┃ ┣ 📂Loading</br>
- ┃ ┃ ┗ 📜Loading.js</br>
  ┃ ┣ 📂Main</br>
- ┃ ┃ ┣ 📜MainSearchFrom.js</br>
- ┃ ┃ ┗ 📜TopButton.js</br>
  ┃ ┣ 📂MyPage</br>
  ┃ ┃ ┣ 📂Booking</br>
- ┃ ┃ ┃ ┣ 📜BookingCompleteComponent.js</br>
- ┃ ┃ ┃ ┣ 📜BookingDate.js</br>
- ┃ ┃ ┃ ┣ 📜BookingListComponent.js</br>
- ┃ ┃ ┃ ┗ 📜ReviewModal.js</br>
  ┃ ┃ ┗ 📂Member</br>
- ┃ ┃ ┃ ┗ 📜Password.js</br>
  ┃ ┗ 📂SignUp</br>
- ┃ ┃ ┣ 📜AddressPopup.js</br>
- ┃ ┃ ┣ 📜AgreeModal.js</br>
- ┃ ┃ ┗ 📜MailModal.js</br>
  ┣ 📂hooks</br>
- ┃ ┗ 📜useCustomLogin.js</br>
  ┣ 📂layouts</br>
- ┃ ┗ 📜Layout.js</br>
  ┣ 📂pages</br>
  ┃ ┣ 📂Board</br>
  ┃ ┃ ┣ 📂BoardCreatePage</br>
- ┃ ┃ ┃ ┗ 📜BoardCreatePage.js</br>
  ┃ ┃ ┣ 📂BoardDetail</br>
- ┃ ┃ ┃ ┗ 📜BoardDetailPage.js</br>
  ┃ ┃ ┣ 📂BoardPage</br>
- ┃ ┃ ┃ ┗ 📜BoardPage.js</br>
  ┃ ┃ ┗ 📂BoardUpdatePage</br>
- ┃ ┃ ┃ ┗ 📜BoardUpdatePage.js</br>
  ┃ ┣ 📂ErrorPage</br>
- ┃ ┃ ┗ 📜ErrorPage.js</br>
  ┃ ┣ 📂EventPage</br>
- ┃ ┃ ┗ 📜EventPage.js</br>
  ┃ ┣ 📂HotelDetailPage</br>
- ┃ ┃ ┣ 📜HotelDetail.js</br>
- ┃ ┃ ┗ 📜HotelDetailPage.js</br>
  ┃ ┣ 📂LoginPage</br>
- ┃ ┃ ┗ 📜index.js</br>
  ┃ ┣ 📂MainPage</br>
- ┃ ┃ ┗ 📜MainPage.js</br>
  ┃ ┣ 📂MyPage</br>
- ┃ ┃ ┣ 📜Booking.js</br>
- ┃ ┃ ┣ 📜LikeList.js</br>
- ┃ ┃ ┣ 📜Member.js</br>
- ┃ ┃ ┣ 📜MyPage.js</br>
- ┃ ┃ ┣ 📜Mydog.js</br>
- ┃ ┃ ┗ 📜Review.js</br>
  ┃ ┣ 📂ReserveCompletePage</br>
- ┃ ┃ ┗ 📜ReserveCompletePage.js</br>
  ┃ ┣ 📂ReserveDetailPage</br>
- ┃ ┃ ┗ 📜ReserveDetailPage.js</br>
  ┃ ┗ 📂SignUpPage</br>
- ┃ ┃ ┗ 📜SignUpPage.js</br>
  ┣ 📂redux</br>
- ┃ ┗ 📜loginSlice.js</br>
  ┣ 📂routes</br>
- ┃ ┗ 📜router.js</br>
  ┣ 📂store</br>
- ┃ ┗ 📜store.js</br>
  ┣ 📂styles</br>
  ┃ ┣ 📂BoardPageStyle</br>
- ┃ ┃ ┗ 📜boardStyle.js</br>
  ┃ ┣ 📂Common</br>
- ┃ ┃ ┣ 📜calendar.css</br>
- ┃ ┃ ┣ 📜footerStyle.js</br>
- ┃ ┃ ┣ 📜headerStyle.js</br>
- ┃ ┃ ┣ 📜hotelCardFormStyle.js</br>
- ┃ ┃ ┣ 📜index.css</br>
- ┃ ┃ ┗ 📜layoutStyle.js</br>
  ┃ ┣ 📂Detail</br>
- ┃ ┃ ┣ 📜hoteldetail.css</br>
- ┃ ┃ ┣ 📜hoteldetailStyle.js</br>
- ┃ ┃ ┣ 📜hotelreview.css</br>
- ┃ ┃ ┣ 📜reserveFormStyle.js</br>
- ┃ ┃ ┣ 📜reserveformstyle.css</br>
- ┃ ┃ ┗ 📜roomtype.css</br>
  ┃ ┣ 📂MainPageStyle</br>
- ┃ ┃ ┣ 📜MainSearchFromStyle.js</br>
- ┃ ┃ ┗ 📜mainPageStyle.js</br>
  ┃ ┣ 📂SignUpPageStyle</br>
- ┃ ┃ ┗ 📜signUpPageStyle.js</br>
  ┃ ┗ 📜dogStyle.scss</br>
  ┣ 📂utils</br>
- ┃ ┣ 📜cookieUtil.js</br>
- ┃ ┗ 📜jwtUtil.js</br>
  ┗ 📜index.js</br>
 
  </br>
