@@ -121,7 +121,11 @@ const LikeList = ({ handleSelectGo, getLikeListData }) => {
               style={{ marginBottom: "20px", width: "calc(50% - 10px)" }}
             >
               <HotelCardDiv>
-                <HotelCardForm hotel={hotel} handleSelectGo={handleSelectGo} setRendering={setRendering} />
+                <HotelCardForm
+                  hotel={hotel}
+                  handleSelectGo={handleSelectGo}
+                  setRendering={setRendering}
+                />
               </HotelCardDiv>
             </div>
           ))}

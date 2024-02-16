@@ -154,3 +154,40 @@ export const postReviewApi = async formData => {
     return error.response?.status || 500; // 에러 응답 상태 코드 반환
   }
 };
+
+// 리뷰 예약 불러오기
+export const getReviewApi = async () => {
+  // reviewData 파라미터 제거
+  try {
+    const url = `/api/review`;
+    const res = await jwtAxios({
+      method: "get",
+      url: url,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    // console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 마이페이지 예약 삭제
+export const reviewDeleteApi = async () => {
+  try {
+    const url = `/api/review`;
+    const res = await jwtAxios({
+      method: "delete",
+      url: url,
+      headers: {
+        "Content-Type": "application/json", // Content-Type 설정
+      },
+    });
+
+    return res.data.result;
+  } catch (error) {
+    console.log(error);
+  }
+};

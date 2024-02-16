@@ -66,21 +66,7 @@ const ModalTitle = styled.div`
     line-height: normal;
   }
 `;
-const Star = styled.div`
-  position: relative;
-  margin-top: 20px;
-  cursor: pointer;
-  text-align: center;
-  margin-bottom: 25px;
-  p {
-    margin-bottom: 6px;
-    color: #9d9d9d;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-`;
+
 const ReviewTxt = styled.form`
   position: relative;
   textarea {
@@ -149,6 +135,21 @@ const ImgContetnts = styled.div`
     border-radius: 5px;
   }
 `;
+const Star = styled.div`
+  position: relative;
+  margin-top: 20px;
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: 25px;
+  p {
+    margin-bottom: 6px;
+    color: #9d9d9d;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+`;
 
 // ReviewModal 컴포넌트 정의
 const ReviewModal = ({
@@ -180,6 +181,8 @@ const ReviewModal = ({
       setImgFileList(prevImages => [...prevImages, tempUrl]);
       // 업로드한 파일의 타입을 저장
       setImgFileListType(prevTypes => [...prevTypes, file.type]);
+      console.log("추가됨");
+      console.log("추가됨", imgFileList);
     } else {
       alert("이미지는 3개까지만 가능합니다.");
     }
@@ -204,6 +207,10 @@ const ReviewModal = ({
   const handleReviewSubmit = async () => {
     // 작성된 후기 데이터 전달
     console.log("클릭 위쪽", rating, reviewText, sendImgFileList);
+    if (reviewText === "") {
+      alert("내용을 입력해주세요.");
+      return;
+    }
     try {
       // FormData 생성
       const formData = new FormData();
@@ -216,8 +223,8 @@ const ReviewModal = ({
           [
             JSON.stringify({
               resPk: bookingData.res_pk,
-              comment: "reviewText",
-              score: rating,
+              comment: reviewText,
+              score: rating * 2,
             }),
           ],
           { type: "application/json" },
@@ -226,11 +233,12 @@ const ReviewModal = ({
 
       if (sendImgFileList !== undefined) {
         // 선택된 파일들을 FormData에 추가
-        formData.append(`pics`, sendImgFileList);
+        formData.append(`pics`, sendImgFileList[0]);
       } else {
         formData.append(`pics`, []);
       }
-      console.log(rating, reviewText, sendImgFileList);
+      console.log(rating, reviewText, sendImgFileList[0]);
+
       const result = await postReviewApi(formData);
       if (result === 1) {
         console.log("성공");
@@ -283,7 +291,6 @@ const ReviewModal = ({
             />
           ))}
         </Star>
-
         {/* 모달 내용 */}
         {children}
         <ReviewTxt>
