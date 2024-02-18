@@ -53,7 +53,7 @@ const RoomType = ({ data, setSelectedRoom, detailId, hotelList }) => {
       <p className="roomtype-text-flex">
         객실 둘러보기
         <span className="roomtype-info">
-          * 객실 먼저 선택 후, 반려견 정보를 입력해 주세요.
+          선택된 날짜 및 반려견 정보를 토대로 객실 예약 가능 여부가 제공됩니다.
         </span>
       </p>
       {hotel_room_info.map(function (item, index) {
@@ -91,7 +91,7 @@ const RoomType = ({ data, setSelectedRoom, detailId, hotelList }) => {
                   // selectedRoom = {selectedRoom}
                   // setSelectedRoom={setSelectedRoom}
                 >
-                  선택하기
+                  객실 담기
                 </button>
               </div>
             </div>

@@ -1,3 +1,4 @@
+import HotelReview from "../components/Detail/HotelReview";
 import Layout from "../components/Layout/Layout";
 import BoardCreatePage from "../pages/Board/BoardCreatePage/BoardCreatePage";
 import BoardDetailPage from "../pages/Board/BoardDetail/BoardDetailPage";
@@ -68,6 +69,11 @@ export const RouterInfo = [
         element: <HotelDetailPage />,
         label: "hotelDetail",
       },
+      // {
+      //   path: "/review/:hotel_pk",
+      //   element: <HotelReview />,
+      //   label: "hotelReview",
+      // },
       {
         path: "/reservecomplete",
         element: <ReserveCompletePage />,

@@ -1,15 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../../src/styles/Detail/hotelreview.css";
+import { useParams } from "react-router-dom";
+import { getReview } from "../../api/Detail/hoteldetailApi";
+// 리뷰 페이지 네이션 초기값
+const initState = [
+  {
+    comment: "",
+    score: 0,
+    pics: [""],
+    review_pk: 0,
+    nick_name: "",
+    updated_at: "",
+    fav_count: 0,
+  },
+];
 
-const HotelReview = ({ setReviewModalOpen, reviewModalOpen }) => {
-  // 후기 모달 관련
-  // true : 열린상태 , setIsOpen : 닫힌상태
-  // if 추가해서 true면 나오도록 하고. false면 안나오록 하고.
-  // const [reviewModalOpen, SetReviewModalOpen] = useState(true);
+const HotelReview = ({
+  hotelList,
+  setReviewModalOpen,
+  reviewModalOpen,
+  hoteLpk,
+  // page,
+}) => {
+  // params 읽기
+  const { page } = useParams();
+  console.log(page);
+  // review 상태 관리
+  const [reviewData, setReviewData] = useState(initState);
+  // hotel_pk
+  // console.log(reviewId);
+
+  const handleMoreReview = e => {
+    console.log("review pagination 의 hotel_pk :");
+    getReview(page);
+    console.log("review pagination 의 page :", page);
+    // reviewHotel_pk();
+  };
+  // useEffect(() => {
+  // }, []);
 
   const closeReviewModal = () => {
     setReviewModalOpen(false);
-    console.log("Modal is closed."); // 모달이 닫힐 때 콘솔에 메시지 출력
     document.body.style.overflow = "unset";
   };
 
@@ -40,8 +71,12 @@ const HotelReview = ({ setReviewModalOpen, reviewModalOpen }) => {
               />
               <div>
                 <span className="review-number">5.0</span>
-                <span className="review-hotel">교동 쉽독호텔 & 리조트</span>
-                <span className="review-spot">대구광역시 중구</span>
+                <span className="review-hotel">
+                  {hotelList.hotel_info_vo.hotel_nm}
+                </span>
+                <span className="review-spot">
+                  {hotelList.hotel_info_vo.road_address}
+                </span>
               </div>
             </div>
             <img
@@ -50,47 +85,48 @@ const HotelReview = ({ setReviewModalOpen, reviewModalOpen }) => {
               alt=""
             />
             {/* 메인's 헤더(별점 및 한줄평) 영역 */}
-            <div className="review-wrap-scroll">
-              <div className="review_wrap">
-                <div className="review_small_stars">
+            {/* 맵을 돌려야 할 거 같은데? 얘는.... */}
+            {reviewData.map((item, index) => (
+              <div className="review-wrap-scroll" key={index}>
+                <div className="review_wrap">
+                  <div className="review_small_stars">
+                    <img
+                      className="review_SmFilledStar"
+                      src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewFilledStar.svg`}
+                      alt=""
+                    />
+                    <img
+                      className="review_SmFilledStar"
+                      src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewFilledStar.svg`}
+                      alt=""
+                    />
+                    <img
+                      className="review_SmFilledStar"
+                      src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewFilledStar.svg`}
+                      alt=""
+                    />
+                    <img
+                      className="review_SmFilledStar"
+                      src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewFilledStar.svg`}
+                      alt=""
+                    />
+                    <img
+                      className="review_SmFilledStar"
+                      src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewFilledStar.svg`}
+                      alt=""
+                    />
+                  </div>
+                  <div className="review_nickname">{reviewData.nick_name}</div>
+                  <div className="review_desc">{reviewData.comment}</div>
+                  {/* 호텔 리뷰 param : {reviewId} */}
                   <img
-                    className="review_SmFilledStar"
-                    src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewFilledStar.svg`}
-                    alt=""
-                  />
-                  <img
-                    className="review_SmFilledStar"
-                    src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewFilledStar.svg`}
-                    alt=""
-                  />
-                  <img
-                    className="review_SmFilledStar"
-                    src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewFilledStar.svg`}
-                    alt=""
-                  />
-                  <img
-                    className="review_SmFilledStar"
-                    src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewFilledStar.svg`}
-                    alt=""
-                  />
-                  <img
-                    className="review_SmFilledStar"
-                    src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewFilledStar.svg`}
+                    className="review-part-line"
+                    src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewWrapLine.svg`}
                     alt=""
                   />
                 </div>
-                <div className="review_nickname">닉네임</div>
-                <div className="review_desc">
-                  저희 집 주인님 팔자는 항상 부럽지만 이렇게 부러운 적은 또
-                  없습니다. 사람도 받아주시나요?
-                </div>
-                <img
-                  className="review-part-line"
-                  src={`${process.env.PUBLIC_URL}/images/hotelDetail/reviewWrapLine.svg`}
-                  alt=""
-                />
               </div>
-            </div>
+            ))}
           </div>
 
           {/* 더보기(후기 - 푸터) 영역 */}
@@ -99,7 +135,12 @@ const HotelReview = ({ setReviewModalOpen, reviewModalOpen }) => {
               src={`${process.env.PUBLIC_URL}/images/hotelDetail/bt_moreReview.svg`}
               alt=""
             />
-            <button className="review_more_bt">더 보기</button>
+            <button
+              className="review_more_bt"
+              onClick={e => handleMoreReview(e)}
+            >
+              더 보기
+            </button>
           </div>
         </div>
       </div>

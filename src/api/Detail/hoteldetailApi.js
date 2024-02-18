@@ -66,21 +66,30 @@ export const getSelDateRmId = async (
 };
 
 // 리뷰 get (3 pagination)
-export const getReview = async (page, successFn, failFn, errorFn) => {
+export const getReview = async (
+  hotel_pk,
+  page,
+  successFnReview,
+  failFnReview,
+) => {
   try {
+    console.log("getreview 의 hotel_pk : ", hotel_pk);
     console.log("page : ", page);
     // page = 쿼리스트링
     // hotelPk = path .  ? 앞까지는 path 즉, 주소임.
-    const url = `/api/review/{hotel_pk}/?page=${page}`;
+    // const url = `/api/review/${hotel_pk}/?page=${page}`;
+    const url = `/api/review/${hotel_pk}?page=${page}`;
+    // http://112.222.157.156:5222/api/review/1?page=1
+    console.log(url);
     const res = await jwtAxios.get(url);
     const status = res.status.toString();
     if (status.charAt(0) === "2") {
-      successFn(res.data);
+      successFnReview(res.data);
     } else {
-      failFn("전송 오류입니다.");
+      failFnReview("전송 오류입니다.");
     }
   } catch (error) {
-    errorFn("서버에러에요");
+    console.log("서버에러에요");
   }
 };
 
