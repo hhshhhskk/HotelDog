@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   ChoiceDiv,
   ChoiceOptionDiv,
@@ -28,7 +28,6 @@ import {
   SubmitButton,
 } from "../../styles/MainPageStyle/MainSearchFromStyle";
 import Calendar, { getCurrentDate, getTomorrowDate } from "../Common/Calendar";
-// import dayjs from "dayjs";
 
 const MainSearchFrom = ({
   changeSelectDay,
@@ -39,9 +38,7 @@ const MainSearchFrom = ({
 }) => {
   // calendar 컴포넌트에서 날짜 불러오기
   const currentDate = getCurrentDate();
-  console.log("체크인? ", currentDate);
   const nextDate = getTomorrowDate();
-  console.log("체크아웃? ", nextDate);
 
   // 필터 미리보기 및 선택된 데이터 useState
   const [locationValue, setLocationValue] = useState("지역을 선택해주세요");
@@ -52,8 +49,10 @@ const MainSearchFrom = ({
   const [filterValue, setFilterValue] = useState(0);
 
   // startDay 또는 endDay가 변경될 때마다 calendarValue를 업데이트
-  useEffect(() => {
-    setCalendarValue(`${startDay} ~ ${endDay}`);
+  useLayoutEffect(() => {
+    if (startDay && endDay) {
+      setCalendarValue(`${startDay} ~ ${endDay}`);
+    }
   }, [startDay, endDay]);
 
   // 드롭다운 useState
@@ -250,9 +249,11 @@ const MainSearchFrom = ({
       formData.main_filter = 1;
     }
 
-    console.log("최종 데이터 전송 :", formData);
-    // setSaveFilterData(formData);
+    // console.log("최종 데이터 전송 :", formData);
+
+    // 메인페이지 함수에 전달
     handleChangeFilter(formData);
+
     // 필터 적용된 호텔 리스트로 이동
     // window.scrollTo({ top: 1550, behavior: "smooth" });
   };

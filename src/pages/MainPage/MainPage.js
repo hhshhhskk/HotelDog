@@ -73,27 +73,24 @@ const initHotellist = {
 
 const MainPage = () => {
   const dispatch = useDispatch();
-  // 리덕스 보관된 state
-  const hotelListData = useSelector(state => state.searchSlice);
-
   const navigate = useNavigate();
   const { isLogin } = useCustomLogin();
+
+  // 리덕스 보관된 state
+  const hotelListData = useSelector(state => state.searchSlice);
 
   const [startDay, setStartDay] = useState(null);
   const [endDay, setEndDay] = useState(null);
 
-  // 필터 폼 클릭 시 스크롤 이동
-  const handleClickFilterForm = () => {
-    window.scrollTo({ top: 300, behavior: "smooth" });
-    setShowOption(true);
-  };
-
-  // POST 데이터 useState
+  // POST할 데이터 useState
   const [postData, setPostData] = useState(initPostData);
+
   // 필터 데이터 ustState
   const [saveFilterData, setSaveFilterData] = useState(null);
+
   // 호텔 리스트 useState
-  const [_, setHotelListData] = useState(initHotellist);
+  // const [_, setHotelListData] = useState(initHotellist);
+
   // 호텔 리스트 페이지 useState
   const [page, setPage] = useState(1);
   // 호텔 리스트 정렬방식 useState
@@ -103,6 +100,12 @@ const MainPage = () => {
 
   // 선택한 날짜 useState
   const [reserveDay, setReserveDay] = useState({ startDay: "", endDay: "" });
+
+  // 필터 폼 클릭 시 스크롤 이동
+  const handleClickFilterForm = () => {
+    window.scrollTo({ top: 300, behavior: "smooth" });
+    setShowOption(true);
+  };
 
   // 전체 호텔 리스트 가져오기
   const totalHotelList = () => {
@@ -123,14 +126,6 @@ const MainPage = () => {
         // 만약 로그인이 아니라면
         dispatch(postHotelListAsync({ page: 1, setPostData: filter }));
       }
-
-      // const LoginState = isLogin ? postJwtHotelListAPI : postHotelListAPI;
-      // const data = await LoginState({
-      //   page: 1,
-      //   setPostData: filter,
-      // });
-
-      // setHotelListData(data);
     } catch (error) {
       console.log(error);
     }
@@ -140,8 +135,9 @@ const MainPage = () => {
     totalHotelList();
   }, []);
 
+  // MainSearchForm에서 받아오는 데이터
   const handleChangeFilter = _formData => {
-    console.log("여기에요.", _formData);
+    // console.log("여기에요.", _formData);
     setSaveFilterData(_formData);
 
     if (isLogin) {
@@ -157,54 +153,16 @@ const MainPage = () => {
 
   //  정렬방식(추천순, 별점순, 리뷰순) 선택
   const handleChangeSorting = e => {
-    console.log("보관된것=====================", saveFilterData);
-
+    // console.log("보관된것=====================", saveFilterData);
     const selectedValue = e.target.value;
-    console.log("정렬방식 : ", selectedValue);
+    // console.log("정렬방식 : ", selectedValue);
     setSelectSorting(selectedValue);
-    // sortingData(selectedValue);
-    // let nowData = {
-    //   filter_type: parseInt(selectedValue),
-    //   main_filter: 0,
-    // };
     let nowData = { ...saveFilterData, filter_type: parseInt(selectedValue) };
     dispatch(postHotelListAsync({ page: 1, setPostData: nowData }));
   };
 
-  // 호텔리스트 정렬방식(별점순, 리뷰순) 필터
-  const sortingData = selectedValue => {
-    // console.log("정렬방식 :", selectedValue);
-    // console.log("정렬방식 변경 전 :", postData);
-    // let nowData = {};
-    // console.log("saveFilterData", saveFilterData);
-    // if (saveFilterData !== null) {
-    //   nowData = {
-    //     filter_type: parseInt(selectedValue),
-    //     main_filter: 0,
-    //   };
-    // } else {
-    //   nowData = {
-    //     filter_type: parseInt(selectedValue),
-    //     main_filter: 0,
-    //   };
-    // }
-
-    // console.log("selectedValue", selectedValue);
-    let nowData = {
-      filter_type: parseInt(selectedValue),
-      main_filter: 0,
-    };
-
-    // // console.log("정렬방식 변경 후 :", nowData);
-    setPostData(nowData);
-    // totalHotelList();
-    // dispatch(postHotelListAsync({ page: 1, setPostData: nowData }));
-  };
-
   // 자식 컴포넌트 즉, calendar 에서 알려줘야 다른 컴포넌트에 전달할 수 있다.
   const changeSelectDay = (_sd, _ed) => {
-    // console.log("체크인 :", _sd);
-    // console.log("체크아웃 :", _ed);
     setReserveDay(prev => {
       // 중요: 값을 업데이트할 때 `this.state` 대신 `state` 값을 읽어옵니다.
       return { startDay: _sd, endDay: _ed };
@@ -218,29 +176,65 @@ const MainPage = () => {
 
   // 호텔 상세페이지 이동
   const handleClickHotel = _hotel_pk => {
-    // console.log("호텔 상세보기 :", _hotel_pk);
-    // console.log(reserveDay);
     // useNavigate 를 이용한 이동과 정보를 함께 보내기(state)
     navigate(`/hoteldetail/${_hotel_pk}`, { state: { day: reserveDay } });
   };
 
   // 호텔 리스트 페이지네이션
+  // const handleClickPage = async () => {
+  //   try {
+  //     // 다음 페이지 데이터를 가져오기
+  //     const nextPage = page + 1;
+  //     // let nowData = { saveFilterData, page: nextPage };
+  //     dispatch(
+  //       postHotelListAsync({ page: nextPage, setPostData: saveFilterData }),
+  //     );
+  //     // if (isLogin) {
+  //     //   // 만약 로그인이 되었다면
+  //     //   dispatch(postJwtHotelListAsync({ page: 1, setPostData: _formData }));
+  //     // } else {
+  //     //   // 만약 로그인이 아니라면
+  //     //   dispatch(postHotelListAsync({ page: 1, setPostData: _formData }));
+  //     // }
+  //     const LoginState = isLogin ? postJwtHotelListAPI : postHotelListAPI;
+  //     const data = await LoginState({
+  //       page: nextPage,
+  //       setPostData: postData,
+  //     });
+  //     // 현재 호텔 리스트 데이터와 새로운 데이터를 합치기
+  //     const prevData = { ...hotelListData };
+  //     const mergedData = {
+  //       hotel_advertise_list: data.hotel_advertise_list,
+  //       hotel_list: [...prevData.hotel_list, ...data.hotel_list],
+  //     };
+  //     // setHotelListData(mergedData);
+  //     // 페이지 번호 업데이트
+  //     setPage(nextPage);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   const handleClickPage = async () => {
     try {
       // 다음 페이지 데이터를 가져오기
       const nextPage = page + 1;
-      const LoginState = isLogin ? postJwtHotelListAPI : postHotelListAPI;
-      const data = await LoginState({
+
+      // 현재 saveFilterData와 nextPage를 사용하여 호텔 리스트 데이터 요청
+      const data = await (isLogin ? postJwtHotelListAPI : postHotelListAPI)({
         page: nextPage,
-        setPostData: postData,
+        setPostData: saveFilterData,
       });
+
       // 현재 호텔 리스트 데이터와 새로운 데이터를 합치기
       const prevData = { ...hotelListData };
       const mergedData = {
         hotel_advertise_list: data.hotel_advertise_list,
         hotel_list: [...prevData.hotel_list, ...data.hotel_list],
       };
-      setHotelListData(mergedData);
+
+      // 호텔 리스트 업데이트
+      // setHotelListData(mergedData);
+
       // 페이지 번호 업데이트
       setPage(nextPage);
     } catch (error) {
@@ -279,7 +273,7 @@ const MainPage = () => {
 
       {/* 호텔리스트 */}
       <HotelListDiv>
-        {showOption && (
+        {/* {showOption && (
           <div>
             <div>
               <div>
@@ -297,7 +291,7 @@ const MainPage = () => {
               <div>수영장</div>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* 광고호텔 */}
         <AdListDiv>
