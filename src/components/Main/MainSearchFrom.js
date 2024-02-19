@@ -33,18 +33,17 @@ import dayjs from "dayjs";
 const MainSearchFrom = ({
   changeSelectDay,
   setSaveFilterData,
+  handleChangeFilter,
   startDay,
   endDay,
 }) => {
-  // calendar에서 오늘 날짜 불러오기
+  // calendar 컴포넌트에서 날짜 불러오기
   const currentDate = getCurrentDate();
-  // const currentDate = dayjs();
-  // const formattedDate = currentDate.format("YYYY-MM-DD");
-  // calendar에서 내일 날짜 불러오기
+  console.log("체크인? ", currentDate);
   const nextDate = getTomorrowDate();
-  // console.log(formattedDate);
+  console.log("체크아웃? ", nextDate);
 
-  // 미리보기 및 선택된 데이터 useState
+  // 필터 미리보기 및 선택된 데이터 useState
   const [locationValue, setLocationValue] = useState("지역을 선택해주세요");
   const [calendarValue, setCalendarValue] = useState(
     `${currentDate} ~ ${nextDate}`,
@@ -63,7 +62,13 @@ const MainSearchFrom = ({
   const [dogDropdown, setDogDropdown] = useState(false);
   const [filterDropdown, setFilterDropdown] = useState(false);
 
-  // 드롭다운 선택 시 나타나기 및 사라지기
+  // 필터 선택 시 드롭다운 실행
+  const handleCLickLocationSelect = () => handleDropdownSelect("location");
+  const handleCLickCalendarSelect = () => handleDropdownSelect("calendar");
+  const handleCLickDogSelect = () => handleDropdownSelect("dog");
+  const handleCLickFilterSelect = () => handleDropdownSelect("filter");
+
+  // 드롭다운 나타나기 및 사라지기
   const handleDropdownSelect = dropdownType => {
     setLocationDropdown(dropdownType === "location");
     setCalendarDropdown(dropdownType === "calendar");
@@ -77,20 +82,6 @@ const MainSearchFrom = ({
     setCalendarDropdown(false);
     setDogDropdown(false);
     setFilterDropdown(false);
-  };
-
-  const handleCLickLocationSelect = () => handleDropdownSelect("location");
-  const handleCLickCalendarSelect = () => handleDropdownSelect("calendar");
-  const handleCLickDogSelect = () => handleDropdownSelect("dog");
-  const handleCLickFilterSelect = () => handleDropdownSelect("filter");
-
-  // 캘린더에서 날짜 선택 시 적용
-  const calendarClose = (_sd, _ed) => {
-    // 메인 변수에 전달
-    changeSelectDay(_sd, _ed);
-    handleCLickDropdownClose();
-    // setCalendarDropdown(false);
-    // return(_sd,_ed)
   };
 
   // 지역에 대한 드롭다운 데이터
@@ -113,6 +104,13 @@ const MainSearchFrom = ({
     "제주특별자치도",
     "강원특별자치도",
   ];
+
+  // 캘린더에서 날짜 선택 시 적용
+  const calendarClose = (_sd, _ed) => {
+    // 메인 변수에 전달
+    changeSelectDay(_sd, _ed);
+    handleCLickDropdownClose();
+  };
 
   // 반려견 정보에 대한 useState
   const [dogOption, setDogOption] = useState([
@@ -161,6 +159,7 @@ const MainSearchFrom = ({
     });
   };
 
+  // 필터 선택
   const handleClickFilter = theme => {
     const Selected = selectFilter.includes(theme);
     if (Selected) {
@@ -183,13 +182,14 @@ const MainSearchFrom = ({
     }));
   };
 
-  // 필터폼 형식에 맞게 변환
+  // POST 형식에 맞게 변환
   const dog = {
     소형견: 1,
     중형견: 2,
     대형견: 3,
     초대형견: 4,
   };
+
   const dogInfo = dogOption
     .filter(({ count }) => count > 0)
     .map(({ size, count }) => ({
@@ -199,14 +199,7 @@ const MainSearchFrom = ({
 
   // POST 데이터 전송을 위한 작업
   const handleSubmit = e => {
-    console.log("선택완료");
-
-    if (totalDogCount === 0) {
-      alert(`반려견을 최소 1마리 이상 선택해주세요.`);
-      e.preventDefault();
-      return;
-    }
-
+    // console.log("선택완료");
     let optionValue = [];
     // console.log("selectFilter", selectFilter);
     if (selectFilter[0] === "수영장") {
@@ -221,7 +214,7 @@ const MainSearchFrom = ({
     if (selectFilter[3] === "셔틀운행") {
       optionValue.push(4);
     }
-    console.log("selectRadio", selectRadio);
+    // console.log("selectRadio", selectRadio);
     if (selectRadio["프로그램"] === "yes") {
       optionValue.push(5);
     }
@@ -231,7 +224,6 @@ const MainSearchFrom = ({
     if (selectRadio["미용"] === "yes") {
       optionValue.push(7);
     }
-
     // console.log("optionValue", optionValue);
 
     e.preventDefault();
@@ -247,7 +239,7 @@ const MainSearchFrom = ({
       filter_type: filterValue,
     };
 
-    // 필터 데이터가 하나라도 있으면 main_filter: 1
+    // main_filter: 1 (필터 데이터가 하나라도 있으면)
     if (
       formData.address ||
       formData.from_date ||
@@ -259,7 +251,8 @@ const MainSearchFrom = ({
     }
 
     console.log("최종 데이터 전송 :", formData);
-    setSaveFilterData(formData);
+    // setSaveFilterData(formData);
+    handleChangeFilter(formData);
     // 필터 적용된 호텔 리스트로 이동
     // window.scrollTo({ top: 1550, behavior: "smooth" });
   };
