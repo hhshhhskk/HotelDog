@@ -13,7 +13,8 @@ import {
 const ReserveFormFixed = styled.div`
   position: fixed; /* 이 부분이 수정되었습니다. */
   width: 420px;
-  min-height: 921px;
+  // min-height: 921px;
+  max-height: 1500px;
   top: 150px;
   left: 1140px;
 `;
@@ -309,7 +310,7 @@ const ReserveForm = ({
                 src={`${process.env.PUBLIC_URL}/images/calendarImage.svg`}
                 alt=""
               />
-              <div className="reserveFormTitle">체크 인/아웃 날짜 선택</div>
+              <div className="reserveFormTitle">1. 체크 인/아웃 날짜 선택</div>
             </div>
             <img
               className="reserveLine"
@@ -338,7 +339,7 @@ const ReserveForm = ({
             />
           </div>
 
-          {/* 선택된 객실 정보 영역 */}
+          {/* 선택된 객실 정보 영역
           <div className="reseved-room-wrap">
             <div className="reserve-header">
               <img
@@ -354,14 +355,11 @@ const ReserveForm = ({
               alt=""
             />
 
-            {/* 선택된 방 이름 출력 */}
-            {/* {selectedRoom && (
-              <p className="selected-room">선택된 객실: {selectedRoom}</p>
-            )} */}
+            선택된 방 이름 출력
             <p className="selected-room">
               선택된 객실 : {selectedRoom?.hotel_room_nm}
             </p>
-          </div>
+          </div> */}
 
           {/* 반려견 정보 */}
           <div className="reserve-dog">
@@ -375,7 +373,7 @@ const ReserveForm = ({
                     alt=""
                   />
                   {/* title */}
-                  <div className="reserveFormTitle">반려견 정보</div>
+                  <div className="reserveFormTitle">2. 반려견 정보</div>
                   {/* <span className="reserve-dog-info">버튼을 누르면 새롭게 입력가능 합니다.</span> */}
                 </div>
                 <img
@@ -484,13 +482,16 @@ const ReserveForm = ({
                   spellCheck="false"
                 ></textarea>
               </div>
+              <span className="roomtype-info">
+                새로운 날짜와 반려견 정보를 선택 후, 하단의 버튼을 눌러주세요.
+              </span>
               <div>
                 <button
                   className="reserve-button"
                   type="submit"
                   onClick={e => handleListPlus(e)}
                 >
-                  담기
+                  다시 선택하기
                 </button>
               </div>
             </form>
@@ -537,7 +538,7 @@ const ReserveForm = ({
                   onClick={() => removeFromReservedList(index)}
                 >
                   <img
-                    src={`${process.env.PUBLIC_URL}/images/bt_plus.svg`}
+                    src={`${process.env.PUBLIC_URL}/images/hotelDetail/bt_minusreservation.svg`}
                     alt=""
                   />
                 </button>

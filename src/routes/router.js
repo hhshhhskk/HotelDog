@@ -4,6 +4,7 @@ import MainPage from "../pages/MainPage/MainPage";
 import LoginPage from "../pages/LoginPage";
 import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import HotelDetailPage from "../pages/HotelDetailPage/HotelDetailPage";
+import HotelReview from "../components/Detail/HotelReview";
 import ReserveCompletePage from "../pages/ReserveCompletePage/ReserveCompletePage";
 import BoardPage from "../pages/Board/BoardPage/BoardPage";
 import BoardCreatePage from "../pages/Board/BoardCreatePage/BoardCreatePage";
@@ -68,6 +69,11 @@ export const RouterInfo = [
         element: <HotelDetailPage />,
         label: "hotelDetail",
       },
+      // {
+      //   path: "/review/:hotel_pk",
+      //   element: <HotelReview />,
+      //   label: "hotelReview",
+      // },
       {
         path: "/reservecomplete",
         element: <ReserveCompletePage />,

@@ -10,6 +10,7 @@ import {
   getHotel,
   getHotelId,
   getOneReservation,
+  getReview,
   getSelDateRmId,
 } from "../../api/Detail/hoteldetailApi";
 
@@ -25,8 +26,7 @@ const HotelDetailPage = () => {
   console.log(state.day);
   const [resDay, setResDay] = useState(state.day);
   console.log(resDay);
-  // jwtAxios 연동
-  // 추가할부분이
+
   const [userPk, setUserPk] = useState(detailId);
   const [hotel_pk, setHotel_pk] = useState(detailId);
   const [hotelList, setHotelList] = useState([]);
@@ -35,7 +35,9 @@ const HotelDetailPage = () => {
   const reloadgetHotelId = () => {
     // jwtAxios.get 에서 userPk, hotelPk, setHotelList  호텔 리스트 목록 불러오기
     console.log("hotel_pk", hotel_pk);
+    // console.log("reviewHotel_pk", reviewHotel_pk);
     getHotelId(hotel_pk, setHotelList);
+    // getReview(hotel_pk);
   };
 
   // 화면 준비되면 그때 반영
