@@ -126,7 +126,6 @@ const HotelDetail = ({
     console.log("모달 열 때, axios 불러와야한다.");
     console.log(hotel_pk);
     // reviewHotel_pk(hotel_pk);
-
     // setReviewModalOpen(reviewHotel_pk, page);
     // setReviewHotel_pk(hotel_pk);
     // setGetReview({ ...getreview });

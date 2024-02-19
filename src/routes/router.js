@@ -1,17 +1,17 @@
+import Layout from "../layouts/Layout";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import MainPage from "../pages/MainPage/MainPage";
+import LoginPage from "../pages/LoginPage";
+import SignUpPage from "../pages/SignUpPage/SignUpPage";
+import HotelDetailPage from "../pages/HotelDetailPage/HotelDetailPage";
 import HotelReview from "../components/Detail/HotelReview";
-import Layout from "../components/Layout/Layout";
+import ReserveCompletePage from "../pages/ReserveCompletePage/ReserveCompletePage";
+import BoardPage from "../pages/Board/BoardPage/BoardPage";
 import BoardCreatePage from "../pages/Board/BoardCreatePage/BoardCreatePage";
 import BoardDetailPage from "../pages/Board/BoardDetail/BoardDetailPage";
-import BoardPage from "../pages/Board/BoardPage/BoardPage";
 import BoardUpdatePage from "../pages/Board/BoardUpdatePage/BoardUpdatePage";
-import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import EventPage from "../pages/EventPage/EventPage";
-import HotelDetailPage from "../pages/HotelDetailPage/HotelDetailPage";
-import LoginPage from "../pages/LoginPage";
-import MainPage from "../pages/MainPage/MainPage";
 import MyPage from "../pages/MyPage/MyPage";
-import ReserveCompletePage from "../pages/ReserveCompletePage/ReserveCompletePage";
-import SignUpPage from "../pages/SignUpPage/SignUpPage";
 
 export const RouterInfo = [
   {

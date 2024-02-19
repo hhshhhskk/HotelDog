@@ -18,8 +18,21 @@ export const getCurrentDate = () => {
   const month = String(currentDate.getMonth() + 1).padStart(2, "0");
   // 1자리 수 일은 0을 붙여 두 자리로 만듦
   const day = String(currentDate.getDate()).padStart(2, "0");
-
   // yyyy-mm-dd 형식의 문자열 반환
+  // console.log("오늘임", year, month, day);
+  return `${year}-${month}-${day}`;
+};
+
+export const getTomorrowDate = () => {
+  const currentDate = new Date();
+  // 현재 날짜에 하루를 더합니다.
+  currentDate.setDate(currentDate.getDate() + 1);
+
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDate.getDate()).padStart(2, "0");
+  // console.log("내일", year, month, day);
+  // yyyy-mm-dd 형식의 문자열을 반환합니다.
   return `${year}-${month}-${day}`;
 };
 

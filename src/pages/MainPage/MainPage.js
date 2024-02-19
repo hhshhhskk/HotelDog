@@ -132,16 +132,22 @@ const MainPage = () => {
   // 호텔리스트 정렬방식(별점순, 리뷰순) 필터
   const sortingData = selectedValue => {
     // console.log("정렬방식 :", selectedValue);
-    console.log("정렬방식 변경 전 :", postData);
+    // console.log("정렬방식 변경 전 :", postData);
     let nowData = {};
     console.log("saveFilterData", saveFilterData);
     if (saveFilterData !== null) {
-      nowData = { ...postData, filter_type: parseInt(selectedValue) };
+      nowData = {
+        filter_type: parseInt(selectedValue),
+        main_filter: 0,
+      };
     } else {
-      nowData = { ...hotelListData, filter_type: parseInt(selectedValue) };
+      nowData = {
+        filter_type: parseInt(selectedValue),
+        main_filter: 0,
+      };
     }
 
-    console.log("정렬방식 변경 후 :", nowData);
+    // console.log("정렬방식 변경 후 :", nowData);
     setPostData(nowData);
   };
 
@@ -224,11 +230,15 @@ const MainPage = () => {
         {/* <div>
           <div>
             <span>사이즈 / 마리</span>
+            <div>
+              <span>소형견</span>
+              <span>1</span>
+            </div>
             <button>소형견 1</button>
           </div>
           <div>
             <span>필터</span>
-            <button>수영장</button>
+            <div>수영장</div>
           </div>
         </div> */}
 
@@ -239,7 +249,7 @@ const MainPage = () => {
             <span>핫한 광고 상품을 추천드립니다!</span>
           </AdText>
           <HotelCardDiv>
-            {hotelListData.hotel_advertise_list?.map((hotel, index) => (
+            {hotelListData?.hotel_advertise_list?.map((hotel, index) => (
               <div key={index}>
                 <HotelCardForm
                   hotel={hotel}
@@ -266,7 +276,7 @@ const MainPage = () => {
             </form>
           </FilterText>
           <HotelCardDiv>
-            {hotelListData.hotel_list?.map((hotel, index) => (
+            {hotelListData?.hotel_list?.map((hotel, index) => (
               <div key={index}>
                 <HotelCardForm
                   hotel={hotel}
