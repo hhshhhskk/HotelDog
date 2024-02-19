@@ -9,8 +9,8 @@ import { MainContent, Wrapper } from "../styles/Common/layoutStyle";
 const Layout = () => {
   return (
     <Wrapper>
-      <Header />
       <MainContent>
+        <Header />
         <Outlet />
       </MainContent>
       <Footer />

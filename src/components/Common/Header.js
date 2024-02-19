@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { logoutAPI } from "../../api/Login/logoutApi";
+import {
+  postHotelListAPI,
+  postJwtHotelListAPI,
+  postSearchHotelListAPI,
+  postSearchJwtHotelListAPI,
+} from "../../api/Main/HotelApi";
+import useCustomLogin from "../../hooks/useCustomLogin";
 import {
   HeaderCategory,
   HeaderContent,
@@ -13,10 +21,15 @@ import {
   SearchBt,
   SearchBtnImg,
 } from "../../styles/Common/headerStyle";
-import useCustomLogin from "../../hooks/useCustomLogin";
-import { logoutAPI } from "../../api/Login/logoutApi";
+import { useDispatch } from "react-redux";
+import {
+  postHotelListAsync,
+  postJwtHotelListAsync,
+} from "../../redux/searchSlice";
 
 const Header = () => {
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -60,9 +73,31 @@ const Header = () => {
   };
 
   // 검색할 시 검색에 대한 필터 작동
-  const handleClickSearch = () => {
+  const handleClickSearch = async () => {
     // !!! 검색 기능 넣어주기
-    alert("호텔 검색");
+    // 1. 사용자가 입력한 글자를 포함하여서
+    // 2. 검색을 하는 데이터형태를 갖추고
+    // 3. 전손을 시켜줌.
+    const filter = {
+      search: "대구",
+      address: "",
+      main_filter: 0,
+      from_date: "",
+      to_date: "",
+      dog_info: [],
+      hotel_option_pk: [],
+      filter_type: 0,
+    };
+
+    if (isLogin) {
+      // 만약 로그인이 되었다면
+      dispatch(postJwtHotelListAsync({ page: 1, setPostData: filter }));
+    } else {
+      // 만약 로그인이 아니라면
+      dispatch(postHotelListAsync({ page: 1, setPostData: filter }));
+    }
+
+    navigate("/");
   };
 
   // 카테고리 클릭 시 페이지 이동

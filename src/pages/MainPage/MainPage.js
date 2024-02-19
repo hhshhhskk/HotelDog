@@ -1,6 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { postHotelListAPI, postJwtHotelListAPI } from "../../api/Main/HotelApi";
+import HotelCardForm from "../../components/Common/HotelCardForm";
 import MainSearchFrom from "../../components/Main/MainSearchFrom";
 import TopButton from "../../components/Main/TopButton";
+import useCustomLogin from "../../hooks/useCustomLogin";
+import {
+  postHotelListAsync,
+  postJwtHotelListAsync,
+} from "../../redux/searchSlice";
 import {
   AdListDiv,
   AdText,
@@ -19,11 +28,6 @@ import {
   VisualInner,
   VisualText,
 } from "../../styles/MainPageStyle/mainPageStyle";
-import HotelCardForm from "../../components/Common/HotelCardForm";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { postHotelListAPI, postJwtHotelListAPI } from "../../api/Main/HotelApi";
-import useCustomLogin from "../../hooks/useCustomLogin";
 
 // POST 데이터 형식
 const initPostData = {
@@ -40,34 +44,38 @@ const initPostData = {
 // 호텔 리스트 데이터 형식
 const initHotellist = {
   hotel_advertise_list: [
-    {
-      star: 0,
-      price: "",
-      hotel_pk: 0,
-      hotel_nm: "",
-      address_name: "",
-      hotel_pic: "",
-      discount_per: 0,
-      book_mark: 0,
-      review_count: 0,
-    },
+    // {
+    //   star: 0,
+    //   price: "",
+    //   hotel_pk: 0,
+    //   hotel_nm: "",
+    //   address_name: "",
+    //   hotel_pic: "",
+    //   discount_per: 0,
+    //   book_mark: 0,
+    //   review_count: 0,
+    // },
   ],
   hotel_list: [
-    {
-      star: 0,
-      price: "",
-      hotel_pk: 0,
-      hotel_nm: "",
-      address_name: "",
-      hotel_pic: "",
-      discount_per: 0,
-      book_mark: 0,
-      review_count: 0,
-    },
+    // {
+    //   star: 0,
+    //   price: "",
+    //   hotel_pk: 0,
+    //   hotel_nm: "",
+    //   address_name: "",
+    //   hotel_pic: "",
+    //   discount_per: 0,
+    //   book_mark: 0,
+    //   review_count: 0,
+    // },
   ],
 };
 
 const MainPage = () => {
+  const dispatch = useDispatch();
+  // 리덕스 보관된 state
+  const hotelListData = useSelector(state => state.searchSlice);
+
   const navigate = useNavigate();
   const { isLogin } = useCustomLogin();
 
@@ -77,6 +85,7 @@ const MainPage = () => {
   // 필터 폼 클릭 시 스크롤 이동
   const handleClickFilterForm = () => {
     window.scrollTo({ top: 300, behavior: "smooth" });
+    setShowOption(true);
   };
 
   // POST 데이터 useState
@@ -84,77 +93,118 @@ const MainPage = () => {
   // 필터 데이터 ustState
   const [saveFilterData, setSaveFilterData] = useState(null);
   // 호텔 리스트 useState
-  const [hotelListData, setHotelListData] = useState(initHotellist);
+  const [_, setHotelListData] = useState(initHotellist);
   // 호텔 리스트 페이지 useState
   const [page, setPage] = useState(1);
   // 호텔 리스트 정렬방식 useState
   const [selectSorting, setSelectSorting] = useState("추천순");
+  // 필터된 옵션 useState
+  const [showOption, setShowOption] = useState(false);
 
   // 선택한 날짜 useState
   const [reserveDay, setReserveDay] = useState({ startDay: "", endDay: "" });
 
-  useEffect(() => {
-    totalHotelList();
-  }, [saveFilterData, postData]);
-
   // 전체 호텔 리스트 가져오기
-  const totalHotelList = async () => {
+  const totalHotelList = () => {
     try {
       let filter = {};
       if (saveFilterData) {
         // console.log("필터링 데이터", saveFilterData);
-        filter = await saveFilterData;
+        filter = saveFilterData;
       } else {
         // console.log("기본 데이터", postData);
-        filter = await postData;
+        filter = postData;
       }
 
-      const LoginState = isLogin ? postJwtHotelListAPI : postHotelListAPI;
-      const data = await LoginState({
-        page: 1,
-        setPostData: filter,
-      });
+      if (isLogin) {
+        // 만약 로그인이 되었다면
+        dispatch(postJwtHotelListAsync({ page: 1, setPostData: filter }));
+      } else {
+        // 만약 로그인이 아니라면
+        dispatch(postHotelListAsync({ page: 1, setPostData: filter }));
+      }
 
-      setHotelListData(data);
+      // const LoginState = isLogin ? postJwtHotelListAPI : postHotelListAPI;
+      // const data = await LoginState({
+      //   page: 1,
+      //   setPostData: filter,
+      // });
+
+      // setHotelListData(data);
     } catch (error) {
       console.log(error);
     }
   };
 
+  useEffect(() => {
+    totalHotelList();
+  }, []);
+
+  const handleChangeFilter = _formData => {
+    console.log("여기에요.", _formData);
+    setSaveFilterData(_formData);
+
+    if (isLogin) {
+      // 만약 로그인이 되었다면
+      dispatch(postJwtHotelListAsync({ page: 1, setPostData: _formData }));
+    } else {
+      // 만약 로그인이 아니라면
+      dispatch(postHotelListAsync({ page: 1, setPostData: _formData }));
+    }
+
+    // totalHotelList();
+  };
+
   //  정렬방식(추천순, 별점순, 리뷰순) 선택
   const handleChangeSorting = e => {
+    console.log("보관된것=====================", saveFilterData);
+
     const selectedValue = e.target.value;
-    // console.log(selectedValue);
+    console.log("정렬방식 : ", selectedValue);
     setSelectSorting(selectedValue);
-    sortingData(selectedValue);
+    // sortingData(selectedValue);
+    // let nowData = {
+    //   filter_type: parseInt(selectedValue),
+    //   main_filter: 0,
+    // };
+    let nowData = { ...saveFilterData, filter_type: parseInt(selectedValue) };
+    dispatch(postHotelListAsync({ page: 1, setPostData: nowData }));
   };
 
   // 호텔리스트 정렬방식(별점순, 리뷰순) 필터
   const sortingData = selectedValue => {
     // console.log("정렬방식 :", selectedValue);
     // console.log("정렬방식 변경 전 :", postData);
-    let nowData = {};
-    console.log("saveFilterData", saveFilterData);
-    if (saveFilterData !== null) {
-      nowData = {
-        filter_type: parseInt(selectedValue),
-        main_filter: 0,
-      };
-    } else {
-      nowData = {
-        filter_type: parseInt(selectedValue),
-        main_filter: 0,
-      };
-    }
+    // let nowData = {};
+    // console.log("saveFilterData", saveFilterData);
+    // if (saveFilterData !== null) {
+    //   nowData = {
+    //     filter_type: parseInt(selectedValue),
+    //     main_filter: 0,
+    //   };
+    // } else {
+    //   nowData = {
+    //     filter_type: parseInt(selectedValue),
+    //     main_filter: 0,
+    //   };
+    // }
 
-    // console.log("정렬방식 변경 후 :", nowData);
+    // console.log("selectedValue", selectedValue);
+    let nowData = {
+      filter_type: parseInt(selectedValue),
+      main_filter: 0,
+    };
+
+    // // console.log("정렬방식 변경 후 :", nowData);
     setPostData(nowData);
+    // totalHotelList();
+    // dispatch(postHotelListAsync({ page: 1, setPostData: nowData }));
   };
 
   // 자식 컴포넌트 즉, calendar 에서 알려줘야 다른 컴포넌트에 전달할 수 있다.
   const changeSelectDay = (_sd, _ed) => {
-    console.log("체크인 :", _sd);
-    console.log("체크아웃 :", _ed);
+    // console.log("체크인 :", _sd);
+    // console.log("체크아웃 :", _ed);
     setReserveDay(prev => {
       // 중요: 값을 업데이트할 때 `this.state` 대신 `state` 값을 읽어옵니다.
       return { startDay: _sd, endDay: _ed };
@@ -207,6 +257,7 @@ const MainPage = () => {
 
         <VisualInner>
           <VisualText>
+            {/* <span>여기에요.{state?.hotel_list.length}</span> */}
             <span>
               나의 반려견에게 <br />
               최고의 하루를 선물하세요
@@ -217,7 +268,8 @@ const MainPage = () => {
           <VisualForm onClick={handleClickFilterForm}>
             <MainSearchFrom
               changeSelectDay={changeSelectDay}
-              setSaveFilterData={setSaveFilterData}
+              handleChangeFilter={handleChangeFilter}
+              // setSaveFilterData={setSaveFilterData}
               startDay={startDay}
               endDay={endDay}
             />
@@ -227,20 +279,25 @@ const MainPage = () => {
 
       {/* 호텔리스트 */}
       <HotelListDiv>
-        {/* <div>
+        {showOption && (
           <div>
-            <span>사이즈 / 마리</span>
             <div>
-              <span>소형견</span>
-              <span>1</span>
+              <div>
+                <span>사이즈 / 마리</span>
+              </div>
+              <div>
+                <span>소형견</span>
+                <span>1</span>
+              </div>
+              <button>소형견 1</button>
             </div>
-            <button>소형견 1</button>
+
+            <div>
+              <span>필터</span>
+              <div>수영장</div>
+            </div>
           </div>
-          <div>
-            <span>필터</span>
-            <div>수영장</div>
-          </div>
-        </div> */}
+        )}
 
         {/* 광고호텔 */}
         <AdListDiv>

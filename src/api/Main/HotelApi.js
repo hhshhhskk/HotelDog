@@ -23,6 +23,8 @@ const removeEmptyValues = obj => {
 
 // JWTAxios : 호텔 전체 리스트 API
 export const postJwtHotelListAPI = async ({ page, setPostData }) => {
+  // console.log("postJwtHotelListAPI - page", page);
+  // console.log("postJwtHotelListAPI -setPostData", setPostData);
   try {
     // console.log("", setPostData);
     const parseData = removeEmptyValues(setPostData);
@@ -40,13 +42,15 @@ export const postJwtHotelListAPI = async ({ page, setPostData }) => {
 
 // Axios : 호텔 전체 리스트 API
 export const postHotelListAPI = async ({ page, setPostData }) => {
+  // console.log("postHotelListAPI - page", page);
+  // console.log("postHotelListAPI -setPostData", setPostData);
   try {
     console.log(setPostData);
     const parseData = await removeEmptyValues(setPostData);
-    console.log("팔스데이터", parseData);
+    // console.log("팔스데이터", parseData);
     // const header = { headers: { "Content-Type": "application/json" } };
     const res = await axios.post(`/api/hotel?page=${page}`, parseData);
-    console.log("성공", res.data.hotel_list);
+    // console.log("성공", res.data.hotel_list);
     return res.data;
   } catch (error) {
     console.log(error);
