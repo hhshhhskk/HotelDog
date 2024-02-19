@@ -1,5 +1,4 @@
-import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React from "react";
 import DaumPostcode from "react-daum-postcode";
 
 import { addressApi } from "../../api/SignUp/addressApi";
