@@ -132,7 +132,7 @@ const MainPage = () => {
   // 호텔리스트 정렬방식(별점순, 리뷰순) 필터
   const sortingData = selectedValue => {
     // console.log("정렬방식 :", selectedValue);
-    console.log("정렬방식 변경 전 :", postData);
+    // console.log("정렬방식 변경 전 :", postData);
     let nowData = {};
     console.log("saveFilterData", saveFilterData);
     if (saveFilterData !== null) {
@@ -147,7 +147,7 @@ const MainPage = () => {
       };
     }
 
-    console.log("정렬방식 변경 후 :", nowData);
+    // console.log("정렬방식 변경 후 :", nowData);
     setPostData(nowData);
   };
 
