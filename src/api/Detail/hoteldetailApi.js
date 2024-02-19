@@ -20,7 +20,6 @@ export const getHotel = async (hotel_pk, setHotelList) => {
 // 호텔 한개만 가져오기
 export const getHotelId = async (hotel_pk, successGetHotelId) => {
   try {
-    console.log("getHotelId hotel_pk: ", hotel_pk);
     const url = `/api/hotel?hotel_pk=${hotel_pk}`;
     // http://112.222.157.156:5222/api/reservation?userPk=0
     const res = await jwtAxios.get(url);
@@ -71,25 +70,25 @@ export const getReview = async (
   page,
   successFnReview,
   failFnReview,
+  errorFnReview,
 ) => {
   try {
-    console.log("getreview 의 hotel_pk : ", hotel_pk);
-    console.log("page : ", page);
     // page = 쿼리스트링
     // hotelPk = path .  ? 앞까지는 path 즉, 주소임.
     // const url = `/api/review/${hotel_pk}/?page=${page}`;
     const url = `/api/review/${hotel_pk}?page=${page}`;
-    // http://112.222.157.156:5222/api/review/1?page=1
-    console.log(url);
     const res = await jwtAxios.get(url);
+
     const status = res.status.toString();
+
     if (status.charAt(0) === "2") {
+      console.log(res.data, "성공");
       successFnReview(res.data);
     } else {
       failFnReview("전송 오류입니다.");
     }
   } catch (error) {
-    console.log("서버에러에요");
+    errorFnReview(error);
   }
 };
 

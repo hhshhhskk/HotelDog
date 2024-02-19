@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
-  createSearchParams,
   useLocation,
-  useParams,
-  useSearchParams,
+  useParams
 } from "react-router-dom";
-import HotelDetail from "./HotelDetail";
 import {
-  getHotel,
-  getHotelId,
-  getOneReservation,
-  getReview,
-  getSelDateRmId,
+  getHotelId
 } from "../../api/Detail/hoteldetailApi";
+import HotelDetail from "./HotelDetail";
 
 // 호텔 상세페이지
 const HotelDetailPage = () => {
@@ -23,23 +17,16 @@ const HotelDetailPage = () => {
   // useNaviate 로 전달된 state 를 알아내기
   const location = useLocation();
   const { state } = location;
-  console.log(state.day);
   const [resDay, setResDay] = useState(state.day);
-  console.log(resDay);
 
-  const [userPk, setUserPk] = useState(detailId);
+  // const [userPk, setUserPk] = useState(detailId);
   const [hotel_pk, setHotel_pk] = useState(detailId);
   const [hotelList, setHotelList] = useState([]);
   const [roomList, setRoomList] = useState([]);
 
   const reloadgetHotelId = () => {
-    // jwtAxios.get 에서 userPk, hotelPk, setHotelList  호텔 리스트 목록 불러오기
-    console.log("hotel_pk", hotel_pk);
-    // console.log("reviewHotel_pk", reviewHotel_pk);
     getHotelId(hotel_pk, setHotelList);
-    // getReview(hotel_pk);
   };
-
   // 화면 준비되면 그때 반영
   useEffect(() => {
     reloadgetHotelId();
@@ -49,7 +36,6 @@ const HotelDetailPage = () => {
     <div>
       <h1>호텔 상세페이지</h1>
       <h2>호텔 고유 번호 : {detailId}</h2>
-      {/* 호텔 디테일을 HotelDetailPage 에 옮겨야하는지? */}
       {hotelList.hotel_info_vo ? (
         <HotelDetail
           detailId={detailId}
@@ -60,7 +46,6 @@ const HotelDetailPage = () => {
           setRoomList={setRoomList}
         />
       ) : null}
-      {/* <h1>HotelDetailPage pk : {detailId}</h1> */}
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "../../../src/styles/Detail/hotelreview.css";
-import { useParams } from "react-router-dom";
 import { getReview } from "../../api/Detail/hoteldetailApi";
 // 리뷰 페이지 네이션 초기값
 const initState = [
@@ -16,34 +15,54 @@ const initState = [
 ];
 
 const HotelReview = ({
+  hotel_pk,
   hotelList,
   setReviewModalOpen,
   reviewModalOpen,
-  hoteLpk,
-  // page,
 }) => {
-  // params 읽기
-  const { page } = useParams();
-  console.log(page);
   // review 상태 관리
-  const [reviewData, setReviewData] = useState(initState);
+  const [reviewData, setReviewData] = useState("");
+  const [page, setPage] = useState(1);
   // hotel_pk
   // console.log(reviewId);
 
   const handleMoreReview = e => {
-    console.log("review pagination 의 hotel_pk :");
-    getReview(page);
-    console.log("review pagination 의 page :", page);
-    // reviewHotel_pk();
+    setPage(page + 1);
   };
-  // useEffect(() => {
-  // }, []);
 
   const closeReviewModal = () => {
     setReviewModalOpen(false);
     document.body.style.overflow = "unset";
   };
 
+  const successFnReview = result => {
+    // console.log("성공", result);
+    setReviewData([...reviewData, ...result]);
+    console.log(reviewData);
+  };
+
+  const failFnReview = result => {
+    console.log("다시 시도해주세요.", result);
+  };
+  const errorFnReview = result => {
+    console.log("서버에러", result);
+  };
+
+  useEffect(() => {
+    // 컴포넌트 처음 불러올때 실행
+    getReview(hotel_pk, page, successFnReview, failFnReview, errorFnReview);
+    console.log("현재 페이지: ", page);
+
+    //page의 값이 바뀌면 useEffect를 다시 실행하겠다.
+  }, [page]);
+
+  // 데이터를 불러오기전이면 null값을 반환
+  if (!reviewData) return null;
+
+  // reviewData는 useState이므로 값이 변화면 화면을 새로 리렌더링한다. 
+  // 데이터가 없다가 데이터를 불러오면 리렌더링함
+
+  // 데이터가 불러와지면 아래 코드 실행
   return (
     <>
       <div className="review-modal-background">
@@ -86,7 +105,7 @@ const HotelReview = ({
             />
             {/* 메인's 헤더(별점 및 한줄평) 영역 */}
             {/* 맵을 돌려야 할 거 같은데? 얘는.... */}
-            {reviewData.map((item, index) => (
+            {reviewData?.map((item, index) => (
               <div className="review-wrap-scroll" key={index}>
                 <div className="review_wrap">
                   <div className="review_small_stars">
@@ -116,8 +135,8 @@ const HotelReview = ({
                       alt=""
                     />
                   </div>
-                  <div className="review_nickname">{reviewData.nick_name}</div>
-                  <div className="review_desc">{reviewData.comment}</div>
+                  <div className="review_nickname">{item?.nick_name}</div>
+                  <div className="review_desc">{item?.comment}</div>
                   {/* 호텔 리뷰 param : {reviewId} */}
                   <img
                     className="review-part-line"
