@@ -1,85 +1,15 @@
-import styled from "@emotion/styled";
 import React from "react";
-
-const Wrapper = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  z-index: 1000;
-`;
-
-const Overlay = styled.div`
-  width: 100%;
-  height: 100vh;
-  background-color: rgb(0, 0, 0, 0.5);
-`;
-
-const Modal = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 680px;
-  height: 800px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #fff;
-  border-radius: 15px;
-`;
-
-const ModalInner = styled.div`
-  padding: 33px 50px 33px 50px;
-  width: 600px;
-  height: 600px;
-  border-radius: 10px;
-  background-color: #f9f9f9;
-
-  overflow: auto;
-`;
-
-const ModalTop = styled.div`
-  width: 600px;
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: #654222;
-  margin-top: 33px;
-  margin-bottom: 23px;
-`;
-
-const TextBox = styled.div`
-  width: 500px;
-  height: 104px;
-  font-size: 1.4rem;
-  margin-bottom: 20px;
-  font-family: Noto Sans;
-`;
-
-const TextTitle = styled.div`
-  margin-bottom: 9px;
-`;
-
-const TextContent = styled.div`
-  color: #9d9d9d;
-`;
-
-const AgreeBtn = styled.div`
-  width: 120px;
-  height: 50px;
-
-  margin-top: 23px;
-
-  color: #fff;
-  text-align: center;
-  font-family: Noto Sans;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 50px;
-
-  border-radius: 10px;
-  border: 1px solid #654222;
-  background: #654222;
-`;
+import {
+  AgreeBtn,
+  Modal,
+  ModalInner,
+  ModalTop,
+  Overlay,
+  TextBox,
+  TextContent,
+  TextTitle,
+  Wrapper,
+} from "../../styles/SignUpPageStyle/agreeModalStyle";
 
 const AgreeModal = ({ closeModal }) => {
   return (
