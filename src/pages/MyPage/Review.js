@@ -64,14 +64,17 @@ const ListNone = styled.div`
   }
 `;
 
+const ReviewContentsWrap = styled.div`
+  position: relative;
+`;
 const ReviewContents = styled.div`
   position: relative;
   width: 600px;
-
   border-radius: 10px;
   border: 1px solid #d9d9d9;
   background: #fff;
   padding: 25px;
+  margin-bottom: 20px;
 `;
 
 const ReviewInfo = styled.div`
@@ -222,9 +225,9 @@ const Review = () => {
   }, []);
 
   // 리뷰 삭제하기
-  const handleDeleteClick = async () => {
+  const handleDeleteClick = async (reviewPk, resPk) => {
     try {
-      const result = await reviewDeleteApi();
+      const result = await reviewDeleteApi(reviewPk, resPk);
       if (result === 1) {
         // 데이터 삭제 성공 시
         // 리뷰내역 다시 불러오기
@@ -243,66 +246,77 @@ const Review = () => {
       <PageTitle>
         <p>이용 후기</p>
       </PageTitle>
-      <ListNone>
-        <img src={`${process.env.PUBLIC_URL}/images/MyPage/review.svg`} />
-        <p>이용 후기가 없습니다.</p>
-        <span>호텔 이용 후 소중한 후기를 남겨주세요.</span>
-      </ListNone>
-      <ReviewContents>
-        {reviewData.map((review, index) => (
-          <ReviewInfo key={index}>
-            <ReviewTop>
-              <span>{review.createdAt}</span>
-              <ReviewOption>
-                <ReviewOptionBt
-                  onClick={() => toggleOptionBoxVisibility(index)}
-                >
-                  {" "}
-                  {/* 인덱스 전달 */}
+      {reviewData.length === 0 ? (
+        <ListNone>
+          <img src={`${process.env.PUBLIC_URL}/images/MyPage/review.svg`} />
+          <p>이용 후기가 없습니다.</p>
+          <span>호텔 이용 후 소중한 후기를 남겨주세요.</span>
+        </ListNone>
+      ) : (
+        <ReviewContentsWrap>
+          {reviewData.map((review, index) => (
+            <ReviewContents key={index}>
+              <ReviewInfo>
+                <ReviewTop>
+                  <span>{review.createdAt}</span>
+                  <ReviewOption>
+                    <ReviewOptionBt
+                      onClick={() => toggleOptionBoxVisibility(index)}
+                    >
+                      {" "}
+                      {/* 인덱스 전달 */}
+                      <img
+                        src={`${process.env.PUBLIC_URL}/images/MyPage/reviewoption.svg`}
+                      />
+                    </ReviewOptionBt>
+                    <OptionBox isVisible={visibleOptionBoxIndex === index}>
+                      {" "}
+                      {/* 현재 인덱스에 대한 가시성 제어 */}
+                      <ReviewFetch
+                        onMouseEnter={handleFetchHover}
+                        onMouseLeave={handleFetchHover}
+                      >
+                        <p
+                          style={{
+                            color: isFetchHovered ? "#654222" : "#969696",
+                          }}
+                        >
+                          수정하기
+                        </p>
+                      </ReviewFetch>
+                      <ReviewDelete
+                        onClick={() => {
+                          handleDeleteClick(review.reviewPk, review.resPk);
+                        }}
+                        onMouseEnter={handleDeleteHover}
+                        onMouseLeave={handleDeleteHover}
+                      >
+                        <p
+                          style={{
+                            color: isDeleteHovered ? "#654222" : "#969696",
+                          }}
+                        >
+                          삭제하기
+                        </p>
+                      </ReviewDelete>
+                    </OptionBox>
+                  </ReviewOption>
+                </ReviewTop>
+                <ReviewImg>
                   <img
-                    src={`${process.env.PUBLIC_URL}/images/MyPage/reviewoption.svg`}
+                    src={`${process.env.PUBLIC_URL}/images/MyPage/reviewimg.svg`}
                   />
-                </ReviewOptionBt>
-                <OptionBox isVisible={visibleOptionBoxIndex === index}>
-                  {" "}
-                  {/* 현재 인덱스에 대한 가시성 제어 */}
-                  <ReviewFetch
-                    onMouseEnter={handleFetchHover}
-                    onMouseLeave={handleFetchHover}
-                  >
-                    <p
-                      style={{ color: isFetchHovered ? "#654222" : "#969696" }}
-                    >
-                      수정하기
-                    </p>
-                  </ReviewFetch>
-                  <ReviewDelete
-                    onClick={handleDeleteClick}
-                    onMouseEnter={handleDeleteHover}
-                    onMouseLeave={handleDeleteHover}
-                  >
-                    <p
-                      style={{ color: isDeleteHovered ? "#654222" : "#969696" }}
-                    >
-                      삭제하기
-                    </p>
-                  </ReviewDelete>
-                </OptionBox>
-              </ReviewOption>
-            </ReviewTop>
-            <ReviewImg>
-              <img
-                src={`${process.env.PUBLIC_URL}/images/MyPage/reviewimg.svg`}
-              />
-            </ReviewImg>
-            <HotelInfo>
-              <p>{review.hotelNm}</p>
-              <span>{review.roomNm}</span>
-            </HotelInfo>
-            <ReviewTxt>{review.comment}</ReviewTxt>
-          </ReviewInfo>
-        ))}
-      </ReviewContents>
+                </ReviewImg>
+                <HotelInfo>
+                  <p>{review.hotelNm}</p>
+                  <span>{review.roomNm}</span>
+                </HotelInfo>
+                <ReviewTxt>{review.comment}</ReviewTxt>
+              </ReviewInfo>
+            </ReviewContents>
+          ))}
+        </ReviewContentsWrap>
+      )}
     </ReviewPage>
   );
 };

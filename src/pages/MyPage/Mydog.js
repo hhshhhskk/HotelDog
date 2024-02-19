@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { postDogInfoApi } from "../../api/mypage/mypageApi";
+import DogGetForm from "../../components/MyPage/MyDog/DogGetForm";
 
 const MydogPage = styled.div`
   margin-left: 85px;
@@ -23,6 +24,7 @@ const PageTitle = styled.div`
 const DogContents = styled.div`
   position: relative;
   display: flex;
+  margin-bottom: 20px;
 `;
 const ImageContainer = styled.div`
   position: relative;
@@ -250,6 +252,9 @@ const Line = styled.div`
 `;
 
 const Mydog = () => {
+  const [isDogInfoSubmitted, setIsDogInfoSubmitted] = useState(false);
+  const [dogData, setDogData] = useState(null);
+
   // 이미지 업로드 부분
   const [imageURL, setImageURL] = useState(null);
   const inputRef = useRef(null);
@@ -309,8 +314,6 @@ const Mydog = () => {
       const blob = await response.blob();
       const currentDate = new Date();
       const types = imgFileListType;
-      // console.log("types", types);
-      // console.log("types", types[index].split("/"));
       const seconds = Math.floor(currentDate.getTime() / 1000);
       const file = new File(
         [blob],
@@ -329,6 +332,7 @@ const Mydog = () => {
   const successFn = result => {
     console.log("successFn", result);
     alert("정보등록이 완료되었습니다.");
+    setIsDogInfoSubmitted(true); // 등록 완료 후 상태 변경
   };
   const failFn = result => {
     console.log("failFn", result);
@@ -352,64 +356,67 @@ const Mydog = () => {
         <p>반려견 정보가 없습니다.</p>
         <span>반려견 정보를 등록해주세요</span>
       </ListNone>
-      <DogContents>
-        <DogLeft onClick={handleDogLeftClick} hasImage={imgFileList[0]}>
-          {/* hasImage prop 전달 */}
-          <input
-            type="file"
-            onChange={handleImageChange}
-            accept="image/*"
-            style={{ display: "none" }}
-            ref={inputRef}
-          />
-          <p>사진을 선택하세요 : {imgFileList[0]} </p>
-          {imgFileList[0] && <img src={imgFileList[0]} alt="Selected" />}
-        </DogLeft>
-        <DogRight>
-          <DogName>
-            <Line />
-            <span>이름</span>
-            <DogNameArea
-              type="text"
-              name="dogNm"
-              value={dogInfo.dogNm}
+      {(!isDogInfoSubmitted || (isDogInfoSubmitted && !imgFileList[0])) && (
+        <DogContents>
+          <DogLeft onClick={handleDogLeftClick} hasImage={imgFileList[0]}>
+            {/* hasImage prop 전달 */}
+            <input
+              type="file"
+              onChange={handleImageChange}
+              accept="image/*"
+              style={{ display: "none" }}
+              ref={inputRef}
+            />
+            <p>사진을 선택하세요 : {imgFileList[0]} </p>
+            {imgFileList[0] && <img src={imgFileList[0]} alt="Selected" />}
+          </DogLeft>
+          <DogRight>
+            <DogName>
+              <Line />
+              <span>이름</span>
+              <DogNameArea
+                type="text"
+                name="dogNm"
+                value={dogInfo.dogNm}
+                onChange={handleInputChange}
+              />
+            </DogName>
+            <DogAge>
+              <Line />
+              <span>나이</span>
+              <DogAgeArea
+                type="text"
+                name="dogAge"
+                value={dogInfo.dogAge}
+                onChange={handleInputChange}
+              />
+              <p>살</p>
+              <Line />
+              <span>사이즈</span>
+              <DogSizeSelect
+                value={dogInfo.sizePk}
+                onChange={handleInputChange}
+                name="sizePk"
+              >
+                <option value={0}>소형</option>
+                <option value={1}>중형</option>
+                <option value={2}>대형</option>
+              </DogSizeSelect>
+            </DogAge>
+            <DogInfo
+              placeholder="특이 사항 및 요청 사항을 입력해 주세요."
+              name="dogEtc"
+              value={dogInfo.dogEtc}
               onChange={handleInputChange}
             />
-          </DogName>
-          <DogAge>
-            <Line />
-            <span>나이</span>
-            <DogAgeArea
-              type="text"
-              name="dogAge"
-              value={dogInfo.dogAge}
-              onChange={handleInputChange}
-            />
-            <p>살</p>
-            <Line />
-            <span>사이즈</span>
-            <DogSizeSelect
-              value={dogInfo.sizePk}
-              onChange={handleInputChange}
-              name="sizePk"
-            >
-              <option value={0}>소형</option>
-              <option value={1}>중형</option>
-              <option value={2}>대형</option>
-            </DogSizeSelect>
-          </DogAge>
-          <DogInfo
-            placeholder="특이 사항 및 요청 사항을 입력해 주세요."
-            name="dogEtc"
-            value={dogInfo.dogEtc}
-            onChange={handleInputChange}
-          />
-          <DogBt>
-            <DogCancel>취소 하기</DogCancel>
-            <DogUp onClick={handleDogSubmit}>등록 하기</DogUp>
-          </DogBt>
-        </DogRight>
-      </DogContents>
+            <DogBt>
+              <DogCancel>취소 하기</DogCancel>
+              <DogUp onClick={handleDogSubmit}>등록 하기</DogUp>
+            </DogBt>
+          </DogRight>
+        </DogContents>
+      )}
+      <DogGetForm />
     </MydogPage>
   );
 };

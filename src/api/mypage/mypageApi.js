@@ -116,7 +116,8 @@ export const mypageBookingListDeleteApi = async resPk => {
   }
 };
 
-// 마이페이지 반려견 정보 출력
+// 반려견
+// 마이페이지 반려견 정보 등록
 export const postDogInfoApi = async (
   { sendData },
   { successFn, failFn, errorFn },
@@ -135,6 +136,25 @@ export const postDogInfoApi = async (
   }
 };
 
+// 강아지 데이터 불러오기
+export const getDogApi = async () => {
+  try {
+    const url = `/api/dog`;
+    const res = await jwtAxios({
+      method: "get",
+      url: url,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    // console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 리뷰
 // 리뷰  등록 API
 export const postReviewApi = async formData => {
   try {
@@ -155,7 +175,7 @@ export const postReviewApi = async formData => {
   }
 };
 
-// 리뷰 예약 불러오기
+// 리뷰 불러오기
 export const getReviewApi = async () => {
   // reviewData 파라미터 제거
   try {
@@ -174,10 +194,10 @@ export const getReviewApi = async () => {
   }
 };
 
-// 마이페이지 예약 삭제
-export const reviewDeleteApi = async () => {
+// 리뷰 삭제
+export const reviewDeleteApi = async (reviewPk, resPk) => {
   try {
-    const url = `/api/review`;
+    const url = `/api/review?reviewPk=${reviewPk}&resPk=${resPk}`;
     const res = await jwtAxios({
       method: "delete",
       url: url,
@@ -191,3 +211,23 @@ export const reviewDeleteApi = async () => {
     console.log(error);
   }
 };
+
+//  리뷰 수정
+// export const reviewPutApi = async data => {
+//   try {
+//     console.log(data);
+//     const res = await jwtAxios({
+//       method: "put",
+//       url: `/api/user/info`,
+//       data,
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     });
+//     return res.data.result;
+//   } catch (error) {
+//     // 오류가 발생했을 때의 처리
+//     console.log(error);
+//     // alert(error.response.data.message);
+//   }
+// };

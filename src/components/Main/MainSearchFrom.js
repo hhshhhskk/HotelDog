@@ -28,7 +28,7 @@ import {
   SubmitButton,
 } from "../../styles/MainPageStyle/MainSearchFromStyle";
 import Calendar, { getCurrentDate, getTomorrowDate } from "../Common/Calendar";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 
 const MainSearchFrom = ({
   changeSelectDay,
