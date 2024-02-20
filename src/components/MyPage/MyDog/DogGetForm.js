@@ -62,6 +62,8 @@ const DogName = styled.div`
 
 const DogNameArea = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
   width: 260px;
   height: 25px;
   align-items: center;
@@ -74,7 +76,7 @@ const DogNameArea = styled.div`
   color: #654222; /* 변경 */
   font-size: 14px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
 `;
 
 const DogAge = styled.div`
@@ -98,6 +100,8 @@ const DogAge = styled.div`
 
 const DogAgeArea = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
   width: 60px;
   height: 25px;
   align-items: center;
@@ -110,11 +114,13 @@ const DogAgeArea = styled.div`
   color: #654222; /* 변경 */
   font-size: 14px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
 `;
 
 const DogSizeSelect = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
   width: 90px;
   height: 25px;
   border-radius: 5px;
@@ -127,6 +133,7 @@ const DogSizeSelect = styled.div`
   color: #654222;
   padding-left: 10px;
   padding-right: 10px;
+  font-weight: 600;
 `;
 
 const DogInfo = styled.div`
@@ -171,8 +178,8 @@ const DogUp = styled.button`
   height: 45px;
   border-radius: 10px;
   border: 1px solid #654222;
-  background: #654222;
-  color: #fff;
+  background: #fff;
+  color: #654222;
   font-size: 14px;
 `;
 const Line = styled.div`
@@ -182,31 +189,8 @@ const Line = styled.div`
   border-left: 3px solid #654222;
 `;
 
-const DogGetForm = () => {
-  const [dogData, setDogData] = useState(); // 초기값 수정
-
-  const fetchData = async () => {
-    try {
-      const data = await getDogApi();
-      setDogData(data);
-    } catch (error) {
-      console.error("Error fetching dog data:", error);
-    }
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const [dogInfo, setDogInfo] = useState({
-    userDogPk: 0,
-    sizePk: 0,
-    dogSize: null,
-    dogNm: "", // 초기값 수정
-    dogAge: 0,
-    dogPic: "",
-    dogEtc: "",
-    createdAt: "",
-  });
+const DogGetForm = ({ dogData, onDeleteData }) => {
+  const [dogInfo, setDogInfo] = useState({});
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -219,6 +203,14 @@ const DogGetForm = () => {
   if (!dogData) {
     return null; // 데이터가 없으면 결과값이 null이 뜨도록 설정
   }
+
+  const handleClickDogDelete = async userDogPk => {
+    try {
+      await onDeleteData(userDogPk);
+    } catch (error) {
+      console.error("강아지 데이터 삭제 중 오류 발생:", error);
+    }
+  };
 
   return (
     <>
@@ -257,8 +249,10 @@ const DogGetForm = () => {
             </DogAge>
             <DogInfo>{dogInfo?.dogEtc}</DogInfo>
             <DogBt>
-              <DogCancel>취소 하기</DogCancel>
-              <DogUp>등록 하기</DogUp>
+              <DogCancel>수정 하기</DogCancel>
+              <DogUp onClick={() => handleClickDogDelete(dogInfo?.userDogPk)}>
+                삭제 하기
+              </DogUp>
             </DogBt>
           </DogRight>
         </DogContents>

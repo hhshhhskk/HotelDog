@@ -1,23 +1,34 @@
 import styled from "@emotion/styled";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { postDogInfoApi } from "../../api/mypage/mypageApi";
+import {
+  deleteDogApi,
+  getDogApi,
+  postDogInfoApi,
+} from "../../api/mypage/mypageApi";
 import DogGetForm from "../../components/MyPage/MyDog/DogGetForm";
 
 const MydogPage = styled.div`
   margin-left: 85px;
   position: relative;
-  width: 865px;
+  width: 697px;
 `;
 
 const PageTitle = styled.div`
   position: relative;
+  display: flex;
+  justify-content: space-between;
   height: auto;
+  width: auto;
   margin-bottom: 35px;
   p {
     font-weight: 700;
     font-size: 24px;
     color: #654222;
+    width: auto;
+  }
+  img {
+    cursor: pointer;
   }
 `;
 
@@ -25,6 +36,7 @@ const DogContents = styled.div`
   position: relative;
   display: flex;
   margin-bottom: 20px;
+  width: auto;
 `;
 const ImageContainer = styled.div`
   position: relative;
@@ -252,10 +264,44 @@ const Line = styled.div`
 `;
 
 const Mydog = () => {
-  const [isDogInfoSubmitted, setIsDogInfoSubmitted] = useState(false);
-  const [dogData, setDogData] = useState(null);
+  const [isDogContentsOpen, setIsDogContentsOpen] = useState(false);
 
-  // 이미지 업로드 부분
+  // 강아지 정보 불러오기
+  const [dogData, setDogData] = useState([]);
+  const fetchData = async () => {
+    try {
+      const data = await getDogApi();
+      setDogData(data);
+    } catch (error) {
+      console.error("Error fetching dog data:", error);
+    }
+  };
+
+  useEffect(() => {
+    // 등록이 완료되면 fetchData를 호출하여 새로운 데이터를 가져옵니다.
+    fetchData();
+
+    // 등록이 완료되면 isDogInfoSubmitted 상태를 감지하여 Mydog 컴포넌트를 다시 렌더링합니다.
+  }, [isDogContentsOpen]);
+
+  // 강아지 정보 삭제하기
+  const handleDeleteData = async userDogPk => {
+    try {
+      const result = await deleteDogApi(userDogPk);
+      if (result === 1) {
+        // 데이터 삭제 성공 시
+        // 리뷰내역 다시 불러오기
+        const newData = await getDogApi();
+        setDogData(newData);
+      } else {
+        console.log("Failed to delete review data.");
+      }
+      // await deleteDogApi(userDogPk); // 실제 API에서 삭제 작업 수행
+    } catch (error) {
+      console.error("Error deleting dog data:", error);
+    }
+  };
+
   const [imageURL, setImageURL] = useState(null);
   const inputRef = useRef(null);
   const [imgFileList, setImgFileList] = useState([]);
@@ -264,7 +310,6 @@ const Mydog = () => {
   const handleImageChange = e => {
     const file = e.target.files[0];
     if (file) {
-      // 미리보기
       const tempUrl = URL.createObjectURL(file);
       const tempArr = [tempUrl];
       const typeArr = [file.type];
@@ -273,15 +318,13 @@ const Mydog = () => {
     }
   };
 
-  // 반려견 정보 상태
   const [dogInfo, setDogInfo] = useState({
-    sizePk: 0,
+    sizePk: 1,
     dogNm: "",
     dogAge: 0,
     dogEtc: "",
   });
 
-  // 반려견 정보 입력 핸들러
   const handleInputChange = e => {
     const { name, value } = e.target;
     setDogInfo(prevState => ({
@@ -290,9 +333,7 @@ const Mydog = () => {
     }));
   };
 
-  // 반려견 정보 저장하기
   const handleDogSubmit = async () => {
-    // 작성된 후기 데이터 전달
     const formData = new FormData();
     const dto = new Blob(
       [
@@ -303,7 +344,6 @@ const Mydog = () => {
           dogEtc: dogInfo.dogEtc,
         }),
       ],
-      // JSON 형식으로 설정
       { type: "application/json" },
     );
 
@@ -332,7 +372,14 @@ const Mydog = () => {
   const successFn = result => {
     console.log("successFn", result);
     alert("정보등록이 완료되었습니다.");
-    setIsDogInfoSubmitted(true); // 등록 완료 후 상태 변경
+    setIsDogContentsOpen(prevState => !prevState);
+    setDogInfo({
+      sizePk: 0,
+      dogNm: "",
+      dogAge: 0,
+      dogEtc: "",
+    });
+    setImgFileList([]);
   };
   const failFn = result => {
     console.log("failFn", result);
@@ -340,26 +387,33 @@ const Mydog = () => {
 
   const errorFn = result => {
     console.log("errorFn", result);
+    alert("정보를 입력하고 등록해주세요.");
   };
 
   const handleDogLeftClick = () => {
-    inputRef.current.click(); // input 요소를 클릭합니다.
+    inputRef.current.click();
   };
 
+  const handleCancel = () => {
+    setIsDogContentsOpen(false);
+  };
+
+  const toggleDogContents = () => {
+    setIsDogContentsOpen(prevState => !prevState);
+  };
+  console.log(isDogContentsOpen);
   return (
     <MydogPage>
       <PageTitle>
         <p>반려견 정보</p>
+        <img
+          src={`${process.env.PUBLIC_URL}/images/MyPage/plusbt.svg`}
+          onClick={toggleDogContents} // 더하기 아이콘 클릭 시 폼 표시 여부를 변경하는 함수 연결
+        />
       </PageTitle>
-      <ListNone>
-        <img src={`${process.env.PUBLIC_URL}/images/MyPage/dog.svg`} />
-        <p>반려견 정보가 없습니다.</p>
-        <span>반려견 정보를 등록해주세요</span>
-      </ListNone>
-      {(!isDogInfoSubmitted || (isDogInfoSubmitted && !imgFileList[0])) && (
+      {isDogContentsOpen && (
         <DogContents>
           <DogLeft onClick={handleDogLeftClick} hasImage={imgFileList[0]}>
-            {/* hasImage prop 전달 */}
             <input
               type="file"
               onChange={handleImageChange}
@@ -367,7 +421,7 @@ const Mydog = () => {
               style={{ display: "none" }}
               ref={inputRef}
             />
-            <p>사진을 선택하세요 : {imgFileList[0]} </p>
+            <p>사진을 선택하세요 {imgFileList[0]} </p>
             {imgFileList[0] && <img src={imgFileList[0]} alt="Selected" />}
           </DogLeft>
           <DogRight>
@@ -398,9 +452,9 @@ const Mydog = () => {
                 onChange={handleInputChange}
                 name="sizePk"
               >
-                <option value={0}>소형</option>
-                <option value={1}>중형</option>
-                <option value={2}>대형</option>
+                <option value={1}>소형</option>
+                <option value={2}>중형</option>
+                <option value={3}>대형</option>
               </DogSizeSelect>
             </DogAge>
             <DogInfo
@@ -410,13 +464,21 @@ const Mydog = () => {
               onChange={handleInputChange}
             />
             <DogBt>
-              <DogCancel>취소 하기</DogCancel>
+              <DogCancel onClick={handleCancel}>취소 하기</DogCancel>
               <DogUp onClick={handleDogSubmit}>등록 하기</DogUp>
             </DogBt>
           </DogRight>
         </DogContents>
       )}
-      <DogGetForm />
+      {dogData.length > 0 ? (
+        <DogGetForm dogData={dogData} onDeleteData={handleDeleteData} />
+      ) : (
+        <ListNone>
+          <img src={`${process.env.PUBLIC_URL}/images/MyPage/dog.svg`} />
+          <p>반려견 정보가 없습니다.</p>
+          <span>반려견 정보를 등록해주세요</span>
+        </ListNone>
+      )}
     </MydogPage>
   );
 };
