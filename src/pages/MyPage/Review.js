@@ -13,6 +13,7 @@ const ReviewPage = styled.div`
 const PageTitle = styled.div`
   position: relative;
   height: auto;
+  margin-bottom: 35px;
   p {
     font-weight: 700;
     font-size: 24px;

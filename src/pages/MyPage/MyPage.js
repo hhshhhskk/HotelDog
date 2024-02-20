@@ -3,10 +3,10 @@ import styled from "@emotion/styled";
 import React, { useState } from "react";
 import Member from "./Member";
 import Password from "../../components/MyPage/Member/Password";
-import Mydog from "./Mydog";
 import LikeList from "./LikeList";
 import Review from "./Review";
 import Booking from "./Booking";
+import Mydog from "./Mydog";
 
 const MyPageWrap = styled.div`
   position: relative;

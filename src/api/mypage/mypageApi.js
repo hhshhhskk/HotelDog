@@ -154,6 +154,24 @@ export const getDogApi = async () => {
   }
 };
 
+// 강아지 정보 삭제하기
+export const deleteDogApi = async userDogPk => {
+  try {
+    const url = `/api/dog?userDogPk=${userDogPk}`;
+    const res = await jwtAxios({
+      method: "delete",
+      url: url,
+      headers: {
+        "Content-Type": "application/json", // Content-Type 설정
+      },
+    });
+
+    return res.data.result;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // 리뷰
 // 리뷰  등록 API
 export const postReviewApi = async formData => {
