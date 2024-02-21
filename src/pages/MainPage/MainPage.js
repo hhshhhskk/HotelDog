@@ -99,7 +99,11 @@ const MainPage = () => {
   const [showOption, setShowOption] = useState(false);
 
   // 선택한 날짜 useState
-  const [reserveDay, setReserveDay] = useState({ startDay: "", endDay: "" });
+  const [reserveDay, setReserveDay] = useState({
+    startDay: "",
+    endDay: "",
+  });
+  const [reserveDogSize, setReserveDogSize] = useState([]);
 
   // 필터 폼 클릭 시 스크롤 이동
   const handleClickFilterForm = () => {
@@ -170,6 +174,14 @@ const MainPage = () => {
     setStartDay(_sd);
     setEndDay(_ed);
   };
+
+  // 강아지 사이즈 변경시 값 보관/전달
+  // size 전달 자료는 일단 보류
+  const changeDogsize = _dogInfo => {
+    console.log("엄마가 받았어요. : ", _dogInfo);
+    setReserveDogSize(_dogInfo);
+  };
+
   useEffect(() => {
     // console.log(reserveDay);
   }, [reserveDay]);
@@ -177,7 +189,9 @@ const MainPage = () => {
   // 호텔 상세페이지 이동
   const handleClickHotel = _hotel_pk => {
     // useNavigate 를 이용한 이동과 정보를 함께 보내기(state)
-    navigate(`/hoteldetail/${_hotel_pk}`, { state: { day: reserveDay } });
+    navigate(`/hoteldetail/${_hotel_pk}`, {
+      state: { day: reserveDay, dogSizeInfo: reserveDogSize },
+    });
   };
 
   // 호텔 리스트 페이지네이션
@@ -262,6 +276,7 @@ const MainPage = () => {
           <VisualForm onClick={handleClickFilterForm}>
             <MainSearchFrom
               changeSelectDay={changeSelectDay}
+              changeDogsize={changeDogsize}
               handleChangeFilter={handleChangeFilter}
               // setSaveFilterData={setSaveFilterData}
               startDay={startDay}

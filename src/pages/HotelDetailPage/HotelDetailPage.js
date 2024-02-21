@@ -10,9 +10,23 @@ const HotelDetailPage = () => {
   // hotel_pk
 
   // useNaviate 로 전달된 state 를 알아내기
-  const location = useLocation();
-  const { state } = location;
+  const { state } = useLocation();
+  // console.log("location 으로 받은 정보 : ", state);
+  // const { state } = location;
   const [resDay, setResDay] = useState(state.day);
+
+  // 샘플코드
+  //   [
+  //     {
+  //         "dogSize": 1,
+  //         "dogCount": 3
+  //     },
+  //     {
+  //         "dogSize": 2,
+  //         "dogCount": 9
+  //     }
+  // ]
+  const [resDogSize, setResDogSize] = useState(state.dogSizeInfo);
 
   // const [userPk, setUserPk] = useState(detailId);
   const [hotel_pk, setHotel_pk] = useState(detailId);
