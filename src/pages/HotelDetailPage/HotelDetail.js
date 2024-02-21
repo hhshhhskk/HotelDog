@@ -43,13 +43,11 @@ const HotelDetail = ({ detailId, hotelList, resDay }) => {
   const [reserveFormVisible, setReserveFormVisible] = useState(false);
   // 캘린더에서 날짜 선택 시 적용
   const [calendarOpen, setCalendarOpen] = useState(false);
+  // 상세페이지 calendar 에서 선택한 날짜가 담긴다.
   const [calendarNow, setCalendarNow] = useState(`${resDay}`);
   // 후기 모달 열고 닫기
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const hotel_pk = detailId;
-
-  // console.log("HotelDetail =========== : ", hotelList);
-  // console.log("dateSelectRoom =========== : ", roomList);
 
   // // useNaviate 로 전달된 state 를 알아내기
   // const location = useLocation();
@@ -61,6 +59,7 @@ const HotelDetail = ({ detailId, hotelList, resDay }) => {
 
   // detailId={detailId} resDay={resDay} setResDay={setResDay}
 
+  // reserveform 스크롤 위치
   useEffect(() => {
     window.addEventListener("scroll", scrollEvent);
     return () => window.removeEventListener("scroll", scrollEvent);
@@ -81,6 +80,7 @@ const HotelDetail = ({ detailId, hotelList, resDay }) => {
     // console.log("체크아웃 날짜 : ", _endDay);
     setCalendarNow({ startDay: _startDay, endDay: _endDay });
 
+    //
     const result = await getSelDateRmId(detailId, _startDay, _endDay, setData);
   };
 
@@ -221,18 +221,21 @@ const HotelDetail = ({ detailId, hotelList, resDay }) => {
       {/* {reserveFormVisible && ( */}
       <ReserveForm
         calendarOpen={calendarOpen}
-        calendarNow={calendarNow}
         calendarClose={calendarClose}
+        // 상세페이지에서 calendar 에서 선택된 날짜를 form에 보내줌
+        calendarNow={calendarNow}
         setCalendarOpen={setCalendarOpen}
         setCalendarNow={setCalendarNow}
+        // 담은 객실 정보를 form 에 보내준다
         selectedRoom={selectedRoom}
-        detailId={detailId}
+        hotel_pk={hotel_pk}
+        // main 에서 가져온 date 를 보내준다?
         resDay={resDay}
-        className={
-          reserveFormVisible ? "reserveForm" : "reserveForm reserveForm-hidden"
-        }
+        // className={
+        //   reserveFormVisible ? "reserveForm" : "reserveForm reserveForm-hidden"
+        // }
       >
-        <ReserveformBottom>뭘봐</ReserveformBottom>
+        <ReserveformBottom>form 밑에 영역 잡아놓고 싶은데 안잡히네! </ReserveformBottom>
       </ReserveForm>
       {/* } */}
     </div>

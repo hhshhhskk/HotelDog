@@ -64,6 +64,33 @@ export const getSelDateRmId = async (
   }
 };
 
+// 날짜 및 강아지 크기 선택시, ) 가능 객실 가져오기
+export const getDateDogId = async (
+  hotelPk,
+  startDate,
+  endDate,
+  dogs,
+  successFn,
+  failFn,
+  errorFn,
+) => {
+  try {
+    // http://112.222.157.156:5222/api/hotel/info/dogs?hotelPk=25&startDate=2024-02-01&endDate=2024-02-02&dogs=0
+    const url = `/api/hotel/info/dogs?hotelPk=${hotelPk}&startDate=${startDate}&endDate=${endDate}&dogs=${dogs}`;
+    const res = await jwtAxios.get(url);
+
+    const status = res.status.toString();
+
+    if (status.charAt(0) === "2") {
+      successFn(res.data);
+    } else {
+      failFn("전송 오류입니다.");
+    }
+  } catch (error) {
+    errorFn("서버에러에요");
+  }
+};
+
 // 리뷰 get (3 pagination)
 export const getReview = async (
   hotel_pk,
