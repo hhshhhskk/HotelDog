@@ -77,12 +77,12 @@ export const boardMyCommentListAPI = async page => {
   }
 };
 
-// 게시글 상세페이지 API (댓글 포함)
-export const boardDetailAPI = async (boardPk, page) => {
+// 게시글 상세페이지 API
+export const boardDetailAPI = async boardPk => {
   try {
     const res = await jwtAxios({
       method: "get",
-      url: `/api/board/view?boardPk=${boardPk}&page=${page}`,
+      url: `/api/board/view?boardPk=${boardPk}`,
       headers: {
         "Content-Type": "application/json",
       },
