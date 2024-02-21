@@ -26,6 +26,7 @@ const initState = {
   dogdesc: "",
   hotel_room_pk: "",
 };
+
 const ReserveForm = ({
   calendarOpen,
   calendarNow,
@@ -33,21 +34,26 @@ const ReserveForm = ({
   setCalendarOpen,
   setCalendarNow,
   selectedRoom,
-  detailId,
+  hotel_pk,
   resDay,
 }) => {
   console.log("selectedRoom : ", selectedRoom);
   const navigate = useNavigate();
-  // console.log("ReserveForm", detailId);
-
   const [showDogSizeOptions, setShowDogSizeOptions] = useState(false); // 강아지 크기 옵션 표시 여부를 관리하는 상태
   const dogSizeOptionsRef = useRef(null); // ul 요소의 ref 설정
-  const toggleDogSizeOptions = () => {
-    setShowDogSizeOptions(!showDogSizeOptions); // 상태를 반전시켜 강아지 크기 옵션의 표시 여부를 변경
-  };
+  // 초기 룸 값 받기
+  const [dogInfo, setDogInfo] = useState(initState);
+  // 담아준 목록을 관리를 함.
+  const [reserveList, setReserveList] = useState([]);
+  // 선택된 강아지 크기를 저장하는 상태
+  const [selectedDogSize, setSelectedDogSize] = useState("");
 
+  // 상태를 반전시켜 강아지 크기 옵션의 표시 여부를 변경
+  const toggleDogSizeOptions = () => {
+    setShowDogSizeOptions(!showDogSizeOptions);
+  };
+  // ul 바깥의 영역을 클릭했을 때 ul을 숨기는 이벤트 핸들러
   useEffect(() => {
-    // ul 바깥의 영역을 클릭했을 때 ul을 숨기는 이벤트 핸들러
     const handleClickOutside = event => {
       if (
         dogSizeOptionsRef.current &&
@@ -67,8 +73,6 @@ const ReserveForm = ({
   const handleDogSizeButtonClick = () => {
     setShowDogSizeOptions(!showDogSizeOptions);
   };
-  // 초기 룸 값 받기
-  const [dogInfo, setDogInfo] = useState(initState);
 
   useEffect(() => {
     setDogInfo({ ...initState, hotel_room_pk: dogInfo.hotel_room_pk });
@@ -80,6 +84,7 @@ const ReserveForm = ({
     //  setDogDesc(e.target.value); // textarea의 값 변경 시 상태 업데이트
     console.log(dogInfo);
   };
+
   // form 제출
   const handleSubmit = e => {
     e.preventDefault();
@@ -92,11 +97,6 @@ const ReserveForm = ({
     // setDogInfo(initState);
   };
 
-  // 담기 버튼 클릭 시, 예약 중인 객실에 목록이 뜨도록 해야한다.
-  // 예약을 담았는지 아닌지 체크 해주 상태
-  // const [checkReservation, setCheckReservation] = useState(false);
-  // 담아준 목록을 관리를 함.
-  const [reserveList, setReserveList] = useState([]);
   const handleListPlus = e => {
     // 담기가 정상처리가된다면...
     e.preventDefault();
@@ -154,11 +154,8 @@ const ReserveForm = ({
       item => item.hotel_room_pk === data.hotel_room_pk,
     );
     if (checkRookPK.length > 0) {
-      // alert("새로운 방을 선택해주세요.");
       // return;
     }
-    // console.log("checkRookPK", checkRookPK);
-
     setReserveList(prev => [...prev, data]);
     // setCheckReservation(true);
     dogInfo.dogdesc = "";
@@ -172,7 +169,6 @@ const ReserveForm = ({
   //   console.log(reserveList);
   // }, [reserveList]);
 
-  const [selectedDogSize, setSelectedDogSize] = useState(""); // 선택된 강아지 크기를 저장하는 상태
   const handleDogSizeSelect = size => {
     // 선택된 강아지 크기가 현재 선택한 크기와 같으면 초기화
     if (selectedDogSize === size) {
@@ -218,10 +214,6 @@ const ReserveForm = ({
     setReserveList(arr);
   };
 
-  // 후기 모달 관련
-
-  // const calendarClose = () => {};
-
   // 자식 컴포넌트 즉, calendar 에서 알려줘야 다른 컴포넌트에 전달할 수 있다.
   const [reserveDay, setReserveDay] = useState({ startDay: "", endDay: "" });
   const changeSelectDay = (_st, _ed) => {
@@ -239,6 +231,7 @@ const ReserveForm = ({
     // document.body.style.overflow = "hidden";
   };
 
+  // 예약 완료 시, 데이터 보내기 sendData
   const handleMoveCompletedPage = e => {
     if (!calendarNow.startDay) {
       alert("날짜를 선택하세요.");
@@ -277,7 +270,7 @@ const ReserveForm = ({
     // ]
     const sendData = [
       {
-        hotel_pk: parseInt(detailId),
+        hotel_pk: parseInt(hotel_pk),
         from_date: calendarNow.startDay,
         to_date: calendarNow.endDay,
         dog_info: reserveList,
@@ -472,7 +465,6 @@ const ReserveForm = ({
 
                 <textarea
                   name="dogdesc"
-                  // 진짜 얘가 문제네. 있으니 textarea 가 안써지네.
                   value={dogInfo.dogdesc}
                   onChange={e => {
                     handleChange(e);
