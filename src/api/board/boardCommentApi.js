@@ -1,5 +1,23 @@
 import jwtAxios from "../../utils/jwtUtil";
 
+// 게시판 댓글 리스트 API
+export const commentAPI = async (boardPk, page) => {
+  try {
+    const res = await jwtAxios({
+      method: "get",
+      url: `/api/board/comment?boardPk=${boardPk}&page=${page}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return res.data;
+  } catch (error) {
+    // 오류가 발생했을 때의 처리
+    console.log(error);
+    return error.response.status;
+  }
+};
+
 // 게시판 댓글 등록 API
 export const commentCreateAPI = async data => {
   try {

@@ -15,6 +15,7 @@ import { useQuery } from "react-query";
 import { boardDeleteAPI, boardDetailAPI } from "../../../api/board/boardApi";
 import { useNavigate, useParams } from "react-router-dom";
 import {
+  commentAPI,
   commentCreateAPI,
   commentDeleteAPI,
   commentUpdateAPI,
@@ -317,12 +318,38 @@ const BoardDetailPage = () => {
     idx: "",
   });
   const [commentModify, setCommentModify] = useState("");
-  const { data, isLoading, isSuccess, refetch } = useQuery(
+
+  // 게시글 리스트
+  const { data, isSuccess: boardSuccess } = useQuery(
+    ["boardDetail", boardPk],
+    () => {
+      const fetchData = async () => {
+        try {
+          const result = await boardDetailAPI(boardPk);
+          return result;
+        } catch {
+          console.log("에러");
+        }
+      };
+
+      return fetchData();
+    },
+    {
+      enabled: Boolean(boardPk), // boardPk 값이 truthy일 때만 쿼리를 활성화
+    },
+  );
+  // 댓글 리스트
+  const {
+    data: commentsData,
+    isLoading,
+    isSuccess,
+    refetch,
+  } = useQuery(
     ["boardDetail", boardPk, commentPage],
     () => {
       const fetchData = async () => {
         try {
-          const result = await boardDetailAPI(boardPk, commentPage);
+          const result = await commentAPI(boardPk, commentPage);
           return result;
         } catch {
           console.log("에러");
@@ -338,8 +365,8 @@ const BoardDetailPage = () => {
 
   let sortedComments = [];
   if (isSuccess) {
-    const sortData = { ...data };
-    sortedComments = [...sortData.comments].sort((a, b) => {
+    const sortData = { ...commentsData };
+    sortedComments = [...sortData.commentInfoVoList].sort((a, b) => {
       const dateA = new Date(a.createdAt);
       const dateB = new Date(b.createdAt);
 
@@ -381,7 +408,7 @@ const BoardDetailPage = () => {
       alert("수정할 댓글을 작성해주세요.");
     } else {
       const commentData = {
-        commentPk: data?.comments[idx].commentPk,
+        commentPk: commentsData?.commentInfoVoList[idx].commentPk,
         comment: commentModify,
       };
       const result = await commentUpdateAPI(commentData);
@@ -396,7 +423,7 @@ const BoardDetailPage = () => {
 
   return (
     <BoardDetailWrap>
-      {isLoading || !isSuccess || (
+      {isLoading || !boardSuccess || (
         <BoardContent>
           <BoardTitle>
             <BoardTitleLeft>
@@ -444,7 +471,9 @@ const BoardDetailPage = () => {
                 src={`${process.env.PUBLIC_URL}/images/board/comment.svg`}
                 alt=""
               />
-              <DetailCommentCnt>댓글({data?.commentCount})</DetailCommentCnt>
+              <DetailCommentCnt>
+                댓글({commentsData?.commentCount})
+              </DetailCommentCnt>
               <DetailCommentFilter>
                 {["최신순", "등록순"].map((data, idx) => {
                   return (
@@ -462,8 +491,8 @@ const BoardDetailPage = () => {
                 })}
               </DetailCommentFilter>
             </DetailCommentTop>
-            {data?.comments[0] &&
-              data.comments.map((item, idx) => {
+            {commentsData?.commentInfoVoList[0] &&
+              commentsData.commentInfoVoList.map((item, idx) => {
                 return (
                   <CommentDiv key={idx}>
                     <CommentDivTop>
@@ -534,7 +563,7 @@ const BoardDetailPage = () => {
               <CommentBtn onClick={commentBtnClicked}>등록</CommentBtn>
             </CommentInputDiv>
             <BoardPagination
-              totalPage={data?.commentMaxPage}
+              totalPage={commentsData?.commentMaxPage}
               nowPage={commentPage}
               setNowPage={setCommentPage}
             />
