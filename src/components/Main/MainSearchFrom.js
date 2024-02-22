@@ -31,6 +31,7 @@ import Calendar, { getCurrentDate, getTomorrowDate } from "../Common/Calendar";
 
 const MainSearchFrom = ({
   changeSelectDay,
+  changeDogsize,
   setSaveFilterData,
   handleChangeFilter,
   startDay,
@@ -108,7 +109,13 @@ const MainSearchFrom = ({
   const calendarClose = (_sd, _ed) => {
     // 메인 변수에 전달
     changeSelectDay(_sd, _ed);
+    // console.log("_sd와 _ed가 담기니?", _sd, _ed);
     handleCLickDropdownClose();
+  };
+
+  // 사이즈 선택 완료시 보관
+  const handleDogSizeSelect = _dogInfo => {
+    changeDogsize(_dogInfo);
   };
 
   // 반려견 정보에 대한 useState
@@ -250,6 +257,10 @@ const MainSearchFrom = ({
     }
 
     // console.log("최종 데이터 전송 :", formData);
+
+    // 강아지 사이즈 정보 저장
+    console.log("강아지 사이즈 정보 dogInfo : ", dogInfo);
+    handleDogSizeSelect(dogInfo);
 
     // 메인페이지 함수에 전달
     handleChangeFilter(formData);
