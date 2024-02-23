@@ -221,6 +221,7 @@ const SignUpPage = () => {
             </InnerDiv>
             <InputName>비밀번호</InputName>
             <InputBox
+              type="password"
               {...register("password", {
                 required: "비밀번호는 필수사항입니다.",
                 validate: value => {
@@ -236,6 +237,7 @@ const SignUpPage = () => {
             />
             <InputName>비밀번호 확인</InputName>
             <InputBox
+              type="password"
               {...register("passwordcheck", {
                 required: "비밀번호 확인은 필수사항입니다.",
                 validate: value =>
