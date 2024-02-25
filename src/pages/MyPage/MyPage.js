@@ -7,6 +7,7 @@ import LikeList from "./LikeList";
 import Review from "./Review";
 import Booking from "./Booking";
 import Mydog from "./Mydog";
+import Resign from "./Resign";
 
 const MyPageWrap = styled.div`
   position: relative;
@@ -26,7 +27,7 @@ const MyPageSide = styled.div`
   position: relative;
   padding: 35px;
   width: 250px;
-  height: 320px;
+  height: 280px;
   background-color: #fffaf0;
   border-radius: 10px;
 `;
@@ -105,6 +106,7 @@ const MyPage = () => {
     "찜한 호텔",
     "이용 후기",
   ];
+  const categoryBottom = ["회원 탈퇴"];
 
   const [selectedCategory, setSelectedCategory] = useState(0);
 
@@ -124,6 +126,8 @@ const MyPage = () => {
         return <LikeList />;
       case 4:
         return <Review />;
+      case 5:
+        return <Resign />;
       default:
         return null;
     }
@@ -163,14 +167,20 @@ const MyPage = () => {
             </SideTop>
             <SideBut>
               <ul>
-                <li>
-                  <p>설정</p>
-                </li>
-                <li>
-                  <p>QnA</p>
-                </li>
-                <li>
-                  <p>고객센터</p>
+                {/* 회원 탈퇴 메뉴 */}
+                <li onClick={() => setSelectedCategory(categoryTop.length)}>
+                  <p
+                    style={{
+                      color:
+                        selectedCategory === categoryTop.length
+                          ? "#654222"
+                          : "#969696",
+                      fontWeight:
+                        selectedCategory === categoryTop.length ? "600" : "400",
+                    }}
+                  >
+                    {categoryBottom[0]}
+                  </p>
                 </li>
               </ul>
             </SideBut>
