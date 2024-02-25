@@ -7,7 +7,9 @@ import MainSearchFrom from "../../components/Main/MainSearchFrom";
 import TopButton from "../../components/Main/TopButton";
 import useCustomLogin from "../../hooks/useCustomLogin";
 import {
+  postAddHotelListAsync,
   postHotelListAsync,
+  postJwtAddHotelListAsync,
   postJwtHotelListAsync,
 } from "../../redux/searchSlice";
 import {
@@ -145,10 +147,8 @@ const MainPage = () => {
     setSaveFilterData(_formData);
 
     if (isLogin) {
-      // 만약 로그인이 되었다면
       dispatch(postJwtHotelListAsync({ page: 1, setPostData: _formData }));
     } else {
-      // 만약 로그인이 아니라면
       dispatch(postHotelListAsync({ page: 1, setPostData: _formData }));
     }
 
@@ -194,63 +194,26 @@ const MainPage = () => {
     });
   };
 
-  // 호텔 리스트 페이지네이션
-  // const handleClickPage = async () => {
-  //   try {
-  //     // 다음 페이지 데이터를 가져오기
-  //     const nextPage = page + 1;
-  //     // let nowData = { saveFilterData, page: nextPage };
-  //     dispatch(
-  //       postHotelListAsync({ page: nextPage, setPostData: saveFilterData }),
-  //     );
-  //     // if (isLogin) {
-  //     //   // 만약 로그인이 되었다면
-  //     //   dispatch(postJwtHotelListAsync({ page: 1, setPostData: _formData }));
-  //     // } else {
-  //     //   // 만약 로그인이 아니라면
-  //     //   dispatch(postHotelListAsync({ page: 1, setPostData: _formData }));
-  //     // }
-  //     const LoginState = isLogin ? postJwtHotelListAPI : postHotelListAPI;
-  //     const data = await LoginState({
-  //       page: nextPage,
-  //       setPostData: postData,
-  //     });
-  //     // 현재 호텔 리스트 데이터와 새로운 데이터를 합치기
-  //     const prevData = { ...hotelListData };
-  //     const mergedData = {
-  //       hotel_advertise_list: data.hotel_advertise_list,
-  //       hotel_list: [...prevData.hotel_list, ...data.hotel_list],
-  //     };
-  //     // setHotelListData(mergedData);
-  //     // 페이지 번호 업데이트
-  //     setPage(nextPage);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  const handleClickPage = async () => {
+  // 호텔리스트 페이지네이션
+  const handleClickNextPage = async saveFilterData => {
+    console.log("뭐가 담겨", saveFilterData);
     try {
-      // 다음 페이지 데이터를 가져오기
       const nextPage = page + 1;
-
-      // 현재 saveFilterData와 nextPage를 사용하여 호텔 리스트 데이터 요청
-      const data = await (isLogin ? postJwtHotelListAPI : postHotelListAPI)({
-        page: nextPage,
-        setPostData: saveFilterData,
-      });
-
-      // 현재 호텔 리스트 데이터와 새로운 데이터를 합치기
-      const prevData = { ...hotelListData };
-      const mergedData = {
-        hotel_advertise_list: data.hotel_advertise_list,
-        hotel_list: [...prevData.hotel_list, ...data.hotel_list],
-      };
-
-      // 호텔 리스트 업데이트
-      // setHotelListData(mergedData);
-
-      // 페이지 번호 업데이트
-      setPage(nextPage);
+      if (isLogin) {
+        dispatch(
+          postJwtAddHotelListAsync({
+            page: nextPage,
+            setPostData: saveFilterData,
+          }),
+        );
+      } else {
+        dispatch(
+          postAddHotelListAsync({
+            page: nextPage,
+            setPostData: saveFilterData,
+          }),
+        );
+      }
     } catch (error) {
       console.log(error);
     }
@@ -352,7 +315,7 @@ const MainPage = () => {
             ))}
           </HotelCardDiv>
           {/* 페이지네이션 버튼 */}
-          <HotelPlusBtDiv onClick={handleClickPage}>
+          <HotelPlusBtDiv onClick={handleClickNextPage}>
             <HotelPlusBt>더 불러오기</HotelPlusBt>
             <img
               src={`${process.env.PUBLIC_URL}/images/hotelPlusArrow2.svg`}
