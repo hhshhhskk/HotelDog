@@ -122,14 +122,58 @@ const SideBar = () => {
     setCateState(cateNum);
   };
 
+  return (
+    <SideWrapper>
+      <SideHeader>
+        <SideHeaderNameBox>
+          <SideHeaderName>테스트</SideHeaderName>
+          <SideHeaderGreet>님, 안녕하세요 :)</SideHeaderGreet>
+        </SideHeaderNameBox>
+        <SideHeaderEmailBox>testId@naver.com</SideHeaderEmailBox>
+      </SideHeader>
+      <SideContents>
+        {adminCategorys.map((item, idx) => (
+          <div key={idx}>
+            <SideCategorys>{item.category}</SideCategorys>
+            {Object.values(item)
+              .slice(1)
+              .map((value, key) => (
+                <SideCategoryItems
+                  key={key}
+                  itemState={idx === 0 ? key : key + 2}
+                  cateState={cateState}
+                >
+                  <SideCategoryItemImg
+                    src={`${
+                      process.env.PUBLIC_URL
+                    }/admin/images/Sidebar/admin/adminSideIcon${
+                      idx === 0 ? key : key + 2
+                    }_${cateState === (idx === 0 ? key : key + 2) ? 1 : 0}.svg`}
+                  />
+                  <SideCategoryItemText
+                    onClick={e => {
+                      const cateNum = idx === 0 ? key : key + 2;
+                      categoryClicked(e, cateNum);
+                    }}
+                  >
+                    {value}
+                  </SideCategoryItemText>
+                </SideCategoryItems>
+              ))}
+          </div>
+        ))}
+      </SideContents>
+    </SideWrapper>
+  );
+
   // return (
   //   <SideWrapper>
   //     <SideHeader>
   //       <SideHeaderNameBox>
-  //         <SideHeaderName>테스트</SideHeaderName>
+  //         <SideHeaderName>최관리</SideHeaderName>
   //         <SideHeaderGreet>님, 안녕하세요 :)</SideHeaderGreet>
   //       </SideHeaderNameBox>
-  //       <SideHeaderEmailBox>testId@naver.com</SideHeaderEmailBox>
+  //       <SideHeaderEmailBox>최고관리자@naver.com</SideHeaderEmailBox>
   //     </SideHeader>
   //     <SideContents>
   //       {categorys.map((item, idx) => (
@@ -142,22 +186,19 @@ const SideBar = () => {
   //                 key={key}
   //                 itemState={idx === 0 ? key : key + 2}
   //                 cateState={cateState}
+  //                 onClick={e => {
+  //                   const cateNum = idx === 0 ? key : key + 2;
+  //                   categoryClicked(e, cateNum);
+  //                 }}
   //               >
   //                 <SideCategoryItemImg
   //                   src={`${
   //                     process.env.PUBLIC_URL
-  //                   }/admin/images/Sidebar/sideIcon${
+  //                   }/admin/images/Sidebar/buisness/sideIcon${
   //                     idx === 0 ? key : key + 2
   //                   }_${cateState === (idx === 0 ? key : key + 2) ? 1 : 0}.svg`}
   //                 />
-  //                 <SideCategoryItemText
-  //                   onClick={e => {
-  //                     const cateNum = idx === 0 ? key : key + 2;
-  //                     categoryClicked(e, cateNum);
-  //                   }}
-  //                 >
-  //                   {value}
-  //                 </SideCategoryItemText>
+  //                 <SideCategoryItemText>{value}</SideCategoryItemText>
   //               </SideCategoryItems>
   //             ))}
   //         </div>
@@ -165,47 +206,6 @@ const SideBar = () => {
   //     </SideContents>
   //   </SideWrapper>
   // );
-
-  return (
-    <SideWrapper>
-      <SideHeader>
-        <SideHeaderNameBox>
-          <SideHeaderName>최관리</SideHeaderName>
-          <SideHeaderGreet>님, 안녕하세요 :)</SideHeaderGreet>
-        </SideHeaderNameBox>
-        <SideHeaderEmailBox>최고관리자@naver.com</SideHeaderEmailBox>
-      </SideHeader>
-      <SideContents>
-        {categorys.map((item, idx) => (
-          <div key={idx}>
-            <SideCategorys>{item.category}</SideCategorys>
-            {Object.values(item)
-              .slice(1)
-              .map((value, key) => (
-                <SideCategoryItems
-                  key={key}
-                  itemState={idx === 0 ? key : key + 2}
-                  cateState={cateState}
-                  onClick={e => {
-                    const cateNum = idx === 0 ? key : key + 2;
-                    categoryClicked(e, cateNum);
-                  }}
-                >
-                  <SideCategoryItemImg
-                    src={`${
-                      process.env.PUBLIC_URL
-                    }/admin/images/Sidebar/buisness/sideIcon${
-                      idx === 0 ? key : key + 2
-                    }_${cateState === (idx === 0 ? key : key + 2) ? 1 : 0}.svg`}
-                  />
-                  <SideCategoryItemText>{value}</SideCategoryItemText>
-                </SideCategoryItems>
-              ))}
-          </div>
-        ))}
-      </SideContents>
-    </SideWrapper>
-  );
 };
 
 export default SideBar;

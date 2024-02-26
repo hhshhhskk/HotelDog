@@ -16,7 +16,7 @@ const SuperAdminLayout = () => {
     <Wrapper>
       <SideBar />
       <Contents>
-        <h1>어드민 페이지 레이아웃</h1>
+        {/* <h1>어드민 페이지 레이아웃</h1> */}
         <Outlet />
       </Contents>
     </Wrapper>

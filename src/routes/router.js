@@ -18,9 +18,9 @@ import AdminLayout from "../layouts/AdminLayout";
 import AdminErrorPage from "../pages/admin/Common/ErrorPage/AdminErrorPage";
 import AdminLoginPage from "../pages/admin/Common/LoginPage/AdminLoginPage";
 import AdminSignUpPage from "../pages/admin/Common/SignUpPage/AdminSignUpPage";
-import RoomPage from "../pages/admin/Business/RoomPage/RoomPage";
 import HotelInfoPage from "../pages/admin/Business/HotelPage/HotelInfoPage";
 import SuperAdminLayout from "../layouts/AdminLayout";
+import RoomPage from "../pages/admin/RoomPage/RoomPage";
 
 export const RouterInfo = [
   {
