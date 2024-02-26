@@ -11,16 +11,16 @@ const Wrapper = styled.div`
 
 const Contents = styled.div``;
 
-const SuperAdminLayout = () => {
+const adminLayout = () => {
   return (
     <Wrapper>
       <SideBar />
       <Contents>
-        <h1>어드민 페이지 레이아웃</h1>
+        <h1>슈퍼어드민 페이지 레이아웃</h1>
         <Outlet />
       </Contents>
     </Wrapper>
   );
 };
 
-export default SuperAdminLayout;
+export default adminLayout;

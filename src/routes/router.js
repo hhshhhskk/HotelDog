@@ -19,6 +19,8 @@ import AdminErrorPage from "../pages/admin/Common/ErrorPage/AdminErrorPage";
 import AdminLoginPage from "../pages/admin/Common/LoginPage/AdminLoginPage";
 import AdminSignUpPage from "../pages/admin/Common/SignUpPage/AdminSignUpPage";
 import RoomPage from "../pages/admin/Business/RoomPage/RoomPage";
+import HotelInfoPage from "../pages/admin/Business/HotelPage/HotelInfoPage";
+import SuperAdminLayout from "../layouts/AdminLayout";
 
 export const RouterInfo = [
   {
@@ -94,6 +96,11 @@ export const RouterInfo = [
         element: <RoomPage />,
         label: "room",
       },
+      {
+        path: "/admin/hotelInfo",
+        element: <HotelInfoPage />,
+        label: "hotelInfo",
+      },
     ],
   },
   // 사이드바 없는 관리자
@@ -106,5 +113,18 @@ export const RouterInfo = [
     path: "/admin/signup",
     element: <AdminSignUpPage />,
     errorElement: <AdminErrorPage />,
+  },
+  // 최고 관리자
+  {
+    path: "/superAdmin",
+    element: <SuperAdminLayout />,
+    errorElement: <AdminErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <RoomPage />,
+        label: "room",
+      },
+    ],
   },
 ];
