@@ -22,7 +22,7 @@ const ModalContent = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 650px;
-  height: 750px;
+  height: 700px;
   background-color: #fff;
   padding: 30px;
   border-radius: 10px;
@@ -50,29 +50,18 @@ const ModalTitle = styled.div`
   }
 `;
 
-const ReviewTxt = styled.form`
+const ResignList = styled.form`
   position: relative;
-  textarea {
-    position: relative;
-    width: 590px;
-    height: 290px;
-    resize: none;
-    border-radius: 5px;
-    border: 1px solid #eee;
-    background: #fafafa;
-    padding: 20px;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-  span {
-    width: 150px;
-    height: 50px;
-  }
+  display: flex;
+  justify-content: center;
+  width: 580px;
+  height: 210px;
+  background-color: #eeeeee;
+  border-radius: 10px;
+  margin-bottom: 40px;
 `;
 
-const ReviewComplete = styled.button`
+const ResignBt = styled.button`
   position: relative;
   display: block;
   margin: 0 auto;
@@ -91,33 +80,7 @@ const ReviewComplete = styled.button`
     line-height: normal;
   }
 `;
-const ImgContetnts = styled.div`
-  position: relative;
-  display: flex;
-  width: 590px;
-  height: 100px;
-  gap: 10px;
 
-  margin-top: 20px;
-
-  cursor: pointer;
-  img {
-    position: relative;
-  }
-  input {
-    position: relative;
-
-    background-color: red;
-  }
-  button {
-    position: relative;
-    width: 80px;
-    height: 80px;
-    background-color: #fafafa;
-    border: 1px solid #eee;
-    border-radius: 5px;
-  }
-`;
 const ModalTxtContents = styled.div`
   position: relative;
   width: 580px;
@@ -128,9 +91,12 @@ const ModalTxtContents = styled.div`
   margin-bottom: 25px;
   padding: 30px;
   line-height: 16px;
+  font-size: 12px;
   h2 {
     position: relative;
     margin-bottom: 2px;
+    font-size: 12px;
+    color: #654222;
   }
   p {
     position: relative;
@@ -142,9 +108,22 @@ const ModalTxtContents = styled.div`
     margin-left: 10px;
   }
 `;
+const ListContents = styled.div`
+  position: relative;
+  width: 555px;
+  height: 150px;
+  background-color: lavender;
+  margin-top: 13px;
+`;
+const ContentsCate = styled.div`
+  position: relative;
+`;
+const ContentsDetail = styled.div`
+  position: relative;
+`;
 const ResignModal = ({ onCloseModal }) => {
   const handleModalClose = () => {
-    onCloseModal(); // 부모 컴포넌트로부터 전달받은 함수를 호출하여 모달을 닫습니다.
+    onCloseModal();
   };
   return (
     <ModalContainer>
@@ -170,15 +149,15 @@ const ResignModal = ({ onCloseModal }) => {
         <ModalTitle>
           <h2>환불 예약 내역</h2>
         </ModalTitle>
-        <ReviewTxt>
-          <p></p>
-        </ReviewTxt>
-
-        <ImgContetnts></ImgContetnts>
-
-        <ReviewComplete>
+        <ResignList>
+          <ListContents>
+            <ContentsCate></ContentsCate>
+            <ContentsDetail></ContentsDetail>
+          </ListContents>
+        </ResignList>
+        <ResignBt>
           <p>탈퇴 하기</p>
-        </ReviewComplete>
+        </ResignBt>
         <CloseButton onClick={handleModalClose}>
           <img src={`${process.env.PUBLIC_URL}/images/MyPage/close.svg`} />
         </CloseButton>
