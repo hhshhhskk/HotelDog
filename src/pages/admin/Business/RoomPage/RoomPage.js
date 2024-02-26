@@ -17,8 +17,8 @@ const RmMenuSearchFlex = styled.div`
 `;
 const RmTodaySearch = styled.input`
   position: relative;
-  background: url(${process.env.PUBLIC_URL}/admin/images/RmToday/search.svg)
-    // no-repeat 5px center;
+  background: url(${process.env.PUBLIC_URL}/admin/images/RmToday/search.svg);
+  // no-repeat 5px center;
   background-size: 15px;
   color: #000;
   font-size: 12px;
@@ -142,8 +142,8 @@ const RmPageModalHead = styled.div`
   color: #999999;
   font-weight: 600;
   text-align: center;
-  margin: 87px 231px; 50px 231px; 
-  `;
+  margin: 87px 231px 50px 231px;
+`;
 const RmModalClose = styled.img`
   position: relative;
   width: 18px;
@@ -203,7 +203,7 @@ const RmModalDogContent = styled.div`
   width: 550px;
   color: #fff;
   border-radius: 10px;
-  margin: 50px 50px; 50px 70px; 
+  margin: 50px 50px 50px 70px;
   img {
     display: block;
     margin: 30px 0;
