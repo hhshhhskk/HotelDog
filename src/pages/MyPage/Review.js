@@ -1,6 +1,12 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
-import { getReviewApi, reviewDeleteApi } from "../../api/mypage/mypageApi";
+import {
+  getReviewApi,
+  mypageBookingListApi,
+  reviewDeleteApi,
+} from "../../api/mypage/mypageApi";
+import ReviewModal from "../../components/MyPage/Booking/ReviewModal";
+import ReviewPutModal from "../../components/MyPage/ReviewPutModal";
 
 const ReviewPage = styled.div`
   margin-left: 85px;
@@ -177,21 +183,6 @@ const ReviewTxt = styled.div`
   font-weight: 400;
   line-height: normal;
 `;
-const Star = styled.div`
-  position: relative;
-  margin-top: 20px;
-  cursor: pointer;
-  text-align: center;
-  margin-bottom: 25px;
-  p {
-    margin-bottom: 6px;
-    color: #9d9d9d;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-  }
-`;
 
 const Review = () => {
   const [isFetchHovered, setIsFetchHovered] = useState(false);
@@ -209,19 +200,19 @@ const Review = () => {
   const toggleOptionBoxVisibility = index => {
     setVisibleOptionBoxIndex(visibleOptionBoxIndex === index ? null : index); // 현재 인덱스의 OptionBox 가시성을 토글
   };
-
   // 리뷰내역 불러오기
   const [reviewData, setReviewData] = useState([]);
+  const getReviewData = async () => {
+    try {
+      const data = await getReviewApi();
+      console.log("Returned review data:", data);
+      setReviewData(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const getReviewData = async () => {
-      try {
-        const data = await getReviewApi();
-        console.log("Returned review data:", data);
-        setReviewData(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getReviewData();
   }, []);
 
@@ -240,6 +231,20 @@ const Review = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [reviewPopData, setReviewPopData] = useState(null);
+  // 후기 모달 열기
+  const openReviewModal = review => {
+    setReviewPopData(review);
+    setIsReviewModalOpen(true);
+  };
+
+  // 후기 모달 닫기
+  const closeReviewModal = () => {
+    setIsReviewModalOpen(false);
+    getReviewData();
   };
 
   return (
@@ -276,6 +281,7 @@ const Review = () => {
                       <ReviewFetch
                         onMouseEnter={handleFetchHover}
                         onMouseLeave={handleFetchHover}
+                        onClick={() => openReviewModal(review)} // 모달 열기
                       >
                         <p
                           style={{
@@ -317,6 +323,19 @@ const Review = () => {
             </ReviewContents>
           ))}
         </ReviewContentsWrap>
+      )}
+
+      {isReviewModalOpen ? (
+        <ReviewPutModal
+          isOpen={true}
+          onClose={closeReviewModal}
+          // 전체 목록 전체 데이터
+          // reviewData={reviewData}
+          // 그 중에 선택된 거 하나
+          reviewData={reviewPopData}
+        />
+      ) : (
+        ""
       )}
     </ReviewPage>
   );

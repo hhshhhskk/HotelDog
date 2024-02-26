@@ -1,8 +1,11 @@
+import React, { useEffect, useState } from "react";
+import {
+  getReviewApi,
+  postReviewApi,
+  reviewPutApi,
+} from "../../api/mypage/mypageApi";
 import styled from "@emotion/styled";
-import React, { useRef, useState } from "react";
-import { postReviewApi } from "../../../api/mypage/mypageApi";
 
-// 모달을 감싸는 컨테이너 스타일 정의
 const ModalContainer = styled.div`
   position: fixed;
   top: 0;
@@ -151,21 +154,20 @@ const Star = styled.div`
   }
 `;
 
-// ReviewModal 컴포넌트 정의
-const ReviewModal = ({
-  isOpen,
-  onClose,
-  bookingData,
-  children,
-  onReviewSubmit,
-}) => {
+const ReviewPutModal = ({ isOpen, onClose, reviewData, children }) => {
   if (!isOpen) return null;
 
-  const [rating, setRating] = useState(5);
-  const [reviewText, setReviewText] = useState("");
+  console.log("ReviewPutModal 전달 받은 데이터 : ", reviewData);
+
+  useEffect(() => {
+    // 보관
+  }, [reviewData]);
+
+  const [rating, setRating] = useState(parseInt(reviewData.score) / 2);
+  const [reviewText, setReviewText] = useState(reviewData.comment);
 
   // 후기 이미지 선택 처리 함수
-  const [imgFileList, setImgFileList] = useState([]);
+  const [imgFileList, setImgFileList] = useState(reviewData.reviewPics);
   const [sendImgFileList, setSendImgFileList] = useState([]);
   const [imgFileListType, setImgFileListType] = useState([]);
   const handleChangeFile = e => {
@@ -225,7 +227,8 @@ const ReviewModal = ({
         new Blob(
           [
             JSON.stringify({
-              resPk: bookingData.res_pk,
+              reviewPk: reviewData.reviewPk,
+              resPk: reviewData.resPk,
               comment: reviewText,
               score: rating * 2,
             }),
@@ -246,10 +249,10 @@ const ReviewModal = ({
       }
       console.log(rating, reviewText, sendImgFileList[0]);
 
-      const result = await postReviewApi(formData);
+      const result = await reviewPutApi(formData);
       if (result === 1) {
         console.log("성공");
-        alert("후기가 작성되었습니다.");
+        alert("후기가 수정되었습니다.");
         // 모달 닫기
         onClose();
       }
@@ -278,8 +281,8 @@ const ReviewModal = ({
       <ModalContent>
         <ModalTitle>
           <h2>숙소 후기</h2>
-          <p>{bookingData.hotel_nm}</p>
-          <span>{bookingData.hotel_call}</span>
+          <p>{reviewData.hotelNm}</p>
+          <span>{reviewData.createdAt}</span>
           {/* ? 날짜는 어떻게 불러오지 */}
         </ModalTitle>
         <Star>
@@ -307,7 +310,7 @@ const ReviewModal = ({
           <p>
             <textarea
               placeholder="다른 회원들이 숙소를 이용할 때 도움이 될 수 있도록 느낀 점을 작성해주세요.
-이미지는 최대 3장까지 업로드가 가능합니다."
+  이미지는 최대 3장까지 업로드가 가능합니다."
               value={reviewText}
               onChange={e => setReviewText(e.target.value)}
             ></textarea>
@@ -336,7 +339,7 @@ const ReviewModal = ({
           {imgFileList.map((item, index) => (
             <div key={index} onClick={() => handleClickDeleteFile(index)}>
               <img
-                src={item}
+                src={`http://112.222.157.156:5222/pic/review/${item}`}
                 style={{
                   width: "80px",
                   height: "80px",
@@ -360,4 +363,4 @@ const ReviewModal = ({
   );
 };
 
-export default ReviewModal;
+export default ReviewPutModal;
