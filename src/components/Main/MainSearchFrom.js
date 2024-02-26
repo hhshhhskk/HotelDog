@@ -180,8 +180,7 @@ const MainSearchFrom = ({
   };
 
   // 필터 라디오 버튼 선택에 따른 이벤트
-  const handleClickRadio = theme => {
-    // console.log("라디오 ", theme);
+  const handleChangeRadio = theme => {
     setSelectRadio(prevState => ({
       ...prevState,
       [theme]: prevState[theme] === "yes" ? "no" : "yes",
@@ -414,8 +413,9 @@ const MainSearchFrom = ({
                         <input
                           type="radio"
                           value="yes"
-                          defaultChecked={selectRadio[option] === "yes"}
-                          onClick={() => handleClickRadio(option)}
+                          checked={selectRadio[option] === "yes"}
+                          // onClick={() => handleChangeRadio(option)}
+                          onChange={() => handleChangeRadio(option, "yes")}
                         />
                         <span>선택</span>
                       </label>
@@ -423,8 +423,9 @@ const MainSearchFrom = ({
                         <input
                           type="radio"
                           value="no"
-                          defaultChecked={selectRadio[option] === "no"}
-                          onClick={() => handleClickRadio(option)}
+                          checked={selectRadio[option] === "no"}
+                          // onClick={() => handleChangeRadio(option)}
+                          onChange={() => handleChangeRadio(option, "no")}
                         />
                         <span>미선택</span>
                       </label>
