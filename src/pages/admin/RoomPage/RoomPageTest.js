@@ -22,8 +22,74 @@ import {
   RmTodaySearch,
   TableWrap,
 } from "../../../styles/AdminPageStyle/RoomPageStyle/roomPageStyle";
+import { createColumnHelper, flexRender, useReactTable } from "@tanstack/react-table";
+
+// Define your row shape
+type RmReserve = {
+  checkbox: string, // 체크 : checkbox
+  number: string, // 번호 : number
+  reserveNumber: number, // 예약번호 : reserveNumber
+  nickname: number, // 닉네임 : nickname
+  roomType: string, // 객실유형 : roomType
+  dogInfo: number, // 반려견정보 : dogInfo
+  reservationData: number, // 예약날짜(체크인아웃) : reservationData
+  phoneNumber: number, // 전화번호 : phoneNumber
+  paymentAmount: number, // 결제금액 : paymentAmount
+  status: number, // 상태 : status
+};
 
 const RoomPage = () => {
+  // table data 담을 useState ( 상태관리用 )
+  const [data, setData] = React.useState([]);
+
+  // react-table 사용하기위한 함수 호출
+  const table = useReactTable({ columns, data });
+
+  const columnHelper = createColumnHelper<RmReserve>()
+  const columns = [
+    columnHelper.accessor('checkbox', {
+      header: () => '체크',
+      cell: info => info.getValue()
+    }),
+    columnHelper.accessor('checkbox', {
+      header: () => '번호',
+      cell: info => info.getValue()
+    }),
+    columnHelper.accessor('checkbox', {
+      header: () => '예약번호',
+      cell: info => info.getValue()
+    }),
+    columnHelper.accessor('checkbox', {
+      header: () => '닉네임',
+      cell: info => info.getValue()
+    }),
+    columnHelper.accessor('checkbox', {
+      header: () => '객실유형',
+      cell: info => info.getValue()
+    }),
+    columnHelper.accessor('checkbox', {
+      header: () => '반려견정보',
+      cell: info => info.getValue()
+    }),
+    columnHelper.accessor('checkbox', {
+      header: () => '예약날짜 (체크 인/아웃)',
+      cell: info => info.getValue()
+    }),
+    columnHelper.accessor('checkbox', {
+      header: () => '전화번호',
+      cell: info => info.getValue()
+    }),
+    columnHelper.accessor('checkbox', {
+      header: () => '결제금액',
+      cell: info => info.getValue()
+    }),
+    columnHelper.accessor('checkbox', {
+      header: () => '상태',
+      cell: info => info.getValue()
+    })
+    
+  ]
+
   return (
     <RmPageWrap>
       {/* header 영역 */}
@@ -78,41 +144,61 @@ const RoomPage = () => {
             <RmPageBt>퇴실완료</RmPageBt>
           </RmBtFlex>
           <TableWrap>
-            {/* 직접 html로 table 만들기 */}
             <table>
               <thead>
-                <tr width="100%">
-                  <th width="50px" scope="col">
-                    체크
-                  </th>
-                  <th width="50px">번호</th>
-                  <th width="80px">예약번호</th>
-                  <th width="120px">닉네임</th>
-                  <th width="195px">객실유형</th>
-                  <th width="120px">반려견 정보</th>
-                  <th width="220px">예약날짜 (체크 인/아웃)</th>
-                  <th width="130px">전화번호</th>
-                  <th width="110px">결제금액</th>
-                  <th width="130px">상태</th>
-                </tr>
+                {table.getHeaderGroups().map(headerGroupd => (
+                  <tr key={headerGroup.id} width="100%">
+                    {headerGroup.headers.map(header => (
+                      <th key={header.id} width="50px" scope="col">
+                        체크
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
               </thead>
+              {/* <thead>
+                <th width="50px">번호</th>
+                <th width="80px">예약번호</th>
+                <th width="120px">닉네임</th>
+                <th width="195px">객실유형</th>
+                <th width="120px">반려견 정보</th>
+                <th width="220px">예약날짜 (체크 인/아웃)</th>
+                <th width="130px">전화번호</th>
+                <th width="110px">결제금액</th>
+                <th width="130px">상태</th>
+              </thead> */}
 
               <tbody>
-                <tr>
-                  <td scope="row"></td>
-                  <td>1</td>
-                  <td>65813</td>
-                  <td>누룽지호랑이</td>
-                  <td>소형견 (3kg~ 7kg) 기준</td>
-                  <td>
-                    <button>정보보기</button>
-                  </td>
-                  <td>2024-02-13 / 2024-02-15</td>
-                  <td>010-1234-5678</td>
-                  <td>97,000원</td>
-                  <td>이용완료</td>
-                </tr>
-                <tr>
+                {table.getRowModel().rows.map(row => (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id} scope="row">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+                {/* <td>1</td>
+                <td>65813</td>
+                <td>누룽지호랑이</td>
+                <td>소형견 (3kg~ 7kg) 기준</td>
+                <td>
+                  <button>정보보기</button>
+                </td>
+                <td>2024-02-13 / 2024-02-15</td>
+                <td>010-1234-5678</td>
+                <td>97,000원</td>
+                <td>이용완료</td> */}
+                {/* <tr>
                   <td scope="row">
                     <input type="checkbox"></input>
                   </td>
@@ -129,7 +215,7 @@ const RoomPage = () => {
                   <td>
                     <button>예약취소</button>
                   </td>
-                </tr>
+                </tr> */}
                 <tr>
                   <td scope="row"></td>
                   <td>3</td>
