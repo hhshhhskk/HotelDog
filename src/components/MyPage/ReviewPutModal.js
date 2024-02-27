@@ -282,7 +282,7 @@ const ReviewPutModal = ({ isOpen, onClose, reviewData, children }) => {
         <ModalTitle>
           <h2>숙소 후기</h2>
           <p>{reviewData.hotelNm}</p>
-          <span>{reviewData.createdAt}</span>
+          <span>{reviewData.roomNm}</span>
           {/* ? 날짜는 어떻게 불러오지 */}
         </ModalTitle>
         <Star>
@@ -339,7 +339,7 @@ const ReviewPutModal = ({ isOpen, onClose, reviewData, children }) => {
           {imgFileList.map((item, index) => (
             <div key={index} onClick={() => handleClickDeleteFile(index)}>
               <img
-                src={`http://112.222.157.156:5222/pic/review/${item}`}
+                src={`http://112.222.157.156:5222/pic/review/${reviewData.reviewPk}/${item}`}
                 style={{
                   width: "80px",
                   height: "80px",

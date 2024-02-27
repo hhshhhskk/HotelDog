@@ -150,11 +150,16 @@ const ReviewDelete = styled.button`
 `;
 const ReviewImg = styled.div`
   position: relative;
-  width: 102px;
+  width: 300px;
+  display: flex;
   margin-bottom: 10px;
   overflow: hidden;
+
   img {
-    width: 102px;
+    position: relative;
+    width: 98px;
+    height: 98px;
+    object-fit: cover;
   }
 `;
 const HotelInfo = styled.div`
@@ -247,6 +252,7 @@ const Review = () => {
     getReviewData();
   };
 
+  console.log(reviewData);
   return (
     <ReviewPage>
       <PageTitle>
@@ -269,14 +275,12 @@ const Review = () => {
                     <ReviewOptionBt
                       onClick={() => toggleOptionBoxVisibility(index)}
                     >
-                      {" "}
                       {/* 인덱스 전달 */}
                       <img
                         src={`${process.env.PUBLIC_URL}/images/MyPage/reviewoption.svg`}
                       />
                     </ReviewOptionBt>
                     <OptionBox isVisible={visibleOptionBoxIndex === index}>
-                      {" "}
                       {/* 현재 인덱스에 대한 가시성 제어 */}
                       <ReviewFetch
                         onMouseEnter={handleFetchHover}
@@ -310,9 +314,14 @@ const Review = () => {
                   </ReviewOption>
                 </ReviewTop>
                 <ReviewImg>
-                  <img
-                    src={`${process.env.PUBLIC_URL}/images/MyPage/reviewimg.svg`}
-                  />
+                  {review.reviewPics.map((data, idx) => {
+                    return (
+                      <img
+                        key={idx}
+                        src={`http://112.222.157.156:5222/pic/review/${review.reviewPk}/${data}`}
+                      />
+                    );
+                  })}
                 </ReviewImg>
                 <HotelInfo>
                   <p>{review.hotelNm}</p>
