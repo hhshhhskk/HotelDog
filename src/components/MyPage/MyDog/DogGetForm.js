@@ -191,7 +191,7 @@ const Line = styled.div`
 
 const DogGetForm = ({ dogData, onDeleteData }) => {
   const [dogInfo, setDogInfo] = useState({});
-
+  const userPk = sessionStorage.getItem("userPk");
   const handleInputChange = e => {
     const { name, value } = e.target;
     setDogInfo(prevState => ({
@@ -227,11 +227,12 @@ const DogGetForm = ({ dogData, onDeleteData }) => {
       {dogData.map((dogInfo, index) => (
         <DogContents key={index}>
           <DogLeft hasImage={dogInfo?.dogPic}>
-            {" "}
             {/* hasImage prop 전달 */}
             <input type="file" accept="image/*" style={{ display: "none" }} />
-            <p>사진을 선택하세요 : </p>
-            <img src={dogInfo?.dogPic} alt="Selected" />
+            <img
+              src={`http://112.222.157.156:5222/pic/user/${userPk}/${dogInfo.userDogPk}/${dogInfo.dogPic}`}
+              alt="Selected"
+            />
           </DogLeft>
           <DogRight>
             <DogName>
