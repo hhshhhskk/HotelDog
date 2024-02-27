@@ -21,6 +21,7 @@ import AdminSignUpPage from "../pages/admin/Common/SignUpPage/AdminSignUpPage";
 import HotelInfoPage from "../pages/admin/Business/HotelPage/HotelInfoPage";
 import SuperAdminLayout from "../layouts/AdminLayout";
 import RoomPage from "../pages/admin/RoomPage/RoomPage";
+import HotelModifyPage from "../pages/admin/Business/HotelPage/HotelModifyPage";
 
 export const RouterInfo = [
   {
@@ -100,6 +101,11 @@ export const RouterInfo = [
         path: "/admin/hotelInfo",
         element: <HotelInfoPage />,
         label: "hotelInfo",
+      },
+      {
+        path: "/admin/hotelModify",
+        element: <HotelModifyPage />,
+        label: "hotelModify",
       },
     ],
   },
