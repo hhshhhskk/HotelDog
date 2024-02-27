@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useEffect, useState } from "react";
-import { getDogApi } from "../../../api/mypage/mypageApi";
+import React, { useState } from "react";
 
 const DogContents = styled.div`
   position: relative;
@@ -189,7 +188,7 @@ const Line = styled.div`
   border-left: 3px solid #654222;
 `;
 
-const DogGetForm = ({ dogData, onDeleteData }) => {
+const DogPutForm = ({ dogData, onDeleteData, onCancelEdit }) => {
   const [dogInfo, setDogInfo] = useState({});
 
   const handleInputChange = e => {
@@ -210,16 +209,6 @@ const DogGetForm = ({ dogData, onDeleteData }) => {
     } catch (error) {
       console.error("강아지 데이터 삭제 중 오류 발생:", error);
     }
-  };
-
-  const [isEditing, setIsEditing] = useState(false);
-
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-
-  const handleCancelEdit = () => {
-    setIsEditing(false);
   };
 
   return (
@@ -259,9 +248,9 @@ const DogGetForm = ({ dogData, onDeleteData }) => {
             </DogAge>
             <DogInfo>{dogInfo?.dogEtc}</DogInfo>
             <DogBt>
-              <DogCancel>수정 하기</DogCancel>
+              <DogCancel onClick={onCancelEdit}>수정 취소</DogCancel>
               <DogUp onClick={() => handleClickDogDelete(dogInfo?.userDogPk)}>
-                삭제 하기
+                등록하기
               </DogUp>
             </DogBt>
           </DogRight>
@@ -271,4 +260,4 @@ const DogGetForm = ({ dogData, onDeleteData }) => {
   );
 };
 
-export default DogGetForm;
+export default DogPutForm;
