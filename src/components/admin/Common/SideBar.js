@@ -2,6 +2,9 @@ import styled from "@emotion/styled";
 import React, { useState } from "react";
 
 const SideWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
   background-color: #323232;
   width: 300px;
   height: 100vh;

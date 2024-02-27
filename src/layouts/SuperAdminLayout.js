@@ -9,9 +9,11 @@ const Wrapper = styled.div`
   display: flex;
 `;
 
-const Contents = styled.div``;
+const Contents = styled.div`
+  margin-left: 300px;
+`;
 
-const adminLayout = () => {
+const SuperAdminLayout = () => {
   return (
     <Wrapper>
       <SideBar />
@@ -23,4 +25,4 @@ const adminLayout = () => {
   );
 };
 
-export default adminLayout;
+export default SuperAdminLayout;

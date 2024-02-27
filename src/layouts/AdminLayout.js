@@ -9,18 +9,19 @@ const Wrapper = styled.div`
   display: flex;
 `;
 
-const Contents = styled.div``;
+const Contents = styled.div`
+  margin-left: 300px;
+`;
 
-const SuperAdminLayout = () => {
+const AdminLayout = () => {
   return (
     <Wrapper>
       <SideBar />
       <Contents>
-        {/* <h1>어드민 페이지 레이아웃</h1> */}
         <Outlet />
       </Contents>
     </Wrapper>
   );
 };
 
-export default SuperAdminLayout;
+export default AdminLayout;
