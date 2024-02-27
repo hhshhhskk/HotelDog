@@ -91,45 +91,106 @@ export const RmPageBt = styled.button`
     opacity: 100%;
   }
 `;
-export const TableWrap = styled.div`
+// export const TableWrap = styled.div`
+//   width: 1200px;
+//   height: 612px;
+//   background-color: #fff;
+
+//   border: 1px solid #b9b9b9;
+//   border-radius: 4px;
+
+//   table {
+//     font-size: 12px;
+//     text-align: center;
+//     border-collapse: collapse;
+//     // border-collapse: separate;
+//     // border-spacing: 0 10px;
+//     tr,
+//     td {
+//       padding: 10px;
+//       border: 1px solid #999999;
+//       height: 38px;
+//     }
+//     thead {
+//       background-color: #323232;
+//       color: #fff;
+//     }
+//   }
+//   button {
+//     outline: none;
+//     border: 1px solid #b9b9b9;
+//     border-radius: 10px;
+//     cursor: pointer;
+//     background-color: #fff;
+//     padding: 5px;
+//     &:active {
+//       background-color: #b9b9b9;
+//     }
+//   }
+// `;
+export const StyledTableWrap = styled.div`
   width: 1200px;
   height: 612px;
   background-color: #fff;
+  /* border: 1px solid #b9b9b9; */
+  /* border-radius: 4px; */
 
-  border: 1px solid #b9b9b9;
-  border-radius: 4px;
-
-  table {
+  .ant-table {
     font-size: 12px;
     text-align: center;
     border-collapse: collapse;
-
-    // border-collapse: separate;
-    // border-spacing: 0 10px;
-
-    th,
-    td {
-      padding: 10px;
-      border: 1px solid #999999;
-      height: 38px;
-    }
-    thead {
-      background-color: #323232;
-      color: #fff;
-    }
   }
-  button {
+
+  .ant-table table {
+    border-collapse: collapse;
+    text-align: center;
+  }
+
+  .ant-table-thead > tr > th {
+    text-align: center;
+    background-color: #323232;
+    color: #fff;
+  }
+
+  .ant-table-tbody > tr > td {
+    padding: 10px;
+    border: 1px solid #999999;
+    height: 38px;
+    border-radius: 4px;
+  }
+
+  .ant-btn button {
     outline: none;
     border: 1px solid #b9b9b9;
     border-radius: 10px;
     cursor: pointer;
     background-color: #fff;
     padding: 5px;
-    &:active {
-      background-color: #b9b9b9;
-    }
+  }
+
+  .ant-btn:active {
+    background-color: #b9b9b9;
   }
 `;
+// export const Table = styled.div`
+//   table {
+//     font-size: 12px;
+//     text-align: center;
+//     border-collapse: collapse;
+//     // border-collapse: separate;
+//     // border-spacing: 0 10px;
+//     th,
+//     td {
+//       padding: 10px;
+//       height: 38px;
+//       border: 1px solid #999999;
+//     }
+//     thead {
+//       background-color: #323232;
+//       color: #fff;
+//     }
+//   }
+// `;
 /* modal 영역*/
 export const RmPageModal = styled.div`
   position: relative;
