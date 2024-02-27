@@ -1,5 +1,52 @@
-import React from "react";
-import { Button, Checkbox, Col, Form, Input, Row, Select } from "antd";
+import React, { useState } from "react";
+import { Button, Checkbox, Col, Form, Input, Row, Select, Upload } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import styled from "@emotion/styled";
+
+const AddressBox = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: right;
+  width: 810px;
+
+  margin-bottom: 50px;
+`;
+
+const AddressName = styled.div`
+  width: 60px;
+  height: 32px;
+  text-align: right;
+  margin-right: 7px;
+  padding-top: 4px;
+`;
+
+const AddressDiv = styled.div`
+  width: 500px;
+  height: 32px;
+  padding: 4px 11px;
+  margin-right: 5px;
+  background-color: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  line-height: normal;
+`;
+
+const AddressBtn = styled.div`
+  width: 57px;
+  height: 32px;
+  padding-top: 4px;
+  text-align: center;
+  color: #fff;
+  border-radius: 6px;
+  background-color: #1677ff;
+
+  cursor: pointer;
+
+  :hover {
+    background-color: #4096ff;
+  }
+`;
+
 const { Option } = Select;
 
 const formItemLayout = {
@@ -32,11 +79,20 @@ const tailFormItemLayout = {
     },
   },
 };
+const normFile = e => {
+  console.log("Upload event:", e);
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return e?.fileList;
+};
 const AdminHotelForm = ({ setTitleNum }) => {
+  const [popUp, setPopUp] = useState(false);
+  const [address, setAddress] = useState();
+
   const [form] = Form.useForm();
   const onFinish = values => {
     console.log("Received values of form: ", values);
-    setTitleNum(2);
   };
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
@@ -45,6 +101,8 @@ const AdminHotelForm = ({ setTitleNum }) => {
           width: 70,
         }}
       >
+        <Option value="82">+82</Option>
+        <Option value="85">+85</Option>
         <Option value="86">+86</Option>
         <Option value="87">+87</Option>
       </Select>
@@ -61,71 +119,47 @@ const AdminHotelForm = ({ setTitleNum }) => {
         prefix: "86",
       }}
       style={{
-        maxWidth: 600,
+        width: 750,
+        marginRight: 250,
       }}
       scrollToFirstError
     >
       <Form.Item
-        name="email"
-        label="E-mail 아이디"
+        name="upload"
+        label="사업자등록증"
+        valuePropName="fileList"
+        getValueFromEvent={normFile}
+        extra=""
         rules={[
           {
-            type: "email",
-            message: "The input is not valid E-mail!",
+            required: true,
+            message: "사업자등록증을 첨부해 주세요.",
           },
+        ]}
+      >
+        <Upload name="logo" action="/upload.do" listType="picture">
+          <Button icon={<UploadOutlined />}>문서첨부</Button>
+        </Upload>
+      </Form.Item>
+      <Form.Item
+        name="BusinessNum"
+        label="사업자등록번호"
+        rules={[
           {
             required: true,
-            message: "이메일을 입력해 주세요.",
+            message: "사업자등록번호를 입력해 주세요.",
           },
         ]}
       >
         <Input />
       </Form.Item>
-
-      <Form.Item
-        name="password"
-        label="비밀번호"
-        rules={[
-          {
-            required: true,
-            message: "비밀번호를 입력해 주세요.",
-          },
-        ]}
-        hasFeedback
-      >
-        <Input.Password />
-      </Form.Item>
-
-      <Form.Item
-        name="confirm"
-        label="비밀번호 확인"
-        dependencies={["password"]}
-        hasFeedback
-        rules={[
-          {
-            required: true,
-            message: "비밀번호 확인을 입력해 주세요.",
-          },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue("password") === value) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error("비밀번호가 일치하지 않습니다."));
-            },
-          }),
-        ]}
-      >
-        <Input.Password />
-      </Form.Item>
-
       <Form.Item
         name="Name"
-        label="실명"
+        label="대표자 성명"
         rules={[
           {
             required: true,
-            message: "실명을 입력해 주세요.",
+            message: "대표자 성명을 입력해 주세요.",
             whitespace: true,
           },
         ]}
@@ -150,6 +184,79 @@ const AdminHotelForm = ({ setTitleNum }) => {
           }}
         />
       </Form.Item>
+      <AddressBox>
+        <AddressName>
+          <span style={{ color: "#ff4d4f" }}>*</span> 주소 :
+        </AddressName>
+        <AddressDiv>{address?.address_name}</AddressDiv>
+        <AddressBtn
+          onClick={() => {
+            setPopUp(true);
+          }}
+        >
+          찾기
+        </AddressBtn>
+      </AddressBox>
+
+      <Form.Item
+        name="upload"
+        label="호텔사진"
+        valuePropName="fileList"
+        getValueFromEvent={normFile}
+        extra=""
+        rules={[
+          {
+            required: true,
+            message: "호텔사진을 추가해 주세요.",
+          },
+        ]}
+      >
+        <Upload name="logo" action="/upload.do" listType="picture">
+          <Button icon={<UploadOutlined />}>사진첨부</Button>
+        </Upload>
+      </Form.Item>
+
+      <Form.Item name="hotelOption" label="호텔옵션">
+        <Checkbox.Group>
+          <Row>
+            <Col span={5}>
+              <Checkbox value="1" style={{ lineHeight: "32px" }}>
+                수영장
+              </Checkbox>
+            </Col>
+            <Col span={5}>
+              <Checkbox value="2" style={{ lineHeight: "32px" }}>
+                운동장
+              </Checkbox>
+            </Col>
+            <Col span={5}>
+              <Checkbox value="3" style={{ lineHeight: "32px" }}>
+                수제식
+              </Checkbox>
+            </Col>
+            <Col span={5}>
+              <Checkbox value="4" style={{ lineHeight: "32px" }}>
+                셔틀운행
+              </Checkbox>
+            </Col>
+            <Col span={5}>
+              <Checkbox value="5" style={{ lineHeight: "32px" }}>
+                프로그램
+              </Checkbox>
+            </Col>
+            <Col span={5}>
+              <Checkbox value="6" style={{ lineHeight: "32px" }}>
+                산책
+              </Checkbox>
+            </Col>
+            <Col span={5}>
+              <Checkbox value="7" style={{ lineHeight: "32px" }}>
+                미용
+              </Checkbox>
+            </Col>
+          </Row>
+        </Checkbox.Group>
+      </Form.Item>
 
       <Form.Item
         name="intro"
@@ -161,44 +268,7 @@ const AdminHotelForm = ({ setTitleNum }) => {
           },
         ]}
       >
-        <Input.TextArea showCount maxLength={100} />
-      </Form.Item>
-
-      <Form.Item name="checkbox-group" label="Checkbox.Group">
-        <Checkbox.Group>
-          <Row>
-            <Col span={8}>
-              <Checkbox value="A" style={{ lineHeight: "32px" }}>
-                A
-              </Checkbox>
-            </Col>
-            <Col span={8}>
-              <Checkbox value="B" style={{ lineHeight: "32px" }} disabled>
-                B
-              </Checkbox>
-            </Col>
-            <Col span={8}>
-              <Checkbox value="C" style={{ lineHeight: "32px" }}>
-                C
-              </Checkbox>
-            </Col>
-            <Col span={8}>
-              <Checkbox value="D" style={{ lineHeight: "32px" }}>
-                D
-              </Checkbox>
-            </Col>
-            <Col span={8}>
-              <Checkbox value="E" style={{ lineHeight: "32px" }}>
-                E
-              </Checkbox>
-            </Col>
-            <Col span={8}>
-              <Checkbox value="F" style={{ lineHeight: "32px" }}>
-                F
-              </Checkbox>
-            </Col>
-          </Row>
-        </Checkbox.Group>
+        <Input.TextArea showCount maxLength={1000} />
       </Form.Item>
 
       <Form.Item
@@ -214,11 +284,20 @@ const AdminHotelForm = ({ setTitleNum }) => {
         ]}
         {...tailFormItemLayout}
       >
-        <Checkbox>
-          I have read the <a href="">agreement</a>
-        </Checkbox>
+        <Checkbox>이용약관동의</Checkbox>
       </Form.Item>
       <Form.Item {...tailFormItemLayout}>
+        <Button
+          onClick={e => {
+            e.preventDefault();
+            setTitleNum(1);
+          }}
+          style={{
+            marginRight: 10,
+          }}
+        >
+          이전
+        </Button>
         <Button type="primary" htmlType="submit">
           다음
         </Button>

@@ -15,7 +15,6 @@ const Wrapper = styled.div`
 `;
 
 const SiginUpBox = styled.div`
-  background-color: beige;
   width: 1200px;
 
   display: flex;
@@ -42,13 +41,7 @@ const TitleBoxItemBorder = styled(motion.div)`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   left: ${props =>
-    props.titlenum === 1
-      ? "38px"
-      : props.titlenum === 2
-      ? "none"
-      : props.titlenum === 3
-      ? "372px"
-      : null};
+    props.titlenum === 1 ? "80px" : props.titlenum === 2 ? "330px" : null};
 `;
 
 const TitleBoxItem = styled.div`
@@ -86,17 +79,11 @@ const AdminSignUpPage = () => {
             />
             <TitleText>호텔등록</TitleText>
           </TitleBoxItem>
-          <TitleBoxItem>
-            <TitleImg
-              src={`${process.env.PUBLIC_URL}/admin/images/SignUp/signupRoom.svg`}
-            />
-            <TitleText>객실등록</TitleText>
-          </TitleBoxItem>
         </SiginUpTitleBox>
         {titleNum === 1 ? (
           <AdminSignUpForm setTitleNum={setTitleNum} />
         ) : titleNum === 2 ? (
-          <AdminHotelForm />
+          <AdminHotelForm setTitleNum={setTitleNum} />
         ) : null}
       </SiginUpBox>
     </Wrapper>
