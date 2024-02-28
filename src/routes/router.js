@@ -25,6 +25,7 @@ import HotelModifyPage from "../pages/admin/Business/HotelPage/HotelModifyPage";
 // 최고관리자 라우터
 import SuperAdminLayout from "../layouts/SuperAdminLayout";
 import UserPage from "../pages/admin/SuperAdmin/UserPage";
+import RoomModifyPage from "../pages/admin/Business/HotelPage/RoomModifyPage";
 
 export const RouterInfo = [
   {
@@ -110,6 +111,11 @@ export const RouterInfo = [
         path: "/admin/hotelModify",
         element: <HotelModifyPage />,
         label: "hotelModify",
+      },
+      {
+        path: "/admin/roomModify",
+        element: <RoomModifyPage />,
+        label: "roomModify",
       },
     ],
   },
