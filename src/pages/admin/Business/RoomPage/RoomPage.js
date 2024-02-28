@@ -22,7 +22,7 @@ import {
   RmTodaySearch,
   StyledTableWrap,
   TableWrap,
-} from "../../../styles/AdminPageStyle/RoomPageStyle/roomPageStyle";
+} from "../../../../styles/AdminPageStyle/RoomPageStyle/roomPageStyle";
 import {
   createColumnHelper,
   flexRender,

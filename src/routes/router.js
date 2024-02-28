@@ -19,7 +19,7 @@ import AdminErrorPage from "../pages/admin/Common/ErrorPage/AdminErrorPage";
 import AdminLoginPage from "../pages/admin/Common/LoginPage/AdminLoginPage";
 import AdminSignUpPage from "../pages/admin/Common/SignUpPage/AdminSignUpPage";
 import HotelInfoPage from "../pages/admin/Business/HotelPage/HotelInfoPage";
-import RoomPage from "../pages/admin/RoomPage/RoomPage";
+import RoomPage from "../pages/admin/Business/RoomPage/RoomPage";
 import HotelModifyPage from "../pages/admin/Business/HotelPage/HotelModifyPage";
 
 // 최고관리자 라우터
