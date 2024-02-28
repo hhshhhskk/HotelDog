@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import React from "react";
+import { Table } from "antd";
+import React, { useState } from "react";
 import {
   RmBtFlex,
   RmDogInfo,
@@ -21,14 +21,7 @@ import {
   RmTodayMenuBt,
   RmTodaySearch,
   StyledTableWrap,
-  TableWrap,
 } from "../../../../styles/AdminPageStyle/RoomPageStyle/roomPageStyle";
-import {
-  createColumnHelper,
-  flexRender,
-  useReactTable,
-} from "@tanstack/react-table";
-import { Table } from "antd";
 
 // Define your row shape
 // type RmReserve = {
@@ -45,6 +38,15 @@ import { Table } from "antd";
 // };
 
 const RoomPage = () => {
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]); // 선택된 행의 키 값들을 저장하는 상태
+  const [selectedRows, setSelectedRows] = useState([]); // 선택된 행들의 정보를 저장하는 상태
+
+  // 체크박스가 변경될 때 호출되는 함수
+  const handleSelectionChange = (keys, rows) => {
+    setSelectedRowKeys(keys); // 선택된 행의 키 값들을 업데이트
+    setSelectedRows(rows); // 선택된 행들의 정보를 업데이트
+  };
+
   // table data 담을 useState ( 상태관리用 )
   // const [data, setData] = React.useState([]);
 
@@ -112,7 +114,7 @@ const RoomPage = () => {
   const data = [
     {
       checkbox: 1,
-      number: 1,
+      key: 1,
       reserveNumber: 66666,
       nickname: "누룽지",
       roomType: "소형견(3kg ~7kg)이하 기준",
@@ -124,7 +126,19 @@ const RoomPage = () => {
     },
     {
       checkbox: 1,
-      number: 2,
+      key: 2,
+      reserveNumber: 81945,
+      nickname: "콩지",
+      roomType: "중형견(7kg ~15kg)이하 기준",
+      dogInfo: <button>반려견정보</button>,
+      reservationData: "20240301-20240303",
+      phoneNumber: "010-2222-7777",
+      paymentAmount: 68000,
+      status: "",
+    },
+    {
+      checkbox: 1,
+      key: 3,
       reserveNumber: 81945,
       nickname: "콩지",
       roomType: "중형견(7kg ~15kg)이하 기준",
@@ -136,7 +150,31 @@ const RoomPage = () => {
     },
     {
       checkbox: 1,
-      number: 2,
+      key: 4,
+      reserveNumber: 81945,
+      nickname: "콩지",
+      roomType: "중형견(7kg ~15kg)이하 기준",
+      dogInfo: <button>반려견정보</button>,
+      reservationData: "20240301-20240303",
+      phoneNumber: "010-2222-7777",
+      paymentAmount: 68000,
+      status: "",
+    },
+    {
+      checkbox: 1,
+      key: 5,
+      reserveNumber: 81945,
+      nickname: "콩지",
+      roomType: "중형견(7kg ~15kg)이하 기준",
+      dogInfo: <button>반려견정보</button>,
+      reservationData: "20240301-20240303",
+      phoneNumber: "010-2222-7777",
+      paymentAmount: 68000,
+      status: "",
+    },
+    {
+      checkbox: 1,
+      key: 6,
       reserveNumber: 81945,
       nickname: "콩지",
       roomType: "중형견(7kg ~15kg)이하 기준",
@@ -148,7 +186,19 @@ const RoomPage = () => {
     },
     {
       checkbox: 1,
-      number: 2,
+      key: 7,
+      reserveNumber: 81945,
+      nickname: "콩지",
+      roomType: "중형견(7kg ~15kg)이하 기준",
+      dogInfo: <button>반려견정보</button>,
+      reservationData: "20240301-20240303",
+      phoneNumber: "010-2222-7777",
+      paymentAmount: 68000,
+      status: "",
+    },
+    {
+      checkbox: 1,
+      key: 8,
       reserveNumber: 81945,
       nickname: "콩지",
       roomType: "중형견(7kg ~15kg)이하 기준",
@@ -160,7 +210,7 @@ const RoomPage = () => {
     },
     {
       checkbox: 1,
-      number: 2,
+      key: 9,
       reserveNumber: 81945,
       nickname: "콩지",
       roomType: "중형견(7kg ~15kg)이하 기준",
@@ -168,11 +218,11 @@ const RoomPage = () => {
       reservationData: "20240301-20240303",
       phoneNumber: "010-2222-7777",
       paymentAmount: 68000,
-      status: "예약대기중",
+      status: "",
     },
     {
       checkbox: 1,
-      number: 2,
+      key: 10,
       reserveNumber: 81945,
       nickname: "콩지",
       roomType: "중형견(7kg ~15kg)이하 기준",
@@ -180,69 +230,16 @@ const RoomPage = () => {
       reservationData: "20240301-20240303",
       phoneNumber: "010-2222-7777",
       paymentAmount: 68000,
-      status: "예약대기중",
-    },
-    {
-      checkbox: 1,
-      number: 2,
-      reserveNumber: 81945,
-      nickname: "콩지",
-      roomType: "중형견(7kg ~15kg)이하 기준",
-      dogInfo: <button>반려견정보</button>,
-      reservationData: "20240301-20240303",
-      phoneNumber: "010-2222-7777",
-      paymentAmount: 68000,
-      status: "예약대기중",
-    },
-    {
-      checkbox: 1,
-      number: 2,
-      reserveNumber: 81945,
-      nickname: "콩지",
-      roomType: "중형견(7kg ~15kg)이하 기준",
-      dogInfo: <button>반려견정보</button>,
-      reservationData: "20240301-20240303",
-      phoneNumber: "010-2222-7777",
-      paymentAmount: 68000,
-      status: "예약대기중",
-    },
-    {
-      checkbox: 1,
-      number: 2,
-      reserveNumber: 81945,
-      nickname: "콩지",
-      roomType: "중형견(7kg ~15kg)이하 기준",
-      dogInfo: <button>반려견정보</button>,
-      reservationData: "20240301-20240303",
-      phoneNumber: "010-2222-7777",
-      paymentAmount: 68000,
-      status: "예약대기중",
-    },
-    {
-      checkbox: 1,
-      number: 2,
-      reserveNumber: 81945,
-      nickname: "콩지",
-      roomType: "중형견(7kg ~15kg)이하 기준",
-      dogInfo: <button>반려견정보</button>,
-      reservationData: "20240301-20240303",
-      phoneNumber: "010-2222-7777",
-      paymentAmount: 68000,
-      status: "예약대기중",
+      status: "",
     },
   ];
   const columns = [
     {
-      title: "체크",
-      dataIndex: "checkbox",
-      key: "checkbox",
-    },
-    {
       title: "번호",
-      dataIndex: "number",
+      dataIndex: "key",
       defaultSortOrder: "descend",
       sorter: (a, b) => a.number - b.number,
-      key: "number",
+      key: "key",
     },
     {
       title: "예약번호",
@@ -283,6 +280,16 @@ const RoomPage = () => {
       title: "상태",
       key: "status",
       dataIndex: "status",
+      // 💥💥💥💥💥💥 변경요함
+      // render: (text, record) => {
+      //   return text === "예약승인" ? (
+      //     "예약승인"
+      //   ) : (
+      //     <button onClick={() => handleReservationAp(record.key)}>
+      //       {text}
+      //     </button>
+      //   );
+      // },
       // 행 필터 추가
       filters: [
         {
@@ -311,7 +318,50 @@ const RoomPage = () => {
       width: "130px",
     },
   ];
-  // const onChagne = (pagination, filters, sorter) => {}
+  const [initdata, setInitData] = useState(data);
+
+  // 선택된 행의 정보 저장
+  const rowSelection = {
+    // 선택된 행의 키 값, 선택된행의 정보를 매개변수로 받아
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(
+        `selectedRowKeys: ${selectedRowKeys}`,
+        "selectedRows: ",
+        selectedRows,
+      );
+    },
+  };
+
+  // 체크->버튼 클릭 시, 상태 변경 함수
+  const handleReservationAp = (selectedRowKeys, selectedRows) => {
+    console.log("selectedRowKeys:", selectedRowKeys);
+    console.log("selectedRows:", selectedRows);
+    selectedRows.forEach(selectedRow => {
+      // 만약 selectedRow에 status 속성이 있는 경우 예약승인으로 출력합니다.
+      if (selectedRow.status) {
+        console.log("Selected row status: 예약승인");
+        selectedRow.status === "예약승인";
+        console.log("Selected row status: 예약승인이 되었습니다.");
+      } else {
+        console.log("Selected row status: status 속성이 없습니다.");
+        selectedRow.status === "예약승인";
+        // setInitData(selectedRow.status === "예약승인");
+        console.log("Selected row status: 예약승인이 되었습니다.");
+        // console.log("Selected row status: ", initdata);
+      }
+    });
+
+    // const updatedData = selectedRows.map(item => {
+    //   if (item.status === status) {
+    //     return { ...item, status: "예약승인" };
+    //   }
+    //   return item;
+    // });
+    // setInitData(updatedData);
+  };
+  // };
+  const handleCheckInCom = () => {};
+  const handleCheckOutCom = () => {};
   return (
     <RmPageWrap>
       {/* header 영역 */}
@@ -361,12 +411,29 @@ const RoomPage = () => {
       <div>
         <RmTableBtFlex>
           <RmBtFlex>
-            <RmPageBt>예약승인</RmPageBt>
-            <RmPageBt>입실완료</RmPageBt>
-            <RmPageBt>퇴실완료</RmPageBt>
+            <RmPageBt
+              onClick={() => handleReservationAp(selectedRowKeys, selectedRows)}
+            >
+              예약승인
+            </RmPageBt>
+            {/* <RmPageBt
+              onClick={(selectedRowKeys, selectedRows) =>
+                handleReservationAp(selectedRowKeys, selectedRows)
+              }
+            >
+              예약승인
+            </RmPageBt> */}
+            <RmPageBt onClick={() => handleCheckInCom()}>입실완료</RmPageBt>
+            <RmPageBt onClick={() => handleCheckOutCom()}>퇴실완료</RmPageBt>
           </RmBtFlex>
           <StyledTableWrap>
             <Table
+              //
+              rowSelection={{
+                type: "checkbox",
+                // 체크박스가 변경될 때 호출되는 콜백 함수
+                onChange: handleSelectionChange,
+              }}
               dataSource={data}
               columns={columns}
               pagination={{
@@ -378,7 +445,6 @@ const RoomPage = () => {
                 //   marginBottom: 20, // 원하는 간격으로 수정하세요
                 // },
               }}
-              // onChange={onChange}
             >
               {/* <thead>
                 {table.getHeaderGroups().map(headerGroupd => (
@@ -425,17 +491,6 @@ const RoomPage = () => {
                     ))}
                   </tr>
                 ))} */}
-                {/* <td>1</td>
-                <td>65813</td>
-                <td>누룽지호랑이</td>
-                <td>소형견 (3kg~ 7kg) 기준</td>
-                <td>
-                  <button>정보보기</button>
-                </td>
-                <td>2024-02-13 / 2024-02-15</td>
-                <td>010-1234-5678</td>
-                <td>97,000원</td>
-                <td>이용완료</td> */}
                 {/* <tr>
                   <td scope="row">
                     <input type="checkbox"></input>
@@ -454,20 +509,6 @@ const RoomPage = () => {
                     <button>예약취소</button>
                   </td>
                 </tr> */}
-                <tr>
-                  <td scope="row"></td>
-                  <td>3</td>
-                  <td>65813</td>
-                  <td>누룽지호랑이</td>
-                  <td>소형견 (3kg~ 7kg) 기준</td>
-                  <td>
-                    <button>정보보기</button>
-                  </td>
-                  <td>2024-02-13 / 2024-02-15</td>
-                  <td>010-1234-5678</td>
-                  <td>97,000원</td>
-                  <td>예약완료</td>
-                </tr>
               </tbody>
             </Table>
           </StyledTableWrap>
