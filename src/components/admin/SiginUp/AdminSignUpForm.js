@@ -79,13 +79,14 @@ const tailFormItemLayout = {
     },
   },
 };
-const AdminSignUpForm = ({ setTitleNum }) => {
+const AdminSignUpForm = ({ setData, setTitleNum }) => {
   const [form] = Form.useForm();
   const [popUp, setPopUp] = useState(false);
   const [address, setAddress] = useState();
 
   const onFinish = values => {
-    console.log("Received values of form: ", values);
+    setData(values);
+    console.log("회원정보 데이터: ", values);
     setTitleNum(2);
   };
   const prefixSelector = (
