@@ -9,7 +9,7 @@ const AddressBox = styled.div`
   justify-content: right;
   width: 810px;
 
-  margin-bottom: 50px;
+  margin-bottom: 25px;
 `;
 
 const AddressName = styled.div`
@@ -86,7 +86,7 @@ const normFile = e => {
   }
   return e?.fileList;
 };
-const AdminHotelForm = ({ setTitleNum }) => {
+const AdminHotelForm = ({ data, setData, setTitleNum }) => {
   const [popUp, setPopUp] = useState(false);
   const [address, setAddress] = useState();
 
@@ -108,7 +108,7 @@ const AdminHotelForm = ({ setTitleNum }) => {
       </Select>
     </Form.Item>
   );
-
+  console.log(data);
   return (
     <Form
       {...formItemLayout}
@@ -116,7 +116,7 @@ const AdminHotelForm = ({ setTitleNum }) => {
       name="register"
       onFinish={onFinish}
       initialValues={{
-        prefix: "86",
+        prefix: "82",
       }}
       style={{
         width: 750,
@@ -125,7 +125,7 @@ const AdminHotelForm = ({ setTitleNum }) => {
       scrollToFirstError
     >
       <Form.Item
-        name="upload"
+        name="BusinessUpload"
         label="사업자등록증"
         valuePropName="fileList"
         getValueFromEvent={normFile}
@@ -199,7 +199,7 @@ const AdminHotelForm = ({ setTitleNum }) => {
       </AddressBox>
 
       <Form.Item
-        name="upload"
+        name="HotelUpload"
         label="호텔사진"
         valuePropName="fileList"
         getValueFromEvent={normFile}
@@ -259,12 +259,12 @@ const AdminHotelForm = ({ setTitleNum }) => {
       </Form.Item>
 
       <Form.Item
-        name="intro"
+        name="hotelinfo"
         label="호텔설명"
         rules={[
           {
             required: true,
-            message: "Please input Intro",
+            message: "호텔설명을 입력해 주세요.",
           },
         ]}
       >
@@ -279,7 +279,7 @@ const AdminHotelForm = ({ setTitleNum }) => {
             validator: (_, value) =>
               value
                 ? Promise.resolve()
-                : Promise.reject(new Error("Should accept agreement")),
+                : Promise.reject(new Error("이용약관동의를 해주세요.")),
           },
         ]}
         {...tailFormItemLayout}
@@ -299,7 +299,7 @@ const AdminHotelForm = ({ setTitleNum }) => {
           이전
         </Button>
         <Button type="primary" htmlType="submit">
-          다음
+          완료
         </Button>
       </Form.Item>
     </Form>

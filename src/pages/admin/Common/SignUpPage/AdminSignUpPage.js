@@ -60,6 +60,7 @@ const TitleText = styled.div`
 `;
 
 const AdminSignUpPage = () => {
+  const [data, setData] = useState("");
   const [titleNum, setTitleNum] = useState(1);
 
   return (
@@ -81,9 +82,13 @@ const AdminSignUpPage = () => {
           </TitleBoxItem>
         </SiginUpTitleBox>
         {titleNum === 1 ? (
-          <AdminSignUpForm setTitleNum={setTitleNum} />
+          <AdminSignUpForm setData={setData} setTitleNum={setTitleNum} />
         ) : titleNum === 2 ? (
-          <AdminHotelForm setTitleNum={setTitleNum} />
+          <AdminHotelForm
+            data={data}
+            setData={setData}
+            setTitleNum={setTitleNum}
+          />
         ) : null}
       </SiginUpBox>
     </Wrapper>
