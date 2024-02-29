@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import React, { useState } from "react";
-import AdvertModal from "../../../../components/admin/Business/HotelInfo/Advert/AdvertModal";
+import AdvertMain from "../../../../components/admin/Business/HotelInfo/Advert/AdvertMain";
 
 export const HotelInfoWrap = styled.div`
   position: relative;
@@ -236,8 +236,9 @@ const HotelInfoPage = () => {
   return (
     <>
       <HotelInfoWrap>
+        {/* 광고 모달창 */}
         {AdvertModalState && (
-          <AdvertModal setAdvertModalState={setAdvertModalState} />
+          <AdvertMain setAdvertModalState={setAdvertModalState} />
         )}
         {/* 상단 버튼 */}
         <HotelInfoTop>
