@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useState } from "react";
+import AdvertModal from "../../../../components/admin/Business/HotelInfo/Advert/AdvertModal";
 
 export const HotelInfoWrap = styled.div`
   position: relative;
@@ -35,6 +36,8 @@ export const AdButton = styled.button`
   color: #fff;
   background-color: #346fff;
   font-size: 1.6rem;
+
+  cursor: pointer;
 `;
 
 export const ModifyButtonDiv = styled.div`
@@ -227,12 +230,20 @@ export const RoomTotalPrice = styled.span`
 `;
 
 const HotelInfoPage = () => {
+  // 광고 모달창 상태
+  const [AdvertModalState, setAdvertModalState] = useState(false);
+
   return (
     <>
       <HotelInfoWrap>
+        {AdvertModalState && (
+          <AdvertModal setAdvertModalState={setAdvertModalState} />
+        )}
         {/* 상단 버튼 */}
         <HotelInfoTop>
-          <AdButton>호텔 광고 관리</AdButton>
+          <AdButton onClick={() => setAdvertModalState(true)}>
+            호텔 광고 관리
+          </AdButton>
           <ModifyButtonDiv>
             <button>호텔 수정</button>
             <button>객실 수정</button>

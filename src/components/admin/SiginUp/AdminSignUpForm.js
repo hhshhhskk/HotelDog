@@ -85,7 +85,7 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
   const [address, setAddress] = useState();
 
   const onFinish = values => {
-    setData(values);
+    setData([values, address]);
     console.log("회원정보 데이터: ", values);
     setTitleNum(2);
   };
