@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Checkbox, Col, Form, Input, Row, Select, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
+import AddressPopup from "../../SignUp/AddressPopup";
 
 const AddressBox = styled.div`
   position: relative;
@@ -86,13 +87,19 @@ const normFile = e => {
   }
   return e?.fileList;
 };
+
 const AdminHotelForm = ({ data, setData, setTitleNum }) => {
   const [popUp, setPopUp] = useState(false);
   const [address, setAddress] = useState();
 
   const [form] = Form.useForm();
   const onFinish = values => {
-    console.log("Received values of form: ", values);
+    console.log("서버에 최종으로 전달할 데이터: ", values);
+    setData(prevData => ({
+      ...prevData,
+      ...values,
+      address: address,
+    }));
   };
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
@@ -110,199 +117,201 @@ const AdminHotelForm = ({ data, setData, setTitleNum }) => {
   );
   console.log(data);
   return (
-    <Form
-      {...formItemLayout}
-      form={form}
-      name="register"
-      onFinish={onFinish}
-      initialValues={{
-        prefix: "82",
-      }}
-      style={{
-        width: 750,
-        marginRight: 250,
-      }}
-      scrollToFirstError
-    >
-      <Form.Item
-        name="BusinessUpload"
-        label="사업자등록증"
-        valuePropName="fileList"
-        getValueFromEvent={normFile}
-        extra=""
-        rules={[
-          {
-            required: true,
-            message: "사업자등록증을 첨부해 주세요.",
-          },
-        ]}
+    <>
+      {popUp && <AddressPopup setPopUp={setPopUp} setAddress={setAddress} />}
+      <Form
+        {...formItemLayout}
+        form={form}
+        name="register"
+        onFinish={onFinish}
+        initialValues={{
+          prefix: "82",
+        }}
+        style={{
+          width: 750,
+          marginRight: 250,
+        }}
+        scrollToFirstError
       >
-        <Upload name="logo" action="/upload.do" listType="picture">
-          <Button icon={<UploadOutlined />}>문서첨부</Button>
-        </Upload>
-      </Form.Item>
-      <Form.Item
-        name="BusinessNum"
-        label="사업자등록번호"
-        rules={[
-          {
-            required: true,
-            message: "사업자등록번호를 입력해 주세요.",
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name="Name"
-        label="대표자 성명"
-        rules={[
-          {
-            required: true,
-            message: "대표자 성명을 입력해 주세요.",
-            whitespace: true,
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        name="phone"
-        label="전화번호"
-        rules={[
-          {
-            required: true,
-            message: "전화번호를 입력해 주세요.",
-          },
-        ]}
-      >
-        <Input
-          addonBefore={prefixSelector}
-          style={{
-            width: "100%",
-          }}
-        />
-      </Form.Item>
-      <AddressBox>
-        <AddressName>
-          <span style={{ color: "#ff4d4f" }}>*</span> 주소 :
-        </AddressName>
-        <AddressDiv>{address?.address_name}</AddressDiv>
-        <AddressBtn
-          onClick={() => {
-            setPopUp(true);
-          }}
+        <Form.Item
+          name="BusinessUpload"
+          label="사업자등록증"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+          extra=""
+          rules={[
+            {
+              required: true,
+              message: "사업자등록증을 첨부해 주세요.",
+            },
+          ]}
         >
-          찾기
-        </AddressBtn>
-      </AddressBox>
-
-      <Form.Item
-        name="HotelUpload"
-        label="호텔사진"
-        valuePropName="fileList"
-        getValueFromEvent={normFile}
-        extra=""
-        rules={[
-          {
-            required: true,
-            message: "호텔사진을 추가해 주세요.",
-          },
-        ]}
-      >
-        <Upload name="logo" action="/upload.do" listType="picture">
-          <Button icon={<UploadOutlined />}>사진첨부</Button>
-        </Upload>
-      </Form.Item>
-
-      <Form.Item name="hotelOption" label="호텔옵션">
-        <Checkbox.Group>
-          <Row>
-            <Col span={5}>
-              <Checkbox value="1" style={{ lineHeight: "32px" }}>
-                수영장
-              </Checkbox>
-            </Col>
-            <Col span={5}>
-              <Checkbox value="2" style={{ lineHeight: "32px" }}>
-                운동장
-              </Checkbox>
-            </Col>
-            <Col span={5}>
-              <Checkbox value="3" style={{ lineHeight: "32px" }}>
-                수제식
-              </Checkbox>
-            </Col>
-            <Col span={5}>
-              <Checkbox value="4" style={{ lineHeight: "32px" }}>
-                셔틀운행
-              </Checkbox>
-            </Col>
-            <Col span={5}>
-              <Checkbox value="5" style={{ lineHeight: "32px" }}>
-                프로그램
-              </Checkbox>
-            </Col>
-            <Col span={5}>
-              <Checkbox value="6" style={{ lineHeight: "32px" }}>
-                산책
-              </Checkbox>
-            </Col>
-            <Col span={5}>
-              <Checkbox value="7" style={{ lineHeight: "32px" }}>
-                미용
-              </Checkbox>
-            </Col>
-          </Row>
-        </Checkbox.Group>
-      </Form.Item>
-
-      <Form.Item
-        name="hotelinfo"
-        label="호텔설명"
-        rules={[
-          {
-            required: true,
-            message: "호텔설명을 입력해 주세요.",
-          },
-        ]}
-      >
-        <Input.TextArea showCount maxLength={1000} />
-      </Form.Item>
-
-      <Form.Item
-        name="agreement"
-        valuePropName="checked"
-        rules={[
-          {
-            validator: (_, value) =>
-              value
-                ? Promise.resolve()
-                : Promise.reject(new Error("이용약관동의를 해주세요.")),
-          },
-        ]}
-        {...tailFormItemLayout}
-      >
-        <Checkbox>이용약관동의</Checkbox>
-      </Form.Item>
-      <Form.Item {...tailFormItemLayout}>
-        <Button
-          onClick={e => {
-            e.preventDefault();
-            setTitleNum(1);
-          }}
-          style={{
-            marginRight: 10,
-          }}
+          <Upload name="logo" listType="text" beforeUpload={() => false}>
+            <Button icon={<UploadOutlined />}>문서첨부</Button>
+          </Upload>
+        </Form.Item>
+        <Form.Item
+          name="BusinessNum"
+          label="사업자등록번호"
+          rules={[
+            {
+              required: true,
+              message: "사업자등록번호를 입력해 주세요.",
+            },
+          ]}
         >
-          이전
-        </Button>
-        <Button type="primary" htmlType="submit">
-          완료
-        </Button>
-      </Form.Item>
-    </Form>
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="Name"
+          label="대표자 성명"
+          rules={[
+            {
+              required: true,
+              message: "대표자 성명을 입력해 주세요.",
+              whitespace: true,
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="phone"
+          label="전화번호"
+          rules={[
+            {
+              required: true,
+              message: "전화번호를 입력해 주세요.",
+            },
+          ]}
+        >
+          <Input
+            addonBefore={prefixSelector}
+            style={{
+              width: "100%",
+            }}
+          />
+        </Form.Item>
+        <AddressBox>
+          <AddressName>
+            <span style={{ color: "#ff4d4f" }}>*</span> 주소 :
+          </AddressName>
+          <AddressDiv>{address?.address_name}</AddressDiv>
+          <AddressBtn
+            onClick={() => {
+              setPopUp(true);
+            }}
+          >
+            찾기
+          </AddressBtn>
+        </AddressBox>
+
+        <Form.Item
+          name="HotelUpload"
+          label="호텔사진"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+          extra=""
+          rules={[
+            {
+              required: true,
+              message: "호텔사진을 추가해 주세요.",
+            },
+          ]}
+        >
+          <Upload name="logo" listType="picture" beforeUpload={() => false}>
+            <Button icon={<UploadOutlined />}>사진첨부</Button>
+          </Upload>
+        </Form.Item>
+        <Form.Item name="hotelOption" label="호텔옵션">
+          <Checkbox.Group>
+            <Row>
+              <Col span={5}>
+                <Checkbox value="1" style={{ lineHeight: "32px" }}>
+                  수영장
+                </Checkbox>
+              </Col>
+              <Col span={5}>
+                <Checkbox value="2" style={{ lineHeight: "32px" }}>
+                  운동장
+                </Checkbox>
+              </Col>
+              <Col span={5}>
+                <Checkbox value="3" style={{ lineHeight: "32px" }}>
+                  수제식
+                </Checkbox>
+              </Col>
+              <Col span={5}>
+                <Checkbox value="4" style={{ lineHeight: "32px" }}>
+                  셔틀운행
+                </Checkbox>
+              </Col>
+              <Col span={5}>
+                <Checkbox value="5" style={{ lineHeight: "32px" }}>
+                  프로그램
+                </Checkbox>
+              </Col>
+              <Col span={5}>
+                <Checkbox value="6" style={{ lineHeight: "32px" }}>
+                  산책
+                </Checkbox>
+              </Col>
+              <Col span={5}>
+                <Checkbox value="7" style={{ lineHeight: "32px" }}>
+                  미용
+                </Checkbox>
+              </Col>
+            </Row>
+          </Checkbox.Group>
+        </Form.Item>
+
+        <Form.Item
+          name="hotelinfo"
+          label="호텔설명"
+          rules={[
+            {
+              required: true,
+              message: "호텔설명을 입력해 주세요.",
+            },
+          ]}
+        >
+          <Input.TextArea showCount maxLength={1000} />
+        </Form.Item>
+
+        <Form.Item
+          name="agreement"
+          valuePropName="checked"
+          rules={[
+            {
+              validator: (_, value) =>
+                value
+                  ? Promise.resolve()
+                  : Promise.reject(new Error("이용약관동의를 해주세요.")),
+            },
+          ]}
+          {...tailFormItemLayout}
+        >
+          <Checkbox>이용약관동의</Checkbox>
+        </Form.Item>
+        <Form.Item {...tailFormItemLayout}>
+          <Button
+            onClick={e => {
+              e.preventDefault();
+              setTitleNum(1);
+            }}
+            style={{
+              marginRight: 10,
+            }}
+          >
+            이전
+          </Button>
+          <Button type="primary" htmlType="submit">
+            완료
+          </Button>
+        </Form.Item>
+      </Form>
+    </>
   );
 };
 export default AdminHotelForm;
