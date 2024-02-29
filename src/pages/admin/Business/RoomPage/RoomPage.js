@@ -122,7 +122,7 @@ const RoomPage = () => {
       reservationData: "20240101-20240103",
       phoneNumber: "010-3333-5555",
       paymentAmount: 45000,
-      status: <button>예약취소</button>,
+      status: "예약취소",
     },
     {
       checkbox: 1,
@@ -280,16 +280,15 @@ const RoomPage = () => {
       title: "상태",
       key: "status",
       dataIndex: "status",
-      // 💥💥💥💥💥💥 변경요함
-      // render: (text, record) => {
-      //   return text === "예약승인" ? (
-      //     "예약승인"
-      //   ) : (
-      //     <button onClick={() => handleReservationAp(record.key)}>
-      //       {text}
-      //     </button>
-      //   );
-      // },
+      render: (text, record) => {
+        return record.status === "예약승인" ? (
+          "예약승인"
+        ) : (
+          <button onClick={() => handleReservationAp([record.key], [record])}>
+            {record.status}
+          </button>
+        );
+      },
       // 행 필터 추가
       filters: [
         {
@@ -299,6 +298,19 @@ const RoomPage = () => {
         {
           text: "예약취소",
           value: "reservationCancellation",
+          // 예약취소 모달 뜨도록
+          render: (text, record) => {
+            console.log(text);
+            return (
+              <>
+                <button
+                  onClick={() => handleReservationAp([record.key], [record])}
+                >
+                  {text}
+                </button>
+              </>
+            );
+          },
         },
         {
           text: "예약완료",
@@ -320,46 +332,41 @@ const RoomPage = () => {
   ];
   const [initdata, setInitData] = useState(data);
 
-  // 선택된 행의 정보 저장
-  const rowSelection = {
-    // 선택된 행의 키 값, 선택된행의 정보를 매개변수로 받아
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows,
-      );
-    },
-  };
-
+  // // 선택된 행의 정보 저장
+  // const rowSelection = {
+  //   // 선택된 행의 키 값, 선택된행의 정보를 매개변수로 받아
+  //   onChange: (selectedRowKeys, selectedRows) => {
+  //     console.log(
+  //       `selectedRowKeys: ${selectedRowKeys}`,
+  //       "selectedRows: ",
+  //       selectedRows,
+  //     );
+  //   },
+  // };
   // 체크->버튼 클릭 시, 상태 변경 함수
   const handleReservationAp = (selectedRowKeys, selectedRows) => {
     console.log("selectedRowKeys:", selectedRowKeys);
     console.log("selectedRows:", selectedRows);
-    selectedRows.forEach(selectedRow => {
-      // 만약 selectedRow에 status 속성이 있는 경우 예약승인으로 출력합니다.
-      if (selectedRow.status) {
-        console.log("Selected row status: 예약승인");
-        selectedRow.status === "예약승인";
-        console.log("Selected row status: 예약승인이 되었습니다.");
-      } else {
-        console.log("Selected row status: status 속성이 없습니다.");
-        selectedRow.status === "예약승인";
-        // setInitData(selectedRow.status === "예약승인");
-        console.log("Selected row status: 예약승인이 되었습니다.");
-        // console.log("Selected row status: ", initdata);
+    // 버튼 클릭 시, key값과 해당 row 값은 불러와진다.
+    // 다음으로 해야할것이 💥 rows 에서 status 값을 "예약승인" 으로 표시해야한다.
+    // selectedRows 배열에서 각 열의 status 값을 콘솔에 출력하고, "예약승인"으로 변경
+    selectedRows.forEach(row => {
+      console.log("원래 열의 status 값 :", row.status);
+      // status 값이 이미 "예약승인"인 경우는 처리하지 않음
+      if (row.status === "예약승인") {
+        return;
       }
+      // status 값을 "예약승인"으로 변경
+      row.status = "예약승인";
+      console.log("변경된 열의 status 값 :", row.status);
     });
-
-    // const updatedData = selectedRows.map(item => {
-    //   if (item.status === status) {
-    //     return { ...item, status: "예약승인" };
-    //   }
-    //   return item;
-    // });
-    // setInitData(updatedData);
+    // 변경된 데이터를 React 상태로 설정하여 화면에 반영
+    const updateStatus = (index, newStatus) => {
+      const updatedData = [...data]; // 주어진 배열 객체를 복사합니다.
+      updatedData[index].status = newStatus; // 주어진 인덱스의 status 값을 변경합니다.
+      return updatedData; // 변경된 배열 객체를 반환합니다.
+    };
   };
-  // };
   const handleCheckInCom = () => {};
   const handleCheckOutCom = () => {};
   return (
