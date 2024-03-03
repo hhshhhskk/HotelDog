@@ -52,14 +52,21 @@ const SmText = styled.div`
   }
 `;
 
-const CompleteBtn = styled.div`
+const InfoBtnBox = styled.div`
+  height: 50px;
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+`;
+
+const CancelBtn = styled.div`
   width: 120px;
   height: 50px;
-  margin: 0 auto;
-  margin-top: 100px;
   border-radius: 5px;
   border: 1px solid #323232;
   background: #fff;
+
   color: #323232;
   text-align: center;
   font-family: "Noto Sans";
@@ -70,22 +77,51 @@ const CompleteBtn = styled.div`
 
   cursor: pointer;
 `;
-const AdvertComplete = ({ setAdvertModalState }) => {
+
+const AdvertBtn = styled.div`
+  background-color: #323232;
+  width: 120px;
+  height: 50px;
+  border-radius: 5px;
+
+  color: #fff;
+  text-align: center;
+  font-family: "Noto Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 50px;
+
+  cursor: pointer;
+`;
+
+const AdvertCancel = ({ setAdvertModalState }) => {
   return (
     <ModalWrapper>
       <ImgBox>
         <CompleteImg
-          src={`${process.env.PUBLIC_URL}/admin/images/HotelInfo/Advert/complete.svg`}
+          src={`${process.env.PUBLIC_URL}/admin/images/HotelInfo/Advert/warning.svg`}
         />
       </ImgBox>
-      <BigText>광고 결제가 완료되었습니다!</BigText>
-      <SmText>오늘부터 시스템에 반영되어 호텔 광고가 시작됩니다.</SmText>
+      <BigText>정말 해지하시겠어요?</BigText>
       <SmText>
-        다음 자동 결제 시점은 <span>2023-03-01</span> 입니다.
+        지금 해지하시면 <span>2023-02-29</span> 까지 이용 가능하고,
       </SmText>
-      <CompleteBtn onClick={() => setAdvertModalState(false)}>확인</CompleteBtn>
+      <SmText>다음 정기결제시점 (2023-03-01) 부터</SmText>
+      <SmText>결제가 중단됩니다. 계속 하시겠어요?</SmText>
+      <InfoBtnBox>
+        <CancelBtn onClick={() => setAdvertModalState(false)}>취소</CancelBtn>
+        <AdvertBtn
+          onClick={() => {
+            alert("광고가 해지 되었습니다.");
+            setAdvertModalState(false);
+          }}
+        >
+          해지
+        </AdvertBtn>
+      </InfoBtnBox>
     </ModalWrapper>
   );
 };
 
-export default AdvertComplete;
+export default AdvertCancel;

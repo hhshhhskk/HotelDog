@@ -26,6 +26,8 @@ import HotelModifyPage from "../pages/admin/Business/HotelPage/HotelModifyPage";
 import SuperAdminLayout from "../layouts/SuperAdminLayout";
 import UserPage from "../pages/admin/SuperAdmin/UserPage";
 import RoomModifyPage from "../pages/admin/Business/HotelPage/RoomModifyPage";
+import HotelList from "../pages/admin/SuperAdmin/HotelList";
+import BusinessPage from "../pages/admin/SuperAdmin/BusinessPage";
 
 export const RouterInfo = [
   {
@@ -90,7 +92,17 @@ export const RouterInfo = [
       },
     ],
   },
-
+  // 사이드바 없는 관리자
+  {
+    path: "/admin/login",
+    element: <AdminLoginPage />,
+    errorElement: <AdminErrorPage />,
+  },
+  {
+    path: "/admin/signup",
+    element: <AdminSignUpPage />,
+    errorElement: <AdminErrorPage />,
+  },
   // 사이드바 포함 관리자
   {
     path: "/admin",
@@ -119,22 +131,9 @@ export const RouterInfo = [
       },
     ],
   },
-
-  // 사이드바 없는 관리자
-  {
-    path: "/admin/login",
-    element: <AdminLoginPage />,
-    errorElement: <AdminErrorPage />,
-  },
-  {
-    path: "/admin/signup",
-    element: <AdminSignUpPage />,
-    errorElement: <AdminErrorPage />,
-  },
-
   // 최고 관리자
   {
-    path: "/superAdmin",
+    path: "/superadmin",
     element: <SuperAdminLayout />,
     errorElement: <AdminErrorPage />,
     children: [
@@ -142,6 +141,16 @@ export const RouterInfo = [
         index: true,
         element: <UserPage />,
         label: "user",
+      },
+      {
+        path: "/superadmin/business",
+        element: <BusinessPage />,
+        label: "business",
+      },
+      {
+        path: "/superadmin/hotelList",
+        element: <HotelList />,
+        label: "hotelList",
       },
     ],
   },
