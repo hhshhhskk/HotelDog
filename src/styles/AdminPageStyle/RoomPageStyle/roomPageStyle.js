@@ -191,13 +191,31 @@ export const StyledTableWrap = styled.div`
 //     }
 //   }
 // `;
+/* 모달 백그라운드 스타일 */
+export const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 어두운 배경색 (투명도 조절 가능) */
+  z-index: 999; /* 모달 위에 위치하도록 */
+`;
 /* modal 영역*/
 export const RmPageModal = styled.div`
-  position: relative;
+  position: fixed;
+  top: 10%;
+  left: 40%;
+  transform: trnaslate(-50%, -50%);
+
   width: 650px;
   height: 700px;
   border-radius: 15px;
   border: 1px solid #b9b9b9;
+  background-color: #fff;
+
+  z-index: 1000; /* 모달이 모달 백그라운드 위에 위치하도록 */
+  // overflow-y: auto; /* 내용이 모달을 벗어나면 스크롤바 표시 */
 `;
 export const RmPageModalHead = styled.div`
   position: relative;
@@ -234,7 +252,7 @@ export const RmPageModalContents = styled.div`
   div {
     text-align: center;
   }
-  // margin: 40px 50px; 50px 70px;
+  margin: 40px 50px; 50px 70px;
 `;
 export const RmModalContentsTitle = styled.span`
   position: relative;
@@ -266,7 +284,8 @@ export const RmModalDogContent = styled.div`
   width: 550px;
   color: #fff;
   border-radius: 10px;
-  margin: 50px 50px 50px 70px;
+  // margin: 50px 50px 50px 70px;
+  margin: 0 auto;
   img {
     display: block;
     margin: 30px 0;
