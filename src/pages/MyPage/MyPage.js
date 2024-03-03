@@ -98,6 +98,7 @@ const SideTopCateItem = styled.div`
 const Content = styled.div``;
 
 // 마이페이지
+// MyPage 컴포넌트 수정
 const MyPage = () => {
   const categoryTop = [
     "회원 정보",
@@ -109,11 +110,6 @@ const MyPage = () => {
   const categoryBottom = ["회원 탈퇴"];
 
   const [selectedCategory, setSelectedCategory] = useState(0);
-
-  const clickMenu = index => {
-    setSelectedCategory(index);
-  };
-
   const myPageCate = () => {
     switch (selectedCategory) {
       case 0:
@@ -127,10 +123,14 @@ const MyPage = () => {
       case 4:
         return <Review />;
       case 5:
-        return <Resign />;
+        return <Resign setSelectedCategory={setSelectedCategory} />;
       default:
         return null;
     }
+  };
+
+  const clickMenu = index => {
+    setSelectedCategory(index);
   };
 
   return (
@@ -187,7 +187,8 @@ const MyPage = () => {
           </MyPageSide>
           <MyPageRright>
             <MyPageRrightContent>
-              {selectedCategory !== null && myPageCate()}
+              {/* myPageCate 함수를 통해 선택된 카테고리에 따라 해당 컴포넌트 렌더링 */}
+              {myPageCate()}
             </MyPageRrightContent>
           </MyPageRright>
         </MyPageContents>

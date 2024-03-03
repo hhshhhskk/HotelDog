@@ -4,6 +4,7 @@ import HotelLike from "../../components/Common/HotelLike";
 import HotelCardForm from "../../components/Common/HotelCardForm";
 import { HotelCardDiv } from "../../styles/Common/hotelCardFormStyle";
 import jwtAxios from "../../utils/jwtUtil";
+import { Pagination } from "antd";
 
 const LikePage = styled.div`
   margin-left: 85px;
@@ -77,35 +78,44 @@ const TwoColumns = styled.div`
 const LikeList = ({ handleSelectGo, getLikeListData }) => {
   const [likeListData, setLikeListData] = useState([]);
   const [page, setPage] = useState(1);
-  const [rendering, setRendering] = useState(false);
+  const [rendering, setRendering] = useState(null);
+  const [currentPage, setCurrentPage] = useState([]); // 현재 페이지 상태 추가
 
-  useEffect(() => {
-    const getLikeListData = async () => {
-      try {
-        // 페이지에 해당하는 요청 URL 생성
-        const url = `/api/hotel/like?page=${page}`;
+  useEffect(
+    () => {
+      const getLikeListData = async () => {
+        try {
+          // 페이지에 해당하는 요청 URL 생성
+          const url = `/api/hotel/like?page=${page}`;
 
-        // 스웨거에서 데이터 가져오는 요청 보내기
-        const res = await jwtAxios({
-          method: "get",
-          url: url,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        console.log(res.data);
+          // 스웨거에서 데이터 가져오는 요청 보내기
+          const res = await jwtAxios({
+            method: "get",
+            url: url,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          console.log(res.data);
 
-        setLikeListData(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+          setLikeListData(res.data);
+        } catch (error) {
+          console.log(error);
+        }
+      };
 
-    // 데이터 불러오기 함수 호출
-    getLikeListData();
-  }, [rendering]); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때만 실행되도록 함
+      // 데이터 불러오기 함수 호출
+      getLikeListData();
+    },
+    [rendering],
+    [currentPage],
+  ); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때만 실행되도록 함
 
   if (!getLikeListData) getLikeListData = [];
+
+  const handlePageChange = page => {
+    rendering(page);
+  };
 
   return (
     <LikePage>
@@ -138,6 +148,13 @@ const LikeList = ({ handleSelectGo, getLikeListData }) => {
           <a href="/"> 호텔 목록 보러가기</a>
         </ListNone>
       )}
+      <Pagination
+        current={currentPage} // 현재 페이지 번호
+        total={likeListData.length} // 전체 아이템 수
+        onChange={page => setCurrentPage(page)} // 페이지 변경 핸들러
+        pageSize={6} // 한 페이지에 표시할 아이템 수
+        showSizeChanger={false} // 페이지 크기 조절기 숨김
+      />
     </LikePage>
   );
 };

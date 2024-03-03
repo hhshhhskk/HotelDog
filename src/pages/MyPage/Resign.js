@@ -50,12 +50,18 @@ const DetailTxt = styled.div`
 `;
 const LinkBt = styled.div`
   position: relative;
-  margin-top: 20px;
+  margin-top: 12px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
   cursor: pointer;
+  font-size: 14px;
+  color: #654222;
+  font-weight: 700;
+  img {
+    margin-right: 5px;
+  }
 `;
 const ModalBt = styled.div`
   position: relative;
@@ -72,7 +78,7 @@ const ModalBt = styled.div`
     font-size: 14px;
   }
 `;
-const Resign = () => {
+const Resign = ({ setSelectedCategory }) => {
   const [showModal, setShowModal] = useState(false);
 
   // 모달을 열고 닫는 함수
@@ -145,7 +151,10 @@ const Resign = () => {
             </p>
           </DetailTxt>
         </ResignContentsTxt>
-        <LinkBt>예약내역바로가기</LinkBt>
+        <LinkBt onClick={() => setSelectedCategory(1)}>
+          <img src={`${process.env.PUBLIC_URL}/images/MyPage/linkBt.svg`} />
+          예약내역바로가기
+        </LinkBt>
         <ModalBt onClick={handleModalToggle}>
           <p>환불 및 탈퇴하기</p>
         </ModalBt>
