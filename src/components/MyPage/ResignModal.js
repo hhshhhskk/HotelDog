@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 // 모달을 감싸는 컨테이너 스타일 정의
 const ModalContainer = styled.div`
@@ -26,6 +26,7 @@ const ModalContent = styled.div`
   background-color: #fff;
   padding: 30px;
   border-radius: 10px;
+  padding-left: 50px;
 `;
 
 // 닫기 버튼 스타일 정의
@@ -50,15 +51,17 @@ const ModalTitle = styled.div`
   }
 `;
 
-const ResignList = styled.form`
+const ResignList = styled.table`
   position: relative;
   display: flex;
   justify-content: center;
-  width: 580px;
+  width: 550px;
   height: 210px;
   background-color: #eeeeee;
   border-radius: 10px;
   margin-bottom: 40px;
+
+  border-collapse: collapse;
 `;
 
 const ResignBt = styled.button`
@@ -83,7 +86,7 @@ const ResignBt = styled.button`
 
 const ModalTxtContents = styled.div`
   position: relative;
-  width: 580px;
+  width: 550px;
   height: 200px;
   border-radius: 10px;
   background: #fffaf0;
@@ -110,21 +113,107 @@ const ModalTxtContents = styled.div`
 `;
 const ListContents = styled.div`
   position: relative;
-  width: 555px;
-  height: 150px;
-  background-color: lavender;
+  width: 520px;
+  height: auto;
+  background-color: #fff;
   margin-top: 13px;
+  font-size: 11px;
+  max-height: 155px; /* 스크롤이 생길 최대 높이 */
+  overflow: auto;
+  /* & td:last-child {
+    width: ${props => (props.hasScroll ? "105px" : "120px")};
+  } */
 `;
-const ContentsCate = styled.div`
+const ContentsCate = styled.thead`
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  height: auto;
+  background-color: #654222;
+  color: #fff;
+  /* padding: 7px; */
+  ul {
+    position: relative;
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+  li {
+    position: relative;
+  }
+`;
+const ContentsDetail = styled.tbody`
   position: relative;
+  color: #654222;
 `;
-const ContentsDetail = styled.div`
+
+const Th = styled.th`
+  padding: 9px;
+  text-align: left;
+`;
+
+const Td = styled.td`
+  padding: 9px;
+`;
+const Tr = styled.tr`
+  &:nth-child(even) {
+    background-color: #fffaf0; /* 짝수 행 배경색 */
+  }
+  &:nth-child(odd) {
+    background-color: #ffffff; /* 홀수 행 배경색 */
+  }
+`;
+const StyledSpan = styled.span`
   position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    border-bottom: 0.2px solid red;
+  }
 `;
+
+const initData = [
+  {
+    id: 1,
+    hotelName: "Hotel A",
+    reservationDate: "2024-01-24 ~ 2024-01-26",
+    before: "65,000",
+    after: "65,000",
+  },
+  {
+    id: 2,
+    hotelName: "Hotel B",
+    reservationDate: "2024-01-24 ~ 2024-01-26",
+    before: "65,000",
+    after: "65,000",
+  },
+  {
+    id: 3,
+    hotelName: "Hotel C",
+    reservationDate: "2024-01-24 ~ 2024-01-26",
+    before: "65,000",
+    after: "65,000",
+  },
+  {
+    id: 3,
+    hotelName: "Hotel C",
+    reservationDate: "2024-01-24 ~ 2024-01-26",
+    before: "65,000",
+    after: "65,000",
+  },
+];
+
 const ResignModal = ({ onCloseModal }) => {
   const handleModalClose = () => {
     onCloseModal();
   };
+
   return (
     <ModalContainer>
       <ModalContent>
@@ -151,8 +240,33 @@ const ResignModal = ({ onCloseModal }) => {
         </ModalTitle>
         <ResignList>
           <ListContents>
-            <ContentsCate></ContentsCate>
-            <ContentsDetail></ContentsDetail>
+            <ContentsCate>
+              <tr>
+                <Th style={{ width: "70px", textAlign: "center" }}>번호</Th>
+                <Th style={{ width: "160px" }}>호텔 이름</Th>
+                <Th style={{ width: "170px" }}>예약 날짜</Th>
+                <Th style={{ width: "120px" }}>환불 금액</Th>
+              </tr>
+            </ContentsCate>
+            <ContentsDetail>
+              {initData.map((item, index) => (
+                <Tr key={item.id}>
+                  <Td style={{ width: "70px", textAlign: "center" }}>
+                    {index + 1}
+                  </Td>
+                  <Td style={{ width: "160px" }}>{item.hotelName}</Td>
+                  <Td style={{ width: "170px" }}>{item.reservationDate}</Td>
+                  <Td style={{ width: "120px" }}>
+                    <StyledSpan>{item.before}</StyledSpan>
+                    <img
+                      style={{ padding: "0 5px 2px 5px" }}
+                      src={`${process.env.PUBLIC_URL}/images/MyPage/Polygon.svg`}
+                    />
+                    {item.after}
+                  </Td>
+                </Tr>
+              ))}
+            </ContentsDetail>
           </ListContents>
         </ResignList>
         <ResignBt>
