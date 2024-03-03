@@ -231,21 +231,21 @@ export const reviewDeleteApi = async (reviewPk, resPk) => {
 };
 
 //  리뷰 수정
-export const reviewPutApi = async data => {
+export const reviewPutApi = async formData => {
   try {
-    console.log(data);
+    console.log(formData);
     const res = await jwtAxios({
       method: "put",
-      url: `/api/user/info`,
-      data,
+      url: "/api/review",
+      data: formData,
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data", // Content-Type 설정
       },
     });
     return res.data.result;
   } catch (error) {
     // 오류가 발생했을 때의 처리
-    console.log(error);
-    // alert(error.response.data.message);
+    console.error(error);
+    return error.response?.status || 500; // 에러 응답 상태 코드 반환
   }
 };

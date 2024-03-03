@@ -89,6 +89,7 @@ const ReviewInfo = styled.div`
 `;
 const ReviewTop = styled.div`
   position: relative;
+  display: flex;
   margin-bottom: 10px;
   span {
     color: #9d9d9d;
@@ -97,6 +98,9 @@ const ReviewTop = styled.div`
     font-weight: 400;
     line-height: normal;
     margin-left: 10px;
+  }
+  img {
+    width: 15px;
   }
 `;
 const ReviewOption = styled.div`
@@ -125,6 +129,7 @@ const OptionBox = styled.div`
   height: 70px;
   border-radius: 10px;
   background-color: #fffaf0;
+  z-index: 1;
 `;
 const ReviewFetch = styled.button`
   position: relative;
@@ -188,6 +193,40 @@ const ReviewTxt = styled.div`
   font-weight: 400;
   line-height: normal;
 `;
+
+const renderStarImages = score => {
+  const filledStars = Math.floor(score / 2); // startfill 이미지 개수
+  const halfStar = score % 2 === 0 ? 0 : 1; // 점수가 홀수인 경우 startlight 이미지 1개 추가
+  const lightStars = 5 - filledStars - halfStar; // startlight 이미지 개수
+
+  const stars = [];
+  for (let i = 0; i < filledStars; i++) {
+    stars.push(
+      <img
+        key={i}
+        src={`${process.env.PUBLIC_URL}/images/MyPage/startfill.svg`}
+      />,
+    );
+  }
+  if (halfStar) {
+    stars.push(
+      <img
+        key="half-star"
+        src={`${process.env.PUBLIC_URL}/images/MyPage/startlight.svg`}
+      />,
+    );
+  }
+  for (let i = 0; i < lightStars; i++) {
+    stars.push(
+      <img
+        key={`light-star-${i}`}
+        src={`${process.env.PUBLIC_URL}/images/MyPage/startlight.svg`}
+      />,
+    );
+  }
+
+  return stars;
+};
 
 const Review = () => {
   const [isFetchHovered, setIsFetchHovered] = useState(false);
@@ -270,6 +309,7 @@ const Review = () => {
             <ReviewContents key={index}>
               <ReviewInfo>
                 <ReviewTop>
+                  {renderStarImages(review.score)}
                   <span>{review.createdAt}</span>
                   <ReviewOption>
                     <ReviewOptionBt

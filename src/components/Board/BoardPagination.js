@@ -16,11 +16,11 @@ const Pagination = styled.div`
   cursor: pointer;
 `;
 
-const PageNextBtn = styled.img`
+const Btn = styled.img`
   cursor: pointer;
 `;
 
-const PagePrevBtn = styled(PageNextBtn)`
+const PagePrevBtn = styled(Btn)`
   transform: rotate(180deg);
 `;
 
@@ -58,14 +58,14 @@ const BoardPagination = ({ totalPage, nowPage, setNowPage }) => {
             onClick={() => {
               setNowPage(1);
             }}
-            src={`${process.env.PUBLIC_URL}/images/board/pageNextBtn2.svg`}
+            src={`${process.env.PUBLIC_URL}/images/board/Btn2.svg`}
             alt=""
           />
           <PagePrevBtn
             onClick={() => {
               setNowPage(nowPage !== 1 && nowPage - 1);
             }}
-            src={`${process.env.PUBLIC_URL}/images/board/pageNextBtn1.svg`}
+            src={`${process.env.PUBLIC_URL}/images/board/Btn1.svg`}
             alt=""
           />
         </>
@@ -87,18 +87,18 @@ const BoardPagination = ({ totalPage, nowPage, setNowPage }) => {
       })}
       {totalPage !== nowPage && (
         <>
-          <PageNextBtn
+          <Btn
             onClick={() => {
               setNowPage(totalPage >= nowPage + 1 && nowPage + 1);
             }}
-            src={`${process.env.PUBLIC_URL}/images/board/pageNextBtn1.svg`}
+            src={`${process.env.PUBLIC_URL}/images/board/Btn1.svg`}
             alt=""
           />
-          <PageNextBtn
+          <Btn
             onClick={() => {
               setNowPage(totalPage);
             }}
-            src={`${process.env.PUBLIC_URL}/images/board/pageNextBtn2.svg`}
+            src={`${process.env.PUBLIC_URL}/images/board/Btn2.svg`}
             alt=""
           />
         </>

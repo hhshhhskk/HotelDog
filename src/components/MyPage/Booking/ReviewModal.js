@@ -152,13 +152,7 @@ const Star = styled.div`
 `;
 
 // ReviewModal 컴포넌트 정의
-const ReviewModal = ({
-  isOpen,
-  onClose,
-  bookingData,
-  children,
-  onReviewSubmit,
-}) => {
+const ReviewModal = ({ isOpen, onClose, bookingData, children }) => {
   if (!isOpen) return null;
 
   const [rating, setRating] = useState(5);

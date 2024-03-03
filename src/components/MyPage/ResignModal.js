@@ -53,15 +53,47 @@ const ModalTitle = styled.div`
 
 const ResignList = styled.table`
   position: relative;
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   width: 550px;
   height: 210px;
   background-color: #eeeeee;
   border-radius: 10px;
   margin-bottom: 40px;
-
   border-collapse: collapse;
+`;
+const Price = styled.div`
+  position: relative;
+  width: 520px;
+  margin: 0 auto;
+  text-align: center;
+  color: #654222;
+  margin-top: 10px;
+  p {
+    display: inline;
+    font-size: 10px;
+    font-weight: 500;
+  }
+  span {
+    font-size: 16px;
+    font-weight: 700;
+    margin-left: 10px;
+    margin-right: 5px;
+  }
+`;
+const RefundBt = styled.div`
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 60px;
+  padding: 3px;
+  border-radius: 5px;
+  border: 1px solid #654222;
+  background: #654222;
+  color: #fff;
+  font-weight: 600;
+  font-size: 10px;
+  cursor: pointer;
 `;
 
 const ResignBt = styled.button`
@@ -113,12 +145,13 @@ const ModalTxtContents = styled.div`
 `;
 const ListContents = styled.div`
   position: relative;
+  margin: 0 auto;
   width: 520px;
   height: auto;
   background-color: #fff;
   margin-top: 13px;
   font-size: 11px;
-  max-height: 155px; /* 스크롤이 생길 최대 높이 */
+  max-height: 156px; /* 스크롤이 생길 최대 높이 */
   overflow: auto;
   /* & td:last-child {
     width: ${props => (props.hasScroll ? "105px" : "120px")};
@@ -177,6 +210,10 @@ const StyledSpan = styled.span`
     border-bottom: 0.2px solid red;
   }
 `;
+const BtArea = styled.div`
+  position: relative;
+  width: 550px;
+`;
 
 const initData = [
   {
@@ -212,6 +249,18 @@ const initData = [
 const ResignModal = ({ onCloseModal }) => {
   const handleModalClose = () => {
     onCloseModal();
+  };
+
+  const handleRefundButtonClick = () => {
+    if (confirm("환불하시겠습니까?")) {
+      alert("환불이 완료되었습니다.");
+    }
+  };
+  const handleResignButtonClick = () => {
+    // 탈퇴 처리 로직 추가
+
+    alert("탈퇴가 완료되었습니다.");
+    location.href = "/login";
   };
 
   return (
@@ -268,10 +317,19 @@ const ResignModal = ({ onCloseModal }) => {
               ))}
             </ContentsDetail>
           </ListContents>
+          <Price>
+            <p>총 환불 금액</p>
+            <span>260,000</span>
+            <p>원</p>
+            <RefundBt onClick={handleRefundButtonClick}>환불하기</RefundBt>
+          </Price>
         </ResignList>
-        <ResignBt>
-          <p>탈퇴 하기</p>
-        </ResignBt>
+        <BtArea>
+          <ResignBt onClick={handleResignButtonClick}>
+            <p>탈퇴 하기</p>
+          </ResignBt>
+        </BtArea>
+
         <CloseButton onClick={handleModalClose}>
           <img src={`${process.env.PUBLIC_URL}/images/MyPage/close.svg`} />
         </CloseButton>

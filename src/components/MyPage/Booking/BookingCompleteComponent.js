@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReserveDate from "../../Common/ReserveDate";
 import ReviewModal from "./ReviewModal";
 import BookingDate from "./BookingDate";
+import { getReviewApi } from "../../../api/mypage/mypageApi";
 
 const BookingCompleteList = styled.div`
   position: relative;
@@ -124,6 +125,8 @@ const BookingCompleteComponent = ({ bookingData }) => {
   // 모달 열림/닫힘 상태를 관리
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
+  const [reviewData, setReviewData] = useState([]);
+  const [isReviewAlreadyWritten, setIsReviewAlreadyWritten] = useState(false);
 
   // 모달을 열기
   const handleOpenModal = booking => {
@@ -136,6 +139,31 @@ const BookingCompleteComponent = ({ bookingData }) => {
     setIsModalOpen(false);
     setSelectedBooking(null);
   };
+
+  // 후기 작성 버튼 활성화 여부 함수
+  const isReviewButtonEnabled = resPk => {
+    // 해당 예약 번호(resPk)에 대한 후기가 이미 등록되었는지 확인
+    return !reviewData.some(review => review.resPk === resPk);
+  };
+  const getReviewData = async () => {
+    try {
+      const data = await getReviewApi();
+      console.log("Returned review data:", data);
+      setReviewData(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const checkReviewAlreadyWritten = resPk => {
+    return reviewData.some(review => review.resPk === resPk);
+  };
+
+  useEffect(() => {
+    getReviewData();
+    // 후기가 이미 작성되었는지 확인
+    setIsReviewAlreadyWritten(checkReviewAlreadyWritten(bookingData.res_pk));
+  }, []);
 
   // 데이터가 없으면 null 반환
   if (!bookingData) return null;
@@ -173,10 +201,19 @@ const BookingCompleteComponent = ({ bookingData }) => {
               </PayInfoTxt>
             </PayInfo>
             <CompleteBt>
-              {/* "숙소 후기" 버튼에 모달을 열기 위한 onClick 이벤트 추가 */}
-              <Complete onClick={() => handleOpenModal(bookingData)}>
-                숙소 후기
-              </Complete>
+              {isReviewButtonEnabled(bookingData.res_pk) ? (
+                <Complete onClick={() => handleOpenModal(bookingData)}>
+                  숙소 후기
+                </Complete>
+              ) : (
+                <Complete
+                  onClick={() => {
+                    alert("이미 후기가 작성되었습니다.");
+                  }}
+                >
+                  숙소 후기
+                </Complete>
+              )}
             </CompleteBt>
             {/* 모달 컴포넌트 */}
             <ReviewModal
