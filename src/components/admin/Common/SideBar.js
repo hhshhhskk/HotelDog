@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const SideWrapper = styled.div`
@@ -101,6 +101,7 @@ const SideBar = () => {
   const pathName = location.pathname;
   const pathArray = pathName.split("/");
   const userType = pathArray[1];
+  const currentCate = pathArray[2];
 
   // 사업자 카테고리
   const categorys = [
@@ -130,7 +131,29 @@ const SideBar = () => {
     },
   ];
 
-  const [cateState, setCateState] = useState(0);
+  const [cateState, setCateState] = useState(
+    // 사업자
+    userType === "admin"
+      ? currentCate === "예약 관리"
+        ? 1
+        : currentCate === "호텔 정보"
+        ? 2
+        : currentCate === "호텔 수정"
+        ? 3
+        : currentCate === "객실 수정"
+        ? 4
+        : 0
+      : // 최고관리자
+      userType === "superadmin"
+      ? currentCate === "business"
+        ? 1
+        : currentCate === "businessreq"
+        ? 1
+        : currentCate === "hotellist"
+        ? 3
+        : 0
+      : 0,
+  );
 
   const categoryClicked = (e, value, cateNum) => {
     e.preventDefault();
@@ -138,9 +161,9 @@ const SideBar = () => {
 
     // 사업자
     userType === "admin"
-      ? value === "일일내역"
+      ? value === "일일 내역"
         ? navigate("/admin")
-        : value === "예약관리"
+        : value === "예약 관리"
         ? navigate("/admin")
         : value === "호텔 정보"
         ? navigate("/admin/hotelinfo")
@@ -155,6 +178,8 @@ const SideBar = () => {
         ? navigate("/superadmin")
         : value === "사업자 회원"
         ? navigate("/superadmin/business")
+        : value === "사업자 회원가입 요청"
+        ? navigate("/superadmin/businessreq")
         : value === "호텔 리스트"
         ? navigate("/superadmin/hotellist")
         : null

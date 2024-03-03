@@ -26,8 +26,9 @@ import HotelModifyPage from "../pages/admin/Business/HotelPage/HotelModifyPage";
 import SuperAdminLayout from "../layouts/SuperAdminLayout";
 import UserPage from "../pages/admin/SuperAdmin/UserPage";
 import RoomModifyPage from "../pages/admin/Business/HotelPage/RoomModifyPage";
-import HotelList from "../pages/admin/SuperAdmin/HotelList";
 import BusinessPage from "../pages/admin/SuperAdmin/BusinessPage";
+import BusinessReq from "../pages/admin/SuperAdmin/BusinessReq";
+import HotelList from "../pages/admin/SuperAdmin/HotelList";
 
 export const RouterInfo = [
   {
@@ -146,6 +147,11 @@ export const RouterInfo = [
         path: "/superadmin/business",
         element: <BusinessPage />,
         label: "business",
+      },
+      {
+        path: "/superadmin/businessreq",
+        element: <BusinessReq />,
+        label: "businessreq",
       },
       {
         path: "/superadmin/hotelList",

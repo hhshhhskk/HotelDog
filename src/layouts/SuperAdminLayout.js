@@ -10,6 +10,7 @@ const Wrapper = styled.div`
 `;
 
 const Contents = styled.div`
+  width: 100%;
   margin-left: 300px;
 `;
 
@@ -18,7 +19,6 @@ const SuperAdminLayout = () => {
     <Wrapper>
       <SideBar />
       <Contents>
-        <h1>슈퍼어드민 페이지 레이아웃</h1>
         <Outlet />
       </Contents>
     </Wrapper>
