@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const SideWrapper = styled.div`
   position: fixed;
@@ -94,8 +94,13 @@ const SideCategoryItemText = styled.div`
 `;
 
 const SideBar = () => {
-  const userType = 2;
   const navigate = useNavigate();
+
+  // 임시 유저 구분
+  const location = useLocation();
+  const pathName = location.pathname;
+  const pathArray = pathName.split("/");
+  const userType = pathArray[1];
 
   // 사업자 카테고리
   const categorys = [
@@ -117,28 +122,46 @@ const SideBar = () => {
       category: "회원관리",
       user: "일반회원",
       admin: "사업자 회원",
+      adminReq: "사업자 회원가입 요청",
     },
     {
       category: "호텔관리",
       list: "호텔 리스트",
     },
   ];
+
   const [cateState, setCateState] = useState(0);
 
   const categoryClicked = (e, value, cateNum) => {
     e.preventDefault();
     setCateState(cateNum);
 
-    value === "일반회원"
-      ? navigate("/admin")
-      : value === "사업자 회원"
-      ? navigate("/admin")
-      : value === "호텔 리스트"
-      ? navigate("/admin/hotelinfo")
+    // 사업자
+    userType === "admin"
+      ? value === "일일내역"
+        ? navigate("/admin")
+        : value === "예약관리"
+        ? navigate("/admin")
+        : value === "호텔 정보"
+        ? navigate("/admin/hotelinfo")
+        : value === "호텔 수정"
+        ? navigate("/admin")
+        : value === "객실 수정"
+        ? navigate("/admin")
+        : null
+      : // 최고관리자
+      userType === "superadmin"
+      ? value === "일반회원"
+        ? navigate("/superadmin")
+        : value === "사업자 회원"
+        ? navigate("/superadmin/business")
+        : value === "호텔 리스트"
+        ? navigate("/superadmin/hotellist")
+        : null
       : null;
   };
 
-  if (userType === 2) {
+  if (userType === "admin") {
     return (
       <SideWrapper>
         <SideHeader>
@@ -149,7 +172,7 @@ const SideBar = () => {
           <SideHeaderEmailBox>testId@naver.com</SideHeaderEmailBox>
         </SideHeader>
         <SideContents>
-          {adminCategorys.map((item, idx) => (
+          {categorys.map((item, idx) => (
             <div key={idx}>
               <SideCategorys>{item.category}</SideCategorys>
               {Object.values(item)
@@ -167,7 +190,7 @@ const SideBar = () => {
                     <SideCategoryItemImg
                       src={`${
                         process.env.PUBLIC_URL
-                      }/admin/images/Sidebar/admin/adminSideIcon${
+                      }/admin/images/Sidebar/business/sideIcon${
                         idx === 0 ? key : key + 2
                       }_${
                         cateState === (idx === 0 ? key : key + 2) ? 1 : 0
@@ -181,7 +204,7 @@ const SideBar = () => {
         </SideContents>
       </SideWrapper>
     );
-  } else if (userType === 3) {
+  } else if (userType === "superadmin") {
     return (
       <SideWrapper>
         <SideHeader>
@@ -192,7 +215,7 @@ const SideBar = () => {
           <SideHeaderEmailBox>최고관리자@naver.com</SideHeaderEmailBox>
         </SideHeader>
         <SideContents>
-          {categorys.map((item, idx) => (
+          {adminCategorys.map((item, idx) => (
             <div key={idx}>
               <SideCategorys>{item.category}</SideCategorys>
               {Object.values(item)
@@ -200,20 +223,20 @@ const SideBar = () => {
                 .map((value, key) => (
                   <SideCategoryItems
                     key={key}
-                    itemState={idx === 0 ? key : key + 2}
+                    itemState={idx === 0 ? key : key + 3}
                     cateState={cateState}
                     onClick={e => {
-                      const cateNum = idx === 0 ? key : key + 2;
-                      categoryClicked(e, cateNum);
+                      const cateNum = idx === 0 ? key : key + 3;
+                      categoryClicked(e, value, cateNum);
                     }}
                   >
                     <SideCategoryItemImg
                       src={`${
                         process.env.PUBLIC_URL
-                      }/admin/images/Sidebar/buisness/sideIcon${
-                        idx === 0 ? key : key + 2
+                      }/admin/images/Sidebar/superAdmin/adminSideIcon${
+                        idx === 0 ? key : key + 3
                       }_${
-                        cateState === (idx === 0 ? key : key + 2) ? 1 : 0
+                        cateState === (idx === 0 ? key : key + 3) ? 1 : 0
                       }.svg`}
                     />
                     <SideCategoryItemText>{value}</SideCategoryItemText>

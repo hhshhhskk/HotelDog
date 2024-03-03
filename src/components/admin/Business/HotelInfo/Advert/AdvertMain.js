@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import AdvertModal from "./AdvertModal";
+import AdvertProgress from "./AdvertProgress";
 
 const AdvertWrap = styled.div``;
 
@@ -137,7 +138,8 @@ const AdvertMain = ({ setAdvertModalState }) => {
   return (
     <AdvertWrap>
       <AdvertOverlay />
-      <AdvertModal setAdvertModalState={setAdvertModalState} />
+      {/* <AdvertModal setAdvertModalState={setAdvertModalState} /> */}
+      <AdvertProgress setAdvertModalState={setAdvertModalState} />
     </AdvertWrap>
   );
 };
