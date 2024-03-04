@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useState } from "react";
 import AdvertMain from "../../../../components/admin/Business/HotelInfo/Advert/AdvertMain";
+import { useNavigate } from "react-router-dom";
 
 export const HotelInfoWrap = styled.div`
   position: relative;
@@ -230,8 +231,18 @@ export const RoomTotalPrice = styled.span`
 `;
 
 const HotelInfoPage = () => {
+  const navigate = useNavigate();
   // 광고 모달창 상태
   const [AdvertModalState, setAdvertModalState] = useState(false);
+
+  // 수정버튼을 클릭 시
+  const handleClickModify = type => {
+    if (type === "hotel") {
+      navigate(`/admin/hotelModify`);
+    } else if (type === "room") {
+      navigate(`/admin/roomModify`);
+    }
+  };
 
   return (
     <>
@@ -246,8 +257,10 @@ const HotelInfoPage = () => {
             호텔 광고 관리
           </AdButton>
           <ModifyButtonDiv>
-            <button>호텔 수정</button>
-            <button>객실 수정</button>
+            <button onClick={() => handleClickModify("hotel")}>
+              호텔 수정
+            </button>
+            <button onClick={() => handleClickModify("room")}>객실 수정</button>
           </ModifyButtonDiv>
         </HotelInfoTop>
 
