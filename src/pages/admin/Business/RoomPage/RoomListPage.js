@@ -1,8 +1,6 @@
-import { Button, Input, Table } from "antd";
-// import Highlighter from "react-highlight-words";
+import { Table } from "antd";
 import React, { useEffect, useState } from "react";
 import {
-  MenuTable,
   ModalBackground,
   RmBtFlex,
   RmDogInfo,
@@ -26,9 +24,7 @@ import {
   StyledTableWrap,
 } from "../../../../styles/AdminPageStyle/RoomPageStyle/roomPageStyle";
 
-const { Search } = Input;
-
-const RoomPage = () => {
+const RoomListPage = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]); // 선택된 행의 키 값들을 저장하는 상태
   const [selectedRows, setSelectedRows] = useState([]); // 선택된 행들의 정보를 저장하는 상태
   const [showAllData, setShowAllData] = useState(false); // 전체 목록을 보여줄지 여부를 저장하는 상태
@@ -57,6 +53,7 @@ const RoomPage = () => {
   // const [initData, setInitData] = useState(data);
   const [initData, setInitData] = useState([
     {
+      checkbox: 1,
       key: 1,
       reserveNumber: 66666,
       nickname: "누룽지",
@@ -64,9 +61,12 @@ const RoomPage = () => {
       dogInfo: "반려견정보",
       reservationData: "20240101-20240103",
       phoneNumber: "010-3333-5555",
+      paymentAmount: 45000,
+      // status: initData.status,
       status: "예약취소",
     },
     {
+      checkbox: 1,
       key: 2,
       reserveNumber: 81945,
       nickname: "콩지",
@@ -74,49 +74,59 @@ const RoomPage = () => {
       dogInfo: "반려견정보",
       reservationData: "20240301-20240303",
       phoneNumber: "010-2222-7777",
+      paymentAmount: 68000,
       status: "",
     },
     {
+      checkbox: 1,
       key: 3,
-      reserveNumber: 43591,
-      nickname: "코오리",
+      reserveNumber: 81945,
+      nickname: "콩지",
       roomType: "중형견(7kg ~15kg)이하 기준",
       dogInfo: "반려견정보",
       reservationData: "20240301-20240303",
       phoneNumber: "010-2222-7777",
+      paymentAmount: 68000,
       status: "예약대기중",
     },
     {
+      checkbox: 1,
       key: 4,
-      reserveNumber: 75151,
-      nickname: "머피",
+      reserveNumber: 81945,
+      nickname: "콩지",
       roomType: "중형견(7kg ~15kg)이하 기준",
       dogInfo: "반려견정보",
       reservationData: "20240301-20240303",
       phoneNumber: "010-2222-7777",
+      paymentAmount: 68000,
       status: "",
     },
     {
+      checkbox: 1,
       key: 5,
-      reserveNumber: 2222,
-      nickname: "성공",
+      reserveNumber: 81945,
+      nickname: "콩지",
       roomType: "중형견(7kg ~15kg)이하 기준",
       dogInfo: "반려견정보",
       reservationData: "20240301-20240303",
       phoneNumber: "010-2222-7777",
+      paymentAmount: 68000,
       status: "입실완료",
     },
     {
+      checkbox: 1,
       key: 6,
-      reserveNumber: 61751,
-      nickname: "우항항",
+      reserveNumber: 81945,
+      nickname: "콩지",
       roomType: "중형견(7kg ~15kg)이하 기준",
       dogInfo: "반려견정보",
       reservationData: "20240301-20240303",
       phoneNumber: "010-2222-7777",
+      paymentAmount: 68000,
       status: "예약대기중",
     },
     {
+      checkbox: 1,
       key: 7,
       reserveNumber: 81945,
       nickname: "콩지",
@@ -124,9 +134,11 @@ const RoomPage = () => {
       dogInfo: "반려견정보",
       reservationData: "20240301-20240303",
       phoneNumber: "010-2222-7777",
+      paymentAmount: 68000,
       status: "",
     },
     {
+      checkbox: 1,
       key: 8,
       reserveNumber: 81945,
       nickname: "콩지",
@@ -134,9 +146,11 @@ const RoomPage = () => {
       dogInfo: "반려견정보",
       reservationData: "20240301-20240303",
       phoneNumber: "010-2222-7777",
+      paymentAmount: 68000,
       status: "예약대기중",
     },
     {
+      checkbox: 1,
       key: 9,
       reserveNumber: 81945,
       nickname: "콩지",
@@ -144,9 +158,11 @@ const RoomPage = () => {
       dogInfo: "반려견정보",
       reservationData: "20240301-20240303",
       phoneNumber: "010-2222-7777",
+      paymentAmount: 68000,
       status: "",
     },
     {
+      checkbox: 1,
       key: 10,
       reserveNumber: 81945,
       nickname: "콩지",
@@ -154,72 +170,27 @@ const RoomPage = () => {
       dogInfo: "반려견정보",
       reservationData: "20240301-20240303",
       phoneNumber: "010-2222-7777",
+      paymentAmount: 68000,
       status: "",
     },
   ]);
-  /* 💚💚💚예약번호, 닉네임 검색 -> 해당 row 가 뜨도록하는 함수 */
-  const [searchText, setSearchText] = useState(""); // 검색어 상태 관리
-  const [searchedColumn, setSearchedColumn] = useState("");
-  const [filteredData, setFilteredData] = useState(initData); // 필터링된 데이터를 저장하는 상태
-
-  // 검색어 입력 시 필터링 함수
-  const handleSearch = e => {
-    const { value } = e.target;
-    setSearchText(value); // 검색어 업데이트
-    // 검색어에 해당하는 행 필터링하여 새로운 데이터 생성
-    const filtered = initData.filter(
-      item =>
-        item.reserveNumber.toString().includes(value) ||
-        item.nickname.includes(value),
-    );
-    setFilteredData(filtered); // 필터링된 데이터 업데이트
-  };
-
-  // const handleSearch = (selectedKeys, confirm, dataIndex) => {
-  //   confirm();
-  //   setSearchText(selectedKeys[0]);
-  //   setSearchedColumn(dataIndex);
-  // };
-
-  const handleReset = clearFilters => {
-    clearFilters();
-    setSearchText("");
-  };
-  const getColumnSearchProps = dataIndex => ({
-    // 필터링 함수
-    // value는 필터링할 값이고, record는 현재 행의 데이터
-    onFilter: (value, record) =>
-      record[dataIndex]
-        ? record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        : "",
-    render: text =>
-      searchedColumn === dataIndex
-        ? // <Highlighter
-          //   highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          //   searchWords={[searchText]}
-          //   autoEscape
-          //   textToHighlight={text ? text.toString() : ""}
-          // />
-          text
-        : text,
-  });
-
-  /* -------------------------- 필터 end ------------------------ */
   const columns = [
+    {
+      title: "번호",
+      dataIndex: "key",
+      defaultSortOrder: "descend",
+      sorter: (a, b) => a.number - b.number,
+      key: "key",
+    },
     {
       title: "예약번호",
       dataIndex: "reserveNumber",
       key: "reserveNumber",
-      ...getColumnSearchProps("reserveNumber"),
     },
     {
       title: "닉네임",
       dataIndex: "nickname",
       key: "nickname",
-      ...getColumnSearchProps("nickname"),
     },
     {
       title: "객실유형",
@@ -246,6 +217,11 @@ const RoomPage = () => {
       key: "phoneNumber",
     },
     {
+      title: "결제금액",
+      dataIndex: "paymentAmount",
+      key: "paymentAmount",
+    },
+    {
       title: "상태",
       key: "status",
       dataIndex: "status",
@@ -266,6 +242,8 @@ const RoomPage = () => {
           "입실완료"
         ) : text === "퇴실완료" ? (
           "퇴실완료"
+        ) : text === "예약없음" ? (
+          "예약없음"
         ) : text === "예약대기중" ? (
           "예약대기중"
         ) : null;
@@ -405,40 +383,53 @@ const RoomPage = () => {
             <RmTodayMenuBt>이용완료</RmTodayMenuBt>
           </RmTodayMenu>
           <div>
-            <RmTodaySearch
-              type="text"
-              placeholder="예약번호 또는 닉네임"
-              onChange={handleSearch} // 텍스트 입력 시 검색어 업데이트
-              value={searchText} // 입력된 검색어 표시
-            >
-              {/* <img
+            <form>
+              <RmTodaySearch type="text">
+                {/* <img
             src={`${process.env.PUBLIC_URL}/admin/images/RmToday/search.svg`}
             alt=""
           /> */}
-              {/* <img
+                {/* <img
             src={`${process.env.PUBLIC_URL}/admin/images/RmToday/search.svg`}
             alt=""
           /> */}
-            </RmTodaySearch>
+              </RmTodaySearch>
+            </form>
           </div>
         </RmMenuSearchFlex>
       </div>
       {/* middle 영역 */}
-      <MenuTable></MenuTable>
-      <RmTableBtFlex>
-        <StyledTableWrap>
-          <Table
-            dataSource={filteredData}
-            columns={columns}
-            pagination={{
-              // 페이지 네이션
-              pageSize: 15,
-              position: ["bottomCenter"],
-              hideOnSinglePage: false,
-            }}
-          ></Table>
-        </StyledTableWrap>
-      </RmTableBtFlex>
+      <div>
+        <RmTableBtFlex>
+          <RmBtFlex>
+            <RmPageBt
+              onClick={() => handleReservationAp(selectedRowKeys, selectedRows)}
+            >
+              예약완료
+            </RmPageBt>
+            <RmPageBt onClick={() => handleCheckInCom()}>입실완료</RmPageBt>
+            <RmPageBt onClick={() => handleCheckOutCom()}>퇴실완료</RmPageBt>
+          </RmBtFlex>
+          <StyledTableWrap>
+            <Table
+              // 행 선택
+              rowSelection={{
+                type: "checkbox",
+                // 체크박스가 변경될 때 호출되는 콜백 함수
+                onChange: handleSelectionChange,
+              }}
+              dataSource={initData}
+              columns={columns}
+              pagination={{
+                // 페이지 네이션
+                pageSize: 15,
+                position: ["bottomCenter"],
+                hideOnSinglePage: false,
+              }}
+            ></Table>
+          </StyledTableWrap>
+        </RmTableBtFlex>
+      </div>
 
       {/* 모달이 열려있을 때만 렌더링? */}
       {/* {cancelModalOpen && (
@@ -532,4 +523,4 @@ const RoomPage = () => {
   );
 };
 
-export default RoomPage;
+export default RoomListPage;

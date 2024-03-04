@@ -56,6 +56,10 @@ export const RmTodayMenuBt = styled.span`
   }
 `;
 // middle 영역
+export const MenuTable = styled.div`
+position: relative;
+margin-bottom: 70px;
+`
 export const RmTableBtFlex = styled.div`
   position: relative;
   display: flex;
@@ -252,7 +256,7 @@ export const RmPageModalContents = styled.div`
   div {
     text-align: center;
   }
-  margin: 40px 50px; 50px 70px;
+  margin: 40px 50px;
 `;
 export const RmModalContentsTitle = styled.span`
   position: relative;

@@ -29,6 +29,7 @@ import RoomModifyPage from "../pages/admin/Business/HotelPage/RoomModifyPage";
 import BusinessPage from "../pages/admin/SuperAdmin/BusinessPage";
 import BusinessReq from "../pages/admin/SuperAdmin/BusinessReq";
 import HotelList from "../pages/admin/SuperAdmin/HotelList";
+import RoomListPage from "../pages/admin/Business/RoomPage/RoomListPage";
 
 export const RouterInfo = [
   {
@@ -114,6 +115,11 @@ export const RouterInfo = [
         index: true,
         element: <RoomPage />,
         label: "room",
+      },
+      {
+        path: "/admin/roomList",
+        element: <RoomListPage />,
+        label: "roomlist",
       },
       {
         path: "/admin/hotelInfo",

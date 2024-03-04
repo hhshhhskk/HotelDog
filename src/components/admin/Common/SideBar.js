@@ -164,7 +164,7 @@ const SideBar = () => {
       ? value === "일일 내역"
         ? navigate("/admin")
         : value === "예약 관리"
-        ? navigate("/admin")
+        ? navigate("/admin/roomlist")
         : value === "호텔 정보"
         ? navigate("/admin/hotelinfo")
         : value === "호텔 수정"
