@@ -57,9 +57,9 @@ export const RmTodayMenuBt = styled.span`
 `;
 // middle 영역
 export const MenuTable = styled.div`
-position: relative;
-margin-bottom: 70px;
-`
+  position: relative;
+  margin-bottom: 70px;
+`;
 export const RmTableBtFlex = styled.div`
   position: relative;
   display: flex;
@@ -162,18 +162,20 @@ export const StyledTableWrap = styled.div`
     height: 38px;
     border-radius: 4px;
   }
+`;
+export const DogInfoButton = styled.button`
+  position: relative;
+  outline: none;
+  border: 1px solid #b9b9b9;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  color: #b9b9b9;
+  padding: 5px;
 
-  .ant-btn button {
-    outline: none;
-    border: 1px solid #b9b9b9;
-    border-radius: 10px;
-    cursor: pointer;
+  &:active {
     background-color: #fff;
-    padding: 5px;
-  }
-
-  .ant-btn:active {
-    background-color: #b9b9b9;
+    color: #000;
   }
 `;
 // export const Table = styled.div`
