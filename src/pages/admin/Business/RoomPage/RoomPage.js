@@ -2,6 +2,7 @@ import { Button, Input, Table } from "antd";
 // import Highlighter from "react-highlight-words";
 import React, { useEffect, useState } from "react";
 import {
+  DogInfoButton,
   MenuTable,
   ModalBackground,
   RmBtFlex,
@@ -25,20 +26,14 @@ import {
   RmTodaySearch,
   StyledTableWrap,
 } from "../../../../styles/AdminPageStyle/RoomPageStyle/roomPageStyle";
+import { getRoomToday } from "../../../../api/admin/Room/RoomApi";
 
-const { Search } = Input;
+// const { Search } = Input;
 
 const RoomPage = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]); // 선택된 행의 키 값들을 저장하는 상태
-  const [selectedRows, setSelectedRows] = useState([]); // 선택된 행들의 정보를 저장하는 상태
   const [showAllData, setShowAllData] = useState(false); // 전체 목록을 보여줄지 여부를 저장하는 상태
   const [cancelOpen, setCancelOpen] = useState(false); // 예약 취소 모달 오픈 여부 관리
 
-  // 체크박스가 변경될 때 호출되는 함수
-  const handleSelectionChange = (keys, rows) => {
-    setSelectedRowKeys(keys); // 선택된 행의 키 값들을 업데이트
-    setSelectedRows(rows); // 선택된 행들의 정보를 업데이트
-  };
   /* 🙂 ant design table 적용해보자 */
   // type RmReserve = {
   //   checkbox: string, // 체크 : checkbox
@@ -128,13 +123,13 @@ const RoomPage = () => {
     },
     {
       key: 8,
-      reserveNumber: 81945,
-      nickname: "콩지",
+      reserveNumber: 0,
+      nickname: "",
       roomType: "중형견(7kg ~15kg)이하 기준",
-      dogInfo: "반려견정보",
-      reservationData: "20240301-20240303",
-      phoneNumber: "010-2222-7777",
-      status: "예약대기중",
+      dogInfo: "",
+      reservationData: "",
+      phoneNumber: "",
+      status: "예약없음",
     },
     {
       key: 9,
@@ -157,6 +152,7 @@ const RoomPage = () => {
       status: "",
     },
   ]);
+  /* -------------------------- 필터 start ------------------------ */
   /* 💚💚💚예약번호, 닉네임 검색 -> 해당 row 가 뜨도록하는 함수 */
   const [searchText, setSearchText] = useState(""); // 검색어 상태 관리
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -175,16 +171,6 @@ const RoomPage = () => {
     setFilteredData(filtered); // 필터링된 데이터 업데이트
   };
 
-  // const handleSearch = (selectedKeys, confirm, dataIndex) => {
-  //   confirm();
-  //   setSearchText(selectedKeys[0]);
-  //   setSearchedColumn(dataIndex);
-  // };
-
-  const handleReset = clearFilters => {
-    clearFilters();
-    setSearchText("");
-  };
   const getColumnSearchProps = dataIndex => ({
     // 필터링 함수
     // value는 필터링할 값이고, record는 현재 행의 데이터
@@ -195,19 +181,10 @@ const RoomPage = () => {
             .toLowerCase()
             .includes(value.toLowerCase())
         : "",
-    render: text =>
-      searchedColumn === dataIndex
-        ? // <Highlighter
-          //   highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          //   searchWords={[searchText]}
-          //   autoEscape
-          //   textToHighlight={text ? text.toString() : ""}
-          // />
-          text
-        : text,
+    render: text => (searchedColumn === dataIndex ? text : text),
   });
-
   /* -------------------------- 필터 end ------------------------ */
+
   const columns = [
     {
       title: "예약번호",
@@ -232,7 +209,15 @@ const RoomPage = () => {
       key: "dogInfo",
       // 반려견정보 버튼 클릭 시, 모달 창 뜨도록 하게!
       render: (text, row) => {
-        return <button onClick={() => cancelModalOpen(row.key)}>{text}</button>;
+        if (!text) {
+          return null; // text가 없을 때 빈 값 반환
+        }
+
+        return (
+          <DogInfoButton onClick={() => dogInfoModalOpen(text)}>
+            {text}
+          </DogInfoButton>
+        );
       },
     },
     {
@@ -259,13 +244,17 @@ const RoomPage = () => {
       // 예약취소일때는 button 추가하여 모달 뜨도록 하도록 render
       render: (text, row) => {
         return text === "예약취소" ? (
-          <button onClick={cancelModalOpen(row.key)}>{text}</button>
+          <DogInfoButton onClick={() => cancelModalOpen(text)}>
+            {text}
+          </DogInfoButton>
         ) : text === "예약완료" ? (
           "예약완료"
         ) : text === "입실완료" ? (
           "입실완료"
         ) : text === "퇴실완료" ? (
           "퇴실완료"
+        ) : text === "예약없음" ? (
+          "예약없음"
         ) : text === "예약대기중" ? (
           "예약대기중"
         ) : null;
@@ -300,35 +289,6 @@ const RoomPage = () => {
     },
   ];
 
-  // 선택된 행의 정보 저장
-  const rowSelection = {
-    // 선택된 행의 키 값, 선택된행의 정보를 매개변수로 받아
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows,
-      );
-    },
-  };
-
-  // 체크->(예약승인)버튼 클릭 시, 상태 변경 함수
-  const handleReservationAp = (selectedRowKeys, selectedRows) => {
-    console.log("selectedRowKeys:", selectedRowKeys);
-    console.log("selectedRows:", selectedRows);
-    // 기존의 데이터를 복제하여 새로운 배열 생성
-    const updatedData = [...initData];
-    // 업데이트된 데이터를 새로운 배열에 추가
-    updatedData.forEach(row => {
-      if (selectedRowKeys.includes(row.key) && row.status !== "예약완료") {
-        row.status = "예약완료";
-      }
-    });
-    // 새로운 배열로 initData 업데이트
-    setInitData(updatedData);
-    console.log("Updated data:", updatedData);
-  };
-
   // // /* 🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊 전체 버튼 누르면 전체 table 뜨도록 해야한다.!  */
   // const [allData, setAllData] = useState(initData); // 전체 예약 목록을 저장하는 상태
 
@@ -361,19 +321,88 @@ const RoomPage = () => {
   //   return showAllData ? initData : selectedRows;
   // };
 
-  const handleCheckInCom = () => {};
-  const handleCheckOutCom = () => {};
+  /* ----------------------💭 모달 open & close start  --------------------*/
+  // 예약 취소 및 반려견정보 선택 시, 모달 오픈
 
-  /* 💭 모달 open & close  */
-  // 예약 취소 선택 시, 모달 오픈
-  const cancelModalOpen = () => {
-    setCancelOpen(true);
+  const [dogInfoOpen, setDogInfoOpen] = useState(false);
+
+  // const cancelModalOpen = text => {
+  //   // 여기에 조건부 논리 추가
+  //   if (text === "예약취소") {
+  //     setCancelOpen(true);
+  //   }
+  // };
+  // const dogInfoModalOpen = text => {
+  //   if (text === "반려견정보") {
+  //     setDogInfoOpen(true);
+  //   }
+  // };
+  const cancelModalOpen = text => {
+    // 여기에 조건부 논리 추가
+    if (text === "예약취소") {
+      setCancelOpen(true);
+      setDogInfoOpen(false); // 반려견 정보 모달 닫기 ?????
+    }
+  };
+  const dogInfoModalOpen = text => {
+    if (text === "반려견정보") {
+      setDogInfoOpen(true);
+      setCancelOpen(false); // 예약 취소 모달 닫기 ?????
+    }
   };
   // 모달 close 버튼 클릭시, 닫도록
   const cancelModalClose = () => {
     console.log("콘솔은 닫힌다.");
     setCancelOpen(false);
+    setDogInfoOpen(false);
   };
+
+  /* ----------------------💭 모달 open & close end --------------------*/
+
+  /* ---------------------- 💛 axios 연동 start --------------------*/
+  /* room today 초기값
+  dogSizeNm: "소형견"
+  dogSizePk: 1
+  fromDate: "2024-03-05"
+  hotelRoomNm: "소형견(7kg 이하)"
+  hotelRoomPk: 1
+  nickname: "백서윤"
+  paymentAmount: 150000
+  resDogAge: 4
+  resDogInfo: "안물어요"
+  resDogNm: "뽀송이"
+  resDogPk: 1
+  resNum: "R2435874146183"
+  resPk: 1
+  resStatus: 0
+  toDate: "2024-03-07"
+  userPhoneNum: "01023885447"
+    
+  */
+  // 첫페이지는 1이므로 초기값을 1로 설정
+  const [page, setPage] = useState(1);
+  useEffect(() => {
+    // 페이지 처음 불러들일 때 실행
+    getRoomToday(
+      page,
+      successGetRoomToday,
+      failGetRoomToday,
+      errorGetRoomToday,
+    );
+    console.log("현재 페이지: ", page);
+    //page의 값이 바뀌면 useEffect를 다시 실행하겠다.
+  }, [page]);
+
+  const successGetRoomToday = result => {
+    console.log("성공했습니다.", result);
+  };
+  const failGetRoomToday = result => {
+    console.log("다시 시도해주세요.", result);
+  };
+  const errorGetRoomToday = result => {
+    console.log("서버 에러입니다.", result);
+  };
+  /* ---------------------- 💛 axios 연동 end --------------------*/
 
   return (
     <RmPageWrap>
@@ -439,13 +468,68 @@ const RoomPage = () => {
           ></Table>
         </StyledTableWrap>
       </RmTableBtFlex>
-
-      {/* 모달이 열려있을 때만 렌더링? */}
+      {/* 예약 취소 모달 */}
+      {dogInfoOpen && (
+        <ModalBackground>
+          <RmPageModal>
+            <RmModalClose
+              // 모달 창 닫을때 함수 실행
+              onClick={cancelModalClose}
+              src={`${process.env.PUBLIC_URL}/admin/images/RmToday/close.svg`}
+              alt=""
+            />
+            <RmPageModalHead>
+              <RmPageTitle>예약 취소</RmPageTitle>
+            </RmPageModalHead>
+            <RmPageModalContents>
+              <RmModalContentsTitle>취소 사유</RmModalContentsTitle>
+              <RmModalCancelInfo>
+                <input type="checkbox"></input>
+                <span>
+                  비상 상황 : &quot; 죄송하지만 예기치 않은 상황으로 인해 해당
+                  객실을 제공할 수 없게 되었습니다. &quot;
+                </span>
+              </RmModalCancelInfo>
+              <RmModalCancelInfo>
+                <input type="checkbox"></input>
+                <span>
+                  기술적 문제 : &quot;시스템 오류 또는 기술적 문제로 인해 예약을
+                  취소해야 합니다. &quot;
+                </span>
+              </RmModalCancelInfo>
+              <RmModalCancelInfo>
+                <input type="checkbox"></input>
+                <span>
+                  호텔 사정 : &quot;호텔 내부 사정으로 인해 예약을 변경하거나
+                  취소 해야 합니다. &quot;
+                </span>
+              </RmModalCancelInfo>
+              <RmModalCancelInfo>
+                <input type="checkbox"></input>
+                <span>
+                  객실 불가능 : &quot;객실의 예기치 못한 문제로 인해 해당 객실을
+                  사용할 수 없게 되었습니다. &quot;
+                </span>
+              </RmModalCancelInfo>
+              <RmModalCancelInfo>
+                <input type="checkbox"></input>
+                <span>
+                  법적 요구 사항 : &quot;법률적인 요구 사항 또는 규정에 따라
+                  예약을 취소해야 합니다. &quot;
+                </span>
+              </RmModalCancelInfo>
+              <div>
+                <RmPageBt onClick={cancelModalClose}>확인</RmPageBt>
+              </div>
+            </RmPageModalContents>
+          </RmPageModal>
+        </ModalBackground>
+      )}
+      {/* 반려견 정보 모달 */}
       {/* {cancelModalOpen && (
         <RmPageModal cancelModalClose={cancelModalClose(setCancelOpen)} />
       )} */}
-      {/* 모달이 열려있을 때만 렌더링 */}
-      {/* {cancelOpen && (
+      {cancelOpen && (
         <ModalBackground>
           <RmPageModal>
             <RmModalClose
@@ -473,61 +557,7 @@ const RoomPage = () => {
             </RmModalDogContent>
           </RmPageModal>
         </ModalBackground>
-      )} */}
-
-      {/* 예약 취소 모달 */}
-      {/* <RmPageModal>
-        <RmModalClose
-        // 모달 창 닫을때 함수 실행
-        onClick={cancelModalClose}
-          src={`${process.env.PUBLIC_URL}/admin/images/RmToday/close.svg`}
-          alt=""
-        />
-        <RmPageModalHead>
-          <RmPageTitle>예약 취소</RmPageTitle>
-        </RmPageModalHead>
-        <RmPageModalContents>
-          <RmModalContentsTitle>취소 사유</RmModalContentsTitle>
-          <RmModalCancelInfo>
-            <input type="checkbox"></input>
-            <span>
-              비상 상황 : &quot; 죄송하지만 예기치 않은 상황으로 인해 해당
-              객실을 제공할 수 없게 되었습니다. &quot;
-            </span>
-          </RmModalCancelInfo>
-          <RmModalCancelInfo>
-            <input type="checkbox"></input>
-            <span>
-              기술적 문제 : &quot;시스템 오류 또는 기술적 문제로 인해 예약을
-              취소해야 합니다. &quot;
-            </span>
-          </RmModalCancelInfo>
-          <RmModalCancelInfo>
-            <input type="checkbox"></input>
-            <span>
-              호텔 사정 : &quot;호텔 내부 사정으로 인해 예약을 변경하거나 취소
-              해야 합니다. &quot;
-            </span>
-          </RmModalCancelInfo>
-          <RmModalCancelInfo>
-            <input type="checkbox"></input>
-            <span>
-              객실 불가능 : &quot;객실의 예기치 못한 문제로 인해 해당 객실을
-              사용할 수 없게 되었습니다. &quot;
-            </span>
-          </RmModalCancelInfo>
-          <RmModalCancelInfo>
-            <input type="checkbox"></input>
-            <span>
-              법적 요구 사항 : &quot;법률적인 요구 사항 또는 규정에 따라 예약을
-              취소해야 합니다. &quot;
-            </span>
-          </RmModalCancelInfo>
-          <div>
-            <RmPageBt>확인</RmPageBt>
-          </div>
-        </RmPageModalContents>
-      </RmPageModal> */}
+      )}
     </RmPageWrap>
   );
 };

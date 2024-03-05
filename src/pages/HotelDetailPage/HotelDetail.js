@@ -234,9 +234,7 @@ const HotelDetail = ({ detailId, hotelList, resDay }) => {
         // className={
         //   reserveFormVisible ? "reserveForm" : "reserveForm reserveForm-hidden"
         // }
-      >
-        <ReserveformBottom>form 밑에 영역 잡아놓고 싶은데 안잡히네! </ReserveformBottom>
-      </ReserveForm>
+      ></ReserveForm>
       {/* } */}
     </div>
   );
