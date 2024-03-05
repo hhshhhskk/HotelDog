@@ -34,6 +34,8 @@ export const AdButton = styled.button`
   color: #fff;
   background-color: #346fff;
   font-size: 1.6rem;
+
+  cursor: pointer;
 `;
 
 export const ModifyButtonDiv = styled.div`
@@ -138,21 +140,26 @@ export const ContentsTitle = styled.span`
 export const HotelOptionDiv = styled.div`
   position: relative;
   display: flex;
+  align-items: center;
+  top: -5px;
   gap: 10px;
 `;
 
 export const HotelOption = styled.span`
   position: relative;
+  display: flex;
+  align-items: center;
   padding: 5px 10px;
   color: #fff;
   background-color: #323232;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   border-radius: 5px;
 `;
 
 export const HotelDesc = styled.div`
   position: relative;
   width: 470px;
+  line-height: 1.5;
 `;
 
 // 객실 정보
