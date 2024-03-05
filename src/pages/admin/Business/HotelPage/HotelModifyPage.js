@@ -1,179 +1,77 @@
-import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { postJwtHotelModifyAPI } from "../../../../api/admin/Business/HotelManagement/HotelInfoApi";
-
-export const HotelModifyWrap = styled.div`
-  position: relative;
-  background-color: #eee;
-  height: 100%;
-  /* 100% 로 가야히지 않을까 */
-  width: 1620px;
-  padding: 80px 210px;
-`;
-
-// 버튼 포함한 영역
-export const HotelModifyDiv = styled.div`
-  position: relative;
-`;
-
-export const HotelModifyCard = styled.div`
-  position: relative;
-  background-color: #fff;
-`;
-
-export const HotelModifyCardTitle = styled.div`
-  position: relative;
-  height: 75px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #eee;
-  p {
-    font-size: 2rem;
-    font-weight: 800;
-    padding-left: 25px;
-  }
-`;
-
-export const HotelModifyContentDiv = styled.div`
-  position: relative;
-  display: flex;
-  font-size: 1.6rem;
-  height: 620px;
-`;
-
-export const HotelModifyTitle = styled.div`
-  position: relative;
-  width: 200px;
-  background-color: rgba(52, 111, 255, 0.1);
-  p {
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding-left: 45px;
-    height: 50px;
-    border-bottom: 1px solid #eee;
-  }
-`;
-
-export const HotelModifyTitlePic = styled.div`
-  position: relative;
-  p {
-    height: 120px;
-  }
-`;
-
-export const HotelModifyTitleDesc = styled.div`
-  position: relative;
-  p {
-    height: 200px;
-  }
-`;
-
-export const HotelModifyContent = styled.div`
-  position: relative;
-  p {
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding-left: 45px;
-    height: 50px;
-    width: 1000px;
-    border-bottom: 1px solid #eee;
-  }
-  textarea {
-    position: relative;
-    margin: 10px 45px;
-    padding: 10px;
-    width: 910px;
-    height: 175px;
-    border-bottom: 1px solid #eee;
-  }
-`;
-
-export const HotelOption = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding-left: 45px;
-  height: 50px;
-  width: 1000px;
-  border-bottom: 1px solid #eee;
-  gap: 20px;
-`;
-
-export const HotelPicDiv = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 10px 45px;
-  border-bottom: 1px solid #eee;
-  gap: 20px;
-`;
-
-export const HotelPic = styled.img`
-  position: relative;
-  width: 100px;
-  height: 100px;
-  /* background-color: aqua; */
-`;
-
-export const HotelPicAddButtonDiv = styled.div`
-  position: relative;
-`;
-
-export const HotelPicAddButton = styled.button`
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  top: -50px;
-  left: -100px;
-  font-size: 4rem;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  color: rgba(255, 255, 255, 0.5);
-  background-color: rgba(0, 0, 0, 0.3);
-`;
-
-export const ButtonDiv = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
-  gap: 20px;
-  padding-top: 25px;
-  button {
-    position: relative;
-    padding: 10px 40px;
-    border: none;
-    border-radius: 5px;
-    color: #fff;
-    background-color: #323232;
-    font-size: 1.6rem;
-  }
-`;
+import {
+  getJwtHotelInfoAPI,
+  postJwtHotelModifyAPI,
+} from "../../../../api/admin/Business/HotelManagement/HotelInfoApi";
+import {
+  ButtonDiv,
+  HotelModifyCard,
+  HotelModifyCardTitle,
+  HotelModifyContent,
+  HotelModifyContentDiv,
+  HotelModifyDiv,
+  HotelModifyTitle,
+  HotelModifyTitleDesc,
+  HotelModifyTitlePic,
+  HotelModifyWrap,
+  HotelOption,
+  HotelPic,
+  HotelPicAddButton,
+  HotelPicAddButtonDiv,
+  HotelPicDiv,
+} from "../../../../styles/AdminPageStyle/hotelPageStyle/hotelModifyStyle";
 
 // 호텔 정보 초기값
 const initHotelInfo = {
-  business_license_number: "0000000000",
-  hotel_name: "네모네모 멈뭄미 호텔",
-  hotel_master: "곽민성",
-  hotel_number: "0000000000",
-  hotel_address: "대구광역시 북구",
-  // 이미지 형식
-  hotel_pic: [
-    `${process.env.PUBLIC_URL}/admin/images/HotelInfo/cat.jpg`,
-    `${process.env.PUBLIC_URL}/admin/images/HotelInfo/cat.jpg`,
-    `${process.env.PUBLIC_URL}/admin/images/HotelInfo/cat.jpg`,
-    `${process.env.PUBLIC_URL}/admin/images/HotelInfo/cat.jpg`,
-    `${process.env.PUBLIC_URL}/admin/images/HotelInfo/cat.jpg`,
+  hotelPk: "",
+  hotelNum: "",
+  hotelNm: "",
+  hotelDetailInfo: "",
+  businessNum: "",
+  hotelCall: "",
+  createdAt: "",
+  hotelPics: [],
+  hotelFullAddress: "",
+  hotelAddressInfo: {
+    addressName: "",
+    region1DepthName: "",
+    region2DepthName: "",
+    region3DepthName: "",
+    zoneNum: "",
+    x: "",
+    y: "",
+    detailAddress: "",
+  },
+  approval: "",
+  optionList: [
+    {
+      optionPk: "",
+      optionNm: "",
+    },
   ],
-  hotel_option: [1, 3],
-  hotel_desc:
-    "이 편지는 영국에서 최초로 시작되어 일년에 한바퀴를 돌면서 받는 사람에게 행운을 주었고 지금은 당신에게로 옮겨진 이 편지는 4일 안에 당신 곁을 떠나야 합니다. 이 편지를 포함해서 7통을 행운이 필요한 사람에게 보내 주셔야 합니다. 복사를 해도 좋습니다. 혹 미신이라 하실지 모르지만 사실입니다.",
+  businessCertificate: "",
+  hotelRoomInfoList: [
+    {
+      hotelRoomPk: "",
+      sizePk: "",
+      hotelRoomNm: "",
+      roomPic: "",
+      hotelRoomEa: "",
+      hotelRoomCost: "",
+      maximum: "",
+      roomAble: "",
+      discountPer: "",
+      createdAt: "",
+      discountSignStatus: "",
+    },
+  ],
+  advertise: "",
+  hotelAdvertiseToDate: "",
+  hotelAdvertiseEndDate: "",
 };
 
-// POST 데이터
+// POST 데이터 초기값
 const initPostData = {
   dto: {
     hotelDetailInfo: "",
@@ -195,11 +93,28 @@ const options = [
 const HotelModifyPage = () => {
   const navigate = useNavigate();
 
+  // 호텔 정보 상태
+  const [hotelInfo, setHotelInfo] = useState(initHotelInfo);
+
+  // 호텔 이미지 상태
   const [previewImg, setPreviewImg] = useState([]);
+  // 호텔 옵션 상태
   const [selectedOptions, setSelectedOptions] = useState([]);
+  // 호텔 설명 상태
   const [detailInfo, setDetailInfo] = useState();
-  // API 전송될 데이터
+  // API 전송될 데이터 상태
   const [postData, setPostData] = useState(initPostData);
+
+  // 화면 초기 불러오기
+  useEffect(() => {
+    // Axios Get으로 호텔 정보 가져오기
+    const getHotelInfo = async () => {
+      const data = await getJwtHotelInfoAPI(setHotelInfo);
+      setHotelInfo(data);
+    };
+
+    getHotelInfo();
+  }, []);
 
   // 이미지 선택했을 때
   const handleChangeUploadPic = e => {
@@ -221,13 +136,39 @@ const HotelModifyPage = () => {
       : [...selectedOptions, option];
 
     setSelectedOptions(updatedOptions);
+    console.log("옵션 상태", selectedOptions);
   };
 
-  // 취소, 전송 버튼
+  // 사업자등록번호 형식으로 변환
+  function formatBusinessNumber(businessNum) {
+    // 입력된 문자열에서 숫자만 추출
+    const numberOnly = businessNum.replace(/\D/g, "");
+    // 정규식을 사용하여 원하는 형식으로 변환
+    const formattedNumber = numberOnly.replace(
+      /(\d{3})(\d{2})(\d{5})/,
+      "$1-$2-$3",
+    );
+    return formattedNumber;
+  }
+
+  // 전화번호 형식으로 변환
+  function formatPhoneNumber(hotelCall) {
+    // 입력된 문자열에서 숫자만 추출
+    const numberOnly = hotelCall.replace(/\D/g, "");
+    // 정규식을 사용하여 원하는 형식으로 변환
+    const formattedNumber = numberOnly.replace(
+      /(\d{3})(\d{4})(\d{4})/,
+      "$1-$2-$3",
+    );
+    return formattedNumber;
+  }
+
+  // 취소 버튼
   const handleClickCancel = () => {
     navigate(`/admin/hotelinfo`);
   };
 
+  // 전송 버튼
   const handleClickSubmit = () => {
     // 호텔 이미지, 옵션, 설명을 전송
     const newPostData = {
@@ -268,33 +209,25 @@ const HotelModifyPage = () => {
                 </HotelModifyTitleDesc>
               </HotelModifyTitle>
               <HotelModifyContent>
-                <p>{initHotelInfo.business_license_number}</p>
-                <p>{initHotelInfo.hotel_name}</p>
-                <p>{initHotelInfo.hotel_master}</p>
-                <p>{initHotelInfo.hotel_number}</p>
-                <p>{initHotelInfo.hotel_address}</p>
+                <p>{formatBusinessNumber(hotelInfo.businessNum)}</p>
+                <p>{hotelInfo.hotelNm}</p>
+                <p>{hotelInfo.businessName}</p>
+                <p>{formatPhoneNumber(hotelInfo.hotelCall)}</p>
+                <p>{hotelInfo.hotelFullAddress}</p>
 
                 <HotelPicDiv>
-                  {initHotelInfo.hotel_pic.map((img, index) => (
+                  {hotelInfo.hotelPics.map((pic, index) => (
                     <React.Fragment key={index}>
                       {previewImg === index ? (
-                        <HotelPic src={img} alt="선택된 이미지 미리보기" />
+                        <HotelPic src={pic} alt="선택된 이미지 미리보기" />
                       ) : (
                         <HotelPic
-                          src={initHotelInfo.hotel_pic}
+                          src={`http://112.222.157.156:5222/pic/hotel/${hotelInfo.hotelPk}/${pic}`}
                           alt="기존 이미지 미리보기"
                         />
                       )}
                     </React.Fragment>
                   ))}
-                  {/* {initHotelInfo.hotel_pic.map ? (
-                    <HotelPic src={previewImg} alt="선택된 이미지 미리보기" />
-                  ) : (
-                    <HotelPic
-                      src={initHotelInfo.hotel_pic}
-                      alt="기존 이미지 미리보기"
-                    />
-                  )} */}
 
                   <HotelPicAddButtonDiv>
                     <label htmlFor="picUpload">
@@ -325,14 +258,23 @@ const HotelModifyPage = () => {
                       <input
                         type="checkbox"
                         value={option}
-                        checked={selectedOptions.includes(option)}
+                        checked={
+                          selectedOptions.includes(option) ||
+                          hotelInfo.optionList.some(
+                            item =>
+                              item.optionPk === options.indexOf(option) + 1,
+                          )
+                        }
                         onChange={() => handleOptionChange(option)}
                       />
                       {option}
                     </label>
                   ))}
                 </HotelOption>
-                <textarea>{initHotelInfo.hotel_desc}</textarea>
+                <textarea
+                  defaultValue={hotelInfo.hotelDetailInfo}
+                  onChange={e => setDetailInfo(e.target.value)}
+                />
               </HotelModifyContent>
             </HotelModifyContentDiv>
           </HotelModifyCard>

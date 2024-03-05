@@ -31,6 +31,7 @@ import {
 } from "../../../../styles/AdminPageStyle/hotelPageStyle/hotelInfoPageStyle";
 import { getJwtHotelInfoAPI } from "../../../../api/admin/Business/HotelManagement/HotelInfoApi";
 
+// 호텔 정보 초기값
 const initHotelInfo = {
   hotelPk: "",
   hotelNum: "",
@@ -41,12 +42,42 @@ const initHotelInfo = {
   createdAt: "",
   hotelPics: [],
   hotelFullAddress: "",
-  hotelAddressInfo: {},
+  hotelAddressInfo: {
+    addressName: "",
+    region1DepthName: "",
+    region2DepthName: "",
+    region3DepthName: "",
+    zoneNum: "",
+    x: "",
+    y: "",
+    detailAddress: "",
+  },
   approval: "",
-  optionList: [],
+  optionList: [
+    {
+      optionPk: "",
+      optionNm: "",
+    },
+  ],
   businessCertificate: "",
-  hotelRoomInfoList: [],
+  hotelRoomInfoList: [
+    {
+      hotelRoomPk: "",
+      sizePk: "",
+      hotelRoomNm: "",
+      roomPic: "",
+      hotelRoomEa: "",
+      hotelRoomCost: "",
+      maximum: "",
+      roomAble: "",
+      discountPer: "",
+      createdAt: "",
+      discountSignStatus: "",
+    },
+  ],
   advertise: "",
+  hotelAdvertiseToDate: "",
+  hotelAdvertiseEndDate: "",
 };
 
 const HotelInfoPage = () => {
@@ -56,16 +87,23 @@ const HotelInfoPage = () => {
   // 호텔 정보 상태
   const [hotelInfo, setHotelInfo] = useState(initHotelInfo);
   // 호텔 이미지 상태
-  const [previewPic, setPreviewPic] = useState([hotelInfo.hotelPics]);
-
-  // Axios Get으로 호텔 정보 가져오기
-  const getHotelInfo = async () => {
-    const a = await getJwtHotelInfoAPI(setHotelInfo);
-    console.log("컴포넌트 불러온데이터: ", a);
-  };
+  const [previewPic, setPreviewPic] = useState(``);
 
   // 화면 초기 불러오기
   useEffect(() => {
+    // Axios Get으로 호텔 정보 가져오기
+    const getHotelInfo = async () => {
+      const data = await getJwtHotelInfoAPI(setHotelInfo);
+      setHotelInfo(data);
+
+      // getHotelInfo가 완료된 후에 초기값 설정
+      if (data.hotelPics.length > 0) {
+        setPreviewPic(
+          `http://112.222.157.156:5222/pic/hotel/${data.hotelPk}/${data.hotelPics[0]}`,
+        );
+      }
+    };
+
     getHotelInfo();
   }, []);
 
@@ -103,7 +141,7 @@ const HotelInfoPage = () => {
     }
   };
 
-  // 가격 천단위 표시
+  // 가격 단위로 변환
   const formatNumber = number => {
     if (number) {
       return number.toLocaleString();
@@ -159,12 +197,11 @@ const HotelInfoPage = () => {
                     hotelInfo.hotelPics.map((pic, index) => (
                       <img
                         key={index}
-                        // src={`${process.env.PUBLIC_URL}/admin/images/HotelInfo/${pic}`}
-                        src={`http://112.222.157.156:5222/pic/hotel/${hotelInfo.hotelPk}/${hotelInfo.hotelPics}`}
+                        src={`http://112.222.157.156:5222/pic/hotel/${hotelInfo.hotelPk}/${pic}`}
                         alt={`호텔사진${index + 1}`}
                         onClick={() =>
                           handleClickPic(
-                            `http://112.222.157.156:5222/pic/hotel/${hotelInfo.hotelPk}/${hotelInfo.hotelPics}`,
+                            `http://112.222.157.156:5222/pic/hotel/${hotelInfo.hotelPk}/${pic}`,
                           )
                         }
                       />
@@ -235,10 +272,15 @@ const HotelInfoPage = () => {
 
                     <RoomInfoContents>
                       <RoomInfoPreview>
-                        <img
-                          src={`${process.env.PUBLIC_URL}/admin/images/HotelInfo/cat.jpg`}
-                          alt="객실 사진"
-                        />
+                        {/* 주소 수정 바랍니다 */}
+                        {room.roomPic ? (
+                          <img
+                            src={`http://112.222.157.156:5222/pic/hotel/${room.hotelRoomPk}/${room.roomPic}`}
+                            alt="객실 사진"
+                          />
+                        ) : (
+                          <span>이미지 없음</span>
+                        )}
                       </RoomInfoPreview>
                       <RoomInfoTextDiv>
                         <RoomInfoText>
