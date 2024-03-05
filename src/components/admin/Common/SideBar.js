@@ -1,6 +1,8 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { logoutAPI } from "../../../api/Login/logoutApi";
+import useCustomAdminLogin from "../../../hooks/admin/useAdminCustomLogin";
 
 const SideWrapper = styled.div`
   position: fixed;
@@ -93,6 +95,35 @@ const SideCategoryItemText = styled.div`
   line-height: normal;
 `;
 
+const LogoutBox = styled.div`
+  position: absolute;
+  bottom: 0;
+  background-color: #292929;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+
+  div {
+    height: 20px;
+    color: #666;
+    font-family: "Noto Sans";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+  }
+`;
+
+const LogoutImg = styled.img`
+  width: 20px;
+  height: 17.5px;
+  margin-left: 40px;
+`;
+
 const SideBar = () => {
   const navigate = useNavigate();
 
@@ -102,6 +133,8 @@ const SideBar = () => {
   const pathArray = pathName.split("/");
   const userType = pathArray[1];
   const currentCate = pathArray[2];
+
+  const { doLogout } = useCustomAdminLogin();
 
   // 사업자 카테고리
   const categorys = [
@@ -186,6 +219,12 @@ const SideBar = () => {
       : null;
   };
 
+  const logoutClicked = async () => {
+    await logoutAPI();
+    doLogout();
+    navigate("/admin/login");
+  };
+
   if (userType === "admin") {
     return (
       <SideWrapper>
@@ -226,6 +265,12 @@ const SideBar = () => {
                 ))}
             </div>
           ))}
+          <LogoutBox onClick={logoutClicked}>
+            <LogoutImg
+              src={`${process.env.PUBLIC_URL}/admin/images/Sidebar/logout.svg`}
+            />
+            <div>로그아웃</div>
+          </LogoutBox>
         </SideContents>
       </SideWrapper>
     );
@@ -270,6 +315,12 @@ const SideBar = () => {
             </div>
           ))}
         </SideContents>
+        <LogoutBox onClick={logoutClicked}>
+          <LogoutImg
+            src={`${process.env.PUBLIC_URL}/admin/images/Sidebar/logout.svg`}
+          />
+          <div>로그아웃</div>
+        </LogoutBox>
       </SideWrapper>
     );
   } else {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
 import styled from "@emotion/styled";
@@ -23,9 +23,12 @@ const NavBox = styled.div`
 const AdminLoginForm = () => {
   const savedAdminId = localStorage.getItem("savedAdminId");
   const navigate = useNavigate();
-  const { doLogin } = useCustomAdminLogin();
-  const [initialValue, setInitialValue] = useState(savedAdminId);
+  const { doLogin, isLogin } = useCustomAdminLogin();
   const [idSaved, setIdSaved] = useState(savedAdminId ? true : false);
+
+  useEffect(() => {
+    isLogin && alert("이미 로그인이 되어있습니다.", navigate("/admin"));
+  });
 
   const handleCheckboxChange = e => {
     setIdSaved(e.target.checked);
@@ -67,7 +70,7 @@ const AdminLoginForm = () => {
       >
         <Form.Item
           name="useremail"
-          initialValue={initialValue}
+          initialValue={savedAdminId ? savedAdminId : ""}
           rules={[
             {
               required: true,
