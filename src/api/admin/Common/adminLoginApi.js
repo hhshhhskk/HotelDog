@@ -1,20 +1,21 @@
 import axios from "axios";
 
-export const AdminLoginApi = async values => {
+// 관리자 로그인 API
+export const AdminLoginApi = async loginParam => {
   try {
     const response = await axios({
       method: "post",
       url: "/api/user/business/signin",
-      data: {
-        userEmail: values?.username,
-        upw: values?.password,
-      },
+      data: loginParam.loginParam,
       headers: {
         "Content-Type": "application/json",
       },
     });
-    sessionStorage.setItem("userPk", response.data.userPk);
-    console.log(response);
+    sessionStorage.setItem("businessPk", response.data.businessPk);
+    sessionStorage.setItem("userRole", response.data.userRole);
+    if (response.status === 200) {
+      return response.data.userRole;
+    }
   } catch (error) {
     // 오류가 발생했을 때의 처리
     alert(error.response.data.message);

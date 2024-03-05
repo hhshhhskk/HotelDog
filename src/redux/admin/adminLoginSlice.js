@@ -1,92 +1,54 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-// API 서버 연동
-// reducer (store 상태 변경) 를 호출할때 지금은 API 호출
 import { getCookie, removeCookie, setCookie } from "../../utils/cookieUtil";
-import { AdminLoginApi } from "../../api/admin/Common/loginApi";
+import { AdminLoginApi } from "../../api/admin/Common/adminLoginApi";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-// export const 외부함수 = createAsyncThunk("이름", 리듀서함수);
+// 비동기 액션 생성자 함수 정의
 export const AdminLoginPostAsync = createAsyncThunk(
-  "AdminLoginPostAsync",
+  "adminLogin/AdminLoginPostAsync",
   async ({ loginParam }) => {
-    try {
-      const res = await AdminLoginApi({ loginParam });
-      // 결과값을 리턴을 해야 action 에 값이 담기지...
-      return res;
-    } catch (error) {
-      return error;
-    }
+    const res = await AdminLoginApi({ loginParam });
+    return res;
   },
 );
 
-const initState = {
-  accessToken: "",
+// 초기 상태 정의
+const initialState = {
+  accessToken: loadAccessTokenCookie() || "", // 초기 상태에서는 빈 문자열로 설정
 };
 
-// 쿠키 정보 읽어와서 initState 변경하기
-const loadAccessTokenCookie = () => {
-  const accessToken = getCookie("accessToken");
-  return accessToken;
-};
+// 쿠키에서 액세스 토큰을 읽어오는 함수
+function loadAccessTokenCookie() {
+  return getCookie("accessToken") || ""; // 쿠키가 없는 경우에 대비하여 기본값 설정
+}
 
-const AdminLoginSlice = createSlice({
-  name: "AdminLoginSlice",
-  initialState: {
-    accessToken: loadAccessTokenCookie() || initState.accessToken,
-  },
-
-  // store 의 state 를 업데이트 하는 함수 모음
+// 리듀서 생성
+const adminLoginSlice = createSlice({
+  name: "adminLogin",
+  initialState,
   reducers: {
     login: (state, action) => {
-      // console.log("login.....");
-
-      return {
-        accessToken: action.payload.accessToken,
-        userPk: action.payload.userPk,
-      };
+      const { accessToken } = action.payload;
+      state.accessToken = accessToken;
+      setCookie("accessToken", accessToken); // 쿠키 설정
     },
-    // 로그아웃
-    logout: (state, action) => {
-      // console.log("logout.....");
-      // 엑세스 토큰 삭제
-      removeCookie("accessToken", "/");
-
-      return { ...initState };
+    logout: state => {
+      removeCookie("accessToken"); // 쿠키 제거
+      state.accessToken = ""; // 액세스 토큰 초기화
     },
   },
-  // 외부 API 연동을 통해 store 의 state 를 업데이트 함수 모음
   extraReducers: builder => {
     builder
       .addCase(AdminLoginPostAsync.fulfilled, (state, action) => {
-        // 외부 연동 성공
-        // state : 기존 값(store 의 loginSate)
-        // action : 받아온 값
-        // console.log("fulfilled", state);
-        // console.log(action);
-        const payload = action.payload;
-        // console.log("payload", payload);
-        if (!payload.error) {
-          // 이때 필요한 정보를 보관한다.
-          // 쿠키는 문자열입니다. 객체를 JSON 문자로 변환
-          setCookie("accessToken", JSON.stringify(payload));
-        }
-        return payload;
-      })
-      .addCase(AdminLoginPostAsync.pending, (state, action) => {
-        // 외부 연동 시도중..
-        // state : 기존 값(store 의 loginSate)
-        // action : 받아온 값
-        // console.log("pending", state);
+        const { accessToken } = action.payload;
+        state.accessToken = accessToken;
+        setCookie("accessToken", accessToken); // 쿠키 설정
       })
       .addCase(AdminLoginPostAsync.rejected, (state, action) => {
-        // 외부 연동 실패
-        // state : 기존 값(store 의 loginSate)
-        // action : 받아온 값
-        // console.log("rejected", state);
+        // 에러 처리
       });
   },
 });
 
-export const { login, logout } = AdminLoginSlice.actions;
-export default AdminLoginSlice.reducer;
+export const { login, logout } = adminLoginSlice.actions;
+export default adminLoginSlice.reducer;
