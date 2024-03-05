@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { logoutAPI } from "../../api/Login/logoutApi";
-import {
-  postHotelListAPI,
-  postJwtHotelListAPI,
-  postSearchHotelListAPI,
-  postSearchJwtHotelListAPI,
-} from "../../api/Main/HotelApi";
 import useCustomLogin from "../../hooks/useCustomLogin";
 import {
+  postHotelListAsync,
+  postJwtHotelListAsync,
+} from "../../redux/searchSlice";
+import {
+  BusinessButton,
   HeaderCategory,
   HeaderContent,
   HeaderDiv,
@@ -21,11 +21,6 @@ import {
   SearchBt,
   SearchBtnImg,
 } from "../../styles/Common/headerStyle";
-import { useDispatch } from "react-redux";
-import {
-  postHotelListAsync,
-  postJwtHotelListAsync,
-} from "../../redux/searchSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -117,6 +112,11 @@ const Header = () => {
     // 리프레쉬 토큰 삭제
     await logoutAPI();
     doLogout();
+    navigate("/");
+  };
+
+  // 사업자 전환
+  const handleClickBusiness = async e => {
     navigate("/");
   };
 
@@ -213,6 +213,9 @@ const Header = () => {
               <li>
                 <span onClick={handleClickCate}>로그인</span>
               </li>
+              <BusinessButton>
+                <span onClick={handleClickBusiness}>사업자 전환</span>
+              </BusinessButton>
             </ul>
           )}
         </HeaderCategory>

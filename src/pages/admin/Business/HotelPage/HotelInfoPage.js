@@ -32,119 +32,21 @@ import {
 import { getJwtHotelInfoAPI } from "../../../../api/admin/Business/HotelManagement/HotelInfoApi";
 
 const initHotelInfo = {
-  hotelPk: 2,
-  hotelNum: "H243107780202259",
-  hotelNm: "멍뭉이 스타일 애견 호텔",
-  hotelDetailInfo:
-    "우리 애완견들도 편안한 휴식과 특별한 케어가 필요합니다. 우리 애견 호텔은 이러한 필요를 충족시키기 위해 설계되었습니다. 여러분의 사랑스러운 반려견이 편안하고 안전한 환경에서 휴식을 취하고 즐길 수 있도록 모든 시설과 서비스가 완벽하게 구비되어 있습니다.",
-  businessNum: "5432109876",
-  hotelCall: "01057938246",
-  createdAt: "2024-03-01T20:22:59.720206",
-  hotelPics: [
-    "857a1bf1-19db-4e29-a76f-8c0f69fc6eaa.png",
-    "32d2c74a-272b-4fdc-a0a1-fb5d5f9da2c1.png",
-    "1717440e-9ce8-4507-9f70-c71a765fa5b9.png",
-    "8f84f0e4-3782-4bd4-9cbf-f55664638235.png",
-    "5e268d34-6690-488b-8f35-f076ac372f13.png",
-  ],
-  hotelFullAddress: "string string",
-  hotelAddressInfo: {
-    addressName: "string",
-    region1DepthName: "string",
-    region2DepthName: "string",
-    region3DepthName: "string",
-    zoneNum: "strig",
-    x: "string",
-    y: "string",
-    detailAddress: "string",
-  },
-  approval: 0,
-  optionList: [
-    {
-      optionPk: 1,
-      optionNm: "swimming_pool",
-    },
-    {
-      optionPk: 2,
-      optionNm: "play_ground",
-    },
-    {
-      optionPk: 3,
-      optionNm: "hand_made_food",
-    },
-    {
-      optionPk: 4,
-      optionNm: "pick_up",
-    },
-    {
-      optionPk: 5,
-      optionNm: "dog_beautiy",
-    },
-    {
-      optionPk: 6,
-      optionNm: "dog_program",
-    },
-    {
-      optionPk: 7,
-      optionNm: "dog_walking",
-    },
-  ],
-  businessCertificate: "9bc2644e-5dbb-45e3-b15e-f636a8260778.jpg",
-  hotelRoomInfoList: [
-    {
-      hotelRoomPk: 1,
-      sizePk: 1,
-      hotelRoomNm: "소형견(7kg 이하)",
-      roomPic: "6574a9c0-e1b2-4435-8650-e3b954ef437f.png",
-      hotelRoomEa: 10,
-      hotelRoomCost: 40000,
-      maximum: 1,
-      roomAble: 1,
-      discountPer: "0",
-      createdAt: "2024-03-01T20:22:59.748209",
-      discountSignStatus: 0,
-    },
-    {
-      hotelRoomPk: 2,
-      sizePk: 2,
-      hotelRoomNm: "중형견(15kg 이하)",
-      roomPic: null,
-      hotelRoomEa: 10,
-      hotelRoomCost: 0,
-      maximum: 1,
-      roomAble: 1,
-      discountPer: "0",
-      createdAt: "2024-03-01T20:22:59.751212",
-      discountSignStatus: 0,
-    },
-    {
-      hotelRoomPk: 3,
-      sizePk: 3,
-      hotelRoomNm: "대형견(40kg 이하)",
-      roomPic: null,
-      hotelRoomEa: 10,
-      hotelRoomCost: 0,
-      maximum: 1,
-      roomAble: 1,
-      discountPer: "0",
-      createdAt: "2024-03-01T20:22:59.752213",
-      discountSignStatus: 0,
-    },
-    {
-      hotelRoomPk: 4,
-      sizePk: 4,
-      hotelRoomNm: "초대형견(40kg 초과)",
-      roomPic: null,
-      hotelRoomEa: 10,
-      hotelRoomCost: 0,
-      maximum: 1,
-      roomAble: 1,
-      discountPer: "0",
-      createdAt: "2024-03-01T20:22:59.753213",
-      discountSignStatus: 0,
-    },
-  ],
-  advertise: 0,
+  hotelPk: "",
+  hotelNum: "",
+  hotelNm: "",
+  hotelDetailInfo: "",
+  businessNum: "",
+  hotelCall: "",
+  createdAt: "",
+  hotelPics: [],
+  hotelFullAddress: "",
+  hotelAddressInfo: {},
+  approval: "",
+  optionList: [],
+  businessCertificate: "",
+  hotelRoomInfoList: [],
+  advertise: "",
 };
 
 const HotelInfoPage = () => {
@@ -156,7 +58,7 @@ const HotelInfoPage = () => {
   // 호텔 이미지 상태
   const [previewPic, setPreviewPic] = useState([hotelInfo.hotelPics]);
 
-  // Get으로 호텔 정보 가져오기
+  // Axios Get으로 호텔 정보 가져오기
   const getHotelInfo = async () => {
     const a = await getJwtHotelInfoAPI(setHotelInfo);
     console.log("컴포넌트 불러온데이터: ", a);
@@ -303,8 +205,6 @@ const HotelInfoPage = () => {
                           </HotelOption>
                         ),
                     )}
-
-                    <HotelOption>프로그램</HotelOption>
                   </HotelOptionDiv>
                 </HotelInfoText>
                 <HotelInfoText>
