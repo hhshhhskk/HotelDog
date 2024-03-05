@@ -60,7 +60,7 @@ const TitleText = styled.div`
 `;
 
 const AdminSignUpPage = () => {
-  const [data, setData] = useState("");
+  const [data, setData] = useState();
   const [titleNum, setTitleNum] = useState(1);
   console.log("현재 데이터 상태: ", data);
   return (

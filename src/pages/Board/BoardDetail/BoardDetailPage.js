@@ -420,7 +420,7 @@ const BoardDetailPage = () => {
       }
     }
   };
-
+  console.log(commentsData);
   return (
     <BoardDetailWrap>
       {isLoading || !boardSuccess || (

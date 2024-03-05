@@ -58,14 +58,14 @@ const BoardPagination = ({ totalPage, nowPage, setNowPage }) => {
             onClick={() => {
               setNowPage(1);
             }}
-            src={`${process.env.PUBLIC_URL}/images/board/Btn2.svg`}
+            src={`${process.env.PUBLIC_URL}/images/board/pageNextBtn2.svg`}
             alt=""
           />
           <PagePrevBtn
             onClick={() => {
               setNowPage(nowPage !== 1 && nowPage - 1);
             }}
-            src={`${process.env.PUBLIC_URL}/images/board/Btn1.svg`}
+            src={`${process.env.PUBLIC_URL}/images/board/pageNextBtn1.svg`}
             alt=""
           />
         </>
@@ -91,14 +91,14 @@ const BoardPagination = ({ totalPage, nowPage, setNowPage }) => {
             onClick={() => {
               setNowPage(totalPage >= nowPage + 1 && nowPage + 1);
             }}
-            src={`${process.env.PUBLIC_URL}/images/board/Btn1.svg`}
+            src={`${process.env.PUBLIC_URL}/images/board/pageNextBtn1.svg`}
             alt=""
           />
           <Btn
             onClick={() => {
               setNowPage(totalPage);
             }}
-            src={`${process.env.PUBLIC_URL}/images/board/Btn2.svg`}
+            src={`${process.env.PUBLIC_URL}/images/board/pageNextBtn2.svg`}
             alt=""
           />
         </>

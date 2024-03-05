@@ -111,14 +111,6 @@ function BoardTable({
 
     return fetchData();
   });
-  // let dataFil = "";
-  // if (cateNum === 1) {
-  //   dataFil = data.filter(item => item.category === "공지");
-  // } else if (cateNum === 2) {
-  //   dataFil = data.filter(item => item.category === "정보");
-  // } else if (cateNum === 3) {
-  //   dataFil = data.filter(item => item.category === "자유게시판");
-  // }
 
   // 게시판 체크박스 전체 선택
   const handleCheckboxAllChange = () => {
