@@ -2,8 +2,20 @@ import React, { useState } from "react";
 import { Button, Form, Input, Select } from "antd";
 import styled from "@emotion/styled";
 import AddressPopup from "../../SignUp/AddressPopup";
-import { mailAuthAPI } from "../../../api/SignUp/addressApi";
 import AdminMailModal from "./AdminMailModal";
+import { AdminMailAuthApi } from "../../../api/admin/Common/adminSignUpApi";
+
+const MailCheckedDiv = styled.div`
+  width: 500px;
+  height: 32px;
+
+  background-color: #c9c9c9;
+  color: #9d9d9d;
+
+  padding: 4px 11px;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+`;
 
 const InnerBtn = styled.div`
   position: absolute;
@@ -19,6 +31,12 @@ const InnerBtn = styled.div`
   line-height: 31px;
 
   border-radius: 6px;
+
+  cursor: pointer;
+
+  :hover {
+    background-color: #4096ff;
+  }
 `;
 
 const AddressBox = styled.div`
@@ -106,6 +124,10 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
   const [isMailModalOpen, setMailModalOpen] = useState(false);
 
   const onFinish = values => {
+    if (mailChecked === false) {
+      return alert("메일인증을 해주세요.");
+    }
+
     setData({
       businessUserDto: {
         emailResponseVo: {
@@ -157,19 +179,17 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
           width: 70,
         }}
       >
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
+        <Option value="82">+82</Option>
+        <Option value="83">+83</Option>
+        <Option value="84">+84</Option>
+        <Option value="85">+85</Option>
       </Select>
     </Form.Item>
   );
 
   const openMailModal = () => {
-    alert("실행됨");
-    // let mailChecked = true;
-    // if (mailChecked) {
     setMailModalOpen(true);
-    //   mailAuthAPI(mail);
-    // }
+    AdminMailAuthApi(mail);
   };
 
   const closeMailModal = () => {
@@ -215,7 +235,16 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
           ]}
         >
           <div>
-            <Input />
+            {mailChecked ? (
+              <MailCheckedDiv>{mail}</MailCheckedDiv>
+            ) : (
+              <Input
+                onChange={e => {
+                  setMail(e.target.value);
+                }}
+              />
+            )}
+
             {mailChecked ? (
               <InnerBtn
                 onClick={() => {

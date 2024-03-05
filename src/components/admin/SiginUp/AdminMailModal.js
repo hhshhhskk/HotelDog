@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { mailAuthAPI, mailAuthCodeAPI } from "../../../api/SignUp/addressApi";
 
 import styled from "@emotion/styled";
+import {
+  AdminMailAuthApi,
+  AdminMailAuthCodeAPI,
+} from "../../../api/admin/Common/adminSignUpApi";
 
 const Wrapper = styled.div`
   position: absolute;
@@ -213,7 +216,7 @@ const AdminMailModal = ({ mail, closeMailModal, setMailChecked }) => {
     if (mailCode === "") {
       alert("인증코드를 입력해주세요");
     } else {
-      const result = await mailAuthCodeAPI(mail, mailCode);
+      const result = await AdminMailAuthCodeAPI(mail, mailCode);
       if (result === 1) {
         alert("인증되었습니다.");
         setMailChecked(true);
@@ -254,7 +257,7 @@ const AdminMailModal = ({ mail, closeMailModal, setMailChecked }) => {
         </CodeTime>
         <ReSendBtn
           onClick={() => {
-            mailAuthAPI(mail);
+            AdminMailAuthApi(mail);
             setCount(60 * 5 - 1);
           }}
         >
