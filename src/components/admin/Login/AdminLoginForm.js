@@ -21,10 +21,15 @@ const NavBox = styled.div`
 `;
 
 const AdminLoginForm = () => {
-  const savedId = localStorage.getItem("savedId");
+  const savedAdminId = localStorage.getItem("savedAdminId");
   const navigate = useNavigate();
   const { doLogin } = useCustomAdminLogin();
-  const [idSaved, setIdSaved] = useState(savedId ? true : false);
+  const [initialValue, setInitialValue] = useState(savedAdminId);
+  const [idSaved, setIdSaved] = useState(savedAdminId ? true : false);
+
+  const handleCheckboxChange = e => {
+    setIdSaved(e.target.checked);
+  };
 
   const onFinish = async values => {
     console.log("전송할 로그인 데이터: ", values);
@@ -34,8 +39,11 @@ const AdminLoginForm = () => {
       const result = await doLogin({ loginParam });
 
       if (idSaved) {
-        localStorage.setItem("savedId", values?.useremail);
+        localStorage.setItem("savedAdminId", values?.useremail);
+      } else {
+        localStorage.removeItem("savedAdminId");
       }
+
       if (result === "BUSINESS_USER") {
         navigate(`/admin`);
       } else if (result === "ADMIN") {
@@ -53,12 +61,13 @@ const AdminLoginForm = () => {
         name="normal_login"
         className="login-form"
         initialValues={{
-          remember: true,
+          remember: idSaved,
         }}
         onFinish={onFinish}
       >
         <Form.Item
           name="useremail"
+          initialValue={initialValue}
           rules={[
             {
               required: true,
@@ -89,7 +98,7 @@ const AdminLoginForm = () => {
         </Form.Item>
         <Form.Item>
           <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>아이디 저장</Checkbox>
+            <Checkbox onChange={handleCheckboxChange}>아이디 저장</Checkbox>
           </Form.Item>
         </Form.Item>
 

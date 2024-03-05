@@ -117,7 +117,7 @@ const Header = () => {
 
   // 사업자 전환
   const handleClickBusiness = async e => {
-    navigate("/");
+    navigate("/admin/login");
   };
 
   return (
