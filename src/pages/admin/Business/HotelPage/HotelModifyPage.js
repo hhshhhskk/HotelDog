@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { postJwtHotelModifyAPI } from "../../../../api/admin/Business/HotelManagement/HotelInfoApi";
 
 export const HotelModifyWrap = styled.div`
   position: relative;
@@ -172,6 +173,15 @@ const initHotelInfo = {
     "이 편지는 영국에서 최초로 시작되어 일년에 한바퀴를 돌면서 받는 사람에게 행운을 주었고 지금은 당신에게로 옮겨진 이 편지는 4일 안에 당신 곁을 떠나야 합니다. 이 편지를 포함해서 7통을 행운이 필요한 사람에게 보내 주셔야 합니다. 복사를 해도 좋습니다. 혹 미신이라 하실지 모르지만 사실입니다.",
 };
 
+// POST 데이터
+const initPostData = {
+  dto: {
+    hotelDetailInfo: "",
+    optionList: [],
+  },
+  hotelPics: [],
+};
+
 const options = [
   "수영장",
   "운동장",
@@ -187,6 +197,9 @@ const HotelModifyPage = () => {
 
   const [previewImg, setPreviewImg] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [detailInfo, setDetailInfo] = useState();
+  // API 전송될 데이터
+  const [postData, setPostData] = useState(initPostData);
 
   // 이미지 선택했을 때
   const handleChangeUploadPic = e => {
@@ -214,8 +227,18 @@ const HotelModifyPage = () => {
   const handleClickCancel = () => {
     navigate(`/admin/hotelinfo`);
   };
+
   const handleClickSubmit = () => {
     // 호텔 이미지, 옵션, 설명을 전송
+    const newPostData = {
+      dto: {
+        hotelDetailInfo: detailInfo,
+        optionList: [selectedOptions],
+      },
+      hotelPics: [previewImg],
+    };
+    setPostData(newPostData);
+    postJwtHotelModifyAPI(setPostData);
   };
 
   return (

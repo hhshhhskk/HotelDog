@@ -168,9 +168,9 @@ const SideBar = () => {
         : value === "호텔 정보"
         ? navigate("/admin/hotelinfo")
         : value === "호텔 수정"
-        ? navigate("/admin")
+        ? navigate("/admin/hotelmodify")
         : value === "객실 수정"
-        ? navigate("/admin")
+        ? navigate("/admin/roommodify")
         : null
       : // 최고관리자
       userType === "superadmin"
