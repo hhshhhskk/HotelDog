@@ -14,7 +14,7 @@ export const AdminLoginApi = async loginParam => {
     sessionStorage.setItem("businessPk", response.data.businessPk);
     sessionStorage.setItem("userRole", response.data.userRole);
     if (response.status === 200) {
-      return response.data.userRole;
+      return response.data;
     }
   } catch (error) {
     // 오류가 발생했을 때의 처리

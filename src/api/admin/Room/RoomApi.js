@@ -1,3 +1,4 @@
+import axios from "axios";
 import jwtAxios from "../../../utils/jwtUtil";
 
 export const getRoomToday = async (
