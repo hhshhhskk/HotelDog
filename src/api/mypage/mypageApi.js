@@ -135,6 +135,28 @@ export const postDogInfoApi = async (
     errorFn(error);
   }
 };
+//  강아지 수정
+export const putDogApi = async (
+  { sendData },
+  { successFn, failFn, errorFn },
+) => {
+  try {
+    console.log(sendData);
+    const res = await jwtAxios({
+      method: "put",
+      url: "/api/dog",
+      data: sendData,
+      headers: {
+        "Content-Type": "multipart/form-data", // Content-Type 설정
+      },
+    });
+    return res.data.result;
+  } catch (error) {
+    // 오류가 발생했을 때의 처리
+    console.error(error);
+    return error.response?.status || 500; // 에러 응답 상태 코드 반환
+  }
+};
 
 // 강아지 데이터 불러오기
 export const getDogApi = async () => {
