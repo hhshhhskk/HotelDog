@@ -129,3 +129,15 @@ export const HeaderCategory = styled.div`
     }
   }
 `;
+
+export const BusinessButton = styled.li`
+  position: relative;
+  top: -4px;
+  left: 5px;
+  background-color: #654222;
+  padding: 5px;
+  border-radius: 5px;
+  span {
+    color: #fff;
+  }
+`;

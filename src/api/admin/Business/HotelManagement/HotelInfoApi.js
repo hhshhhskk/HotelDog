@@ -2,7 +2,7 @@ import axios from "axios";
 import jwtAxios from "../../../../utils/jwtUtil";
 
 const token =
-  "eyJhbGciOiJIUzI1NiJ9.eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoie1widXNlclBrXCI6NSxcInJvbGVzXCI6W1wiQlVTSU5FU1NfVVNFUlwiXX0iLCJpYXQiOjE3MDk1NTg5ODEsImV4cCI6MTcwOTU2NjE4MX0.y8NVylLubTJkGi4RzcW_QNZ7lZwrFMYR0LclsNkdw2w.8m_A0WAeg3Cvr3v-rwaKN4GOZxGXjeE8LbbO66l0--E";
+  "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoie1widXNlclBrXCI6MyxcInJvbGVzXCI6W1wiQlVTSU5FU1NfVVNFUlwiXX0iLCJpYXQiOjE3MDk2MDA2MTcsImV4cCI6MTcwOTYwNzgxN30.zaJb2jra4RNoQ7lgPIrNKhS5CHyPBAOUgF4TZ5q6Li0";
 
 // 호텔 정보 API
 export const getJwtHotelInfoAPI = async setHotelInfo => {
