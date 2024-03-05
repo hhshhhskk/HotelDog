@@ -101,6 +101,8 @@ const CodeBtn = styled.input`
   font-size: 1.6rem;
   border: none;
   border-radius: 7px;
+
+  cursor: pointer;
 `;
 
 const CodeTime = styled.div`

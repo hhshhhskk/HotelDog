@@ -39,50 +39,6 @@ const InnerBtn = styled.div`
   }
 `;
 
-const AddressBox = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: right;
-  width: 810px;
-
-  margin-bottom: 50px;
-`;
-
-const AddressName = styled.div`
-  width: 60px;
-  height: 32px;
-  text-align: right;
-  margin-right: 7px;
-  padding-top: 4px;
-`;
-
-const AddressDiv = styled.div`
-  width: 500px;
-  height: 32px;
-  padding: 4px 11px;
-  margin-right: 5px;
-  background-color: #fff;
-  border: 1px solid #d9d9d9;
-  border-radius: 6px;
-  line-height: normal;
-`;
-
-const AddressBtn = styled.div`
-  width: 57px;
-  height: 32px;
-  padding-top: 4px;
-  text-align: center;
-  color: #fff;
-  border-radius: 6px;
-  background-color: #1677ff;
-
-  cursor: pointer;
-
-  :hover {
-    background-color: #4096ff;
-  }
-`;
-
 const { Option } = Select;
 
 const formItemLayout = {
@@ -124,9 +80,9 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
   const [isMailModalOpen, setMailModalOpen] = useState(false);
 
   const onFinish = values => {
-    if (mailChecked === false) {
-      return alert("메일인증을 해주세요.");
-    }
+    // if (mailChecked === false) {
+    //   return alert("메일인증을 해주세요.");
+    // }
 
     setData({
       businessUserDto: {
@@ -135,19 +91,8 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
           result: 1,
         },
         upw: values?.password,
-        nickname: "",
         phoneNum: values?.phone,
         businessName: values?.name,
-        addressEntity: {
-          addressName: address?.address_name,
-          region1DepthName: address?.region_1depth_name,
-          region2DepthName: address?.region_2depth_name,
-          region3DepthName: address?.region_3depth_name,
-          zoneNum: address?.zone_no,
-          x: address?.x,
-          y: address?.y,
-          detailAddress: "string",
-        },
       },
       hotelDto: {
         hotelNm: "string",
@@ -212,7 +157,7 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
         name="register"
         onFinish={onFinish}
         initialValues={{
-          prefix: "86",
+          prefix: "82",
         }}
         style={{
           width: 750,
@@ -223,16 +168,16 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
         <Form.Item
           name="email"
           label="E-mail 아이디"
-          rules={[
-            {
-              type: "email",
-              message: "이메일 형식이 아닙니다.",
-            },
-            {
-              required: true,
-              message: "이메일을 입력해 주세요.",
-            },
-          ]}
+          // rules={[
+          //   {
+          //     type: "email",
+          //     message: "이메일 형식이 아닙니다.",
+          //   },
+          //   {
+          //     required: true,
+          //     message: "이메일을 입력해 주세요.",
+          //   },
+          // ]}
         >
           <div>
             {mailChecked ? (
@@ -349,20 +294,7 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
             }}
           />
         </Form.Item>
-        <AddressBox>
-          <AddressName>
-            <span style={{ color: "#ff4d4f" }}>*</span> 주소 :
-          </AddressName>
-          <AddressDiv>{address?.address_name}</AddressDiv>
-          <AddressBtn
-            onClick={() => {
-              setPopUp(true);
-            }}
-          >
-            찾기
-          </AddressBtn>
-        </AddressBox>
-        <Form.Item {...tailFormItemLayout}>
+        <Form.Item style={{ marginTop: 50 }} {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit">
             다음
           </Button>

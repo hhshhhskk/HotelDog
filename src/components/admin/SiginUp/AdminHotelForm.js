@@ -8,9 +8,9 @@ const AddressBox = styled.div`
   position: relative;
   display: flex;
   justify-content: right;
-  width: 810px;
+  width: 750px;
 
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 `;
 
 const AddressName = styled.div`
@@ -25,7 +25,6 @@ const AddressDiv = styled.div`
   width: 500px;
   height: 32px;
   padding: 4px 11px;
-  margin-right: 5px;
   background-color: #fff;
   border: 1px solid #d9d9d9;
   border-radius: 6px;
@@ -33,6 +32,10 @@ const AddressDiv = styled.div`
 `;
 
 const AddressBtn = styled.div`
+  position: absolute;
+  top: 0;
+  right: -60px;
+
   width: 57px;
   height: 32px;
   padding-top: 4px;
@@ -89,8 +92,8 @@ const normFile = e => {
 };
 
 const AdminHotelForm = ({ data, setData, setTitleNum }) => {
-  const [popUp, setPopUp] = useState(false);
   const [address, setAddress] = useState();
+  const [popUp, setPopUp] = useState(false);
 
   const [form] = Form.useForm();
   const onFinish = values => {
@@ -193,19 +196,45 @@ const AdminHotelForm = ({ data, setData, setTitleNum }) => {
             }}
           />
         </Form.Item>
-        <AddressBox>
-          <AddressName>
-            <span style={{ color: "#ff4d4f" }}>*</span> 주소 :
-          </AddressName>
-          <AddressDiv>{address?.address_name}</AddressDiv>
-          <AddressBtn
-            onClick={() => {
-              setPopUp(true);
-            }}
-          >
-            찾기
-          </AddressBtn>
-        </AddressBox>
+        {!address ? (
+          <>
+            <Form.Item
+              name="address"
+              label="주소"
+              rules={[
+                {
+                  required: true,
+                  message: "주소를 입력해 주세요.",
+                },
+              ]}
+            >
+              <div>
+                <Input readOnly />
+                <AddressBtn
+                  onClick={() => {
+                    setPopUp(true);
+                  }}
+                >
+                  찾기
+                </AddressBtn>
+              </div>
+            </Form.Item>
+          </>
+        ) : (
+          <AddressBox>
+            <AddressName>
+              <span style={{ color: "#ff4d4f" }}>*</span> 주소 :
+            </AddressName>
+            <AddressDiv>{address?.address_name}</AddressDiv>
+            <AddressBtn
+              onClick={() => {
+                setPopUp(true);
+              }}
+            >
+              찾기
+            </AddressBtn>
+          </AddressBox>
+        )}
 
         <Form.Item
           name="HotelUpload"
