@@ -26,10 +26,6 @@ const AdminLoginForm = () => {
   const { doLogin, isLogin } = useCustomAdminLogin();
   const [idSaved, setIdSaved] = useState(savedAdminId ? true : false);
 
-  useEffect(() => {
-    isLogin && alert("이미 로그인이 되어있습니다.", navigate("/admin"));
-  });
-
   const handleCheckboxChange = e => {
     setIdSaved(e.target.checked);
   };
@@ -40,16 +36,16 @@ const AdminLoginForm = () => {
     try {
       setIdSaved(values.remember);
       const result = await doLogin({ loginParam });
-
+      console.log(result);
       if (idSaved) {
         localStorage.setItem("savedAdminId", values?.useremail);
       } else {
         localStorage.removeItem("savedAdminId");
       }
 
-      if (result === "BUSINESS_USER") {
+      if (result.userRole === "BUSINESS_USER") {
         navigate(`/admin`);
-      } else if (result === "ADMIN") {
+      } else if (result.userRole === "ADMIN") {
         navigate(`/superadmin`);
       }
     } catch (error) {

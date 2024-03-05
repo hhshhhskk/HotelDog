@@ -10,16 +10,15 @@ const jwtAxios = axios.create();
 const beforeReq = config => {
   // console.log("1. 요청전 전달 .... ", config);
   // console.log("2. 쿠키로 토큰가져오기");
-  const tokenCookie = getCookie("accessToken");
-
-  if (!tokenCookie) {
+  const accessToken = getCookie("accessToken");
+  if (!accessToken) {
     // console.log("쿠키 정보 없네요.");
     // axios 요청을 중단합니다.
     return Promise.reject({ response: { data: { error: "Login 하세요." } } });
   }
 
   // console.log("3. 쿠키에서 토큰 정보를 뜯는다");
-  const { accessToken } = tokenCookie;
+  // const { accessToken } = tokenCookie;
   // console.log("4. 액세스토큰 정보", accessToken);
   // 요청한 Request 에 headers 에 형식이 있어요.
   // jwt 액세스토큰을 붙일때 형식이 있어요.
@@ -27,7 +26,6 @@ const beforeReq = config => {
   // 이곳에서는  요청한 axios 의 전처리를 합니다.
   // 이때 추가내용을 headers에 추가합니다.
   config.headers.Authorization = `Bearer ${accessToken}`;
-
   return config;
 };
 
