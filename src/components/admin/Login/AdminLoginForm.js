@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
 import styled from "@emotion/styled";
+import useCustomAdminLogin from "../../../hooks/admin/useAdminCustomLogin";
 import { useNavigate } from "react-router-dom";
-import { AdminLoginApi } from "../../../api/admin/Common/loginApi";
-import doLogin from "../../../hooks/admin/adminCustomLogin";
 
 const NavBox = styled.div`
   width: 100%;
@@ -22,19 +21,32 @@ const NavBox = styled.div`
 `;
 
 const AdminLoginForm = () => {
-  const navigate = useNavigate();
-  // const { doLogin } = adminCustomLogin();
   const savedId = localStorage.getItem("savedId");
+  const navigate = useNavigate();
+  const { doLogin } = useCustomAdminLogin();
   const [idSaved, setIdSaved] = useState(savedId ? true : false);
 
-  const onFinish = values => {
-    console.log("Received values of form: ", values);
-    const loginParam = { userEmail: values?.username, upw: values?.password };
-    doLogin({ loginParam });
-    if (idSaved) {
-      localStorage.setItem("savedId", values?.username);
+  const onFinish = async values => {
+    console.log("전송할 로그인 데이터: ", values);
+    const loginParam = { userEmail: values?.useremail, upw: values?.password };
+    try {
+      setIdSaved(values.remember);
+      const result = await doLogin({ loginParam });
+
+      if (idSaved) {
+        localStorage.setItem("savedId", values?.useremail);
+      }
+      if (result === "BUSINESS_USER") {
+        navigate(`/admin`);
+      } else if (result === "ADMIN") {
+        navigate(`/superadmin`);
+      }
+    } catch (error) {
+      console.error("로그인 에러:", error);
+      // 로그인 실패 시 처리할 내용 추가
     }
   };
+
   return (
     <>
       <Form
@@ -46,7 +58,7 @@ const AdminLoginForm = () => {
         onFinish={onFinish}
       >
         <Form.Item
-          name="username"
+          name="useremail"
           rules={[
             {
               required: true,
@@ -57,7 +69,7 @@ const AdminLoginForm = () => {
           <Input
             style={{ width: 350 }}
             prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Username"
+            placeholder="UserEmail"
           />
         </Form.Item>
         <Form.Item

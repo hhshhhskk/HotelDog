@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 import { AdminLoginPostAsync, logout } from "../../redux/admin/adminLoginSlice";
 
-const useCustomLogin = () => {
+const useCustomAdminLogin = () => {
   // 패스 이동하기
   const navigate = useNavigate();
 
@@ -10,17 +10,22 @@ const useCustomLogin = () => {
   const dispatch = useDispatch();
 
   // RTK 상태값 읽기
-  const adminLoginState = useSelector(state => state.AdminLoginSlice);
+  const adminLoginState = useSelector(state => state.adminLoginSlice); // 수정
   // 로그인 상태값 파악
-  const isLogin = adminLoginState.accessToken ? true : false;
+  const isLogin = !!adminLoginState.accessToken;
 
   // 로그인 기능
   const doLogin = async ({ loginParam }) => {
-    // 로그인 어느화면에서 실행이 될 소지가 높아요.
-    // 로그인 상태 업데이트
-    const action = await dispatch(AdminLoginPostAsync({ loginParam }));
-    // 결과값
-    return action.payload;
+    try {
+      // 로그인 어느화면에서 실행이 될 소지가 높아요.
+      // 로그인 상태 업데이트
+      const action = await dispatch(AdminLoginPostAsync({ loginParam }));
+      // 결과값
+      return action.payload;
+    } catch (error) {
+      console.error("로그인 실패:", error);
+      throw error; // 에러를 호출한 곳으로 전달
+    }
   };
 
   // 로그아웃 기능
@@ -50,4 +55,4 @@ const useCustomLogin = () => {
   };
 };
 
-export default useCustomLogin;
+export default useCustomAdminLogin;
