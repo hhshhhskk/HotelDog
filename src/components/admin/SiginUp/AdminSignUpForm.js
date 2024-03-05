@@ -2,6 +2,24 @@ import React, { useState } from "react";
 import { Button, Form, Input, Select } from "antd";
 import styled from "@emotion/styled";
 import AddressPopup from "../../SignUp/AddressPopup";
+import { mailAuthAPI } from "../../../api/SignUp/addressApi";
+import AdminMailModal from "./AdminMailModal";
+
+const InnerBtn = styled.div`
+  position: absolute;
+  top: 0;
+  right: -62px;
+
+  width: 57px;
+  height: 32px;
+  background-color: #1677ff;
+  color: #fff;
+  font-weight: 400;
+  text-align: center;
+  line-height: 31px;
+
+  border-radius: 6px;
+`;
 
 const AddressBox = styled.div`
   position: relative;
@@ -83,9 +101,52 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
   const [form] = Form.useForm();
   const [popUp, setPopUp] = useState(false);
   const [address, setAddress] = useState();
+  const [mail, setMail] = useState("");
+  const [mailChecked, setMailChecked] = useState(false);
+  const [isMailModalOpen, setMailModalOpen] = useState(false);
 
   const onFinish = values => {
-    setData([values, address]);
+    setData({
+      businessUserDto: {
+        emailResponseVo: {
+          email: values?.email,
+          result: 1,
+        },
+        upw: values?.password,
+        nickname: "",
+        phoneNum: values?.phone,
+        businessName: values?.name,
+        addressEntity: {
+          addressName: address?.address_name,
+          region1DepthName: address?.region_1depth_name,
+          region2DepthName: address?.region_2depth_name,
+          region3DepthName: address?.region_3depth_name,
+          zoneNum: address?.zone_no,
+          x: address?.x,
+          y: address?.y,
+          detailAddress: "string",
+        },
+      },
+      hotelDto: {
+        hotelNm: "string",
+        hotelDetailInfo: "string",
+        businessNum: "string",
+        hotelCall: "string",
+        hotelOption: [0],
+        hotelAddressInfo: {
+          addressName: "string",
+          region1DepthName: "string",
+          region2DepthName: "string",
+          region3DepthName: "string",
+          zoneNum: "string",
+          x: "string",
+          y: "string",
+          detailAddress: "string",
+        },
+      },
+      businessCertificationFile: "string",
+      hotelPics: ["string"],
+    });
     console.log("회원정보 데이터: ", values);
     setTitleNum(2);
   };
@@ -102,9 +163,29 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
     </Form.Item>
   );
 
+  const openMailModal = () => {
+    alert("실행됨");
+    // let mailChecked = true;
+    // if (mailChecked) {
+    setMailModalOpen(true);
+    //   mailAuthAPI(mail);
+    // }
+  };
+
+  const closeMailModal = () => {
+    setMailModalOpen(false);
+  };
+
   return (
     <>
       {popUp && <AddressPopup setPopUp={setPopUp} setAddress={setAddress} />}
+      {isMailModalOpen && (
+        <AdminMailModal
+          mail={mail}
+          closeMailModal={closeMailModal}
+          setMailChecked={setMailChecked}
+        />
+      )}
       <Form
         {...formItemLayout}
         form={form}
@@ -125,7 +206,7 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
           rules={[
             {
               type: "email",
-              message: "The input is not valid E-mail!",
+              message: "이메일 형식이 아닙니다.",
             },
             {
               required: true,
@@ -133,7 +214,40 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
             },
           ]}
         >
-          <Input />
+          <div>
+            <Input />
+            {mailChecked ? (
+              <InnerBtn
+                onClick={() => {
+                  form
+                    .validateFields(["email"])
+                    .then(() => {
+                      openMailModal();
+                    })
+                    .catch(() => {
+                      console.log("이메일형식아님");
+                    });
+                }}
+              >
+                메일수정
+              </InnerBtn>
+            ) : (
+              <InnerBtn
+                onClick={() => {
+                  form
+                    .validateFields(["email"])
+                    .then(() => {
+                      openMailModal();
+                    })
+                    .catch(() => {
+                      console.log("이메일형식아님");
+                    });
+                }}
+              >
+                메일인증
+              </InnerBtn>
+            )}
+          </div>
         </Form.Item>
 
         <Form.Item
@@ -176,7 +290,7 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
         </Form.Item>
 
         <Form.Item
-          name="Name"
+          name="name"
           label="실명"
           rules={[
             {
