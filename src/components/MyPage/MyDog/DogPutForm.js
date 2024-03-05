@@ -216,7 +216,6 @@ const DogPutForm = ({ dogData, onDeleteData, onCancelEdit }) => {
       {dogData.map((dogInfo, index) => (
         <DogContents key={index}>
           <DogLeft hasImage={dogInfo?.dogPic}>
-            {" "}
             {/* hasImage prop 전달 */}
             <input type="file" accept="image/*" style={{ display: "none" }} />
             <p>사진을 선택하세요 : </p>

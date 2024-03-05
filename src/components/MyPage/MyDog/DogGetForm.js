@@ -214,13 +214,13 @@ const DogGetForm = ({ dogData, onDeleteData }) => {
 
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
+  // const handleEdit = () => {
+  //   setIsEditing(true);
+  // };
 
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-  };
+  // const handleCancelEdit = () => {
+  //   setIsEditing(false);
+  // };
 
   return (
     <>
