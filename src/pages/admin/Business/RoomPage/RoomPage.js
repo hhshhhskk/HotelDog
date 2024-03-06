@@ -32,7 +32,8 @@ import { getRoomToday } from "../../../../api/admin/Room/RoomApi";
 
 const RoomPage = () => {
   const [showAllData, setShowAllData] = useState(false); // 전체 목록을 보여줄지 여부를 저장하는 상태
-  const [cancelOpen, setCancelOpen] = useState(false); // 예약 취소 모달 오픈 여부 관리
+  // const [cancelOpen, setCancelOpen] = useState(false); // 예약 취소 모달 오픈 여부 관리
+  const [selectedRow, setSelectedRow] = useState(null); // 선택된 행 정보를 저장하는 상태
 
   /* 🙂 ant design table 적용해보자 */
   // type RmReserve = {
@@ -49,108 +50,17 @@ const RoomPage = () => {
   // };
 
   // 초기값 설정해보기
-  // const [initData, setInitData] = useState(data);
   const [initData, setInitData] = useState([
-    {
-      key: 1,
-      reserveNumber: 66666,
-      nickname: "누룽지",
-      roomType: "소형견(3kg ~7kg)이하 기준",
-      dogInfo: "반려견정보",
-      reservationData: "20240101-20240103",
-      phoneNumber: "010-3333-5555",
-      status: "예약취소",
-    },
-    {
-      key: 2,
-      reserveNumber: 81945,
-      nickname: "콩지",
-      roomType: "중형견(7kg ~15kg)이하 기준",
-      dogInfo: "반려견정보",
-      reservationData: "20240301-20240303",
-      phoneNumber: "010-2222-7777",
-      status: "",
-    },
-    {
-      key: 3,
-      reserveNumber: 43591,
-      nickname: "코오리",
-      roomType: "중형견(7kg ~15kg)이하 기준",
-      dogInfo: "반려견정보",
-      reservationData: "20240301-20240303",
-      phoneNumber: "010-2222-7777",
-      status: "예약대기중",
-    },
-    {
-      key: 4,
-      reserveNumber: 75151,
-      nickname: "머피",
-      roomType: "중형견(7kg ~15kg)이하 기준",
-      dogInfo: "반려견정보",
-      reservationData: "20240301-20240303",
-      phoneNumber: "010-2222-7777",
-      status: "",
-    },
-    {
-      key: 5,
-      reserveNumber: 2222,
-      nickname: "성공",
-      roomType: "중형견(7kg ~15kg)이하 기준",
-      dogInfo: "반려견정보",
-      reservationData: "20240301-20240303",
-      phoneNumber: "010-2222-7777",
-      status: "입실완료",
-    },
-    {
-      key: 6,
-      reserveNumber: 61751,
-      nickname: "우항항",
-      roomType: "중형견(7kg ~15kg)이하 기준",
-      dogInfo: "반려견정보",
-      reservationData: "20240301-20240303",
-      phoneNumber: "010-2222-7777",
-      status: "예약대기중",
-    },
-    {
-      key: 7,
-      reserveNumber: 81945,
-      nickname: "콩지",
-      roomType: "중형견(7kg ~15kg)이하 기준",
-      dogInfo: "반려견정보",
-      reservationData: "20240301-20240303",
-      phoneNumber: "010-2222-7777",
-      status: "",
-    },
-    {
-      key: 8,
-      reserveNumber: 0,
-      nickname: "",
-      roomType: "중형견(7kg ~15kg)이하 기준",
-      dogInfo: "",
-      reservationData: "",
-      phoneNumber: "",
-      status: "예약없음",
-    },
-    {
-      key: 9,
-      reserveNumber: 81945,
-      nickname: "콩지",
-      roomType: "중형견(7kg ~15kg)이하 기준",
-      dogInfo: "반려견정보",
-      reservationData: "20240301-20240303",
-      phoneNumber: "010-2222-7777",
-      status: "",
-    },
-    {
-      key: 10,
-      reserveNumber: 81945,
-      nickname: "콩지",
-      roomType: "중형견(7kg ~15kg)이하 기준",
-      dogInfo: "반려견정보",
-      reservationData: "20240301-20240303",
-      phoneNumber: "010-2222-7777",
-      status: "",
-    },
+    // {
+    //   key: 1,
+    //   reserveNumber: 66666,
+    //   nickname: "누룽지",
+    //   roomType: "소형견(3kg ~7kg)이하 기준",
+    //   dogInfo: "반려견정보",
+    //   reservationData: "20240101-20240103",
+    //   phoneNumber: "010-3333-5555",
+    //   status: "예약취소",
+    // },
   ]);
   /* -------------------------- 필터 start ------------------------ */
   /* 💚💚💚예약번호, 닉네임 검색 -> 해당 row 가 뜨도록하는 함수 */
@@ -165,8 +75,7 @@ const RoomPage = () => {
     // 검색어에 해당하는 행 필터링하여 새로운 데이터 생성
     const filtered = initData.filter(
       item =>
-        item.reserveNumber.toString().includes(value) ||
-        item.nickname.includes(value),
+        item.resNum.toString().includes(value) || item.nickname.includes(value),
     );
     setFilteredData(filtered); // 필터링된 데이터 업데이트
   };
@@ -188,9 +97,9 @@ const RoomPage = () => {
   const columns = [
     {
       title: "예약번호",
-      dataIndex: "reserveNumber",
+      dataIndex: "resNum",
       key: "reserveNumber",
-      ...getColumnSearchProps("reserveNumber"),
+      ...getColumnSearchProps("resNum"),
     },
     {
       title: "닉네임",
@@ -200,163 +109,131 @@ const RoomPage = () => {
     },
     {
       title: "객실유형",
-      dataIndex: "roomType",
+      dataIndex: "hotelRoomNm",
       key: "roomType",
     },
     {
       title: "반려견정보",
-      dataIndex: "dogInfo",
+      dataIndex: "resDogPk",
       key: "dogInfo",
       // 반려견정보 버튼 클릭 시, 모달 창 뜨도록 하게!
-      render: (text, row) => {
-        if (!text) {
-          return null; // text가 없을 때 빈 값 반환
+      render: (resDogPk, row) => {
+        if (!resDogPk) {
+          return null; // resDogPk 없을 때 빈 값 반환
         }
-
         return (
-          <DogInfoButton onClick={() => dogInfoModalOpen(text)}>
-            {text}
+          <DogInfoButton onClick={() => dogInfoModalOpen(row)}>
+            {"반려견정보"}
           </DogInfoButton>
         );
       },
     },
     {
       title: "예약날짜(체크인아웃)",
-      dataIndex: "reservationData",
       key: "reservationData",
+      render: (text, row) => (
+        <span>
+          {row.fromDate} - {row.toDate}
+        </span>
+      ),
     },
     {
       title: "전화번호",
-      dataIndex: "phoneNumber",
+      dataIndex: "userPhoneNum",
       key: "phoneNumber",
+      render: (text, row) => {
+        // 전화번호를 '-'로 구분하여 세 부분으로 나누고 합치는 방법
+        const formattedPhoneNumber = `${row.userPhoneNum.slice(
+          0,
+          3,
+        )}-${row.userPhoneNum.slice(3, 7)}-${row.userPhoneNum.slice(7)}`;
+        return <span>{formattedPhoneNumber}</span>;
+      },
     },
     {
       title: "상태",
-      key: "status",
-      dataIndex: "status",
-      /* 
-      render 옵션은 Array.map()처럼 작동합니다.
-      render: (text, row, index) => {};
-      text: name의 data [String]
-      row: 하나의 row data [Object]
-      index: row index [Number]
-      */
-      // 예약취소일때는 button 추가하여 모달 뜨도록 하도록 render
+      key: "resStatus",
+      dataIndex: "resStatus",
       render: (text, row) => {
-        return text === "예약취소" ? (
-          <DogInfoButton onClick={() => cancelModalOpen(text)}>
-            {text}
-          </DogInfoButton>
-        ) : text === "예약완료" ? (
-          "예약완료"
-        ) : text === "입실완료" ? (
-          "입실완료"
-        ) : text === "퇴실완료" ? (
-          "퇴실완료"
-        ) : text === "예약없음" ? (
-          "예약없음"
-        ) : text === "예약대기중" ? (
-          "예약대기중"
-        ) : null;
+        if (row.resStatus === 0) {
+          return "예약대기중";
+        } else if (row.resStatus === 1) {
+          return "예약완료";
+        } else if (row.resStatus === 2) {
+          return "이용중";
+        } else if (row.resStatus === 3) {
+          return "이용완료";
+        } else if (row.resStatus === 4 || row.resStatus === 5) {
+          return (
+            <DogInfoButton onClick={() => cancelModalOpen(row)}>
+              {"예약취소"}
+            </DogInfoButton>
+          );
+        } else {
+          return null;
+        }
       },
-      // 💥💥💥💥💥💥 변경요함
-      // 행 필터 추가
-      filters: [
-        {
-          text: "예약대기중",
-          value: "reservationPending",
-        },
-        {
-          text: "예약취소",
-          value: "reservationCancellation",
-        },
-        {
-          text: "예약완료",
-          value: "reservationConfirmed",
-        },
-        {
-          text: "이용중",
-          value: "roomInUse",
-        },
-        {
-          text: "이용완료",
-          value: "reservationComplete",
-        },
-      ],
-      onFilter: (value, record) => record.status.startsWith(value),
-      filterSearch: false,
-      width: "130px",
     },
   ];
 
-  // // /* 🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊🌊 전체 버튼 누르면 전체 table 뜨도록 해야한다.!  */
-  // const [allData, setAllData] = useState(initData); // 전체 예약 목록을 저장하는 상태
-
-  // // 전체 버튼 클릭 시 전체 예약 목록을 렌더링하는 함수
-  // const handleShowAllData = () => {
-  //   console.log("전체 버튼은 눌리냐? : ok ");
-  //   // 어떻게해야 목록을 가져올 수 있을까?
-  //   setAllData(initData); // 전체 목록을 가져와서 상태에 업데이트
-  //   console.log(allData);
-  //   // 💥 문제 : initData에 status가 업데이트된 목록만 담겨져 있네?...
-  //   setShowAllData(true); // 전체 목록을 보여주는 상태로 설정
-  // };
-
-  // useEffect(() => {
-  //   // initData가 변경될 때마다 useEffect 실행
-  //   // 전체 목록을 보여줄지 여부에 따라 데이터 설정
-  //   setAllData(showAllData ? initData : selectedRows);
-  // }, [initData, showAllData]);
-
-  // // const [initData, setInitData] = useState([]);
-
-  // // 전체 버튼 클릭 시 전체 예약 목록을 렌더링하는 함수
-  // const handleShowAllData = () => {
-  //   setAllData(initData); // 초기 데이터를 전체 예약 목록으로 설정
-  //   console.log("전체 버튼이 눌리니 ? ");
-  // };
-
-  // // 예약 완료 및 체크인, 체크아웃 버튼 클릭 시 전체 목록을 보여줄지 여부에 따라 데이터 설정
-  // const getData = () => {
-  //   return showAllData ? initData : selectedRows;
-  // };
-
-  /* ----------------------💭 모달 open & close start  --------------------*/
-  // 예약 취소 및 반려견정보 선택 시, 모달 오픈
-
-  const [dogInfoOpen, setDogInfoOpen] = useState(false);
-
-  // const cancelModalOpen = text => {
-  //   // 여기에 조건부 논리 추가
-  //   if (text === "예약취소") {
-  //     setCancelOpen(true);
-  //   }
-  // };
-  // const dogInfoModalOpen = text => {
-  //   if (text === "반려견정보") {
-  //     setDogInfoOpen(true);
-  //   }
-  // };
-  const cancelModalOpen = text => {
-    // 여기에 조건부 논리 추가
-    if (text === "예약취소") {
-      setCancelOpen(true);
-      setDogInfoOpen(false); // 반려견 정보 모달 닫기 ?????
-    }
+  /* ---------------------- menu tab status start  --------------------*/
+  const [reAllData, setAllData] = useState(""); // 전체 목록 저장 상태관리
+  const ShowReserveAllData = () => {
+    const reAllData = initData.filter(
+      item => item.resStatus >= 0 && item.resStatus <= 5,
+    );
+    setFilteredData(reAllData); // setFilteredData를 사용하여 필터링된 데이터를 업데이트
   };
-  const dogInfoModalOpen = text => {
-    if (text === "반려견정보") {
-      setDogInfoOpen(true);
-      setCancelOpen(false); // 예약 취소 모달 닫기 ?????
-    }
+
+  const [rePendingData, setRePendingData] = useState(""); // 예약 대기중 목록 저장 상태관리
+  // 예약 대기중 상태일 떄, 대기 목록 렌더링 함수
+  const showReservePending = () => {
+    const reservePendingData = initData.filter(item => item.resStatus === 0); // resStatus가 0인 경우 필터링
+    setRePendingData(rePendingData);
+  };
+  const [reComfirmedData, setReComfirmedData] = useState(""); // 예약 대기중 목록 저장 상태관리
+  // 예약 대기중 상태일 떄, 대기 목록 렌더링 함수
+  const showReserveComfirmed = () => {
+    const reComfirmedData = initData.filter(item => item.resStatus === 1); // resStatus가 1인 경우 필터링
+    setReComfirmedData(reComfirmedData);
+  };
+
+  const [reCheckInData, setReCheckInData] = useState(""); // 이용중(체크인 상태) 목록 저장 상태 관리
+  const showReserveCheckIn = () => {
+    const reCheckInData = initData.filter(item => item.resStatus === 2); // resStatus가 2인 경우 필터링
+    setFilteredData(reCheckInData); // 이용중인 데이터로 필터링된 데이터 업데이트
+  };
+
+  const [reCheckOutData, setReCheckOutData] = useState(""); // 이용완료(체크아웃 상태) 목록 저장 상태 관리
+  const showReserveCheckOut = () => {
+    const reCheckOutData = initData.filter(item => item.resStatus === 3); // resStatus가 3인 경우 필터링
+    setFilteredData(reCheckOutData); // 이용중인 데이터로 필터링된 데이터 업데이트
+  };
+
+  /* ---------------------- menu tab status end  --------------------*/
+  /* ----------------------💭 모달 open & close start  --------------------*/
+  const [dogInfoOpen, setDogInfoOpen] = useState(false); // 반려견 정보 모달 오픈 여부 관리
+  const [cancelOpen, setCancelOpen] = useState(false); // 예약 취소 모달 오픈 여부 관리
+  // 💥 반려견 정보 모달 관련 내용 추가!
+  // RoomPage 컴포넌트에서 선택된 행 정보를 저장할 상태 추가
+  const [selectedDogInfo, setSelectedDogInfo] = useState(null);
+
+  const cancelModalOpen = row => {
+    setSelectedRow(row); // 선택된 행 정보 저장
+    setCancelOpen(true); // 예약 취소 모달 오픈
+    setDogInfoOpen(false); // 반려견 정보 모달 닫기
+  };
+  const dogInfoModalOpen = row => {
+    setSelectedRow(row); // 선택된 행 정보 저장
+    setSelectedDogInfo(row); // 선택된 행의 반려견 정보 저장
+    setDogInfoOpen(true); // 반려견 정보 모달 오픈
+    setCancelOpen(false); // 예약 취소 모달 닫기
   };
   // 모달 close 버튼 클릭시, 닫도록
   const cancelModalClose = () => {
-    console.log("콘솔은 닫힌다.");
     setCancelOpen(false);
     setDogInfoOpen(false);
   };
-
   /* ----------------------💭 모달 open & close end --------------------*/
 
   /* ---------------------- 💛 axios 연동 start --------------------*/
@@ -377,7 +254,6 @@ const RoomPage = () => {
   resStatus: 0
   toDate: "2024-03-07"
   userPhoneNum: "01023885447"
-    
   */
   // 첫페이지는 1이므로 초기값을 1로 설정
   const [page, setPage] = useState(1);
@@ -395,6 +271,7 @@ const RoomPage = () => {
 
   const successGetRoomToday = result => {
     console.log("성공했습니다.", result);
+    setInitData(result.reservationTodayInfoList); // 서버에서 받은 데이터를 설정
   };
   const failGetRoomToday = result => {
     console.log("다시 시도해주세요.", result);
@@ -402,6 +279,7 @@ const RoomPage = () => {
   const errorGetRoomToday = result => {
     console.log("서버 에러입니다.", result);
   };
+
   /* ---------------------- 💛 axios 연동 end --------------------*/
 
   return (
@@ -410,28 +288,31 @@ const RoomPage = () => {
       <div>
         <RmMenuSearchFlex>
           <RmTodayMenu>
-            <RmTodayMenuBt>전체</RmTodayMenuBt>
-            {/* <RmTodayMenuBt onClick={handleShowAllData}>전체</RmTodayMenuBt> */}
+            <RmTodayMenuBt onClick={ShowReserveAllData}>전체</RmTodayMenuBt>
             <img
               src={`${process.env.PUBLIC_URL}/admin/images/RmToday/bar.svg`}
               alt=""
             />
-            <RmTodayMenuBt>이용중</RmTodayMenuBt>
+            <RmTodayMenuBt onClick={showReservePending}>대기중</RmTodayMenuBt>
             <img
               src={`${process.env.PUBLIC_URL}/admin/images/RmToday/bar.svg`}
               alt=""
             />
-            <RmTodayMenuBt>예약완료</RmTodayMenuBt>
+            <RmTodayMenuBt onClick={showReserveComfirmed}>
+              예약완료
+            </RmTodayMenuBt>
             <img
               src={`${process.env.PUBLIC_URL}/admin/images/RmToday/bar.svg`}
               alt=""
             />
-            <RmTodayMenuBt>대기중</RmTodayMenuBt>
+            <RmTodayMenuBt onClick={showReserveCheckIn}>이용중</RmTodayMenuBt>
             <img
               src={`${process.env.PUBLIC_URL}/admin/images/RmToday/bar.svg`}
               alt=""
             />
-            <RmTodayMenuBt>이용완료</RmTodayMenuBt>
+            <RmTodayMenuBt onClick={showReserveCheckOut}>
+              이용완료
+            </RmTodayMenuBt>
           </RmTodayMenu>
           <div>
             <RmTodaySearch
@@ -457,19 +338,52 @@ const RoomPage = () => {
       <RmTableBtFlex>
         <StyledTableWrap>
           <Table
-            dataSource={filteredData}
+            // dataSource={filteredData}
+            dataSource={filteredData.length > 0 ? filteredData : initData}
             columns={columns}
             pagination={{
               // 페이지 네이션
-              pageSize: 15,
+              pageSize: 10,
               position: ["bottomCenter"],
               hideOnSinglePage: false,
             }}
           ></Table>
         </StyledTableWrap>
       </RmTableBtFlex>
-      {/* 예약 취소 모달 */}
+      {/* 반려견 정보 모달 */}
       {dogInfoOpen && (
+        <ModalBackground>
+          <RmPageModal>
+            <RmModalClose
+              // 모달 창 닫을때 함수 실행
+              onClick={cancelModalClose}
+              src={`${process.env.PUBLIC_URL}/admin/images/RmToday/close.svg`}
+              alt=""
+            />
+            <RmPageModalHead>
+              <RmPageTitle>반려견 정보</RmPageTitle>
+            </RmPageModalHead>
+            <RmModalDogContent>
+              <RmModalDogHead>
+                <RmModalDogTitle>
+                  객실유형 : {selectedDogInfo.hotelRoomNm}
+                </RmModalDogTitle>
+              </RmModalDogHead>
+              <img
+                src={`${process.env.PUBLIC_URL}/admin/images/RmToday/exampleimg.svg`}
+                alt=""
+              />
+              <RmDogInfo>
+                <span>강아지 이름 : {selectedDogInfo.resDogNm}</span>
+                <span>강아지 나이 : {selectedDogInfo.resDogAge}</span>
+                <span>강아지 크기 : {selectedDogInfo.dogSizeNm}</span>
+              </RmDogInfo>
+            </RmModalDogContent>
+          </RmPageModal>
+        </ModalBackground>
+      )}
+      {/* 예약 취소 모달 */}
+      {cancelOpen && (
         <ModalBackground>
           <RmPageModal>
             <RmModalClose
@@ -522,39 +436,6 @@ const RoomPage = () => {
                 <RmPageBt onClick={cancelModalClose}>확인</RmPageBt>
               </div>
             </RmPageModalContents>
-          </RmPageModal>
-        </ModalBackground>
-      )}
-      {/* 반려견 정보 모달 */}
-      {/* {cancelModalOpen && (
-        <RmPageModal cancelModalClose={cancelModalClose(setCancelOpen)} />
-      )} */}
-      {cancelOpen && (
-        <ModalBackground>
-          <RmPageModal>
-            <RmModalClose
-              // 모달 창 닫을때 함수 실행
-              onClick={cancelModalClose}
-              src={`${process.env.PUBLIC_URL}/admin/images/RmToday/close.svg`}
-              alt=""
-            />
-            <RmPageModalHead>
-              <RmPageTitle>반려견 정보</RmPageTitle>
-            </RmPageModalHead>
-            <RmModalDogContent>
-              <RmModalDogHead>
-                <RmModalDogTitle>객실유형 : {}</RmModalDogTitle>
-              </RmModalDogHead>
-              <img
-                src={`${process.env.PUBLIC_URL}/admin/images/RmToday/exampleimg.svg`}
-                alt=""
-              />
-              <RmDogInfo>
-                <span>강아지 이름 : {}</span>
-                <span>강아지 나이 : {}</span>
-                <span>강아지 크기 : {}</span>
-              </RmDogInfo>
-            </RmModalDogContent>
           </RmPageModal>
         </ModalBackground>
       )}
