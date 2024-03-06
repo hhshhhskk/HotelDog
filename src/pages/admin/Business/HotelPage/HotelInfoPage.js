@@ -40,7 +40,12 @@ const initHotelInfo = {
   businessNum: "",
   hotelCall: "",
   createdAt: "",
-  hotelPics: [],
+  hotelPics: [
+    {
+      hotelPicPk: "",
+      hotelPic: "",
+    },
+  ],
   hotelFullAddress: "",
   hotelAddressInfo: {
     addressName: "",
@@ -99,7 +104,7 @@ const HotelInfoPage = () => {
       // getHotelInfo가 완료된 후에 초기값 설정
       if (data.hotelPics.length > 0) {
         setPreviewPic(
-          `http://112.222.157.156:5222/pic/hotel/${data.hotelPk}/${data.hotelPics[0]}`,
+          `http://112.222.157.156:5222/pic/hotel/${data.hotelPk}/${data.hotelPics[0].hotelPic}`,
         );
       }
     };
@@ -197,11 +202,11 @@ const HotelInfoPage = () => {
                     hotelInfo.hotelPics.map((pic, index) => (
                       <img
                         key={index}
-                        src={`http://112.222.157.156:5222/pic/hotel/${hotelInfo.hotelPk}/${pic}`}
+                        src={`http://112.222.157.156:5222/pic/hotel/${hotelInfo.hotelPk}/${pic.hotelPic}`}
                         alt={`호텔사진${index + 1}`}
                         onClick={() =>
                           handleClickPic(
-                            `http://112.222.157.156:5222/pic/hotel/${hotelInfo.hotelPk}/${pic}`,
+                            `http://112.222.157.156:5222/pic/hotel/${hotelInfo.hotelPk}/${pic.hotelPic}`,
                           )
                         }
                       />
@@ -272,10 +277,9 @@ const HotelInfoPage = () => {
 
                     <RoomInfoContents>
                       <RoomInfoPreview>
-                        {/* 주소 수정 바랍니다 */}
                         {room.roomPic ? (
                           <img
-                            src={`http://112.222.157.156:5222/pic/hotel/${room.hotelRoomPk}/${room.roomPic}`}
+                            src={`http://112.222.157.156:5222/pic/hotel/${hotelInfo.hotelPk}/room/${room.hotelRoomPk}/${room.roomPic}`}
                             alt="객실 사진"
                           />
                         ) : (

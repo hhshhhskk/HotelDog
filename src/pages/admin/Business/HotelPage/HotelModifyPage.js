@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   getJwtHotelInfoAPI,
-  postJwtHotelModifyAPI,
+  putJwtHotelModifyAPI,
 } from "../../../../api/admin/Business/HotelManagement/HotelInfoApi";
 import {
   ButtonDiv,
@@ -19,7 +19,9 @@ import {
   HotelPic,
   HotelPicAddButton,
   HotelPicAddButtonDiv,
+  HotelPicDeleteButton,
   HotelPicDiv,
+  HotelPicsDiv,
 } from "../../../../styles/AdminPageStyle/hotelPageStyle/hotelModifyStyle";
 
 // 호텔 정보 초기값
@@ -31,7 +33,12 @@ const initHotelInfo = {
   businessNum: "",
   hotelCall: "",
   createdAt: "",
-  hotelPics: [],
+  hotelPics: [
+    {
+      hotelPicPk: "",
+      hotelPic: "",
+    },
+  ],
   hotelFullAddress: "",
   hotelAddressInfo: {
     addressName: "",
@@ -71,24 +78,31 @@ const initHotelInfo = {
   hotelAdvertiseEndDate: "",
 };
 
-// POST 데이터 초기값
+// PUT 데이터 초기값
 const initPostData = {
   dto: {
     hotelDetailInfo: "",
     optionList: [],
+    deletePicsPk: [],
   },
   hotelPics: [],
 };
 
-const options = [
-  "수영장",
-  "운동장",
-  "수제식",
-  "셔틀운행",
-  "프로그램",
-  "산책",
-  "미용",
-];
+// const options = [
+//   "수영장",
+//   "운동장",
+//   "수제식",
+//   "셔틀운행",
+//   "프로그램",
+//   "산책",
+//   "미용",
+// ];
+
+// 1. 상세 내용 만 수정후 전송후 되는지 (파일 추가없이 전송시)
+// 2. 기존 이미지 목록 일부만 삭제후 전송후 되는지 (파일 추가없이 전송시)
+// 3. 기존 이미지 목록 일부만 삭제후 전송후 되는지 (파일 추가없이 전송시)
+// 4. 옵션 값 숫자로 전달하도록 수정하기
+// 5. 파일 추가 후 보내기 (전송시)
 
 const HotelModifyPage = () => {
   const navigate = useNavigate();
@@ -98,10 +112,15 @@ const HotelModifyPage = () => {
 
   // 호텔 이미지 상태
   const [previewImg, setPreviewImg] = useState([]);
+  // 삭제할 호텔 이미지 상태
+  const [deletePic, setDeletePic] = useState([]);
+  // 추가할 호텔 이미지 상태
+  const [addPic, setAddPic] = useState([]);
+
   // 호텔 옵션 상태
   const [selectedOptions, setSelectedOptions] = useState([]);
   // 호텔 설명 상태
-  const [detailInfo, setDetailInfo] = useState();
+  const [detailInfo, setDetailInfo] = useState("");
   // API 전송될 데이터 상태
   const [postData, setPostData] = useState(initPostData);
 
@@ -111,39 +130,68 @@ const HotelModifyPage = () => {
     const getHotelInfo = async () => {
       const data = await getJwtHotelInfoAPI(setHotelInfo);
       setHotelInfo(data);
+      setDetailInfo(data.hotelDetailInfo);
     };
-
     getHotelInfo();
   }, []);
 
-  // 이미지 선택했을 때
+  useEffect(() => {}, [detailInfo]);
+
+  // 서버 전송용 파일 보관 state
+  const [uploadImgBeforeFile, setUploadImgBeforeFile] = useState([]);
+
+  // 호텔 이미지 선택
   const handleChangeUploadPic = e => {
     const file = e.target.files[0];
     if (file) {
       // 나의 웹브라우저에서 URL을 임시로 생성
       const tempUrl = URL.createObjectURL(file);
       // 미리보기 state
-      // setPreviewImg(tempUrl);
       setPreviewImg(prevImgs => [...prevImgs, tempUrl]);
+
+      //  파일 보관하기
+      setUploadImgBeforeFile(prevFile => [...prevFile, file]);
     }
   };
 
-  // 옵션 선택했을 때
-  const handleOptionChange = option => {
-    // 이미 선택되어 있다면 제거, 아니면 추가
-    const updatedOptions = selectedOptions.includes(option)
-      ? selectedOptions.filter(selected => selected !== option)
-      : [...selectedOptions, option];
+  // 호텔 이미지 삭제
+  const handleClickDeletePic = index => {
+    const selectedPic = hotelInfo.hotelPics[index];
+    const deleteData = {
+      ...selectedPic,
+      hotelPicPk: selectedPic.hotelPicPk,
+    };
+    // console.log("삭제할 파일명 :", deleteData.hotelPicPk);
+    setDeletePic(prevDeletePic => [...prevDeletePic, deleteData.hotelPicPk]);
+    // console.log("삭제 요청할 파일명 :", deletePic);
 
-    setSelectedOptions(updatedOptions);
-    console.log("옵션 상태", selectedOptions);
+    // 삭제할 이미지를 제외한 목록
+    const updatedPics = hotelInfo.hotelPics.filter((_, i) => i !== index);
+
+    // 이미지 목록 업데이트
+    setHotelInfo({
+      ...hotelInfo,
+      hotelPics: updatedPics,
+    });
+  };
+
+  // 호텔 옵션 선택
+  const handleOptionChange = option => {
+    // console.log(option);
+    // const updatedOptions = selectedOptions.includes(option)
+    //   ? selectedOptions.filter(selected => selected !== option)
+    //   : [...selectedOptions, option];
+    // setSelectedOptions(updatedOptions);
+    // console.log("옵션 상태", selectedOptions);
+  };
+
+  const handleDetailInfoChange = e => {
+    setDetailInfo(e.target.value);
   };
 
   // 사업자등록번호 형식으로 변환
   function formatBusinessNumber(businessNum) {
-    // 입력된 문자열에서 숫자만 추출
     const numberOnly = businessNum.replace(/\D/g, "");
-    // 정규식을 사용하여 원하는 형식으로 변환
     const formattedNumber = numberOnly.replace(
       /(\d{3})(\d{2})(\d{5})/,
       "$1-$2-$3",
@@ -153,9 +201,7 @@ const HotelModifyPage = () => {
 
   // 전화번호 형식으로 변환
   function formatPhoneNumber(hotelCall) {
-    // 입력된 문자열에서 숫자만 추출
     const numberOnly = hotelCall.replace(/\D/g, "");
-    // 정규식을 사용하여 원하는 형식으로 변환
     const formattedNumber = numberOnly.replace(
       /(\d{3})(\d{4})(\d{4})/,
       "$1-$2-$3",
@@ -169,17 +215,36 @@ const HotelModifyPage = () => {
   };
 
   // 전송 버튼
-  const handleClickSubmit = () => {
-    // 호텔 이미지, 옵션, 설명을 전송
-    const newPostData = {
-      dto: {
-        hotelDetailInfo: detailInfo,
-        optionList: [selectedOptions],
-      },
-      hotelPics: [previewImg],
+  const handleClickSubmit = async () => {
+    const formData = new FormData();
+
+    const sendData = {
+      hotelDetailInfo: detailInfo,
+      optionList: [1, 2],
+      deletePicsPk: deletePic,
     };
-    setPostData(newPostData);
-    postJwtHotelModifyAPI(setPostData);
+    console.log("================ dto 에 담은 보낼 데이터 ", sendData);
+
+    const dto = new Blob(
+      [JSON.stringify(sendData)],
+      // JSON 형식으로 설정
+      { type: "application/json" },
+    );
+
+    formData.append("dto", dto);
+
+    const imagePromises = uploadImgBeforeFile.map((image, index) => {
+      formData.append("hotelPics", image);
+    });
+    // 만약 변동이 없다면
+    if (imagePromises.length === 0) {
+      formData.append("hotelPics", JSON.stringify([]));
+    }
+    // await Promise.all(imagePromises);
+
+    // console.log("post 요청할 데이터 :", postData);
+    putJwtHotelModifyAPI(formData);
+    // navigate(`/admin/hotelinfo`);
   };
 
   return (
@@ -215,18 +280,32 @@ const HotelModifyPage = () => {
                 <p>{formatPhoneNumber(hotelInfo.hotelCall)}</p>
                 <p>{hotelInfo.hotelFullAddress}</p>
 
-                <HotelPicDiv>
+                <HotelPicsDiv>
                   {hotelInfo.hotelPics.map((pic, index) => (
-                    <React.Fragment key={index}>
-                      {previewImg === index ? (
-                        <HotelPic src={pic} alt="선택된 이미지 미리보기" />
-                      ) : (
-                        <HotelPic
-                          src={`http://112.222.157.156:5222/pic/hotel/${hotelInfo.hotelPk}/${pic}`}
-                          alt="기존 이미지 미리보기"
-                        />
-                      )}
-                    </React.Fragment>
+                    <HotelPicDiv key={index}>
+                      {/* 기존 이미지 미리보기 */}
+                      <HotelPic
+                        src={`http://112.222.157.156:5222/pic/hotel/${hotelInfo.hotelPk}/${pic.hotelPic}`}
+                        alt="기존 이미지 미리보기"
+                      />
+                      <HotelPicDeleteButton
+                        onClick={() => handleClickDeletePic(index)}
+                      >
+                        x
+                      </HotelPicDeleteButton>
+                    </HotelPicDiv>
+                  ))}
+
+                  {previewImg.map((url, index) => (
+                    <HotelPicDiv key={index}>
+                      {/* 새로 추가된 이미지 미리보기 */}
+                      <HotelPic src={url} alt="선택된 이미지 미리보기" />
+                      <HotelPicDeleteButton
+                        onClick={() => handleClickDeletePic(index)}
+                      >
+                        x
+                      </HotelPicDeleteButton>
+                    </HotelPicDiv>
                   ))}
 
                   <HotelPicAddButtonDiv>
@@ -250,10 +329,10 @@ const HotelModifyPage = () => {
                       style={{ display: "none" }}
                     />
                   </HotelPicAddButtonDiv>
-                </HotelPicDiv>
+                </HotelPicsDiv>
 
                 <HotelOption>
-                  {options.map(option => (
+                  {/* {options.map(option => (
                     <label key={option}>
                       <input
                         type="checkbox"
@@ -269,11 +348,11 @@ const HotelModifyPage = () => {
                       />
                       {option}
                     </label>
-                  ))}
+                  ))} */}
                 </HotelOption>
                 <textarea
                   defaultValue={hotelInfo.hotelDetailInfo}
-                  onChange={e => setDetailInfo(e.target.value)}
+                  onChange={handleDetailInfoChange}
                 />
               </HotelModifyContent>
             </HotelModifyContentDiv>
