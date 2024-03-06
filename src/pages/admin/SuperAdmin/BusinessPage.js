@@ -419,6 +419,7 @@ const BusinessPage = () => {
 
   const rows = ["번호", "아이디", "이름", "전화번호", "주소"];
   const [current, setCurrent] = useState(1);
+  const [pageSize, setPageSize] = useState(15);
 
   if (current === 1) {
     dummyData = dummy1;
@@ -444,10 +445,11 @@ const BusinessPage = () => {
     }
   };
 
-  const totalData = 30;
+  // const totalData = 43;
 
-  console.log("총 페이지 수 ", businessUserData.totalPage);
-
+  console.log("총 페이지 수 ", businessUserData?.totalPage);
+  console.log("총 페이지 수 ", businessUserData?.businessUserInfoList?.length);
+  const totalData = businessUserData?.totalPage * 15;
   // 페이지가 변경될 때마다 데이터를 다시 불러옵니다.
   useEffect(() => {
     // getBusinessData(1); // 초기 페이지는 1로 설정합니다.
@@ -502,6 +504,7 @@ const BusinessPage = () => {
             totalData={totalData}
             current={current}
             setCurrent={setCurrent}
+            pageSize={pageSize}
           />
         </PaginationBox>
       </Contents>

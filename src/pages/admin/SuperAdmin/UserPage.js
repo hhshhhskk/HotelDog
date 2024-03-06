@@ -158,7 +158,7 @@ const PaginationBox = styled.div`
 
 const UserPage = () => {
   let dummyData = {};
-  const totalData = 30;
+
   const dummy1 = {
     data: [
       {
@@ -422,6 +422,7 @@ const UserPage = () => {
 
   const rows = ["번호", "아이디", "이름", "전화번호", "주소"];
   const [current, setCurrent] = useState(1);
+  const [pageSize, setPageSize] = useState(15);
 
   if (current === 1) {
     dummyData = dummy1;
@@ -434,7 +435,16 @@ const UserPage = () => {
   // dummyData와 totalData를 state로 관리합니다.
   const [initData, setInitData] = useState({});
   const [initTotalData, setInitTotalData] = useState(0);
-  const [userData, setUserData] = useState({});
+
+  const [userData, setUserData] = useState([]);
+  // const totalData = 6;
+  console.log("userData  :", userData?.totalPage);
+  const totalPageNum = Number(userData?.totalPage);
+  const totalData = totalPageNum * 15;
+  // const totalData = 11;
+  console.log("userData  :", totalPageNum * 15);
+  // const totalDataLength = userData?.userInfoList?.length;
+  // const totalData = totalDataLength; // 총 데이터 갯수
 
   const getUserData = async page => {
     try {
@@ -443,19 +453,18 @@ const UserPage = () => {
     } catch (error) {
       console.log(error); // 에러를 콘솔에 출력합니다.
       // 서버 에러가 발생하면 빈 데이터를 설정합니다.
-      setInitData({ data: [] });
     }
   };
 
   // 페이지가 변경될 때마다 데이터를 다시 불러옵니다.
   useEffect(() => {
-    getUserData(1); // 초기 페이지는 1로 설정합니다.
-  }, []);
+    getUserData(current); // 초기 페이지는 1로 설정합니다.
+  }, [current]);
 
   // totalData를 설정합니다.
-  useEffect(() => {
-    setInitTotalData(dummyData.total); // dummyData에서 total 값을 가져와 설정합니다.
-  }, [dummyData]);
+  // useEffect(() => {
+  //   setInitTotalData(dummyData.total); // dummyData에서 total 값을 가져와 설정합니다.
+  // }, [dummyData]);
 
   return (
     <Wrapper>
@@ -482,17 +491,13 @@ const UserPage = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {dummyData.data.map((item, idx) => (
-              <Tr key={idx}>
-                {["number", "hotelName", "ceo", "phoneNum", "address"].map(
-                  (data, key) => {
-                    return (
-                      <Td key={key} idx={key}>
-                        {item[data]}
-                      </Td>
-                    );
-                  },
-                )}
+            {userData?.userInfoList?.map(item => (
+              <Tr key={item?.userPk}>
+                <Td style={{ width: "50px" }}>{item?.userPk}</Td>
+                <Td style={{ width: "240px" }}>{item?.userEmail}</Td>
+                <Td style={{ width: "200px" }}>{item?.nickname}</Td>
+                <Td style={{ width: "250px" }}>{item?.phoneNum}</Td>
+                <Td style={{ width: "460px" }}>{item?.userAddress}</Td>
               </Tr>
             ))}
           </Tbody>
@@ -502,6 +507,7 @@ const UserPage = () => {
             totalData={totalData}
             current={current}
             setCurrent={setCurrent}
+            pageSize={pageSize}
           />
         </PaginationBox>
       </Contents>
