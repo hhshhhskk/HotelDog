@@ -155,7 +155,7 @@ const PaginationBox = styled.div`
 
 const BusinessPage = () => {
   let dummyData = {};
-  const totalData = 30;
+
   const dummy1 = {
     data: [
       {
@@ -432,26 +432,34 @@ const BusinessPage = () => {
   const [initData, setInitData] = useState({});
   const [initTotalData, setInitTotalData] = useState(0);
 
-  const fetchData = async page => {
+  const [businessUserData, setBusinessUserData] = useState([]);
+  const getBusinessData = async page => {
     try {
       const data = await businessUserGetwApi(page);
-      setInitData(data);
+      console.log("사업자 데이터", data);
+      setBusinessUserData(data);
     } catch (error) {
       console.log(error); // 에러를 콘솔에 출력합니다.
       // 서버 에러가 발생하면 빈 데이터를 설정합니다.
-      setInitData({ data: [] });
     }
   };
 
+  const totalData = 30;
+
+  console.log("총 페이지 수 ", businessUserData.totalPage);
+
   // 페이지가 변경될 때마다 데이터를 다시 불러옵니다.
   useEffect(() => {
-    fetchData(1); // 초기 페이지는 1로 설정합니다.
-  }, []);
+    // getBusinessData(1); // 초기 페이지는 1로 설정합니다.
+    getBusinessData(current); // 초기 페이지는 1로 설정합니다.
+  }, [current]);
 
-  // totalData를 설정합니다.
-  useEffect(() => {
-    setInitTotalData(dummyData.total); // dummyData에서 total 값을 가져와 설정합니다.
-  }, [dummyData]);
+  // // totalData를 설정합니다.
+  // useEffect(() => {
+  //   setInitTotalData(businessUserData.total); // dummyData에서 total 값을 가져와 설정합니다.
+  // }, [businessUserData]);
+
+  console.log("test : ", businessUserData);
 
   return (
     <Wrapper>
@@ -478,17 +486,13 @@ const BusinessPage = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {dummyData.data.map((item, idx) => (
-              <Tr key={idx}>
-                {["number", "hotelName", "ceo", "phoneNum", "address"].map(
-                  (data, key) => {
-                    return (
-                      <Td key={key} idx={key}>
-                        {item[data]}
-                      </Td>
-                    );
-                  },
-                )}
+            {businessUserData?.businessUserInfoList?.map(item => (
+              <Tr key={item?.businessUserPk}>
+                <Td style={{ width: "50px" }}>{item?.businessUserPk}</Td>
+                <Td style={{ width: "240px" }}>{item?.userEmail}</Td>
+                <Td style={{ width: "200px" }}>{item?.businessName}</Td>
+                <Td style={{ width: "250px" }}>{item?.phoneNum}</Td>
+                <Td style={{ width: "460px" }}>{item?.hotelAddress}</Td>
               </Tr>
             ))}
           </Tbody>
