@@ -56,14 +56,14 @@ export const HotelModifyTitle = styled.div`
 export const HotelModifyTitlePic = styled.div`
   position: relative;
   p {
-    height: 120px;
+    height: 140px;
   }
 `;
 
 export const HotelModifyTitleDesc = styled.div`
   position: relative;
   p {
-    height: 200px;
+    height: 175px;
   }
 `;
 
@@ -83,7 +83,7 @@ export const HotelModifyContent = styled.div`
     margin: 10px 45px;
     padding: 10px;
     width: 910px;
-    height: 175px;
+    height: 160px;
     border-bottom: 1px solid #eee;
   }
 `;
@@ -99,7 +99,7 @@ export const HotelOption = styled.div`
   gap: 20px;
 `;
 
-export const HotelPicDiv = styled.div`
+export const HotelPicsDiv = styled.div`
   position: relative;
   display: flex;
   align-items: center;
@@ -108,11 +108,29 @@ export const HotelPicDiv = styled.div`
   gap: 20px;
 `;
 
+export const HotelPicDiv = styled.div`
+  position: relative;
+  display: inline-block; /* 사진과 버튼을 인라인으로 표시 */
+  margin: 10px; /* 필요한 여백을 설정하세요 */
+`;
+
 export const HotelPic = styled.img`
   position: relative;
   width: 100px;
   height: 100px;
   /* background-color: aqua; */
+`;
+
+export const HotelPicDeleteButton = styled.button`
+  position: absolute;
+  top: -5px;
+  left: 85px;
+  font-size: 2.5rem;
+  /* font-weight: 600; */
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(0, 0, 0, 0);
 `;
 
 export const HotelPicAddButtonDiv = styled.div`
@@ -124,7 +142,6 @@ export const HotelPicAddButton = styled.button`
   width: 100px;
   height: 100px;
   top: -50px;
-  left: -100px;
   font-size: 4rem;
   font-weight: 600;
   border: none;
