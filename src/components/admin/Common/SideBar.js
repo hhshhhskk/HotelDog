@@ -203,7 +203,7 @@ const SideBar = () => {
       ? currentCate === "business"
         ? 1
         : currentCate === "businessreq"
-        ? 1
+        ? 2
         : currentCate === "hotellist"
         ? 3
         : 0
