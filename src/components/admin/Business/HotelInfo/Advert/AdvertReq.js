@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import AdvertComplete from "./AdvertComplete";
+import { hotelAdvertApi } from "../../../../../api/admin/Business/HotelManagement/HotelInfoApi";
 
 const ModalWrapper = styled.div`
   position: relative;
@@ -146,16 +147,30 @@ const AdvertReq = ({ setAdvertModalState }) => {
   } = useForm();
 
   const [complete, setComplete] = useState(false);
+  const [cardValidDate, setCardValidDate] = useState();
 
   const onValid = async data => {
     console.log(data);
-    setComplete(true);
+    const result = await hotelAdvertApi(
+      data.cardNum,
+      data.cardValidThru,
+      data.cardUserName,
+      data.userBirth,
+    );
+    setCardValidDate(data?.cardValidThru);
+    console.log("성공여부: ", result);
+    if (result == 1) {
+      setComplete(true);
+    }
   };
 
   return (
     <>
       {complete ? (
-        <AdvertComplete setAdvertModalState={setAdvertModalState} />
+        <AdvertComplete
+          setAdvertModalState={setAdvertModalState}
+          cardValidDate={cardValidDate}
+        />
       ) : (
         <ModalWrapper>
           <ReqTop>카드 정보와 일치해야 합니다</ReqTop>
@@ -172,30 +187,30 @@ const AdvertReq = ({ setAdvertModalState }) => {
             <InputDiv>
               <ReqText>카드 유효기간</ReqText>
               <ReqInput
-                {...register("cardDate", {
+                {...register("cardValidThru", {
                   required: "카드 유효기간을 입력해 주세요.",
                 })}
               />
             </InputDiv>
-            <ValidDiv>{errors?.cardDate?.message}</ValidDiv>
+            <ValidDiv>{errors?.cardValidThru?.message}</ValidDiv>
             <InputDiv>
               <ReqText>이름</ReqText>
               <ReqInput
-                {...register("name", {
+                {...register("cardUserName", {
                   required: "이름을 입력해 주세요.",
                 })}
               />
             </InputDiv>
-            <ValidDiv>{errors?.name?.message}</ValidDiv>
+            <ValidDiv>{errors?.cardUserName?.message}</ValidDiv>
             <InputDiv>
               <ReqText>생년월일 6자리</ReqText>
               <ReqInput
-                {...register("birthDate", {
+                {...register("userBirth", {
                   required: "생년월일 6자리를 입력해 주세요.",
                 })}
               />
             </InputDiv>
-            <ValidDiv>{errors?.birthDate?.message}</ValidDiv>
+            <ValidDiv>{errors?.userBirth?.message}</ValidDiv>
             <BusinessNum>사업자 번호 10자리</BusinessNum>
             <PaymentInfo>
               월 50,000원(VAT 포함)이 자동으로 결제됩니다.

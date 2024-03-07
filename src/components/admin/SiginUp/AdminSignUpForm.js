@@ -94,25 +94,6 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
         phoneNum: values?.phone,
         businessName: values?.name,
       },
-      hotelDto: {
-        hotelNm: "string",
-        hotelDetailInfo: "string",
-        businessNum: "string",
-        hotelCall: "string",
-        hotelOption: [0],
-        hotelAddressInfo: {
-          addressName: "string",
-          region1DepthName: "string",
-          region2DepthName: "string",
-          region3DepthName: "string",
-          zoneNum: "string",
-          x: "string",
-          y: "string",
-          detailAddress: "string",
-        },
-      },
-      businessCertificationFile: "string",
-      hotelPics: ["string"],
     });
     console.log("회원정보 데이터: ", values);
     setTitleNum(2);

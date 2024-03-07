@@ -67,7 +67,7 @@ const HotelInfoPage = () => {
   // 화면 초기 불러오기
   useEffect(() => {
     getHotelInfo();
-  }, []);
+  }, [AdvertModalState]);
 
   // 수정 버튼 클릭 시
   const handleClickModify = type => {
@@ -120,13 +120,15 @@ const HotelInfoPage = () => {
     }
     return null;
   };
-
   return (
     <>
       <HotelInfoWrap>
         {/* 광고 모달창 */}
         {AdvertModalState && (
-          <AdvertMain setAdvertModalState={setAdvertModalState} />
+          <AdvertMain
+            setAdvertModalState={setAdvertModalState}
+            advertise={hotelInfo?.advertise}
+          />
         )}
         {/* 상단 버튼 */}
         <HotelInfoTop>

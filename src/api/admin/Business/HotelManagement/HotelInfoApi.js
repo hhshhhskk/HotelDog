@@ -1,20 +1,11 @@
-import axios from "axios";
 import jwtAxios from "../../../../utils/jwtUtil";
-
-const token =
-  "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoie1widXNlclBrXCI6MyxcInJvbGVzXCI6W1wiQlVTSU5FU1NfVVNFUlwiXX0iLCJpYXQiOjE3MDk2MDA2MTcsImV4cCI6MTcwOTYwNzgxN30.zaJb2jra4RNoQ7lgPIrNKhS5CHyPBAOUgF4TZ5q6Li0";
 
 // 호텔 정보 API
 export const getJwtHotelInfoAPI = async setHotelInfo => {
   try {
-    const res = await axios.get(`/api/business`, {
-      headers: {
-        // 토큰이 있다면 헤더에 추가합니다.
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json", // 필요에 따라 Content-Type 설정
-      },
-    });
+    const res = await jwtAxios.get(`/api/business`);
     console.log("api 불러온데이터: ", res);
+    setHotelInfo(res.data);
     return res.data;
   } catch (error) {
     console.log(error);
@@ -25,17 +16,42 @@ export const getJwtHotelInfoAPI = async setHotelInfo => {
 // 호텔 수정 API
 export const postJwtHotelModifyAPI = async setPostData => {
   try {
-    const res = await axios.post(`/api/business/hotel`, setPostData, {
-      headers: {
-        // 토큰이 있다면 헤더에 추가합니다.
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json", // 필요에 따라 Content-Type 설정
-      },
-    });
+    const res = await jwtAxios.post(`/api/business/hotel`, setPostData);
     console.log("api 불러온데이터: ", res);
     return res.data;
   } catch (error) {
     console.log(error);
     alert("서버가 불안정합니다.");
+  }
+};
+
+// 호텔 광고 신청 API
+export const hotelAdvertApi = async (
+  cardNum,
+  cardValidThru,
+  cardUserName,
+  userBirth,
+) => {
+  console.log(cardNum, cardValidThru, cardUserName, userBirth);
+  try {
+    const response = await jwtAxios({
+      method: "post",
+      url: `/api/business/advertise`,
+      data: {
+        cardNum,
+        cardValidThru,
+        cardUserName,
+        userBirth,
+      },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(response.data);
+    if (response.status === 200) {
+      return response.data.result;
+    }
+  } catch (error) {
+    return error.response?.status || 500;
   }
 };
