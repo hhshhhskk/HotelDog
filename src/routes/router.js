@@ -118,22 +118,22 @@ export const RouterInfo = [
         label: "room",
       },
       {
-        path: "/admin/roomList",
+        path: "/admin/roomlist",
         element: <RoomListPage />,
         label: "roomlist",
       },
       {
-        path: "/admin/hotelInfo",
+        path: "/admin/hotelinfo",
         element: <HotelInfoPage />,
         label: "hotelInfo",
       },
       {
-        path: "/admin/hotelModify",
+        path: "/admin/hotelmodify",
         element: <HotelModifyPage />,
         label: "hotelModify",
       },
       {
-        path: "/admin/roomModify",
+        path: "/admin/roommodify",
         element: <RoomModifyPage />,
         label: "roomModify",
       },
