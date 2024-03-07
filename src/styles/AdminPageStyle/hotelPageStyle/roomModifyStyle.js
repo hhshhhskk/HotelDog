@@ -236,5 +236,6 @@ export const ButtonDiv = styled.div`
     color: #fff;
     background-color: #323232;
     font-size: 1.6rem;
+    cursor: pointer;
   }
 `;

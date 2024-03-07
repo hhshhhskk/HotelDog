@@ -163,6 +163,17 @@ const HotelInfoPage = () => {
     }
     return null;
   };
+
+  // 호텔 할인율로 정가 계산
+  const calculateOriginalPrice = (salePrice, sale) => {
+    if (salePrice !== null && sale !== null) {
+      const originalPrice =
+        parseFloat(salePrice) / (1 - parseFloat(sale) / 100);
+      return originalPrice.toLocaleString();
+    }
+    return null;
+  };
+
   return (
     <>
       <HotelInfoWrap>
@@ -320,22 +331,31 @@ const HotelInfoPage = () => {
                             alt="구분선"
                           />
                           <RoomPriceDiv>
-                            {hotelInfo.discountPer ? (
+                            {room.discountPer !== "0" ? (
                               <>
                                 <RoomDiscount>{room.discountPer}%</RoomDiscount>
-                                <RoomPrice>{room.hotelRoomCost}</RoomPrice>
-                                <RoomTotalPrice>
+                                {/* <RoomPrice>{room.hotelRoomCost}</RoomPrice> */}
+                                <RoomPrice>
+                                  {calculateOriginalPrice(
+                                    room.hotelRoomCost,
+                                    room.discountPer,
+                                  )}
+                                </RoomPrice>
+                                {/* <RoomTotalPrice>
                                   {salePrice(
                                     room.hotelRoomCost,
                                     room.discountPer,
                                   )}
                                   원
+                                </RoomTotalPrice> */}
+                                <RoomTotalPrice>
+                                  {room.hotelRoomCost}원
                                 </RoomTotalPrice>
                               </>
                             ) : (
                               <>
                                 <RoomTotalPrice>
-                                  {room.hotelRoomCost}원
+                                  {formatNumber(room.hotelRoomCost)}원
                                 </RoomTotalPrice>
                               </>
                             )}

@@ -98,8 +98,8 @@ const DeleteIdPage = () => {
       if (newIsOperating) {
         alert("운영이 재개되었습니다");
       } else {
-        alert("운영이 중지되었습니다. 예약 내역으로 안내합니다.");
-        navigate(`/admin/roomlist`);
+        alert("운영이 중지되었습니다");
+        // navigate(`/admin/roomlist`);
       }
 
       return newIsOperating;
@@ -153,12 +153,12 @@ const DeleteIdPage = () => {
             <DeleteIdContent>
               <DeleteIdContentTitle>3. 회원탈퇴 가능 여부</DeleteIdContentTitle>
               <p>
-                회원탈퇴는 호텔 운영 중지 상태에서 모든 예약 건이 이용완료
-                처리된 후에만 가능합니다.
+                회원탈퇴는 운영 중지인 상태에서 모든 예약 건이 처리된 후
+                가능합니다.
               </p>
             </DeleteIdContent>
           </DeleteIdContentsDiv>
-          <NavigationButton>
+          {/* <NavigationButton>
             <button
               onClick={e => {
                 handleClickNavi(e);
@@ -166,12 +166,14 @@ const DeleteIdPage = () => {
             >
               예약 내역 바로가기
             </button>
-          </NavigationButton>
+          </NavigationButton> */}
         </DeleteIdDiv>
         <ButtonDiv>
-          <DeleteIdButton onClick={() => handleButtonClick("delete")}>
-            회원 탈퇴
-          </DeleteIdButton>
+          {!isOperating && (
+            <DeleteIdButton onClick={() => handleButtonClick("delete")}>
+              회원 탈퇴
+            </DeleteIdButton>
+          )}
           <ToggleOperatingButton
             onClick={() => handleButtonClick("toggle")}
             isOperating={isOperating}
