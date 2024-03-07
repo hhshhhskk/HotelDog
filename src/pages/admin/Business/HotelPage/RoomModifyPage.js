@@ -196,6 +196,17 @@ const RoomModifyPage = () => {
     formData.append("roomPics", fileImg[0]);
 
     putJwtRoomModifyAPI(formData);
+    alert("저장이 완료되었습니다");
+  };
+
+  // 호텔 할인율로 정가 계산
+  const calculateOriginalPrice = (salePrice, sale) => {
+    if (salePrice !== null && sale !== null) {
+      const originalPrice =
+        parseFloat(salePrice) / (1 - parseFloat(sale) / 100);
+      return originalPrice.toLocaleString();
+    }
+    return null;
   };
 
   return (
