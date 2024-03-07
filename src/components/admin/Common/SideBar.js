@@ -231,23 +231,23 @@ const SideBar = () => {
   // 호텔 정보 상태
   const [hotelInfo, setHotelInfo] = useState();
 
-  // 화면 초기 불러오기
-  useEffect(() => {
-    // Axios Get으로 호텔 정보 가져오기
-    const getHotelInfo = async () => {
-      const data = await getJwtHotelInfoAPI(setHotelInfo);
-      setHotelInfo(data);
-    };
+  // // 화면 초기 불러오기
+  // useEffect(() => {
+  //   // Axios Get으로 호텔 정보 가져오기
+  //   const getHotelInfo = async () => {
+  //     const data = await getJwtHotelInfoAPI(setHotelInfo);
+  //     setHotelInfo(data);
+  //   };
 
-    getHotelInfo();
-  }, []);
+  //   getHotelInfo();
+  // }, []);
 
   if (userType === "admin") {
     return (
       <SideWrapper>
         <SideHeader>
           <SideHeaderNameBox>
-            <SideHeaderName>{hotelInfo.businessName}</SideHeaderName>
+            {/* <SideHeaderName>{hotelInfo.businessName}</SideHeaderName> */}
             <SideHeaderGreet>님, 안녕하세요 :)</SideHeaderGreet>
           </SideHeaderNameBox>
           <SideHeaderEmailBox>testId@naver.com</SideHeaderEmailBox>

@@ -35,20 +35,6 @@ const RoomPage = () => {
   // const [cancelOpen, setCancelOpen] = useState(false); // 예약 취소 모달 오픈 여부 관리
   const [selectedRow, setSelectedRow] = useState(null); // 선택된 행 정보를 저장하는 상태
 
-  /* 🙂 ant design table 적용해보자 */
-  // type RmReserve = {
-  //   checkbox: string, // 체크 : checkbox
-  //   number: string, // 번호 : number
-  //   reserveNumber: number, // 예약번호 : reserveNumber
-  //   nickname: number, // 닉네임 : nickname
-  //   roomType: string, // 객실유형 : roomType
-  //   dogInfo: number, // 반려견정보 : dogInfo
-  //   reservationData: number, // 예약날짜(체크인아웃) : reservationData
-  //   phoneNumber: number, // 전화번호 : phoneNumber
-  //   paymentAmount: number, // 결제금액 : paymentAmount
-  //   status: number, // 상태 : status
-  // };
-
   // 초기값 설정해보기
   const [initData, setInitData] = useState([
     // {
@@ -237,6 +223,7 @@ const RoomPage = () => {
   /* ----------------------💭 모달 open & close end --------------------*/
 
   /* ---------------------- 💛 axios 연동 start --------------------*/
+  const [reservationTodayInfoList, setReservationTodayInfoList] = useState([]);
   /* room today 초기값
   dogSizeNm: "소형견"
   dogSizePk: 1
@@ -336,6 +323,7 @@ const RoomPage = () => {
       {/* middle 영역 */}
       <MenuTable></MenuTable>
       <RmTableBtFlex>
+        o
         <StyledTableWrap>
           <Table
             // dataSource={filteredData}
@@ -369,10 +357,18 @@ const RoomPage = () => {
                   객실유형 : {selectedDogInfo.hotelRoomNm}
                 </RmModalDogTitle>
               </RmModalDogHead>
-              <img
-                src={`${process.env.PUBLIC_URL}/admin/images/RmToday/exampleimg.svg`}
+              {/* {reservationTodayInfoList.map((reservation, index) => (
+                <img
+                  key={index}
+                  src={`http://112.222.157.156:5222/pic/hotel/${reservation.hotelRoomPic}`}
+                  alt=""
+                />
+              ))} */}
+              {/* <img
+                src={`http://112.222.157.156:5222/pic/hotel/${selectedDogInfo.hotelRoomPic}`}
                 alt=""
-              />
+              /> */}
+              {/* hotelRoomPic */}
               <RmDogInfo>
                 <span>강아지 이름 : {selectedDogInfo.resDogNm}</span>
                 <span>강아지 나이 : {selectedDogInfo.resDogAge}</span>
