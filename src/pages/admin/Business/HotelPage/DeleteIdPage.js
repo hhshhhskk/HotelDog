@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const DeleteIdWrap = styled.div`
@@ -55,7 +56,28 @@ export const NavigationButton = styled.div`
     background-color: rgba(52, 111, 255, 0);
     font-size: 1.6rem;
     font-weight: 700;
+    cursor: pointer;
   }
+`;
+const ToggleOperatingButton = styled.button`
+  position: relative;
+  padding: 10px 40px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  background-color: ${props => (props.isOperating ? "#323232" : "#346fff")};
+  font-size: 1.6rem;
+`;
+
+const DeleteIdButton = styled.button`
+  position: relative;
+  padding: 10px 40px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #323232;
+  font-size: 1.6rem;
+  cursor: pointer;
 `;
 export const ButtonDiv = styled.div`
   position: relative;
@@ -63,19 +85,36 @@ export const ButtonDiv = styled.div`
   justify-content: flex-end;
   gap: 20px;
   padding-top: 300px;
-  button {
-    position: relative;
-    padding: 10px 40px;
-    border: none;
-    border-radius: 5px;
-    color: #fff;
-    background-color: #323232;
-    font-size: 1.6rem;
-  }
 `;
 
-const DeleteIdPage = e => {
-  const navigate = useNavigate;
+const DeleteIdPage = () => {
+  const navigate = useNavigate();
+  const [isOperating, setIsOperating] = useState(true); // 초기 상태는 운영 중
+
+  const handleToggleOperating = () => {
+    setIsOperating(prevIsOperating => {
+      const newIsOperating = !prevIsOperating;
+
+      if (newIsOperating) {
+        alert("운영이 재개되었습니다");
+      } else {
+        alert("운영이 중지되었습니다. 예약 내역으로 안내합니다.");
+        navigate(`/admin/roomlist`);
+      }
+
+      return newIsOperating;
+    });
+  };
+
+  const handleButtonClick = action => {
+    if (action === "delete") {
+      alert("탈퇴가 완료되었습니다");
+      navigate(`/admin/login`);
+      // 회원탈퇴 처리
+    } else if (action === "toggle") {
+      handleToggleOperating();
+    }
+  };
 
   const handleClickNavi = e => {
     navigate(`/admin/roomlist`);
@@ -92,7 +131,7 @@ const DeleteIdPage = e => {
 
           <DeleteIdContentsDiv>
             <DeleteIdContent>
-              <DeleteIdContentTitle>1.운영중지</DeleteIdContentTitle>
+              <DeleteIdContentTitle>1. 운영중지</DeleteIdContentTitle>
               <p>
                 호텔 관리자는 원할 경우 해당 시스템을 통해 호텔 운영을 중지할 수
                 있습니다.
@@ -130,9 +169,15 @@ const DeleteIdPage = e => {
           </NavigationButton>
         </DeleteIdDiv>
         <ButtonDiv>
-          <button>회원탈퇴</button>
-          <button>운영 중지</button>
-          <button>운영 재개</button>
+          <DeleteIdButton onClick={() => handleButtonClick("delete")}>
+            회원 탈퇴
+          </DeleteIdButton>
+          <ToggleOperatingButton
+            onClick={() => handleButtonClick("toggle")}
+            isOperating={isOperating}
+          >
+            {isOperating ? "운영 중지" : "운영 재개"}
+          </ToggleOperatingButton>
         </ButtonDiv>
       </DeleteIdWrap>
     </>

@@ -43,6 +43,42 @@ export const putJwtRoomModifyAPI = async setPostData => {
   }
 };
 
+// 객실 상태 API (1 활성화 2 비활성화)
+export const patchJwtRoomStateAPI = async setRoomState => {
+  try {
+    const res = await jwtAxios.patch(`/api/business/hotelRoom`, setRoomState);
+    // console.log("api 불러온 객실수정 데이터: ", res);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    alert("서버가 불안정합니다.");
+  }
+};
+
+// 호텔 상태 전환
+export const postJwtHotelStateAPI = async setRoomState => {
+  try {
+    const res = await jwtAxios.post(`/api/business/state`, setRoomState);
+    // console.log("api 불러온 객실수정 데이터: ", res);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    alert("서버가 불안정합니다.");
+  }
+};
+
+// 사업자 유저 회원 탈퇴
+export const postJwtDeleteIdAPI = async setRoomState => {
+  try {
+    const res = await jwtAxios.post(`/api/business/withdrawal`, setRoomState);
+    // console.log("api 불러온 객실수정 데이터: ", res);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    alert("서버가 불안정합니다.");
+  }
+};
+
 // 호텔 광고 신청 API
 export const hotelAdvertApi = async (
   cardNum,
@@ -70,7 +106,6 @@ export const hotelAdvertApi = async (
       return response.data.result;
     }
   } catch (error) {
-    alert(error.response.data.message);
     return error.response?.status || 500;
   }
 };

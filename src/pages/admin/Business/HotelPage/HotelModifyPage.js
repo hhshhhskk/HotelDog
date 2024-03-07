@@ -88,15 +88,15 @@ const initPostData = {
   hotelPics: [],
 };
 
-// const options = [
-//   "수영장",
-//   "운동장",
-//   "수제식",
-//   "셔틀운행",
-//   "프로그램",
-//   "산책",
-//   "미용",
-// ];
+const optionsInit = [
+  { optionPk: 1, optionNm: "수영장", optionActive: false },
+  { optionPk: 2, optionNm: "운동장", optionActive: false },
+  { optionPk: 3, optionNm: "수제식", optionActive: false },
+  { optionPk: 4, optionNm: "셔틀운행", optionActive: false },
+  { optionPk: 5, optionNm: "프로그램", optionActive: false },
+  { optionPk: 6, optionNm: "산책", optionActive: false },
+  { optionPk: 7, optionNm: "미용", optionActive: false },
+];
 
 // 1. 상세 내용 만 수정후 전송후 되는지 (파일 추가없이 전송시)
 // 2. 기존 이미지 목록 일부만 삭제후 전송후 되는지 (파일 추가없이 전송시)
@@ -117,6 +117,7 @@ const HotelModifyPage = () => {
   // 추가할 호텔 이미지 상태
   const [addPic, setAddPic] = useState([]);
 
+  const [options, setOptions] = useState(optionsInit);
   // 호텔 옵션 상태
   const [selectedOptions, setSelectedOptions] = useState([]);
   // 호텔 설명 상태
@@ -131,6 +132,16 @@ const HotelModifyPage = () => {
       const data = await getJwtHotelInfoAPI(setHotelInfo);
       setHotelInfo(data);
       setDetailInfo(data.hotelDetailInfo);
+      // 옵션값을 이용한 처리
+      const tempArr = [...options];
+      data.optionList.forEach(item => {
+        const index = item.optionPk - 1;
+        if (index >= 0 && index < tempArr.length) {
+          tempArr[index].optionActive = true;
+        }
+      });
+      setSelectedOptions(tempArr);
+      //========== 옵션 인덱스를 이용한처리
     };
     getHotelInfo();
   }, []);
@@ -176,8 +187,10 @@ const HotelModifyPage = () => {
   };
 
   // 호텔 옵션 선택
-  const handleOptionChange = option => {
-    // console.log(option);
+  const handleOptionChange = _index => {
+    const tempArr = [...options];
+    tempArr[_index].optionActive = !tempArr[_index].optionActive;
+    setSelectedOptions(tempArr);
     // const updatedOptions = selectedOptions.includes(option)
     //   ? selectedOptions.filter(selected => selected !== option)
     //   : [...selectedOptions, option];
@@ -218,9 +231,15 @@ const HotelModifyPage = () => {
   const handleClickSubmit = async () => {
     const formData = new FormData();
 
+    const sendOptList = options.filter(item => {
+      if (item.optionActive === true) {
+        return item.optionPk;
+      }
+    });
+    const sendOptionData = sendOptList.map(item => item.optionPk);
     const sendData = {
       hotelDetailInfo: detailInfo,
-      optionList: [1, 2],
+      optionList: sendOptionData,
       deletePicsPk: deletePic,
     };
     console.log("================ dto 에 담은 보낼 데이터 ", sendData);
@@ -238,13 +257,13 @@ const HotelModifyPage = () => {
     });
     // 만약 변동이 없다면
     if (imagePromises.length === 0) {
-      formData.append("hotelPics", JSON.stringify([]));
+      formData.append("hotelPics", []);
     }
     // await Promise.all(imagePromises);
 
     // console.log("post 요청할 데이터 :", postData);
     putJwtHotelModifyAPI(formData);
-    // navigate(`/admin/hotelinfo`);
+    navigate(`/admin/hotelinfo`);
   };
 
   return (
@@ -332,23 +351,17 @@ const HotelModifyPage = () => {
                 </HotelPicsDiv>
 
                 <HotelOption>
-                  {/* {options.map(option => (
-                    <label key={option}>
+                  {options.map((option, index) => (
+                    <label key={option.optionPk}>
                       <input
                         type="checkbox"
-                        value={option}
-                        checked={
-                          selectedOptions.includes(option) ||
-                          hotelInfo.optionList.some(
-                            item =>
-                              item.optionPk === options.indexOf(option) + 1,
-                          )
-                        }
-                        onChange={() => handleOptionChange(option)}
+                        value={option.optionPk}
+                        checked={option.optionActive}
+                        onChange={() => handleOptionChange(index)}
                       />
-                      {option}
+                      {option.optionNm}
                     </label>
-                  ))} */}
+                  ))}
                 </HotelOption>
                 <textarea
                   defaultValue={hotelInfo.hotelDetailInfo}
