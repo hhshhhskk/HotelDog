@@ -51,8 +51,6 @@ export const AdminMailAuthCodeAPI = async (email, authNum) => {
 export const AdminSignUpAPI = async formData => {
   try {
     console.log("회원가입 api실행됨");
-    // formData 내용 콘솔에 출력
-    console.log("FormData 내용: ", formData);
 
     const response = await axios({
       method: "post",

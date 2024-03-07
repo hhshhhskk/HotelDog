@@ -70,6 +70,27 @@ export const hotelAdvertApi = async (
       return response.data.result;
     }
   } catch (error) {
+    alert(error.response.data.message);
+    return error.response?.status || 500;
+  }
+};
+
+// 호텔 광고 해지 신청 API
+export const hotelAdvertCancelApi = async () => {
+  try {
+    const response = await jwtAxios({
+      method: "get",
+      url: `/api/business/advertise/cancel`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(response.data);
+    if (response.status === 200) {
+      return response.data.result;
+    }
+  } catch (error) {
+    alert(error.response.data.message);
     return error.response?.status || 500;
   }
 };

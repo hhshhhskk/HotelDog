@@ -7,19 +7,18 @@ import AdminHotelForm from "../../../../components/admin/SiginUp/AdminHotelForm"
 
 const Wrapper = styled.div`
   width: 100%;
+  height: 100vh;
 
   display: flex;
   justify-content: center;
-
-  margin-top: 100px;
 `;
 
 const SiginUpBox = styled.div`
   width: 1200px;
+  height: 100%;
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 `;
 
@@ -31,6 +30,7 @@ const SiginUpTitleBox = styled(motion.div)`
   justify-content: space-around;
   align-items: center;
 
+  margin-top: 70px;
   margin-bottom: 50px;
 `;
 

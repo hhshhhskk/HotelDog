@@ -80,9 +80,9 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
   const [isMailModalOpen, setMailModalOpen] = useState(false);
 
   const onFinish = values => {
-    // if (mailChecked === false) {
-    //   return alert("메일인증을 해주세요.");
-    // }
+    if (mailChecked === false) {
+      return alert("메일인증을 해주세요.");
+    }
 
     setData({
       businessUserDto: {
@@ -149,16 +149,16 @@ const AdminSignUpForm = ({ setData, setTitleNum }) => {
         <Form.Item
           name="email"
           label="E-mail 아이디"
-          // rules={[
-          //   {
-          //     type: "email",
-          //     message: "이메일 형식이 아닙니다.",
-          //   },
-          //   {
-          //     required: true,
-          //     message: "이메일을 입력해 주세요.",
-          //   },
-          // ]}
+          rules={[
+            {
+              type: "email",
+              message: "이메일 형식이 아닙니다.",
+            },
+            {
+              required: true,
+              message: "이메일을 입력해 주세요.",
+            },
+          ]}
         >
           <div>
             {mailChecked ? (
