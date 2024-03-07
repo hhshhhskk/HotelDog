@@ -134,21 +134,19 @@ const AdvertBtn = styled.div`
   cursor: pointer;
 `;
 
-const AdvertMain = ({ setAdvertModalState }) => {
-  // 임시 광고 상태
-  const randomNumber = Math.floor(Math.random() * 2);
-  if (randomNumber === 0) {
-    console.log("광고 시작전 : ", randomNumber);
-  } else if (randomNumber === 1) {
-    console.log("광고 진행중 : ", randomNumber);
+const AdvertMain = ({ setAdvertModalState, advertise }) => {
+  if (advertise === 0) {
+    console.log("광고 시작전 : ", advertise);
+  } else if (advertise === 1) {
+    console.log("광고 진행중 : ", advertise);
   }
 
   return (
     <AdvertWrap>
       <AdvertOverlay />
-      {randomNumber === 0 ? (
+      {advertise === 0 ? (
         <AdvertModal setAdvertModalState={setAdvertModalState} />
-      ) : randomNumber === 1 ? (
+      ) : advertise === 1 ? (
         <AdvertProgress setAdvertModalState={setAdvertModalState} />
       ) : null}
     </AdvertWrap>

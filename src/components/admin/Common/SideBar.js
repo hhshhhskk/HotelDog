@@ -69,6 +69,21 @@ const SideCategorys = styled.div`
   margin: 22px 0 12px 40px;
 `;
 
+const SideCategorysEnd = styled.div`
+  height: 50px;
+  font-family: "Noto Sans";
+  font-size: 1.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  padding-left: 40px;
+
+  color: ${props => (props.cateState === props.itemState ? "#fff" : "#666")};
+  background-color: ${props => (props.cateState === 5 ? "#346fff" : "none")};
+
+  cursor: pointer;
+`;
+
 const SideCategoryItems = styled.div`
   width: 100%;
   height: 50px;
@@ -127,6 +142,9 @@ const LogoutImg = styled.img`
 
 const SideBar = () => {
   const navigate = useNavigate();
+  const { doLogout } = useCustomAdminLogin();
+  const [adminName, setAdminName] = useState();
+  const [adminEmail, setAdminEmail] = useState();
 
   // 임시 유저 구분
   const location = useLocation();
@@ -134,8 +152,6 @@ const SideBar = () => {
   const pathArray = pathName.split("/");
   const userType = pathArray[1];
   const currentCate = pathArray[2];
-
-  const { doLogout } = useCustomAdminLogin();
 
   // 사업자 카테고리
   const categorys = [
@@ -149,6 +165,9 @@ const SideBar = () => {
       info: "호텔 정보",
       hotelUpdate: "호텔 수정",
       roomUpdate: "객실 수정",
+    },
+    {
+      category: "운영 관리 및 탈퇴",
     },
   ];
   // 최고 관리자 카테고리
@@ -168,14 +187,16 @@ const SideBar = () => {
   const [cateState, setCateState] = useState(
     // 사업자
     userType === "admin"
-      ? currentCate === "예약 관리"
+      ? currentCate === "roomlist"
         ? 1
-        : currentCate === "호텔 정보"
+        : currentCate === "hotelinfo"
         ? 2
-        : currentCate === "호텔 수정"
+        : currentCate === "hotelmodify"
         ? 3
-        : currentCate === "객실 수정"
+        : currentCate === "roommodify"
         ? 4
+        : currentCate === "deleteIdPage"
+        ? 5
         : 0
       : // 최고관리자
       userType === "superadmin"
@@ -188,6 +209,11 @@ const SideBar = () => {
         : 0
       : 0,
   );
+
+  useEffect(() => {
+    setAdminEmail(sessionStorage.getItem("adminEmail"));
+    setAdminName(sessionStorage.getItem("adminName"));
+  }, [adminName]);
 
   const categoryClicked = (e, value, cateNum) => {
     e.preventDefault();
@@ -206,7 +232,7 @@ const SideBar = () => {
         : value === "객실 수정"
         ? navigate("/admin/roommodify")
         : value === "운영 관리 및 탈퇴"
-        ? navigate("/admin/roommodify")
+        ? navigate("/admin/deleteIdPage")
         : null
       : // 최고관리자
       userType === "superadmin"
@@ -228,34 +254,34 @@ const SideBar = () => {
     navigate("/admin/login");
   };
 
-  // 호텔 정보 상태
-  const [hotelInfo, setHotelInfo] = useState();
-
-  // // 화면 초기 불러오기
-  // useEffect(() => {
-  //   // Axios Get으로 호텔 정보 가져오기
-  //   const getHotelInfo = async () => {
-  //     const data = await getJwtHotelInfoAPI(setHotelInfo);
-  //     setHotelInfo(data);
-  //   };
-
-  //   getHotelInfo();
-  // }, []);
-
   if (userType === "admin") {
     return (
       <SideWrapper>
         <SideHeader>
           <SideHeaderNameBox>
-            {/* <SideHeaderName>{hotelInfo.businessName}</SideHeaderName> */}
+            <SideHeaderName>{adminName}</SideHeaderName>
             <SideHeaderGreet>님, 안녕하세요 :)</SideHeaderGreet>
           </SideHeaderNameBox>
-          <SideHeaderEmailBox>testId@naver.com</SideHeaderEmailBox>
+          <SideHeaderEmailBox>{adminEmail}</SideHeaderEmailBox>
         </SideHeader>
         <SideContents>
           {categorys.map((item, idx) => (
             <div key={idx}>
-              <SideCategorys>{item.category}</SideCategorys>
+              {item.category === "운영 관리 및 탈퇴" ? (
+                <SideCategorysEnd
+                  itemState={5}
+                  cateState={cateState}
+                  onClick={e => {
+                    const cateNum = 5;
+                    const value = "운영 관리 및 탈퇴";
+                    categoryClicked(e, value, cateNum);
+                  }}
+                >
+                  {item.category}
+                </SideCategorysEnd>
+              ) : (
+                <SideCategorys>{item.category}</SideCategorys>
+              )}
               {Object.values(item)
                 .slice(1)
                 .map((value, key) => (
@@ -296,10 +322,10 @@ const SideBar = () => {
       <SideWrapper>
         <SideHeader>
           <SideHeaderNameBox>
-            <SideHeaderName>최관리</SideHeaderName>
+            <SideHeaderName>{adminName}</SideHeaderName>
             <SideHeaderGreet>님, 안녕하세요 :)</SideHeaderGreet>
           </SideHeaderNameBox>
-          <SideHeaderEmailBox>최고관리자@naver.com</SideHeaderEmailBox>
+          <SideHeaderEmailBox>{adminEmail}</SideHeaderEmailBox>
         </SideHeader>
         <SideContents>
           {adminCategorys.map((item, idx) => (

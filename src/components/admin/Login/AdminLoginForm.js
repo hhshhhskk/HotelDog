@@ -44,8 +44,10 @@ const AdminLoginForm = () => {
       }
 
       if (result.userRole === "BUSINESS_USER") {
+        sessionStorage.setItem("adminEmail", loginParam.userEmail);
         navigate(`/admin`);
       } else if (result.userRole === "ADMIN") {
+        sessionStorage.setItem("adminEmail", loginParam.userEmail);
         navigate(`/superadmin`);
       }
     } catch (error) {
