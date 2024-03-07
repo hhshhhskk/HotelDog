@@ -152,19 +152,21 @@ const PaginationBox = styled.div`
   margin-top: 55px;
 `;
 const BusinessReq = () => {
-  const [data, setData] = useState([
-    {
-      advertise: 0,
-      approval: 0,
-      businessName: "아아",
-      hotelCall: "23231",
-      hotelFullAddress: "도로 자세한주소",
-      hotelNm: "멍뭉쓰호텔1",
-      hotelNum: "H243632288125036",
-      hotelPk: 53,
-      maxPage: 1,
-    },
-  ]);
+  const [data, setData] = useState({
+    hotelInfoList: [
+      {
+        hotelPk: 999,
+        hotelNum: "999999999",
+        hotelNm: "더미호텔",
+        businessName: "김덤희",
+        hotelFullAddress: "미국 샌프란시스코",
+        hotelCall: "026626678",
+        advertise: 0,
+        approval: 0,
+      },
+    ],
+    totalPage: 1,
+  });
   const [nowPage, setNowPage] = useState(1);
 
   const rows = ["번호", "호텔이름", "이름", "전화번호", "주소", "상태"];
@@ -206,12 +208,12 @@ const BusinessReq = () => {
         <ContentTop>
           <Title>사업자 회원가입 요청</Title>
           <SearchBox>
-            <SearchInput type="text" />
+            {/* <SearchInput type="text" />
             <SearchBtn>
               <SearchBtnImg
                 src={`${process.env.PUBLIC_URL}/admin/images/HotelList/searchIcon.svg`}
               />
-            </SearchBtn>
+            </SearchBtn> */}
           </SearchBox>
         </ContentTop>
         <Table>
@@ -225,7 +227,7 @@ const BusinessReq = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {data.map((item, idx) => (
+            {data.hotelInfoList.map((item, idx) => (
               <Tr key={`row-${idx}`}>
                 {[
                   "hotelPk",

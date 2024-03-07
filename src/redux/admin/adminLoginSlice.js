@@ -29,7 +29,7 @@ const adminLoginSlice = createSlice({
   reducers: {
     login: (state, action) => {
       const { accessToken } = action.payload;
-      console.log("페이로드 accessToken: ", accessToken);
+      // console.log("페이로드 accessToken: ", accessToken);
       state.accessToken = accessToken;
       setCookie("accessToken", accessToken); // 쿠키 설정
     },
