@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { logoutAPI } from "../../../api/Login/logoutApi";
 import useCustomAdminLogin from "../../../hooks/admin/useAdminCustomLogin";
+import { getJwtHotelInfoAPI } from "../../../api/admin/Business/HotelManagement/HotelInfoApi";
 
 const SideWrapper = styled.div`
   position: fixed;
@@ -210,6 +211,8 @@ const SideBar = () => {
         ? navigate("/admin/hotelmodify")
         : value === "객실 수정"
         ? navigate("/admin/roommodify")
+        : value === "운영 관리 및 탈퇴"
+        ? navigate("/admin/roommodify")
         : null
       : // 최고관리자
       userType === "superadmin"
@@ -230,6 +233,20 @@ const SideBar = () => {
     doLogout();
     navigate("/admin/login");
   };
+
+  // 호텔 정보 상태
+  const [hotelInfo, setHotelInfo] = useState();
+
+  // 화면 초기 불러오기
+  useEffect(() => {
+    // Axios Get으로 호텔 정보 가져오기
+    const getHotelInfo = async () => {
+      const data = await getJwtHotelInfoAPI(setHotelInfo);
+      setHotelInfo(data);
+    };
+
+    getHotelInfo();
+  }, []);
 
   if (userType === "admin") {
     return (

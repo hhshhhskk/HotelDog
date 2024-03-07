@@ -1,244 +1,250 @@
-import styled from "@emotion/styled";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { postJwtHotelModifyAPI } from "../../../../api/admin/Business/HotelManagement/HotelInfoApi";
-
-export const HotelModifyWrap = styled.div`
-  position: relative;
-  background-color: #eee;
-  height: 100%;
-  /* 100% 로 가야히지 않을까 */
-  width: 1620px;
-  padding: 80px 210px;
-`;
-
-// 버튼 포함한 영역
-export const HotelModifyDiv = styled.div`
-  position: relative;
-`;
-
-export const HotelModifyCard = styled.div`
-  position: relative;
-  background-color: #fff;
-`;
-
-export const HotelModifyCardTitle = styled.div`
-  position: relative;
-  height: 75px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #eee;
-  p {
-    font-size: 2rem;
-    font-weight: 800;
-    padding-left: 25px;
-  }
-`;
-
-export const HotelModifyContentDiv = styled.div`
-  position: relative;
-  display: flex;
-  font-size: 1.6rem;
-  height: 620px;
-`;
-
-export const HotelModifyTitle = styled.div`
-  position: relative;
-  width: 200px;
-  background-color: rgba(52, 111, 255, 0.1);
-  p {
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding-left: 45px;
-    height: 50px;
-    border-bottom: 1px solid #eee;
-  }
-`;
-
-export const HotelModifyTitlePic = styled.div`
-  position: relative;
-  p {
-    height: 120px;
-  }
-`;
-
-export const HotelModifyTitleDesc = styled.div`
-  position: relative;
-  p {
-    height: 200px;
-  }
-`;
-
-export const HotelModifyContent = styled.div`
-  position: relative;
-  p {
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding-left: 45px;
-    height: 50px;
-    width: 1000px;
-    border-bottom: 1px solid #eee;
-  }
-  textarea {
-    position: relative;
-    margin: 10px 45px;
-    padding: 10px;
-    width: 910px;
-    height: 175px;
-    border-bottom: 1px solid #eee;
-  }
-`;
-
-export const HotelOption = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding-left: 45px;
-  height: 50px;
-  width: 1000px;
-  border-bottom: 1px solid #eee;
-  gap: 20px;
-`;
-
-export const HotelPicDiv = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 10px 45px;
-  border-bottom: 1px solid #eee;
-  gap: 20px;
-`;
-
-export const HotelPic = styled.img`
-  position: relative;
-  width: 100px;
-  height: 100px;
-  /* background-color: aqua; */
-`;
-
-export const HotelPicAddButtonDiv = styled.div`
-  position: relative;
-`;
-
-export const HotelPicAddButton = styled.button`
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  top: -50px;
-  left: -100px;
-  font-size: 4rem;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  color: rgba(255, 255, 255, 0.5);
-  background-color: rgba(0, 0, 0, 0.3);
-`;
-
-export const ButtonDiv = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
-  gap: 20px;
-  padding-top: 25px;
-  button {
-    position: relative;
-    padding: 10px 40px;
-    border: none;
-    border-radius: 5px;
-    color: #fff;
-    background-color: #323232;
-    font-size: 1.6rem;
-  }
-`;
+import {
+  getJwtHotelInfoAPI,
+  putJwtHotelModifyAPI,
+} from "../../../../api/admin/Business/HotelManagement/HotelInfoApi";
+import {
+  ButtonDiv,
+  HotelModifyCard,
+  HotelModifyCardTitle,
+  HotelModifyContent,
+  HotelModifyContentDiv,
+  HotelModifyDiv,
+  HotelModifyTitle,
+  HotelModifyTitleDesc,
+  HotelModifyTitlePic,
+  HotelModifyWrap,
+  HotelOption,
+  HotelPic,
+  HotelPicAddButton,
+  HotelPicAddButtonDiv,
+  HotelPicDeleteButton,
+  HotelPicDiv,
+  HotelPicsDiv,
+} from "../../../../styles/AdminPageStyle/hotelPageStyle/hotelModifyStyle";
 
 // 호텔 정보 초기값
 const initHotelInfo = {
-  business_license_number: "0000000000",
-  hotel_name: "네모네모 멈뭄미 호텔",
-  hotel_master: "곽민성",
-  hotel_number: "0000000000",
-  hotel_address: "대구광역시 북구",
-  // 이미지 형식
-  hotel_pic: [
-    `${process.env.PUBLIC_URL}/admin/images/HotelInfo/cat.jpg`,
-    `${process.env.PUBLIC_URL}/admin/images/HotelInfo/cat.jpg`,
-    `${process.env.PUBLIC_URL}/admin/images/HotelInfo/cat.jpg`,
-    `${process.env.PUBLIC_URL}/admin/images/HotelInfo/cat.jpg`,
-    `${process.env.PUBLIC_URL}/admin/images/HotelInfo/cat.jpg`,
+  hotelPk: "",
+  hotelNum: "",
+  hotelNm: "",
+  hotelDetailInfo: "",
+  businessNum: "",
+  hotelCall: "",
+  createdAt: "",
+  hotelPics: [
+    {
+      hotelPicPk: "",
+      hotelPic: "",
+    },
   ],
-  hotel_option: [1, 3],
-  hotel_desc:
-    "이 편지는 영국에서 최초로 시작되어 일년에 한바퀴를 돌면서 받는 사람에게 행운을 주었고 지금은 당신에게로 옮겨진 이 편지는 4일 안에 당신 곁을 떠나야 합니다. 이 편지를 포함해서 7통을 행운이 필요한 사람에게 보내 주셔야 합니다. 복사를 해도 좋습니다. 혹 미신이라 하실지 모르지만 사실입니다.",
+  hotelFullAddress: "",
+  hotelAddressInfo: {
+    addressName: "",
+    region1DepthName: "",
+    region2DepthName: "",
+    region3DepthName: "",
+    zoneNum: "",
+    x: "",
+    y: "",
+    detailAddress: "",
+  },
+  approval: "",
+  optionList: [
+    {
+      optionPk: "",
+      optionNm: "",
+    },
+  ],
+  businessCertificate: "",
+  hotelRoomInfoList: [
+    {
+      hotelRoomPk: "",
+      sizePk: "",
+      hotelRoomNm: "",
+      roomPic: "",
+      hotelRoomEa: "",
+      hotelRoomCost: "",
+      maximum: "",
+      roomAble: "",
+      discountPer: "",
+      createdAt: "",
+      discountSignStatus: "",
+    },
+  ],
+  advertise: "",
+  hotelAdvertiseToDate: "",
+  hotelAdvertiseEndDate: "",
 };
 
-// POST 데이터
+// PUT 데이터 초기값
 const initPostData = {
   dto: {
     hotelDetailInfo: "",
     optionList: [],
+    deletePicsPk: [],
   },
   hotelPics: [],
 };
 
-const options = [
-  "수영장",
-  "운동장",
-  "수제식",
-  "셔틀운행",
-  "프로그램",
-  "산책",
-  "미용",
-];
+// const options = [
+//   "수영장",
+//   "운동장",
+//   "수제식",
+//   "셔틀운행",
+//   "프로그램",
+//   "산책",
+//   "미용",
+// ];
+
+// 1. 상세 내용 만 수정후 전송후 되는지 (파일 추가없이 전송시)
+// 2. 기존 이미지 목록 일부만 삭제후 전송후 되는지 (파일 추가없이 전송시)
+// 3. 기존 이미지 목록 일부만 삭제후 전송후 되는지 (파일 추가없이 전송시)
+// 4. 옵션 값 숫자로 전달하도록 수정하기
+// 5. 파일 추가 후 보내기 (전송시)
 
 const HotelModifyPage = () => {
   const navigate = useNavigate();
 
+  // 호텔 정보 상태
+  const [hotelInfo, setHotelInfo] = useState(initHotelInfo);
+
+  // 호텔 이미지 상태
   const [previewImg, setPreviewImg] = useState([]);
+  // 삭제할 호텔 이미지 상태
+  const [deletePic, setDeletePic] = useState([]);
+  // 추가할 호텔 이미지 상태
+  const [addPic, setAddPic] = useState([]);
+
+  // 호텔 옵션 상태
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [detailInfo, setDetailInfo] = useState();
-  // API 전송될 데이터
+  // 호텔 설명 상태
+  const [detailInfo, setDetailInfo] = useState("");
+  // API 전송될 데이터 상태
   const [postData, setPostData] = useState(initPostData);
 
-  // 이미지 선택했을 때
+  // 화면 초기 불러오기
+  useEffect(() => {
+    // Axios Get으로 호텔 정보 가져오기
+    const getHotelInfo = async () => {
+      const data = await getJwtHotelInfoAPI(setHotelInfo);
+      setHotelInfo(data);
+      setDetailInfo(data.hotelDetailInfo);
+    };
+    getHotelInfo();
+  }, []);
+
+  useEffect(() => {}, [detailInfo]);
+
+  // 서버 전송용 파일 보관 state
+  const [uploadImgBeforeFile, setUploadImgBeforeFile] = useState([]);
+
+  // 호텔 이미지 선택
   const handleChangeUploadPic = e => {
     const file = e.target.files[0];
     if (file) {
       // 나의 웹브라우저에서 URL을 임시로 생성
       const tempUrl = URL.createObjectURL(file);
       // 미리보기 state
-      // setPreviewImg(tempUrl);
       setPreviewImg(prevImgs => [...prevImgs, tempUrl]);
+
+      //  파일 보관하기
+      setUploadImgBeforeFile(prevFile => [...prevFile, file]);
     }
   };
 
-  // 옵션 선택했을 때
-  const handleOptionChange = option => {
-    // 이미 선택되어 있다면 제거, 아니면 추가
-    const updatedOptions = selectedOptions.includes(option)
-      ? selectedOptions.filter(selected => selected !== option)
-      : [...selectedOptions, option];
+  // 호텔 이미지 삭제
+  const handleClickDeletePic = index => {
+    const selectedPic = hotelInfo.hotelPics[index];
+    const deleteData = {
+      ...selectedPic,
+      hotelPicPk: selectedPic.hotelPicPk,
+    };
+    // console.log("삭제할 파일명 :", deleteData.hotelPicPk);
+    setDeletePic(prevDeletePic => [...prevDeletePic, deleteData.hotelPicPk]);
+    // console.log("삭제 요청할 파일명 :", deletePic);
 
-    setSelectedOptions(updatedOptions);
+    // 삭제할 이미지를 제외한 목록
+    const updatedPics = hotelInfo.hotelPics.filter((_, i) => i !== index);
+
+    // 이미지 목록 업데이트
+    setHotelInfo({
+      ...hotelInfo,
+      hotelPics: updatedPics,
+    });
   };
 
-  // 취소, 전송 버튼
+  // 호텔 옵션 선택
+  const handleOptionChange = option => {
+    // console.log(option);
+    // const updatedOptions = selectedOptions.includes(option)
+    //   ? selectedOptions.filter(selected => selected !== option)
+    //   : [...selectedOptions, option];
+    // setSelectedOptions(updatedOptions);
+    // console.log("옵션 상태", selectedOptions);
+  };
+
+  const handleDetailInfoChange = e => {
+    setDetailInfo(e.target.value);
+  };
+
+  // 사업자등록번호 형식으로 변환
+  function formatBusinessNumber(businessNum) {
+    const numberOnly = businessNum.replace(/\D/g, "");
+    const formattedNumber = numberOnly.replace(
+      /(\d{3})(\d{2})(\d{5})/,
+      "$1-$2-$3",
+    );
+    return formattedNumber;
+  }
+
+  // 전화번호 형식으로 변환
+  function formatPhoneNumber(hotelCall) {
+    const numberOnly = hotelCall.replace(/\D/g, "");
+    const formattedNumber = numberOnly.replace(
+      /(\d{3})(\d{4})(\d{4})/,
+      "$1-$2-$3",
+    );
+    return formattedNumber;
+  }
+
+  // 취소 버튼
   const handleClickCancel = () => {
     navigate(`/admin/hotelinfo`);
   };
 
-  const handleClickSubmit = () => {
-    // 호텔 이미지, 옵션, 설명을 전송
-    const newPostData = {
-      dto: {
-        hotelDetailInfo: detailInfo,
-        optionList: [selectedOptions],
-      },
-      hotelPics: [previewImg],
+  // 전송 버튼
+  const handleClickSubmit = async () => {
+    const formData = new FormData();
+
+    const sendData = {
+      hotelDetailInfo: detailInfo,
+      optionList: [1, 2],
+      deletePicsPk: deletePic,
     };
-    setPostData(newPostData);
-    postJwtHotelModifyAPI(setPostData);
+    console.log("================ dto 에 담은 보낼 데이터 ", sendData);
+
+    const dto = new Blob(
+      [JSON.stringify(sendData)],
+      // JSON 형식으로 설정
+      { type: "application/json" },
+    );
+
+    formData.append("dto", dto);
+
+    const imagePromises = uploadImgBeforeFile.map((image, index) => {
+      formData.append("hotelPics", image);
+    });
+    // 만약 변동이 없다면
+    if (imagePromises.length === 0) {
+      formData.append("hotelPics", JSON.stringify([]));
+    }
+    // await Promise.all(imagePromises);
+
+    // console.log("post 요청할 데이터 :", postData);
+    putJwtHotelModifyAPI(formData);
+    // navigate(`/admin/hotelinfo`);
   };
 
   return (
@@ -268,33 +274,39 @@ const HotelModifyPage = () => {
                 </HotelModifyTitleDesc>
               </HotelModifyTitle>
               <HotelModifyContent>
-                <p>{initHotelInfo.business_license_number}</p>
-                <p>{initHotelInfo.hotel_name}</p>
-                <p>{initHotelInfo.hotel_master}</p>
-                <p>{initHotelInfo.hotel_number}</p>
-                <p>{initHotelInfo.hotel_address}</p>
+                <p>{formatBusinessNumber(hotelInfo.businessNum)}</p>
+                <p>{hotelInfo.hotelNm}</p>
+                <p>{hotelInfo.businessName}</p>
+                <p>{formatPhoneNumber(hotelInfo.hotelCall)}</p>
+                <p>{hotelInfo.hotelFullAddress}</p>
 
-                <HotelPicDiv>
-                  {initHotelInfo.hotel_pic.map((img, index) => (
-                    <React.Fragment key={index}>
-                      {previewImg === index ? (
-                        <HotelPic src={img} alt="선택된 이미지 미리보기" />
-                      ) : (
-                        <HotelPic
-                          src={initHotelInfo.hotel_pic}
-                          alt="기존 이미지 미리보기"
-                        />
-                      )}
-                    </React.Fragment>
+                <HotelPicsDiv>
+                  {hotelInfo.hotelPics.map((pic, index) => (
+                    <HotelPicDiv key={index}>
+                      {/* 기존 이미지 미리보기 */}
+                      <HotelPic
+                        src={`http://112.222.157.156:5222/pic/hotel/${hotelInfo.hotelPk}/${pic.hotelPic}`}
+                        alt="기존 이미지 미리보기"
+                      />
+                      <HotelPicDeleteButton
+                        onClick={() => handleClickDeletePic(index)}
+                      >
+                        x
+                      </HotelPicDeleteButton>
+                    </HotelPicDiv>
                   ))}
-                  {/* {initHotelInfo.hotel_pic.map ? (
-                    <HotelPic src={previewImg} alt="선택된 이미지 미리보기" />
-                  ) : (
-                    <HotelPic
-                      src={initHotelInfo.hotel_pic}
-                      alt="기존 이미지 미리보기"
-                    />
-                  )} */}
+
+                  {previewImg.map((url, index) => (
+                    <HotelPicDiv key={index}>
+                      {/* 새로 추가된 이미지 미리보기 */}
+                      <HotelPic src={url} alt="선택된 이미지 미리보기" />
+                      <HotelPicDeleteButton
+                        onClick={() => handleClickDeletePic(index)}
+                      >
+                        x
+                      </HotelPicDeleteButton>
+                    </HotelPicDiv>
+                  ))}
 
                   <HotelPicAddButtonDiv>
                     <label htmlFor="picUpload">
@@ -317,22 +329,31 @@ const HotelModifyPage = () => {
                       style={{ display: "none" }}
                     />
                   </HotelPicAddButtonDiv>
-                </HotelPicDiv>
+                </HotelPicsDiv>
 
                 <HotelOption>
-                  {options.map(option => (
+                  {/* {options.map(option => (
                     <label key={option}>
                       <input
                         type="checkbox"
                         value={option}
-                        checked={selectedOptions.includes(option)}
+                        checked={
+                          selectedOptions.includes(option) ||
+                          hotelInfo.optionList.some(
+                            item =>
+                              item.optionPk === options.indexOf(option) + 1,
+                          )
+                        }
                         onChange={() => handleOptionChange(option)}
                       />
                       {option}
                     </label>
-                  ))}
+                  ))} */}
                 </HotelOption>
-                <textarea>{initHotelInfo.hotel_desc}</textarea>
+                <textarea
+                  defaultValue={hotelInfo.hotelDetailInfo}
+                  onChange={handleDetailInfoChange}
+                />
               </HotelModifyContent>
             </HotelModifyContentDiv>
           </HotelModifyCard>
