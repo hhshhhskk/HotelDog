@@ -4,6 +4,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
 import AddressPopup from "../../SignUp/AddressPopup";
 import { AdminSignUpAPI } from "../../../api/admin/Common/adminSignUpApi";
+import { useNavigate } from "react-router-dom";
 
 const AddressBox = styled.div`
   position: relative;
@@ -96,112 +97,108 @@ const AdminHotelForm = ({ data, setData, setTitleNum }) => {
   const [address, setAddress] = useState();
   const [popUp, setPopUp] = useState(false);
   const [fileList, setFileList] = useState([]);
+  const navigator = useNavigate();
 
   const [form] = Form.useForm();
   console.log(address);
 
   const onFinish = async values => {
-    try {
-      // FormData 생성
-      const formData = new FormData();
-
-      const testData = {
-        businessUserDto: {
-          emailResponseVo: {
-            email: data.businessUserDto.emailResponseVo.email,
-            result: data.businessUserDto.emailResponseVo.result,
-          },
-          upw: data.businessUserDto.upw,
-          phoneNum: data.businessUserDto.phoneNum,
-          businessName: data.businessUserDto.businessName,
+    // FormData 생성
+    const formData = new FormData();
+    console.log(values);
+    const sendData = {
+      businessUserDto: {
+        emailResponseVo: {
+          email: data.businessUserDto.emailResponseVo.email,
+          result: data.businessUserDto.emailResponseVo.result,
         },
-        hotelDto: {
-          hotelNm: values.hotelNm,
-          hotelDetailInfo: values.hotelInfo,
-          businessNum: values.businessNum,
-          hotelCall: values.phone,
-          hotelOption: values.hotelOption,
-          hotelAddressInfo: {
-            addressName: address.address_name,
-            region1DepthName: address.region_1depth_name,
-            region2DepthName: address.region_2depth_name,
-            region3DepthName: address.region_3depth_name,
-            zoneNum: address.zone_no,
-            x: address.x,
-            y: address.y,
-            detailAddress: values.addressDetail,
-          },
+        upw: data.businessUserDto.upw,
+        phoneNum: data.businessUserDto.phoneNum,
+        businessName: data.businessUserDto.businessName,
+      },
+      hotelDto: {
+        hotelNm: values.hotelNm,
+        hotelDetailInfo: values.hotelInfo,
+        businessNum: values.businessNum,
+        hotelCall: values.phone,
+        hotelOption: values.hotelOption,
+        hotelAddressInfo: {
+          addressName: address.address_name,
+          region1DepthName: address.region_1depth_name,
+          region2DepthName: address.region_2depth_name,
+          region3DepthName: address.region_3depth_name,
+          zoneNum: address.zone_no,
+          x: address.x,
+          y: address.y,
+          detailAddress: values.addressDetail,
         },
-        businessCertificationFile: values.businessUpload[0],
-        hotelPics: values.hotelUpload,
-      };
-      console.log("testData: ", testData);
-      // businessUserDto 데이터 추가
-      formData.append(
-        "businessUserDto",
-        new Blob(
-          [
-            JSON.stringify({
-              emailResponseVo: {
-                email: data.businessUserDto.emailResponseVo.email,
-                result: data.businessUserDto.emailResponseVo.result,
-              },
-              upw: data.businessUserDto.upw,
-              phoneNum: data.businessUserDto.phoneNum,
-              businessName: data.businessUserDto.businessName,
-            }),
-          ],
-          { type: "application/json" },
-        ),
-      );
+      },
+      businessCertificationFile: values.businessUpload,
+      hotelPics: values.hotelUpload,
+    };
+    // console.log("sendData: ", sendData);
+    // businessUserDto 데이터 추가
+    formData.append(
+      "businessUserDto",
+      new Blob(
+        [
+          JSON.stringify({
+            emailResponseVo: {
+              email: data.businessUserDto.emailResponseVo.email,
+              result: data.businessUserDto.emailResponseVo.result,
+            },
+            upw: data.businessUserDto.upw,
+            phoneNum: data.businessUserDto.phoneNum,
+            businessName: data.businessUserDto.businessName,
+          }),
+        ],
+        { type: "application/json" },
+      ),
+    );
 
-      // hotelDto 데이터 추가
-      formData.append(
-        "hotelDto",
-        new Blob(
-          [
-            JSON.stringify({
-              hotelNm: values.hotelNm,
-              hotelDetailInfo: values.hotelInfo,
-              businessNum: values.businessNum,
-              hotelCall: values.phone,
-              hotelOption: values.hotelOption,
-              hotelAddressInfo: {
-                addressName: address.address_name,
-                region1DepthName: address.region_1depth_name,
-                region2DepthName: address.region_2depth_name,
-                region3DepthName: address.region_3depth_name,
-                zoneNum: address.zone_no,
-                x: address.x,
-                y: address.y,
-                detailAddress: values.addressDetail,
-              },
-            }),
-          ],
-          { type: "application/json" },
-        ),
-      );
+    // hotelDto 데이터 추가
+    formData.append(
+      "hotelDto",
+      new Blob(
+        [
+          JSON.stringify({
+            hotelNm: values.hotelNm,
+            hotelDetailInfo: values.hotelInfo,
+            businessNum: values.businessNum,
+            hotelCall: values.phone,
+            hotelOption: values.hotelOption,
+            hotelAddressInfo: {
+              addressName: address.address_name,
+              region1DepthName: address.region_1depth_name,
+              region2DepthName: address.region_2depth_name,
+              region3DepthName: address.region_3depth_name,
+              zoneNum: address.zone_no,
+              x: address.x,
+              y: address.y,
+              detailAddress: values.addressDetail,
+            },
+          }),
+        ],
+        { type: "application/json" },
+      ),
+    );
 
-      // 파일을 formData에 추가
-      formData.append("businessCertificationFile", values.businessUpload[0]);
-      console.log(values.businessUpload[0]);
+    // 파일을 formData에 추가
+    sendData.businessCertificationFile.forEach(file => {
+      formData.append(`businessCertificationFile`, file.originFileObj);
+    });
 
-      testData.hotelPics.forEach(file => {
-        formData.append(`hotelPics`, file);
-      });
+    sendData.hotelPics.forEach(file => {
+      console.log(file.originFileObj);
+      formData.append(`hotelPics`, file.originFileObj);
+    });
 
-      // for (let key of formData.keys()) {
-      //   console.log(key, ":", formData.get(key));
-      // }
+    // Axios를 사용하여 API 호출
+    const result = await AdminSignUpAPI(formData);
 
-      // Axios를 사용하여 API 호출
-      const result = await AdminSignUpAPI(formData);
-
-      if (result === 1) {
-        console.log("회원가입 성공! : ", result);
-      }
-    } catch (error) {
-      console.error("Error uploading files:", error);
+    if (result === 1) {
+      alert("회원가입 되셨습니다.");
+      navigator("/admin/login");
     }
   };
 

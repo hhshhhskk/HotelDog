@@ -150,7 +150,6 @@ const AdvertReq = ({ setAdvertModalState }) => {
   const [cardValidDate, setCardValidDate] = useState();
 
   const onValid = async data => {
-    console.log(data);
     const result = await hotelAdvertApi(
       data.cardNum,
       data.cardValidThru,

@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import React from "react";
+import { hotelAdvertCancelApi } from "../../../../../api/admin/Business/HotelManagement/HotelInfoApi";
 
 const ModalWrapper = styled.div`
   position: relative;
@@ -112,9 +113,13 @@ const AdvertCancel = ({ setAdvertModalState }) => {
       <InfoBtnBox>
         <CancelBtn onClick={() => setAdvertModalState(false)}>취소</CancelBtn>
         <AdvertBtn
-          onClick={() => {
-            alert("광고가 해지 되었습니다.");
-            setAdvertModalState(false);
+          onClick={async () => {
+            const result = await hotelAdvertCancelApi();
+
+            if (result === 1) {
+              alert("광고가 해지 되었습니다.");
+              setAdvertModalState(false);
+            }
           }}
         >
           해지
