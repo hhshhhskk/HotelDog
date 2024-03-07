@@ -463,14 +463,43 @@ const BusinessPage = () => {
 
   console.log("test : ", businessUserData);
 
+  const [searchKeyword, setSearchKeyword] = useState("");
+
+  const handleSearchInputChange = e => {
+    const keyword = e.target.value;
+    setSearchKeyword(keyword);
+    if (!keyword) {
+      // 검색어가 비어있는 경우 전체 데이터를 다시 불러옵니다.
+      getBusinessData(current);
+    }
+  };
+
+  const handleSearchButtonClick = () => {
+    // 검색어를 사용하여 userData를 필터링합니다.
+    const filteredBusinessUserData =
+      businessUserData.businessUserInfoList.filter(item => {
+        return (
+          item.businessName
+            .toLowerCase()
+            .includes(searchKeyword.toLowerCase()) ||
+          item.phoneNum.includes(searchKeyword)
+        );
+      });
+    setBusinessUserData({ businessUserInfoList: filteredBusinessUserData });
+  };
+
   return (
     <Wrapper>
       <Contents>
         <ContentTop>
           <Title>사업자 회원</Title>
           <SearchBox>
-            <SearchInput type="text" />
-            <SearchBtn>
+            <SearchInput
+              type="text"
+              value={searchKeyword}
+              onChange={handleSearchInputChange}
+            />
+            <SearchBtn onClick={handleSearchButtonClick}>
               <SearchBtnImg
                 src={`${process.env.PUBLIC_URL}/admin/images/HotelList/searchIcon.svg`}
               />
