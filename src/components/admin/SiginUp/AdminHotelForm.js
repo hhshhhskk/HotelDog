@@ -3,14 +3,15 @@ import { Button, Checkbox, Col, Form, Input, Row, Select, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import styled from "@emotion/styled";
 import AddressPopup from "../../SignUp/AddressPopup";
+import { AdminSignUpAPI } from "../../../api/admin/Common/adminSignUpApi";
 
 const AddressBox = styled.div`
   position: relative;
   display: flex;
   justify-content: right;
-  width: 810px;
+  width: 750px;
 
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 `;
 
 const AddressName = styled.div`
@@ -25,7 +26,6 @@ const AddressDiv = styled.div`
   width: 500px;
   height: 32px;
   padding: 4px 11px;
-  margin-right: 5px;
   background-color: #fff;
   border: 1px solid #d9d9d9;
   border-radius: 6px;
@@ -33,6 +33,10 @@ const AddressDiv = styled.div`
 `;
 
 const AddressBtn = styled.div`
+  position: absolute;
+  top: 0;
+  right: -60px;
+
   width: 57px;
   height: 32px;
   padding-top: 4px;
@@ -85,22 +89,122 @@ const normFile = e => {
   if (Array.isArray(e)) {
     return e;
   }
-  return e?.fileList;
+  return e && e.fileList;
 };
 
 const AdminHotelForm = ({ data, setData, setTitleNum }) => {
-  const [popUp, setPopUp] = useState(false);
   const [address, setAddress] = useState();
+  const [popUp, setPopUp] = useState(false);
+  const [fileList, setFileList] = useState([]);
 
   const [form] = Form.useForm();
-  const onFinish = values => {
-    console.log("서버에 최종으로 전달할 데이터: ", values);
-    setData(prevData => ({
-      ...prevData,
-      ...values,
-      address: address,
-    }));
+  console.log(address);
+
+  const onFinish = async values => {
+    try {
+      // FormData 생성
+      const formData = new FormData();
+
+      const testData = {
+        businessUserDto: {
+          emailResponseVo: {
+            email: data.businessUserDto.emailResponseVo.email,
+            result: data.businessUserDto.emailResponseVo.result,
+          },
+          upw: data.businessUserDto.upw,
+          phoneNum: data.businessUserDto.phoneNum,
+          businessName: data.businessUserDto.businessName,
+        },
+        hotelDto: {
+          hotelNm: values.hotelNm,
+          hotelDetailInfo: values.hotelInfo,
+          businessNum: values.businessNum,
+          hotelCall: values.phone,
+          hotelOption: values.hotelOption,
+          hotelAddressInfo: {
+            addressName: address.address_name,
+            region1DepthName: address.region_1depth_name,
+            region2DepthName: address.region_2depth_name,
+            region3DepthName: address.region_3depth_name,
+            zoneNum: address.zone_no,
+            x: address.x,
+            y: address.y,
+            detailAddress: values.addressDetail,
+          },
+        },
+        businessCertificationFile: values.businessUpload[0],
+        hotelPics: values.hotelUpload,
+      };
+      console.log("testData: ", testData);
+      // businessUserDto 데이터 추가
+      formData.append(
+        "businessUserDto",
+        new Blob(
+          [
+            JSON.stringify({
+              emailResponseVo: {
+                email: data.businessUserDto.emailResponseVo.email,
+                result: data.businessUserDto.emailResponseVo.result,
+              },
+              upw: data.businessUserDto.upw,
+              phoneNum: data.businessUserDto.phoneNum,
+              businessName: data.businessUserDto.businessName,
+            }),
+          ],
+          { type: "application/json" },
+        ),
+      );
+
+      // hotelDto 데이터 추가
+      formData.append(
+        "hotelDto",
+        new Blob(
+          [
+            JSON.stringify({
+              hotelNm: values.hotelNm,
+              hotelDetailInfo: values.hotelInfo,
+              businessNum: values.businessNum,
+              hotelCall: values.phone,
+              hotelOption: values.hotelOption,
+              hotelAddressInfo: {
+                addressName: address.address_name,
+                region1DepthName: address.region_1depth_name,
+                region2DepthName: address.region_2depth_name,
+                region3DepthName: address.region_3depth_name,
+                zoneNum: address.zone_no,
+                x: address.x,
+                y: address.y,
+                detailAddress: values.addressDetail,
+              },
+            }),
+          ],
+          { type: "application/json" },
+        ),
+      );
+
+      // 파일을 formData에 추가
+      formData.append("businessCertificationFile", values.businessUpload[0]);
+      console.log(values.businessUpload[0]);
+
+      testData.hotelPics.forEach(file => {
+        formData.append(`hotelPics`, file);
+      });
+
+      // for (let key of formData.keys()) {
+      //   console.log(key, ":", formData.get(key));
+      // }
+
+      // Axios를 사용하여 API 호출
+      const result = await AdminSignUpAPI(formData);
+
+      if (result === 1) {
+        console.log("회원가입 성공! : ", result);
+      }
+    } catch (error) {
+      console.error("Error uploading files:", error);
+    }
   };
+
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select
@@ -134,11 +238,10 @@ const AdminHotelForm = ({ data, setData, setTitleNum }) => {
         scrollToFirstError
       >
         <Form.Item
-          name="BusinessUpload"
+          name="businessUpload"
           label="사업자등록증"
           valuePropName="fileList"
           getValueFromEvent={normFile}
-          extra=""
           rules={[
             {
               required: true,
@@ -151,7 +254,7 @@ const AdminHotelForm = ({ data, setData, setTitleNum }) => {
           </Upload>
         </Form.Item>
         <Form.Item
-          name="BusinessNum"
+          name="businessNum"
           label="사업자등록번호"
           rules={[
             {
@@ -163,13 +266,12 @@ const AdminHotelForm = ({ data, setData, setTitleNum }) => {
           <Input />
         </Form.Item>
         <Form.Item
-          name="Name"
-          label="대표자 성명"
+          name="hotelNm"
+          label="호텔이름"
           rules={[
             {
               required: true,
-              message: "대표자 성명을 입력해 주세요.",
-              whitespace: true,
+              message: "호텔이름을 입력해 주세요.",
             },
           ]}
         >
@@ -193,26 +295,62 @@ const AdminHotelForm = ({ data, setData, setTitleNum }) => {
             }}
           />
         </Form.Item>
-        <AddressBox>
-          <AddressName>
-            <span style={{ color: "#ff4d4f" }}>*</span> 주소 :
-          </AddressName>
-          <AddressDiv>{address?.address_name}</AddressDiv>
-          <AddressBtn
-            onClick={() => {
-              setPopUp(true);
-            }}
-          >
-            찾기
-          </AddressBtn>
-        </AddressBox>
-
+        {!address ? (
+          <>
+            <Form.Item
+              name="address"
+              label="주소"
+              rules={[
+                {
+                  required: true,
+                  message: "주소를 입력해 주세요.",
+                },
+              ]}
+            >
+              <div>
+                <Input readOnly />
+                <AddressBtn
+                  onClick={() => {
+                    setPopUp(true);
+                  }}
+                >
+                  찾기
+                </AddressBtn>
+              </div>
+            </Form.Item>
+          </>
+        ) : (
+          <AddressBox>
+            <AddressName>
+              <span style={{ color: "#ff4d4f" }}>*</span> 주소 :
+            </AddressName>
+            <AddressDiv>{address?.address_name}</AddressDiv>
+            <AddressBtn
+              onClick={() => {
+                setPopUp(true);
+              }}
+            >
+              찾기
+            </AddressBtn>
+          </AddressBox>
+        )}
         <Form.Item
-          name="HotelUpload"
+          name="addressDetail"
+          label="상세주소"
+          rules={[
+            {
+              required: true,
+              message: "상세주소를 입력해 주세요.",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="hotelUpload"
           label="호텔사진"
-          valuePropName="fileList"
           getValueFromEvent={normFile}
-          extra=""
+          valuePropName="fileList"
           rules={[
             {
               required: true,
@@ -220,45 +358,53 @@ const AdminHotelForm = ({ data, setData, setTitleNum }) => {
             },
           ]}
         >
-          <Upload name="logo" listType="picture" beforeUpload={() => false}>
+          <Upload
+            name="logo"
+            listType="picture"
+            beforeUpload={file => {
+              setFileList(fileList.concat(file));
+              return false; // 파일 선택시 바로 업로드 하지 않고 후에 한꺼번에 전송하기 위함
+            }}
+          >
             <Button icon={<UploadOutlined />}>사진첨부</Button>
           </Upload>
         </Form.Item>
+
         <Form.Item name="hotelOption" label="호텔옵션">
           <Checkbox.Group>
             <Row>
               <Col span={5}>
-                <Checkbox value="1" style={{ lineHeight: "32px" }}>
+                <Checkbox value={1} style={{ lineHeight: "32px" }}>
                   수영장
                 </Checkbox>
               </Col>
               <Col span={5}>
-                <Checkbox value="2" style={{ lineHeight: "32px" }}>
+                <Checkbox value={2} style={{ lineHeight: "32px" }}>
                   운동장
                 </Checkbox>
               </Col>
               <Col span={5}>
-                <Checkbox value="3" style={{ lineHeight: "32px" }}>
+                <Checkbox value={3} style={{ lineHeight: "32px" }}>
                   수제식
                 </Checkbox>
               </Col>
               <Col span={5}>
-                <Checkbox value="4" style={{ lineHeight: "32px" }}>
+                <Checkbox value={4} style={{ lineHeight: "32px" }}>
                   셔틀운행
                 </Checkbox>
               </Col>
               <Col span={5}>
-                <Checkbox value="5" style={{ lineHeight: "32px" }}>
+                <Checkbox value={5} style={{ lineHeight: "32px" }}>
                   프로그램
                 </Checkbox>
               </Col>
               <Col span={5}>
-                <Checkbox value="6" style={{ lineHeight: "32px" }}>
+                <Checkbox value={6} style={{ lineHeight: "32px" }}>
                   산책
                 </Checkbox>
               </Col>
               <Col span={5}>
-                <Checkbox value="7" style={{ lineHeight: "32px" }}>
+                <Checkbox value={7} style={{ lineHeight: "32px" }}>
                   미용
                 </Checkbox>
               </Col>
@@ -267,7 +413,7 @@ const AdminHotelForm = ({ data, setData, setTitleNum }) => {
         </Form.Item>
 
         <Form.Item
-          name="hotelinfo"
+          name="hotelInfo"
           label="호텔설명"
           rules={[
             {

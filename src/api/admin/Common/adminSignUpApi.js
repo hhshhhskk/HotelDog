@@ -46,3 +46,27 @@ export const AdminMailAuthCodeAPI = async (email, authNum) => {
     console.log(error.message);
   }
 };
+
+// 관리자 회원가입 API
+export const AdminSignUpAPI = async formData => {
+  try {
+    console.log("회원가입 api실행됨");
+    // formData 내용 콘솔에 출력
+    console.log("FormData 내용: ", formData);
+
+    const response = await axios({
+      method: "post",
+      url: "/api/user/business/signup",
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data", // Content-Type 설정
+      },
+    });
+    // 성공한 경우 응답 데이터를 반환
+    console.log("회원가입 성공 여부: ", response.data.result);
+    return response.data.result;
+  } catch (error) {
+    console.log(error.message);
+    return error.response?.status || 500;
+  }
+};

@@ -127,6 +127,9 @@ const LogoutImg = styled.img`
 
 const SideBar = () => {
   const navigate = useNavigate();
+  const { doLogout } = useCustomAdminLogin();
+  const [adminName, setAdminName] = useState();
+  const [adminEmail, setAdminEmail] = useState();
 
   // 임시 유저 구분
   const location = useLocation();
@@ -134,8 +137,6 @@ const SideBar = () => {
   const pathArray = pathName.split("/");
   const userType = pathArray[1];
   const currentCate = pathArray[2];
-
-  const { doLogout } = useCustomAdminLogin();
 
   // 사업자 카테고리
   const categorys = [
@@ -188,6 +189,11 @@ const SideBar = () => {
         : 0
       : 0,
   );
+
+  useEffect(() => {
+    setAdminEmail(sessionStorage.getItem("adminEmail"));
+    setAdminName(sessionStorage.getItem("adminName"));
+  }, [adminName]);
 
   const categoryClicked = (e, value, cateNum) => {
     e.preventDefault();
@@ -247,10 +253,10 @@ const SideBar = () => {
       <SideWrapper>
         <SideHeader>
           <SideHeaderNameBox>
-            <SideHeaderName>{hotelInfo.businessName}</SideHeaderName>
+            <SideHeaderName>{adminName}</SideHeaderName>
             <SideHeaderGreet>님, 안녕하세요 :)</SideHeaderGreet>
           </SideHeaderNameBox>
-          <SideHeaderEmailBox>testId@naver.com</SideHeaderEmailBox>
+          <SideHeaderEmailBox>{adminEmail}</SideHeaderEmailBox>
         </SideHeader>
         <SideContents>
           {categorys.map((item, idx) => (
@@ -296,10 +302,10 @@ const SideBar = () => {
       <SideWrapper>
         <SideHeader>
           <SideHeaderNameBox>
-            <SideHeaderName>최관리</SideHeaderName>
+            <SideHeaderName>{adminName}</SideHeaderName>
             <SideHeaderGreet>님, 안녕하세요 :)</SideHeaderGreet>
           </SideHeaderNameBox>
-          <SideHeaderEmailBox>최고관리자@naver.com</SideHeaderEmailBox>
+          <SideHeaderEmailBox>{adminEmail}</SideHeaderEmailBox>
         </SideHeader>
         <SideContents>
           {adminCategorys.map((item, idx) => (

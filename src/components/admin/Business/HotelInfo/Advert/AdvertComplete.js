@@ -70,7 +70,11 @@ const CompleteBtn = styled.div`
 
   cursor: pointer;
 `;
-const AdvertComplete = ({ setAdvertModalState }) => {
+const AdvertComplete = ({ setAdvertModalState, cardValidDate }) => {
+  const date = new Date(cardValidDate);
+  date.setMonth(date.getMonth() + 1);
+  const nextMonthDate = date.toISOString().slice(0, 10);
+
   return (
     <ModalWrapper>
       <ImgBox>
@@ -81,7 +85,7 @@ const AdvertComplete = ({ setAdvertModalState }) => {
       <BigText>광고 결제가 완료되었습니다!</BigText>
       <SmText>오늘부터 시스템에 반영되어 호텔 광고가 시작됩니다.</SmText>
       <SmText>
-        다음 자동 결제 시점은 <span>2023-03-01</span> 입니다.
+        다음 자동 결제 시점은 <span>{nextMonthDate}</span> 입니다.
       </SmText>
       <CompleteBtn onClick={() => setAdvertModalState(false)}>확인</CompleteBtn>
     </ModalWrapper>
