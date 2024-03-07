@@ -10,7 +10,7 @@ export const businessSignUpListApi = async (page, setData) => {
         "Content-Type": "application/json",
       },
     });
-    console.log(response.data);
+    // console.log(response.data);
     if (response.status === 200) {
       setData(response.data);
       return response.data;
@@ -31,9 +31,8 @@ export const approveBusinessSignupApi = async hotelPk => {
         "Content-Type": "application/json",
       },
     });
-    console.log(response.data);
     if (response.status === 200) {
-      return response.data;
+      return response.status;
     }
   } catch (error) {
     alert(error.response.data.message);

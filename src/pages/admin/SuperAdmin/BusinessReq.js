@@ -1,7 +1,10 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import AntdPagination from "../../../components/admin/Common/AntdPagination";
-import { businessSignUpListApi } from "../../../api/admin/SuperAdmin/SuperAdminApi";
+import {
+  approveBusinessSignupApi,
+  businessSignUpListApi,
+} from "../../../api/admin/SuperAdmin/SuperAdminApi";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -166,7 +169,7 @@ const BusinessReq = () => {
 
   const rows = ["번호", "호텔이름", "이름", "전화번호", "주소", "상태"];
   const [current, setCurrent] = useState(1);
-
+  const [rendering, setRendering] = useState(false);
   useEffect(() => {
     // 비동기 함수 정의
     async function fetchData() {
@@ -180,9 +183,22 @@ const BusinessReq = () => {
     }
 
     fetchData();
-  }, [nowPage]);
+  }, [nowPage, rendering]);
 
   const totalData = data?.maxPage;
+
+  const approveClicked = async hotelPk => {
+    // console.log("hotelPk: ", hotelPk);
+    let result = "";
+    const answer = confirm("정말로 승인하시겠습니까?");
+    if (answer) {
+      result = await approveBusinessSignupApi(hotelPk);
+    }
+
+    if (result === 200) {
+      setRendering(!rendering);
+    }
+  };
 
   return (
     <Wrapper>
@@ -210,7 +226,7 @@ const BusinessReq = () => {
           </Thead>
           <Tbody>
             {data.map((item, idx) => (
-              <Tr key={idx}>
+              <Tr key={`row-${idx}`}>
                 {[
                   "hotelPk",
                   "hotelNm",
@@ -220,17 +236,19 @@ const BusinessReq = () => {
                   "approval",
                 ].map((data, key) => {
                   return (
-                    <>
+                    <Td key={`cell-${key}`} idx={key}>
                       {data === "approval" ? (
-                        <Td key={key} idx={key}>
-                          <button>승인하기</button>
-                        </Td>
+                        <button
+                          onClick={() => {
+                            approveClicked(item["hotelPk"]);
+                          }}
+                        >
+                          승인하기
+                        </button>
                       ) : (
-                        <Td key={key} idx={key}>
-                          {item[data]}
-                        </Td>
+                        item[data]
                       )}
-                    </>
+                    </Td>
                   );
                 })}
               </Tr>
