@@ -44,34 +44,34 @@ const initPostData = {
 };
 
 // 호텔 리스트 데이터 형식
-const initHotellist = {
-  hotel_advertise_list: [
-    // {
-    //   star: 0,
-    //   price: "",
-    //   hotel_pk: 0,
-    //   hotel_nm: "",
-    //   address_name: "",
-    //   hotel_pic: "",
-    //   discount_per: 0,
-    //   book_mark: 0,
-    //   review_count: 0,
-    // },
-  ],
-  hotel_list: [
-    // {
-    //   star: 0,
-    //   price: "",
-    //   hotel_pk: 0,
-    //   hotel_nm: "",
-    //   address_name: "",
-    //   hotel_pic: "",
-    //   discount_per: 0,
-    //   book_mark: 0,
-    //   review_count: 0,
-    // },
-  ],
-};
+// const initHotellist = {
+//   hotel_advertise_list: [
+//     {
+//       star: 0,
+//       price: "",
+//       hotel_pk: 0,
+//       hotel_nm: "",
+//       address_name: "",
+//       hotel_pic: "",
+//       discount_per: 0,
+//       book_mark: 0,
+//       review_count: 0,
+//     },
+//   ],
+//   hotel_list: [
+//     {
+//       star: 0,
+//       price: "",
+//       hotel_pk: 0,
+//       hotel_nm: "",
+//       address_name: "",
+//       hotel_pic: "",
+//       discount_per: 0,
+//       book_mark: 0,
+//       review_count: 0,
+//     },
+//   ],
+// };
 
 const MainPage = () => {
   const dispatch = useDispatch();

@@ -145,14 +145,43 @@ const SideBar = () => {
   const { doLogout } = useCustomAdminLogin();
   const [adminName, setAdminName] = useState();
   const [adminEmail, setAdminEmail] = useState();
-
+  const [cateState, setCateState] = useState();
   // 임시 유저 구분
   const location = useLocation();
   const pathName = location.pathname;
   const pathArray = pathName.split("/");
   const userType = pathArray[1];
-  const currentCate = pathArray[2];
 
+  useEffect(() => {
+    const pathName = location.pathname;
+    const pathArray = pathName.split("/");
+    const userType = pathArray[1];
+    const currentCate = pathArray[2];
+
+    // 사업자
+    userType === "admin"
+      ? currentCate === "roomlist"
+        ? setCateState(1)
+        : currentCate === "hotelinfo"
+        ? setCateState(2)
+        : currentCate === "hotelmodify"
+        ? setCateState(3)
+        : currentCate === "roommodify"
+        ? setCateState(4)
+        : currentCate === "deleteIdPage"
+        ? setCateState(5)
+        : setCateState(0)
+      : // 최고관리자
+      userType === "superadmin"
+      ? currentCate === "business"
+        ? setCateState(1)
+        : currentCate === "businessreq"
+        ? setCateState(2)
+        : currentCate === "hotellist"
+        ? setCateState(3)
+        : setCateState(0)
+      : setCateState(0);
+  }, [location]);
   // 사업자 카테고리
   const categorys = [
     {
@@ -183,32 +212,6 @@ const SideBar = () => {
       list: "호텔 리스트",
     },
   ];
-
-  const [cateState, setCateState] = useState(
-    // 사업자
-    userType === "admin"
-      ? currentCate === "roomlist"
-        ? 1
-        : currentCate === "hotelinfo"
-        ? 2
-        : currentCate === "hotelmodify"
-        ? 3
-        : currentCate === "roommodify"
-        ? 4
-        : currentCate === "deleteIdPage"
-        ? 5
-        : 0
-      : // 최고관리자
-      userType === "superadmin"
-      ? currentCate === "business"
-        ? 1
-        : currentCate === "businessreq"
-        ? 2
-        : currentCate === "hotellist"
-        ? 3
-        : 0
-      : 0,
-  );
 
   useEffect(() => {
     setAdminEmail(sessionStorage.getItem("adminEmail"));

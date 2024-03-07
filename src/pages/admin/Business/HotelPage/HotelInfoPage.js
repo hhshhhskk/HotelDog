@@ -115,9 +115,9 @@ const HotelInfoPage = () => {
   // 수정 버튼 클릭 시
   const handleClickModify = type => {
     if (type === "hotel") {
-      navigate(`/admin/hotelModify`);
+      navigate(`/admin/hotelmodify`);
     } else if (type === "room") {
-      navigate(`/admin/roomModify`);
+      navigate(`/admin/roommodify`);
     }
   };
 
