@@ -110,14 +110,14 @@ const HotelInfoPage = () => {
     };
 
     getHotelInfo();
-  }, []);
+  }, [AdvertModalState]);
 
   // 수정 버튼 클릭 시
   const handleClickModify = type => {
     if (type === "hotel") {
-      navigate(`/admin/hotelModify`);
+      navigate(`/admin/hotelmodify`);
     } else if (type === "room") {
-      navigate(`/admin/roomModify`);
+      navigate(`/admin/roommodify`);
     }
   };
 
@@ -164,12 +164,25 @@ const HotelInfoPage = () => {
     return null;
   };
 
+  // 호텔 할인율로 정가 계산
+  const calculateOriginalPrice = (salePrice, sale) => {
+    if (salePrice !== null && sale !== null) {
+      const originalPrice =
+        parseFloat(salePrice) / (1 - parseFloat(sale) / 100);
+      return originalPrice.toLocaleString();
+    }
+    return null;
+  };
+
   return (
     <>
       <HotelInfoWrap>
         {/* 광고 모달창 */}
         {AdvertModalState && (
-          <AdvertMain setAdvertModalState={setAdvertModalState} />
+          <AdvertMain
+            setAdvertModalState={setAdvertModalState}
+            advertise={hotelInfo?.advertise}
+          />
         )}
         {/* 상단 버튼 */}
         <HotelInfoTop>
@@ -318,22 +331,31 @@ const HotelInfoPage = () => {
                             alt="구분선"
                           />
                           <RoomPriceDiv>
-                            {hotelInfo.discountPer ? (
+                            {room.discountPer !== "0" ? (
                               <>
                                 <RoomDiscount>{room.discountPer}%</RoomDiscount>
-                                <RoomPrice>{room.hotelRoomCost}</RoomPrice>
-                                <RoomTotalPrice>
+                                {/* <RoomPrice>{room.hotelRoomCost}</RoomPrice> */}
+                                <RoomPrice>
+                                  {calculateOriginalPrice(
+                                    room.hotelRoomCost,
+                                    room.discountPer,
+                                  )}
+                                </RoomPrice>
+                                {/* <RoomTotalPrice>
                                   {salePrice(
                                     room.hotelRoomCost,
                                     room.discountPer,
                                   )}
                                   원
+                                </RoomTotalPrice> */}
+                                <RoomTotalPrice>
+                                  {room.hotelRoomCost}원
                                 </RoomTotalPrice>
                               </>
                             ) : (
                               <>
                                 <RoomTotalPrice>
-                                  {room.hotelRoomCost}원
+                                  {formatNumber(room.hotelRoomCost)}원
                                 </RoomTotalPrice>
                               </>
                             )}

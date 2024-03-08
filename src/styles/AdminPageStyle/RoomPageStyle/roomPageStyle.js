@@ -312,7 +312,8 @@ export const RmDogInfo = styled.div`
 `;
 export const RmModalDogHead = styled.div`
   position: relative;
-  margin-top: 20px;
+  margin-top: 70px;
+  margin-bottom: 100px;
 `;
 export const RmModalDogTitle = styled.span`
   position: relative;

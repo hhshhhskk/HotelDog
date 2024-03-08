@@ -6,7 +6,7 @@ const AntdPagination = ({ totalData, current, setCurrent, pageSize }) => {
     // console.log(page);
     setCurrent(page);
   };
-  // console.log(pageSize);
+  
   return (
     <Pagination
       current={current}

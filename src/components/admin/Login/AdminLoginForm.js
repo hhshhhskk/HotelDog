@@ -44,8 +44,10 @@ const AdminLoginForm = () => {
       }
 
       if (result.userRole === "BUSINESS_USER") {
+        sessionStorage.setItem("adminEmail", loginParam.userEmail);
         navigate(`/admin`);
       } else if (result.userRole === "ADMIN") {
+        sessionStorage.setItem("adminEmail", loginParam.userEmail);
         navigate(`/superadmin`);
       }
     } catch (error) {
@@ -117,6 +119,7 @@ const AdminLoginForm = () => {
           회원이 아니신가요?
         </span>
         <span>비밀번호를 잊으셨나요?</span>
+        <span onClick={() => navigate("/")}>호텔독 메인으로 가기</span>
       </NavBox>
     </>
   );

@@ -40,7 +40,8 @@ const loginSlice = createSlice({
   reducers: {
     login: (state, action) => {
       // console.log("login.....");
-
+      const { accessToken } = action.payload;
+      setCookie("accessToken", accessToken); // 쿠키 설정
       return {
         accessToken: action.payload.accessToken,
         userPk: action.payload.userPk,

@@ -12,6 +12,7 @@ export const AdminLoginApi = async loginParam => {
       },
     });
     sessionStorage.setItem("businessPk", response.data.businessPk);
+    sessionStorage.setItem("adminName", response.data.businessName);
     sessionStorage.setItem("userRole", response.data.userRole);
     if (response.status === 200) {
       return response.data;

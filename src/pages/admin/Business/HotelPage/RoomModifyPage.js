@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
+  getJwtHotelInfoAPI,
+  patchJwtRoomStateAPI,
+  putJwtRoomModifyAPI,
+} from "../../../../api/admin/Business/HotelManagement/HotelInfoApi";
+import {
   Ablebutton,
   ButtonDiv,
   NonAbleRoom,
@@ -20,12 +25,7 @@ import {
   RoomPicDiv,
   RoomPicsDiv,
   RoomPicsTitle,
-  RoomUse,
 } from "../../../../styles/AdminPageStyle/hotelPageStyle/roomModifyStyle";
-import {
-  getJwtHotelInfoAPI,
-  putJwtRoomModifyAPI,
-} from "../../../../api/admin/Business/HotelManagement/HotelInfoApi";
 
 // 호텔 정보 초기값
 const initHotelInfo = {
@@ -95,87 +95,93 @@ const initPostData = {
 const RoomModifyPage = () => {
   // 호텔 정보 상태
   const [hotelInfo, setHotelInfo] = useState(initHotelInfo);
-
-  // 토글로 처리
-  const [roomUseChecked, setRoomUseChecked] = useState([]);
+  const [hotelRoomInfoList, sethotelRoomInfoList] = useState([]);
 
   const [previewImg, setPreviewImg] = useState([]);
-  const [roomEa, setRoomEa] = useState("");
-  const [cost, setCost] = useState("");
-  const [discount, setDiscount] = useState("");
+  const [fileImg, setFileImg] = useState([]);
 
   // 화면 초기 불러오기
   useEffect(() => {
     // Axios Get으로 호텔 정보 가져오기
     const getHotelInfo = async () => {
       const data = await getJwtHotelInfoAPI(setHotelInfo);
-      setHotelInfo(data);
-      setRoomEa(data.hotelRoomEa);
-      setCost(data.hotelRoomCost);
-      setDiscount(data.descounterPer);
+      sethotelRoomInfoList(data.hotelRoomInfoList);
+      console.log(data.hotelRoomInfoList);
 
       // getHotelInfo가 완료된 후에 초기값 설정
-      if (data.hotelPics.length > 0) {
-        setPreviewImg(
-          `http://112.222.157.156:5222/pic/hotel/${data.hotelPk}/${data.hotelPics[0].hotelPic}`,
-        );
-      }
+      const imgArr = data.hotelRoomInfoList.map(item => {
+        return item.roomPic;
+      });
+      setPreviewImg(imgArr);
     };
 
     getHotelInfo();
   }, []);
 
-  const handleRoomUseChange = index => {
-    const updatedRoomUseChecked = [...roomUseChecked];
-    updatedRoomUseChecked[index] = !updatedRoomUseChecked[index];
-    setRoomUseChecked(updatedRoomUseChecked);
+  // 객실 상태 변환
+  const handleClickRoomState = async (_index, _room) => {
+    // 서버에 전송할 데이터
+    const sendData = {
+      hotelRoomPk: _room.hotelRoomPk,
+      // roomAble: roomState ? 0 : 1, // 1이면 0으로, 0이면 1로 전환
+    };
+
+    // 서버에 데이터 전송 (post 함수 대신 실제로 사용할 함수로 변경)
+    const res = await patchJwtRoomStateAPI(sendData);
+
+    // 화면에 보여지는 것을 위해서 토클
+    const tempArr = [...hotelRoomInfoList];
+    tempArr[_index].roomAble = parseInt(res.result);
+    sethotelRoomInfoList(tempArr);
   };
 
   // 이미지 선택했을 때
   const handleChangeUploadPic = e => {
+    const indexVal = parseInt(e.target.id.replace("picUpload", ""));
+    // console.log("어디니 ? ", indexVal);
     const file = e.target.files[0];
     if (file) {
       // 나의 웹브라우저에서 URL을 임시로 생성
       const tempUrl = URL.createObjectURL(file);
-      // 미리보기 state
-      setPreviewImg(tempUrl);
-      // setPreviewImg(prevImgs => [...prevImgs, tempUrl]);
+      const tempArr = [...previewImg];
+      tempArr[indexVal] = tempUrl;
+      setPreviewImg(tempArr);
+      // 파일 변경된 보관 배열
+      const tempFileArr = [...fileImg];
+      tempFileArr[indexVal] = file;
+      setFileImg(tempFileArr);
     }
   };
 
-  const handleChangeRoomEa = e => {
+  // 객실 데이터 변동 시 이벤트
+  const handleChangeRoomEa = (e, idx) => {
     const newRoomEa = e.target.value;
-    setRoomEa(newRoomEa);
+    const tempArr = [...hotelRoomInfoList];
+    tempArr[idx].hotelRoomEa = parseInt(newRoomEa);
+    sethotelRoomInfoList(tempArr);
   };
-  const handleChangeRoomCost = e => {
+  const handleChangeRoomCost = (e, idx) => {
     const newRoomCost = e.target.value;
-    setCost(newRoomCost);
+    const tempArr = [...hotelRoomInfoList];
+    tempArr[idx].hotelRoomCost = parseInt(newRoomCost);
+    sethotelRoomInfoList(tempArr);
   };
-  const handleChangeRoomDiscout = e => {
+  const handleChangeRoomDiscount = (e, idx) => {
     const newRoomDiscount = e.target.value;
-    setDiscount(newRoomDiscount);
-  };
-
-  // 호텔 할인가 계산
-  const salePrice = (originalPrice, sale) => {
-    if (originalPrice && sale) {
-      const discount = (parseFloat(sale) / 100) * parseFloat(originalPrice);
-      return (parseFloat(originalPrice) - discount).toLocaleString();
-    }
-    return null;
+    const tempArr = [...hotelRoomInfoList];
+    tempArr[idx].discountPer = parseInt(newRoomDiscount);
+    sethotelRoomInfoList(tempArr);
   };
 
   // 전송 버튼
-  const handleClickSubmit = async () => {
+  const handleClickSubmit = async _index => {
     const formData = new FormData();
 
     const sendData = {
-      dto: {
-        hotelRoomPk: initHotelInfo.hotelRoomPk,
-        hotelRoomEa: roomEa,
-        hotelRoomCost: cost,
-        discountPer: discount,
-      },
+      hotelRoomPk: hotelRoomInfoList[_index].hotelRoomPk,
+      hotelRoomEa: hotelRoomInfoList[_index].hotelRoomEa,
+      hotelRoomCost: hotelRoomInfoList[_index].hotelRoomCost,
+      discountPer: hotelRoomInfoList[_index].discountPer,
     };
     console.log("================ dto 에 담은 보낼 데이터 ", sendData);
 
@@ -184,42 +190,52 @@ const RoomModifyPage = () => {
       // JSON 형식으로 설정
       { type: "application/json" },
     );
-
     formData.append("dto", dto);
 
-    // const imagePromises = uploadImgBeforeFile.map((image, index) => {
-    //   formData.append("roomPics", image);
-    // });
-    // 만약 변동이 없다면
-    // if (imagePromises.length === 0) {
-    //   formData.append("roomPics", JSON.stringify([]));
-    // }
-    // await Promise.all(imagePromises);
+    console.log("사진전송", fileImg[0]);
+    formData.append("roomPics", fileImg[0]);
 
-    // console.log("post 요청할 데이터 :", postData);
     putJwtRoomModifyAPI(formData);
-    // navigate(`/admin/hotelinfo`);
+    alert("저장이 완료되었습니다");
+  };
+
+  // 호텔 할인율로 정가 계산
+  const calculateOriginalPrice = (salePrice, sale) => {
+    if (salePrice !== null && sale !== null) {
+      const originalPrice =
+        parseFloat(salePrice) / (1 - parseFloat(sale) / 100);
+      return originalPrice.toLocaleString();
+    }
+    return null;
   };
 
   return (
     <>
       <RoomModifyWrap>
         {/* 객실 정보들 */}
-        {hotelInfo.hotelRoomInfoList.map((room, index) => (
+        {hotelRoomInfoList.map((room, index) => (
           <RoomModifyDiv key={index}>
             {/* 객실 정보 카드 */}
-            {/* {room.roomAble === 1 && (
+            {room.roomAble === 1 || (
               <NonAbleRoom>
                 <p />
               </NonAbleRoom>
-            )} */}
+            )}
             <RoomModifyCard>
               <RoomModifyCardTitle>
                 <div>
                   {room.roomAble === 1 ? (
-                    <Ablebutton>활성화</Ablebutton>
+                    <Ablebutton
+                      onClick={() => handleClickRoomState(index, room)}
+                    >
+                      활성화
+                    </Ablebutton>
                   ) : (
-                    <NonAblebutton>비활성화</NonAblebutton>
+                    <NonAblebutton
+                      onClick={() => handleClickRoomState(index, room)}
+                    >
+                      비활성화
+                    </NonAblebutton>
                   )}
                 </div>
                 <p>객실 수정 _ {room.hotelRoomNm}</p>
@@ -238,41 +254,33 @@ const RoomModifyPage = () => {
                   <p>가격</p>
                   <p>할인율</p>
                 </RoomModifyTitle>
+
                 {/* 내용 */}
                 <RoomModifyContent>
-                  {/* <RoomUse>
-                    <input type="checkbox" />
-                  </RoomUse> */}
                   <p>{room.hotelRoomNm}</p>
-
                   <RoomPicsDiv>
                     <RoomPicDiv>
-                      <RoomPic
-                        src={
-                          previewImg ||
-                          `http://112.222.157.156:5222/pic/hotel/${hotelInfo.hotelPk}/room/${room.hotelRoomPk}/${room.roomPic}`
-                        }
-                        alt="객실 사진"
-                      />
-
-                      {/* {previewImg ? (
+                      {previewImg[index].includes("blob") ? (
                         <RoomPic
-                          src={previewImg}
+                          src={`${previewImg[index]}`}
                           alt="선택된 이미지 미리보기"
                         />
                       ) : (
                         <RoomPic
-                          src={`http://112.222.157.156:5222/pic/hotel/${hotelInfo.hotelPk}/room/${room.hotelRoomPk}/${room.roomPic}`}
+                          src={`/pic/hotel/${hotelInfo.hotelPk}/room/${room.hotelRoomPk}/${previewImg[index]}`}
                           alt="기존 이미지 미리보기"
                         />
-                      )} */}
+                      )}
                     </RoomPicDiv>
+
                     <RoomPicAddButtonDiv>
-                      <label htmlFor="picUpload">
+                      <label htmlFor={`picUpload${index}`}>
                         <RoomPicAddButton
                           type="button"
                           onClick={() => {
-                            document.getElementById("picUpload").click();
+                            document
+                              .getElementById(`picUpload${index}`)
+                              .click();
                           }}
                         >
                           +
@@ -284,7 +292,7 @@ const RoomModifyPage = () => {
                         onChange={e => {
                           handleChangeUploadPic(e);
                         }}
-                        id="picUpload"
+                        id={`picUpload${index}`}
                         style={{ display: "none" }}
                       />
                     </RoomPicAddButtonDiv>
@@ -292,32 +300,32 @@ const RoomModifyPage = () => {
 
                   <RoomCount>
                     <input
-                      type="text"
+                      type="number"
                       defaultValue={room.hotelRoomEa}
-                      onChange={e => handleChangeRoomEa(e)}
+                      onChange={e => handleChangeRoomEa(e, index)}
                     />
                     <p>개</p>
                   </RoomCount>
                   <RoomCost>
                     <input
-                      type="text"
+                      type="number"
                       defaultValue={room.hotelRoomCost}
-                      onChange={e => handleChangeRoomCost(e)}
+                      onChange={e => handleChangeRoomCost(e, index)}
                     />
                     <p>원</p>
                   </RoomCost>
                   <RoomDiscount>
                     <input
-                      type="text"
+                      type="number"
                       defaultValue={room.discountPer}
-                      onChange={e => handleChangeRoomDiscout(e)}
+                      onChange={e => handleChangeRoomDiscount(e, index)}
                     />
                     <p>%</p>
                   </RoomDiscount>
                 </RoomModifyContent>
               </RoomModifyContentDiv>
               <ButtonDiv>
-                <button type="submit" onClick={() => handleClickSubmit()}>
+                <button type="submit" onClick={() => handleClickSubmit(index)}>
                   저장
                 </button>
               </ButtonDiv>
