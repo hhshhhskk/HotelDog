@@ -2,6 +2,8 @@ import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import AntdPagination from "../../../components/admin/Common/AntdPagination";
 import { businessUserGetwApi } from "../../../api/superadmin/superAdminApi";
+import HotelDetail from "../../../components/superAdmin/HotelDetail";
+import HotelDetailPage from "../../HotelDetailPage/HotelDetailPage";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -127,6 +129,7 @@ const Tr = styled.tr`
   width: 100%;
   height: 40px;
   text-align: center;
+  cursor: pointer;
 `;
 
 const Td = styled.td`
@@ -419,7 +422,7 @@ const BusinessPage = () => {
 
   const rows = ["번호", "아이디", "이름", "전화번호", "주소"];
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(15);
+  // const [pageSize, setPageSize] = useState(15);
 
   if (current === 1) {
     dummyData = dummy1;
@@ -432,6 +435,7 @@ const BusinessPage = () => {
   // dummyData와 totalData를 state로 관리합니다.
   const [initData, setInitData] = useState({});
   const [initTotalData, setInitTotalData] = useState(0);
+  const pageSize = 15;
 
   const [businessUserData, setBusinessUserData] = useState([]);
   const getBusinessData = async page => {
@@ -449,7 +453,7 @@ const BusinessPage = () => {
 
   console.log("총 페이지 수 ", businessUserData?.totalPage);
   console.log("총 페이지 수 ", businessUserData?.businessUserInfoList?.length);
-  const totalData = businessUserData?.totalPage * 15;
+  // const totalData = businessUserData?.totalPage * 15;
   // 페이지가 변경될 때마다 데이터를 다시 불러옵니다.
   useEffect(() => {
     // getBusinessData(1); // 초기 페이지는 1로 설정합니다.
@@ -463,6 +467,7 @@ const BusinessPage = () => {
 
   console.log("test : ", businessUserData);
 
+  // 검색기능
   const [searchKeyword, setSearchKeyword] = useState("");
 
   const handleSearchInputChange = e => {
@@ -476,6 +481,7 @@ const BusinessPage = () => {
 
   const handleSearchButtonClick = () => {
     // 검색어를 사용하여 userData를 필터링합니다.
+
     const filteredBusinessUserData =
       businessUserData.businessUserInfoList.filter(item => {
         return (
@@ -486,7 +492,24 @@ const BusinessPage = () => {
         );
       });
     setBusinessUserData({ businessUserInfoList: filteredBusinessUserData });
+    const handleSearchButtonClick = () => {
+      getBusinessData(current);
+    };
   };
+  // 모달창 띄우기
+  const [selectedHotel, setSelectedHotel] = useState(null);
+
+  // 행을 클릭하여 모달을 열 때 호출되는 함수
+  const handleRowClick = hotelData => {
+    setSelectedHotel(hotelData);
+  };
+
+  // 모달을 닫을 때 호출되는 함수
+  const handleCloseModal = () => {
+    setSelectedHotel(null);
+  };
+
+  const totalData = businessUserData.totalPage * pageSize;
 
   return (
     <Wrapper>
@@ -518,7 +541,10 @@ const BusinessPage = () => {
           </Thead>
           <Tbody>
             {businessUserData?.businessUserInfoList?.map(item => (
-              <Tr key={item?.businessUserPk}>
+              <Tr
+                key={item?.businessUserPk}
+                onClick={() => handleRowClick(item)}
+              >
                 <Td style={{ width: "50px" }}>{item?.businessUserPk}</Td>
                 <Td style={{ width: "240px" }}>{item?.userEmail}</Td>
                 <Td style={{ width: "200px" }}>{item?.businessName}</Td>
@@ -528,6 +554,9 @@ const BusinessPage = () => {
             ))}
           </Tbody>
         </Table>
+        {selectedHotel && (
+          <HotelDetail hotelInfo={selectedHotel} onClose={handleCloseModal} />
+        )}
         <PaginationBox>
           <AntdPagination
             totalData={totalData}
