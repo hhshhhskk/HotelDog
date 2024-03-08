@@ -449,11 +449,6 @@ const BusinessPage = () => {
     }
   };
 
-  // const totalData = 43;
-
-  console.log("총 페이지 수 ", businessUserData?.totalPage);
-  console.log("총 페이지 수 ", businessUserData?.businessUserInfoList?.length);
-  // const totalData = businessUserData?.totalPage * 15;
   // 페이지가 변경될 때마다 데이터를 다시 불러옵니다.
   useEffect(() => {
     // getBusinessData(1); // 초기 페이지는 1로 설정합니다.
@@ -509,7 +504,8 @@ const BusinessPage = () => {
     setSelectedHotel(null);
   };
 
-  const totalData = businessUserData.totalPage * pageSize;
+  // const totalData = businessUserData.totalPage * pageSize;
+  const totalData = 50;
 
   return (
     <Wrapper>

@@ -167,7 +167,6 @@ const BusinessReq = () => {
     ],
     totalPage: 1,
   });
-  const [nowPage, setNowPage] = useState(1);
 
   const rows = ["번호", "호텔이름", "이름", "전화번호", "주소", "상태"];
   const [current, setCurrent] = useState(1);
@@ -177,7 +176,7 @@ const BusinessReq = () => {
     async function fetchData() {
       try {
         // 비동기 작업 수행
-        const response = await businessSignUpListApi(nowPage, setData);
+        const response = await businessSignUpListApi(current, setData);
         // 작업 완료 후 필요한 작업 수행
       } catch (error) {
         // 에러 처리
@@ -185,9 +184,11 @@ const BusinessReq = () => {
     }
 
     fetchData();
-  }, [nowPage, rendering]);
+  }, [current, rendering]);
 
-  const totalData = data?.maxPage;
+  const totalData = data?.totalPage;
+  // const totalData = 50;
+  const pageSize = 15;
 
   const approveClicked = async hotelPk => {
     // console.log("hotelPk: ", hotelPk);
@@ -262,6 +263,7 @@ const BusinessReq = () => {
             totalData={totalData}
             current={current}
             setCurrent={setCurrent}
+            pageSize={pageSize}
           />
         </PaginationBox>
       </Contents>

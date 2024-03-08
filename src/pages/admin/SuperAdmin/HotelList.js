@@ -149,7 +149,8 @@ const PaginationBox = styled.div`
   margin-top: 55px;
 `;
 const HotelList = () => {
-  const [nowPage, setNowPage] = useState(1);
+  const pageSize = 15;
+  const [current, setCurrent] = useState(1);
   const [data, setData] = useState({
     hotelInfoList: [
       {
@@ -167,14 +168,13 @@ const HotelList = () => {
   });
 
   const rows = ["번호", "호텔명", "대표자", "전화번호", "주소", "광고", "상태"];
-  const [current, setCurrent] = useState(1);
 
   useEffect(() => {
     // 비동기 함수 정의
     async function fetchData() {
       try {
         // 비동기 작업 수행
-        const response = await superAdminHotelListApi(nowPage, setData);
+        const response = await superAdminHotelListApi(current, setData);
         // 작업 완료 후 필요한 작업 수행
       } catch (error) {
         // 에러 처리
@@ -182,9 +182,10 @@ const HotelList = () => {
     }
 
     fetchData();
-  }, [nowPage]);
+  }, [current]);
 
-  const totalData = data?.maxPage;
+  // const totalData = data?.totalPage * 15;
+  const totalData = 50;
 
   return (
     <Wrapper>
@@ -249,6 +250,7 @@ const HotelList = () => {
             totalData={totalData}
             current={current}
             setCurrent={setCurrent}
+            pageSize={pageSize}
           />
         </PaginationBox>
       </Contents>
