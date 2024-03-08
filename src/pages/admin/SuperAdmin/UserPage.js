@@ -438,11 +438,11 @@ const UserPage = () => {
 
   const [userData, setUserData] = useState([]);
   // const totalData = 6;
-  console.log("userData  :", userData?.totalPage);
+  // console.log("userData  :", userData?.totalPage);
   const totalPageNum = Number(userData?.totalPage);
   const totalData = totalPageNum * 15;
   // const totalData = 11;
-  console.log("userData  :", totalPageNum * 15);
+  // console.log("userData  :", totalPageNum * 15);
   // const totalDataLength = userData?.userInfoList?.length;
   // const totalData = totalDataLength; // 총 데이터 갯수
 
@@ -458,7 +458,8 @@ const UserPage = () => {
 
   // 페이지가 변경될 때마다 데이터를 다시 불러옵니다.
   useEffect(() => {
-    getUserData(current); // 초기 페이지는 1로 설정합니다.
+    // 컴포넌트가 마운트될 때 초기 사용자 데이터를 가져옵니다.
+    getUserData(current);
   }, [current]);
 
   // totalData를 설정합니다.
@@ -466,14 +467,42 @@ const UserPage = () => {
   //   setInitTotalData(dummyData.total); // dummyData에서 total 값을 가져와 설정합니다.
   // }, [dummyData]);
 
+  // 검색
+
+  const [searchKeyword, setSearchKeyword] = useState("");
+
+  const handleSearchInputChange = e => {
+    const keyword = e.target.value;
+    setSearchKeyword(keyword);
+    if (!keyword) {
+      // 검색어가 비어있는 경우 전체 데이터를 다시 불러옵니다.
+      getUserData(current);
+    }
+  };
+
+  const handleSearchButtonClick = () => {
+    // 검색어를 사용하여 userData를 필터링합니다.
+    const filteredUserData = userData.userInfoList.filter(item => {
+      return (
+        item.nickname.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+        item.phoneNum.includes(searchKeyword)
+      );
+    });
+    setUserData({ userInfoList: filteredUserData });
+  };
+
   return (
     <Wrapper>
       <Contents>
         <ContentTop>
           <Title>일반 회원</Title>
           <SearchBox>
-            <SearchInput type="text" />
-            <SearchBtn>
+            <SearchInput
+              type="text"
+              value={searchKeyword}
+              onChange={handleSearchInputChange}
+            />
+            <SearchBtn onClick={handleSearchButtonClick}>
               <SearchBtnImg
                 src={`${process.env.PUBLIC_URL}/admin/images/HotelList/searchIcon.svg`}
               />
