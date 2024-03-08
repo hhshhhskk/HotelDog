@@ -78,7 +78,11 @@ const HotelCardForm = ({ hotel, handleClickHotel, setRendering }) => {
       <HotelCardDiv>
         <HotelImgDiv>
           <img
-            src={`http://112.222.157.156:5222/pic/hotel/${hotel.hotel_pk}/${hotel.hotel_pic}`}
+            src={
+              hotel.hotel_pic === ""
+                ? `${process.env.PUBLIC_URL}/images/dummyImg.jpeg`
+                : `http://112.222.157.156:5222/pic/hotel/${hotel.hotel_pk}/${hotel.hotel_pic}`
+            }
             onClick={() => handleClickHotel(hotel.hotel_pk)}
           />
           {/* 호텔 좋아요 북마크 */}
