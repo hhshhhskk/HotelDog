@@ -20,6 +20,7 @@ export const loginAPI = async ({ loginParam, successFn, failFn, errorFn }) => {
     if (status.charAt(0) === "2") {
       // 화면 처리용
       successFn(response.data);
+      console.log(response.data);
 
       // RTK 업데이트 하기위해서는 리턴을 해서 값을 전달해야 해
       return response.data;

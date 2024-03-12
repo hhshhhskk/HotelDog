@@ -43,7 +43,7 @@ const loginSlice = createSlice({
       const { accessToken } = action.payload;
       setCookie("accessToken", accessToken); // 쿠키 설정
       return {
-        accessToken: action.payload.accessToken,
+        accessToken: accessToken,
         userPk: action.payload.userPk,
       };
     },
@@ -70,7 +70,7 @@ const loginSlice = createSlice({
         if (!payload.error) {
           // 이때 필요한 정보를 보관한다.
           // 쿠키는 문자열입니다. 객체를 JSON 문자로 변환
-          setCookie("accessToken", JSON.stringify(payload));
+          setCookie("accessToken", JSON.stringify(payload.accessToken));
         }
         return payload;
       })

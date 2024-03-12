@@ -8,6 +8,7 @@ const cookie = new Cookies();
 export const setCookie = (name, value, day = 1) => {
   // 날짜(유통기간)을 생성
   const expires = new Date();
+  console.log("쿠키등록: ", value);
   expires.setUTCDate(expires.getUTCDate() + day);
   return cookie.set(name, value, { path: "/", expires: expires });
 };
