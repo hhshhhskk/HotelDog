@@ -202,6 +202,14 @@
 
 ![1.비회원_메인](https://github.com/hhshhhskk/HotelDog/assets/67895755/38ff3ef3-f4de-461c-96ef-54ab2fb552f2)
 
+![2.회원가입_이메일인증](https://github.com/hhshhhskk/HotelDog/assets/67895755/80c8ddd0-8ae1-456a-bceb-e3edfd152dd2)
+
+![3.회원가입_닉네임체크_이용약관](https://github.com/hhshhhskk/HotelDog/assets/67895755/a270df1e-d767-4559-b705-57f127f42393)
+
+![4.로그인:로그아웃](https://github.com/hhshhhskk/HotelDog/assets/67895755/2563fa2d-02ba-42c1-a1a2-728048e314fa)
+
+![5.호텔예약](https://github.com/hhshhhskk/HotelDog/assets/67895755/7af02975-9971-40fb-abd5-3d9126bd6ac4)
+
 
 
 
