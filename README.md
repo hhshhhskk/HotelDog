@@ -162,28 +162,11 @@
  
 ### 박유민
 
-- 마이페이지
-    - 회원정보 수정
-        - 수정전 비밀번호 체크 기능
-        - 닉네임 중복체크 기능
-        - 주소찾기 기능
-          
-    - 예약내역
-        - 예약된 내역 불러오기
-        - 예약취소 기능
-        - 후기등록 기능(이미지 업로드 가능)
-
-    - 반려견정보
-        - 반려견 등록, 수정(이미지 업로드 가능)
-        - 등록된 반려견 삭제
-
-    - 북마크한 호텔
-        - 북마크한 호텔 불러오기
-        - 북마크 취소 기능
-    
-    - 이용후기
-        - 등록한 후기 목록 불러오기
-        - 후기 수정, 삭제
+- UI
+    - 일반유저 페이지 : 마이페이지, 회원정보, 예약내역, 후기작성모달, 반려견 정보, 찜한호텔, 이용 후기, 회원탈퇴
+    - 관리자 페이지 : 일반유저리스트, 사업자유저리스트
+- 기능
+    - 마이페이지 사이드바, 회원정보 CRUD, 예약내역 CRUD, 후기작성 CRUD, 반려견 정보 CRUD, 찜한호텔 목록 불러오기, 이용후기 CRUD, 회원탈퇴 CRUD, 일반유저리스트 불러오기, 사업자유저 리스트 불러오기, 일반유저 & 사업자유저 검색 기능
 
 ### 황예지
 
@@ -194,9 +177,8 @@
     - 다른 객실 추가예약 기능
     - 호텔 후기 더보기 기능
 
-
-
-
+ </br>
+ </br>
 
 ## 시연영상
 
@@ -210,6 +192,17 @@
 
 ![5.호텔예약](https://github.com/hhshhhskk/HotelDog/assets/67895755/7af02975-9971-40fb-abd5-3d9126bd6ac4)
 
+![4.로그인:로그아웃](https://github.com/hhshhhskk/HotelDog/assets/67895755/e9f92f24-25d2-4394-b0bd-624d07319d3d)
+
+![5.호텔예약](https://github.com/hhshhhskk/HotelDog/assets/67895755/bbfa46fa-b77b-48a7-9cad-e57fbe91e4ff)
+
+![6.회원정보수정](https://github.com/hhshhhskk/HotelDog/assets/67895755/9b3ad2ef-cad6-49f4-af04-1a98637c4bcb)
+
+![7.찜목록](https://github.com/hhshhhskk/HotelDog/assets/67895755/68446953-e3b4-474b-96c3-de124e184c48)
+
+![8.게시판1](https://github.com/hhshhhskk/HotelDog/assets/67895755/91b0c37f-2cad-45b2-ae33-469ebd2f768c)
+
+![8.게시판2](https://github.com/hhshhhskk/HotelDog/assets/67895755/fe464b54-dd6b-466c-b99a-a74d1fddecf4)
 
 
 
