@@ -6,7 +6,7 @@
 </p>
 </br>
 
-- 배포 URL
+- 배포 URL (현재 서버가 닫혀서 사용할 수 없습니다. 아래에 시연영상이 있습니다.)
 - 테스트 아이디
   
   - 일반유저: ID: user1@gmail.com PW: test123
@@ -220,6 +220,10 @@
 ![8.게시판2](https://github.com/hhshhhskk/HotelDog/assets/67895755/fe464b54-dd6b-466c-b99a-a74d1fddecf4)
 
 </details>
+
+## 관리자모드 시연영상
+
+https://youtu.be/Fg-thld8vA8
 
 
 
