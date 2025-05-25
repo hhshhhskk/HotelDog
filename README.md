@@ -181,7 +181,6 @@
 
 ## 시연영상
 
-<details markdown="1">
 <summary>일반유저</summary>
   
 ### 비회원상태에서의 메인화면
@@ -218,7 +217,6 @@
 
 ![8.게시판2](https://github.com/hhshhhskk/HotelDog/assets/67895755/fe464b54-dd6b-466c-b99a-a74d1fddecf4)
 
-</details>
 
 ## 관리자모드 시연영상
 
